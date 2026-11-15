@@ -1323,3 +1323,192 @@
     </script>
 </body>
 </html>
+<!-- AI Chat & Search Widget Start -->
+<style>
+  /* फ्लोटिंग बटन */
+  #ai-chat-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0d6efd;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #ai-chat-btn:hover { background: #0b5ed7; }
+
+  /* चैट बॉक्स */
+  #ai-chat-box {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 330px;
+    max-width: 90vw;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    z-index: 9999;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+  }
+  .chat-header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+  }
+  .chat-header button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .chat-body {
+    padding: 12px;
+    height: 260px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    font-size: 14px;
+  }
+  .msg-bot, .msg-user {
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    max-width: 85%;
+    line-height: 1.4;
+  }
+  .msg-bot { background: #e9ecef; color: #212529; }
+  .msg-user { background: #0d6efd; color: #fff; margin-left: auto; text-align: right; }
+  .quick-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  .quick-btns button {
+    background: #fff;
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+    border-radius: 15px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .chat-footer {
+    display: flex;
+    border-top: 1px solid #ddd;
+    padding: 8px;
+    background: #fff;
+  }
+  .chat-footer input {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    outline: none;
+  }
+  .chat-footer button {
+    background: #0d6efd;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin-left: 6px;
+    cursor: pointer;
+  }
+</style>
+
+<!-- नीचे दिखने वाला बटन -->
+<button id="ai-chat-btn" onclick="toggleChat()">🤖 AI सहायक से पूछें</button>
+
+<!-- चैट विंडो -->
+<div id="ai-chat-box">
+  <div class="chat-header">
+    <span>🤖 ग्राहक सहायता (AI Assistant)</span>
+    <button onclick="toggleChat()">✖</button>
+  </div>
+  <div class="chat-body" id="chat-messages">
+    <div class="msg-bot">नमस्ते! मैं आपकी क्या मदद कर सकता हूँ? आप नीचे दिए गए विकल्प चुनें या अपना <b>मोबाइल / पैन / रसीद नंबर</b> डालकर स्टेटस चेक करें।</div>
+    <div class="quick-btns">
+      <button onclick="askBot('पैन कार्ड दस्तावेज')">पैन कार्ड डॉक्यूमेंट</button>
+      <button onclick="askBot('आधार अपडेट दस्तावेज')">आधार अपडेट</button>
+      <button onclick="askBot('राशन कार्ड दस्तावेज')">राशन कार्ड</button>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chat-input" placeholder="नंबर या सवाल लिखें..." onkeypress="if(event.key==='Enter') sendMsg()">
+    <button onclick="sendMsg()">भेजें</button>
+  </div>
+</div>
+
+<script>
+  // यहाँ अपने ग्राहकों का डेटा जोड़ें (मोबाइल नंबर, रसीद नंबर या PAN से सर्च करने के लिए)
+  const customerRecords = {
+    "9876543210": "नाम: राहुल कुमार | सेवा: नया PAN Card | स्थिति: ✅ बन गया है (सेंटर से प्राप्त करें)",
+    "ABCDE1234F": "नाम: सुरेश वर्मा | सेवा: PAN सुधार | स्थिति: ⏳ प्रक्रिया में है (2 दिन लगेंगे)",
+    "1001": "नाम: अमित साहू | सेवा: आधार मोबाइल अपडेट | स्थिति: ✅ पूरा हो गया है"
+  };
+
+  function toggleChat() {
+    const box = document.getElementById("ai-chat-box");
+    box.style.display = (box.style.display === "block") ? "none" : "block";
+  }
+
+  function sendMsg() {
+    const input = document.getElementById("chat-input");
+    const text = input.value.trim();
+    if (!text) return;
+    askBot(text);
+    input.value = "";
+  }
+
+  function askBot(query) {
+    const chatBody = document.getElementById("chat-messages");
+    
+    // यूजर का मैसेज दिखाएं
+    chatBody.innerHTML += `<div class="msg-user">${query}</div>`;
+
+    let reply = "";
+    const cleanKey = query.toUpperCase().replace(/\s+/g, '');
+
+    // 1. डेटाबेस में नंबर या ID सर्च करें
+    if (customerRecords[cleanKey]) {
+      reply = "🔍 <b>रिकॉर्ड मिला:</b><br>" + customerRecords[cleanKey];
+    } 
+    // 2. दस्तावेजों से जुड़े सवालों के जवाब
+    else if (query.includes("पैन") || query.toLowerCase().includes("pan")) {
+      reply = "📄 <b>PAN Card दस्तावेज:</b><br>1. आधार कार्ड<br>2. 2 पासपोर्ट फोटो<br>3. आधार से लिंक मोबाइल नंबर";
+    } 
+    else if (query.includes("आधार") || query.toLowerCase().includes("aadhaar") || query.toLowerCase().includes("aadhar")) {
+      reply = "🪪 <b>आधार अपडेट दस्तावेज:</b><br>• मोबाइल अपडेट: केवल आधार नंबर और बायोमेट्रिक<br>• पता/नाम सुधार: वैध प्रमाण पत्र (मार्कशीट/निवास/राशन कार्ड)";
+    } 
+    else if (query.includes("राशन") || query.toLowerCase().includes("ration")) {
+      reply = "🌾 <b>राशन कार्ड दस्तावेज:</b><br>1. परिवार के सभी सदस्यों का आधार<br>2. मुखिया की 2 फोटो<br>3. बैंक पासबुक की कॉपी";
+    } 
+    else {
+      reply = "क्षमा करें, इस नंबर का कोई रिकॉर्ड नहीं मिला। कृपया सही <b>मोबाइल नंबर / रसीद नंबर</b> डालें या सीधे हमारे WhatsApp पर संपर्क करें।";
+    }
+
+    setTimeout(() => {
+      chatBody.innerHTML += `<div class="msg-bot">${reply}</div>`;
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 300);
+  }
+</script>
+<!-- AI Chat & Search Widget End -->
