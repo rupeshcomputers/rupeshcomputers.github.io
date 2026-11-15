@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUPESH COMPUTERS | रूपेश कंप्यूटर्स - ग्राहक सेवा केंद्र एवं ऑनलाइन सर्विसेज</title>
+    <meta name="description" content="RUPESH COMPUTERS (चोंगरीबहार एवं दोकड़ा) - CSC डिजिटल सेवा केंद्र, सभी सरकारी व ऑनलाइन सेवाएं, आवश्यक दस्तावेज सूची एवं निःशुल्क PDF टूल।">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Noto Sans Devanagari & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- PDF-Lib & PDF.js (100% Client-Side PDF Processing) -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Devanagari"', 'Poppins', 'sans-serif'],
+                        english: ['Poppins', '"Noto Sans Devanagari"', 'sans-serif'],
+                    },
+                    colors: {
+                        cscBlue: '#0b4f9f',
+                        cscDark: '#062c5c',
+                        cscOrange: '#f37021',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+            background-color: #f4f7fb;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #062c5c 0%, #0b4f9f 60%, #1565c0 100%);
+            position: relative;
+        }
+        .hero-dots {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .service-card {
+            transition: all 0.25s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px -10px rgba(11, 79, 159, 0.2);
+        }
+        @keyframes blink-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(1.25); }
+        }
+        .live-indicator {
+            animation: blink-dot 1.8s infinite;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0b4f9f;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-cscOrange selection:text-white">
+
+    <!-- 1. Top Live Status & Timing Bar -->
+    <div class="bg-cscDark text-white text-xs sm:text-sm py-2 px-4 border-b border-blue-900">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <i class="fa-regular fa-clock text-cscOrange"></i>
+                <span>ऑफिस समय: <strong>सुबह 10:00 से शाम 6:00 बजे तक</strong> | <span class="text-amber-300 font-bold">रविवार को बंद</span></span>
+            </div>
+            <div id="live-status-pill" class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-white/10 border border-white/15">
+                <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 live-indicator"></span>
+                <span id="status-text">स्थिति जांची जा रही है...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Sticky Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cscBlue to-blue-600 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
+                    <i class="fa-solid fa-desktop text-xl"></i>
+                </div>
+                <div>
+                    <span class="font-english block text-lg sm:text-xl font-extrabold tracking-tight text-cscBlue leading-none">
+                        RUPESH <span class="text-cscOrange">COMPUTERS</span>
+                    </span>
+                    <span class="block text-xs text-slate-600 font-semibold mt-0.5">ग्राहक सेवा केंद्र एवं ऑनलाइन सर्विसेज</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-slate-700">
+                <a href="#home" class="hover:text-cscBlue transition">होम</a>
+                <a href="#branches" class="hover:text-cscBlue transition">हमारी शाखाएं</a>
+                <a href="#services" class="hover:text-cscBlue transition">हमारी सेवाएं</a>
+                <a href="#services" class="hover:text-cscBlue transition">आवश्यक दस्तावेज</a>
+                <a href="#pdf-tools" class="inline-flex items-center gap-1.5 text-cscOrange hover:text-orange-700 transition">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>फ्री PDF टूल</span>
+                </a>
+                <a href="#contact" class="hover:text-cscBlue transition">संपर्क करें</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <a href="#pdf-tools" class="hidden sm:inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-cscBlue border border-blue-200 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-file-pdf text-red-600"></i>
+                    <span>PDF टूल</span>
+                </a>
+                <button type="button" onclick="openBranchModal('सामान्य पूछताछ / ऑनलाइन सेवा')" class="inline-flex items-center gap-1.5 bg-cscOrange hover:bg-orange-600 text-white text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl shadow transition cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>संपर्क करें</span>
+                </button>
+                <button id="mobile-menu-toggle" aria-label="Menu" class="lg:hidden p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-slate-200 px-4 py-3 space-y-1.5 text-sm font-bold">
+            <a href="#home" class="block py-2 px-3 rounded-lg hover:bg-blue-50 text-slate-700">होम (Home)</a>
+            <a href="#branches" class="block py-2 px-3 rounded-lg hover:bg-blue-50 text-slate-700">हमारी शाखाएं (चोंगरीबहार / दोकड़ा)</a>
+            <a href="#services" class="block py-2 px-3 rounded-lg hover:bg-blue-50 text-slate-700">हमारी सेवाएं एवं आवश्यक दस्तावेज</a>
+            <a href="#pdf-tools" class="block py-2 px-3 rounded-lg bg-orange-50 text-cscOrange">फ्री PDF एवं फोटो टूल (PDF Tools)</a>
+            <a href="#contact" class="block py-2 px-3 rounded-lg hover:bg-blue-50 text-slate-700">संपर्क करें (Contact)</a>
+        </div>
+    </header>
+
+    <!-- 3. Hero Banner Section -->
+    <section id="home" class="hero-bg hero-dots text-white py-12 sm:py-16 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Left Intro -->
+            <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold text-amber-200">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>अधिकृत CSC डिजिटल सेवा एवं ऑनलाइन सुविधा केंद्र</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+                    <span class="font-english block text-amber-300 text-2xl sm:text-3xl mb-1">RUPESH COMPUTERS</span>
+                    रूपेश कंप्यूटर्स — सभी डिजिटल, बैंकिंग एवं सरकारी सेवाओं का विश्वसनीय केंद्र
+                </h1>
+
+                <p class="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    आय-जाति-निवास प्रमाण पत्र, नया पैन कार्ड, आयुष्मान कार्ड, ई-श्रम, आधार बैंकिंग (पैसे जमा/निकासी), सभी प्रतियोगी परीक्षाओं के ऑनलाइन फॉर्म एवं कंप्यूटर कार्य अब आपकी अपनी शाखा <strong>चोंगरीबहार</strong> और <strong>दोकड़ा</strong> में उपलब्ध।
+                </p>
+
+                <!-- Direct Call Buttons -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+                    <a href="tel:+916264531630" class="inline-flex items-center gap-2 bg-white text-cscBlue hover:bg-blue-50 font-extrabold px-5 py-3 rounded-xl shadow-lg transition">
+                        <i class="fa-solid fa-phone text-cscOrange"></i>
+                        <span>चोंगरीबहार: 6264531630</span>
+                    </a>
+                    <a href="tel:+919713926390" class="inline-flex items-center gap-2 bg-cscOrange hover:bg-orange-600 text-white font-extrabold px-5 py-3 rounded-xl shadow-lg transition">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>दोकड़ा: 9713926390</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Quick Info Card -->
+            <div class="lg:col-span-5">
+                <div class="bg-white text-slate-800 rounded-2xl p-6 shadow-2xl border border-blue-100 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-cscOrange">केंद्र की जानकारी</span>
+                            <h2 class="text-lg font-extrabold text-cscBlue">शाखाएं एवं कार्यालय समय</h2>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl bg-blue-50 text-cscBlue flex items-center justify-center">
+                            <i class="fa-solid fa-building-user text-xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Office Hours -->
+                    <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-2 text-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-600 font-semibold"><i class="fa-regular fa-clock text-cscBlue mr-1.5"></i>सोमवार – शनिवार:</span>
+                            <span class="font-extrabold text-slate-900">सुबह 10:00 – शाम 6:00</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-600 font-semibold"><i class="fa-solid fa-calendar-xmark text-red-500 mr-1.5"></i>साप्ताहिक अवकाश:</span>
+                            <span class="font-extrabold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-md">रविवार को बंद</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick WhatsApp Branch Links -->
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-blue-50/80 border border-blue-100">
+                            <div>
+                                <p class="text-xs font-extrabold text-cscBlue">शाखा 1: चोंगरीबहार (CHONGRIBAHAR)</p>
+                                <p class="text-sm font-extrabold text-slate-900">6264531630</p>
+                            </div>
+                            <a href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%91%E0%A4%A8%E0%A4%B2%E0%A4%BE%E0%A4%87%E0%A4%A8%20%E0%A4%B8%E0%A5%87%E0%A4%B5%E0%A4%BE%20%E0%A4%95%E0%A5%87%20%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition">
+                                <i class="fa-brands fa-whatsapp text-base"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-orange-50/80 border border-orange-100">
+                            <div>
+                                <p class="text-xs font-extrabold text-cscOrange">शाखा 2: दोकड़ा (DOKDA)</p>
+                                <p class="text-sm font-extrabold text-slate-900">9713926390</p>
+                            </div>
+                            <a href="https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%91%E0%A4%A8%E0%A4%B2%E0%A4%BE%E0%A4%87%E0%A4%A8%20%E0%A4%B8%E0%A5%87%E0%A4%B5%E0%A4%BE%20%E0%A4%95%E0%A5%87%20%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition">
+                                <i class="fa-brands fa-whatsapp text-base"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Branches Section -->
+    <section id="branches" class="py-12 px-4 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-8">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-cscOrange bg-orange-100/70 px-3 py-1 rounded-full">हमारी शाखाएं</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">RUPESH COMPUTERS की दोनों शाखाएं</h2>
+            <p class="text-slate-600 text-sm sm:text-base mt-1.5">अपनी नजदीकी शाखा पर संपर्क करें या सीधे WhatsApp पर अपने दस्तावेज भेजकर काम करवाएं।</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Branch 1: चोंगरीबहार -->
+            <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-cscBlue service-card flex flex-col justify-between">
+                <div>
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block text-xs font-bold bg-blue-100 text-cscBlue px-2.5 py-1 rounded-md mb-1.5">शाखा क्रमांक 01</span>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">चोंगरीबहार <span class="font-english text-cscBlue text-lg">(CHONGRIBAHAR)</span></h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-cscBlue flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-location-dot text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-2 text-sm text-slate-600">
+                        <p class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-map-pin text-cscOrange mt-1"></i>
+                            <span><strong>पता:</strong> RUPESH COMPUTERS, चोंगरीबहार (Chongribahar)</span>
+                        </p>
+                        <p class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-phone text-cscBlue"></i>
+                            <span><strong>मोबाइल नंबर:</strong> <a href="tel:+916264531630" class="font-extrabold text-slate-900 hover:text-cscBlue">6264531630</a></span>
+                        </p>
+                        <p class="flex items-center gap-2.5">
+                            <i class="fa-regular fa-clock text-emerald-600"></i>
+                            <span><strong>ऑफिस समय:</strong> सुबह 10:00 से शाम 6:00 बजे तक (रविवार बंद)</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-slate-100">
+                    <a href="tel:+916264531630" class="flex items-center justify-center gap-2 bg-cscBlue hover:bg-cscDark text-white font-bold py-2.5 px-4 rounded-xl text-sm transition">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>कॉल करें</span>
+                    </a>
+                    <a href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Branch 2: दोकड़ा -->
+            <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-cscOrange service-card flex flex-col justify-between">
+                <div>
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block text-xs font-bold bg-orange-100 text-cscOrange px-2.5 py-1 rounded-md mb-1.5">शाखा क्रमांक 02</span>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">दोकड़ा <span class="font-english text-cscOrange text-lg">(DOKDA)</span></h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-orange-50 text-cscOrange flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-location-dot text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-2 text-sm text-slate-600">
+                        <p class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-map-pin text-cscOrange mt-1"></i>
+                            <span><strong>पता:</strong> RUPESH COMPUTERS, दोकड़ा (Dokda)</span>
+                        </p>
+                        <p class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-phone text-cscOrange"></i>
+                            <span><strong>मोबाइल नंबर:</strong> <a href="tel:+919713926390" class="font-extrabold text-slate-900 hover:text-cscOrange">9713926390</a></span>
+                        </p>
+                        <p class="flex items-center gap-2.5">
+                            <i class="fa-regular fa-clock text-emerald-600"></i>
+                            <span><strong>ऑफिस समय:</strong> सुबह 10:00 से शाम 6:00 बजे तक (रविवार बंद)</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-slate-100">
+                    <a href="tel:+919713926390" class="flex items-center justify-center gap-2 bg-cscOrange hover:bg-orange-600 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>कॉल करें</span>
+                    </a>
+                    <a href="https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Comprehensive Services & "उसके लिए क्या लगेगा" (Required Documents) Section -->
+    <section id="services" class="py-14 px-4 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-8">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-cscBlue bg-blue-50 px-3.5 py-1 rounded-full">डिजिटल सेवा एवं दस्तावेज मार्गदर्शिका</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">हमारी प्रमुख सेवाएं एवं <span class="text-cscOrange">आवश्यक दस्तावेज (क्या लगेगा)</span></h2>
+                <p class="text-slate-600 text-sm sm:text-base mt-2">सेंटर आने से पहले नीचे अपनी सेवा खोजें और जानें कि उस काम के लिए कौन-कौन से कागजात साथ लाने हैं।</p>
+            </div>
+
+            <!-- Search & Category Filter Bar -->
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-8 space-y-4">
+                <div class="relative max-w-xl mx-auto">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="service-search" placeholder="सेवा या दस्तावेज खोजें (जैसे: आय, जाति, पैन कार्ड, आयुष्मान, व्यापम, राशन)..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cscBlue">
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div id="category-filters" class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-bold">
+                    <button type="button" data-cat="all" class="cat-btn active bg-cscBlue text-white px-4 py-2 rounded-xl transition cursor-pointer">सभी सेवाएं (15)</button>
+                    <button type="button" data-cat="certificate" class="cat-btn bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 px-4 py-2 rounded-xl transition cursor-pointer">प्रमाण पत्र (लोक सेवा)</button>
+                    <button type="button" data-cat="id" class="cat-btn bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 px-4 py-2 rounded-xl transition cursor-pointer">कार्ड एवं पहचान पत्र</button>
+                    <button type="button" data-cat="banking" class="cat-btn bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 px-4 py-2 rounded-xl transition cursor-pointer">बैंकिंग व किसान</button>
+                    <button type="button" data-cat="forms" class="cat-btn bg-white text-slate-700 border border-slate-300 hover:bg-blue-50 px-4 py-2 rounded-xl transition cursor-pointer">परीक्षा फॉर्म व अन्य</button>
+                </div>
+            </div>
+
+            <!-- Services Grid (Populated via JavaScript) -->
+            <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 15 Service Cards will render here -->
+            </div>
+
+            <div id="no-service-found" class="hidden text-center py-10 text-slate-500">
+                <i class="fa-regular fa-face-frown text-3xl mb-2 text-slate-400"></i>
+                <p class="font-bold">क्षमा करें, इस नाम से कोई सेवा नहीं मिली। कृपया दूसरा शब्द खोजें या सीधे WhatsApp पर पूछें।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Built-in Client-Side PDF & Photo Tools Section -->
+    <section id="pdf-tools" class="py-14 px-4 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-8">
+            <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-red-700 bg-red-100 px-3.5 py-1 rounded-full">
+                <i class="fa-solid fa-file-pdf"></i> 100% सुरक्षित एवं निःशुल्क ऑनलाइन टूल
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">निःशुल्क PDF एवं फोटो टूल (ऑनलाइन फॉर्म के लिए)</h2>
+            <p class="text-slate-600 text-sm sm:text-base mt-2">
+                सरकारी फॉर्म (CG Vyapam, PSC, SSC, स्कॉलरशिप) भरने के लिए अपने मोबाइल से ही <strong>PDF का साइज कम करें</strong>, <strong>फोटो से PDF बनाएं</strong> या <strong>फोटो/सिग्नेचर का KB सेट करें</strong>। आपकी फाइलें आपके ब्राउज़र में ही प्रोसेस होती हैं।
+            </p>
+        </div>
+
+        <!-- Tool Tabs Navigation -->
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+            <div class="grid grid-cols-1 sm:grid-cols-3 border-b border-slate-200 bg-slate-50">
+                <button type="button" onclick="switchPdfTab('compress')" id="tab-btn-compress" class="pdf-tab-btn flex items-center justify-center gap-2 py-4 px-4 text-sm sm:text-base font-extrabold border-b-4 border-cscBlue bg-white text-cscBlue transition cursor-pointer">
+                    <i class="fa-solid fa-compress text-lg"></i>
+                    <span>1. PDF कंप्रेसर (KB कम करें)</span>
+                </button>
+                <button type="button" onclick="switchPdfTab('img2pdf')" id="tab-btn-img2pdf" class="pdf-tab-btn flex items-center justify-center gap-2 py-4 px-4 text-sm sm:text-base font-extrabold border-b-4 border-transparent text-slate-600 hover:text-cscBlue transition cursor-pointer">
+                    <i class="fa-solid fa-images text-lg"></i>
+                    <span>2. फोटो से PDF बनाएं</span>
+                </button>
+                <button type="button" onclick="switchPdfTab('resizer')" id="tab-btn-resizer" class="pdf-tab-btn flex items-center justify-center gap-2 py-4 px-4 text-sm sm:text-base font-extrabold border-b-4 border-transparent text-slate-600 hover:text-cscBlue transition cursor-pointer">
+                    <i class="fa-solid fa-crop-simple text-lg"></i>
+                    <span>3. फोटो व साइन KB रिसाइज़र</span>
+                </button>
+            </div>
+
+            <div class="p-6 sm:p-8">
+                <!-- TAB 1: PDF Compressor -->
+                <div id="panel-compress" class="pdf-panel space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 hover:bg-blue-50 rounded-2xl p-6 text-center transition">
+                                <i class="fa-solid fa-cloud-arrow-up text-4xl text-cscBlue mb-3"></i>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900">अपनी PDF फाइल चुनें (Select PDF)</h3>
+                                <p class="text-xs text-slate-500 mt-1 mb-4">अंकसूची, प्रमाण पत्र या कोई भी बड़ी PDF फाइल अपलोड करें</p>
+                                <input type="file" id="compress-pdf-input" accept="application/pdf" class="hidden">
+                                <label for="compress-pdf-input" class="inline-flex items-center gap-2 bg-cscBlue hover:bg-cscDark text-white font-bold px-5 py-2.5 rounded-xl cursor-pointer shadow transition text-sm">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <span>PDF फाइल चुनें</span>
+                                </label>
+                                <p id="compress-file-info" class="text-xs font-bold text-slate-700 mt-3"></p>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                                <label class="block text-xs font-extrabold text-slate-700">कम्प्रेशन स्तर चुनें (Compression Quality):</label>
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="comp-level" value="low" class="peer sr-only">
+                                        <div class="p-3 rounded-xl border border-slate-300 bg-white text-center peer-checked:border-cscBlue peer-checked:bg-blue-50 peer-checked:text-cscBlue">
+                                            <span class="block text-xs font-extrabold">अधिक कम (Small)</span>
+                                            <span class="block text-[11px] text-slate-500">~100-200 KB</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="comp-level" value="medium" checked class="peer sr-only">
+                                        <div class="p-3 rounded-xl border border-slate-300 bg-white text-center peer-checked:border-cscBlue peer-checked:bg-blue-50 peer-checked:text-cscBlue">
+                                            <span class="block text-xs font-extrabold">मध्यम (Medium)</span>
+                                            <span class="block text-[11px] text-slate-500">स्पष्ट क्वालिटी</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="comp-level" value="high" class="peer sr-only">
+                                        <div class="p-3 rounded-xl border border-slate-300 bg-white text-center peer-checked:border-cscBlue peer-checked:bg-blue-50 peer-checked:text-cscBlue">
+                                            <span class="block text-xs font-extrabold">हल्का (High HD)</span>
+                                            <span class="block text-[11px] text-slate-500">प्रिंट हेतु श्रेष्ठ</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <button type="button" id="start-compress-btn" class="w-full bg-cscOrange hover:bg-orange-600 text-white font-extrabold py-3 px-5 rounded-xl shadow transition flex items-center justify-center gap-2 cursor-pointer">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span>PDF साइज कम करें (Compress PDF)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Result Box -->
+                        <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-6 border border-slate-200 min-h-[240px] flex flex-col justify-center">
+                            <div id="compress-placeholder" class="text-center text-slate-400 space-y-2">
+                                <i class="fa-solid fa-file-circle-check text-4xl"></i>
+                                <p class="text-sm font-semibold">PDF चुनकर "PDF साइज कम करें" बटन दबाएं। परिणाम यहाँ दिखेगा।</p>
+                            </div>
+
+                            <div id="compress-loading" class="hidden text-center space-y-3">
+                                <i class="fa-solid fa-spinner fa-spin text-3xl text-cscBlue"></i>
+                                <p id="compress-progress-text" class="text-sm font-bold text-slate-700">PDF पेज प्रोसेस हो रहे हैं...</p>
+                            </div>
+
+                            <div id="compress-result" class="hidden space-y-4">
+                                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+                                    <span class="inline-block text-xs font-extrabold bg-emerald-600 text-white px-2.5 py-0.5 rounded-full mb-2">सफलतापूर्वक कम्प्रेस हुआ!</span>
+                                    <div class="grid grid-cols-2 gap-2 text-sm mt-2">
+                                        <div class="bg-white p-2.5 rounded-lg border border-emerald-100">
+                                            <span class="block text-xs text-slate-500">पुराना साइज</span>
+                                            <strong id="orig-pdf-size" class="text-slate-800">--</strong>
+                                        </div>
+                                        <div class="bg-white p-2.5 rounded-lg border border-emerald-100">
+                                            <span class="block text-xs text-slate-500">नया साइज</span>
+                                            <strong id="new-pdf-size" class="text-emerald-700">--</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a id="download-compressed-pdf" download="Rupesh_Computers_Compressed.pdf" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>Compressed PDF डाउनलोड करें</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: Images to PDF Maker -->
+                <div id="panel-img2pdf" class="pdf-panel hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="border-2 border-dashed border-orange-300 bg-orange-50/40 hover:bg-orange-50 rounded-2xl p-6 text-center transition">
+                                <i class="fa-solid fa-images text-4xl text-cscOrange mb-3"></i>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900">एक या अधिक फोटो चुनें (JPG / PNG)</h3>
+                                <p class="text-xs text-slate-500 mt-1 mb-4">आधार कार्ड (आगे-पीछे), मार्कशीट या दस्तावेजों की फोटो चुनकर एक PDF बनाएं</p>
+                                <input type="file" id="img2pdf-input" accept="image/jpeg,image/png,image/webp" multiple class="hidden">
+                                <label for="img2pdf-input" class="inline-flex items-center gap-2 bg-cscOrange hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-xl cursor-pointer shadow transition text-sm">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>फोटो जोड़ें (Select Images)</span>
+                                </label>
+                            </div>
+
+                            <!-- Preview Thumbnails -->
+                            <div id="img2pdf-preview-list" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                        </div>
+
+                        <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4">
+                            <h4 class="font-extrabold text-slate-900 text-base">PDF सेटिंग्स एवं डाउनलोड</h4>
+                            <p class="text-xs text-slate-600">चयनित सभी फोटो को साफ-सुथरे A4 साइज PDF में जोड़ा जाएगा।</p>
+                            
+                            <div class="flex items-center justify-between text-sm bg-white p-3 rounded-xl border border-slate-200">
+                                <span class="font-semibold text-slate-600">चयनित कुल फोटो:</span>
+                                <span id="img2pdf-count" class="font-extrabold text-cscBlue">0</span>
+                            </div>
+
+                            <button type="button" id="generate-pdf-btn" class="w-full bg-cscBlue hover:bg-cscDark text-white font-extrabold py-3.5 px-5 rounded-xl shadow transition flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span>PDF बनाएं और डाउनलोड करें</span>
+                            </button>
+                            <button type="button" id="clear-img2pdf-btn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-xl text-xs transition cursor-pointer">
+                                सभी फोटो हटाएं (Clear)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Photo & Signature KB Resizer -->
+                <div id="panel-resizer" class="pdf-panel hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/40 hover:bg-emerald-50 rounded-2xl p-6 text-center transition">
+                                <i class="fa-solid fa-id-badge text-4xl text-emerald-600 mb-3"></i>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900">पासपोर्ट फोटो या हस्ताक्षर (Signature) चुनें</h3>
+                                <p class="text-xs text-slate-500 mt-1 mb-4">CG Vyapam, SSC, PSC, Railway फॉर्म के अनुसार सटीक KB में बदलें</p>
+                                <input type="file" id="resizer-input" accept="image/jpeg,image/png,image/webp" class="hidden">
+                                <label for="resizer-input" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl cursor-pointer shadow transition text-sm">
+                                    <i class="fa-solid fa-image"></i>
+                                    <span>फोटो / साइन चुनें</span>
+                                </label>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-extrabold text-slate-700 mb-1">प्रकार चुनें (Preset):</label>
+                                    <select id="resizer-preset" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-bold">
+                                        <option value="photo">पासपोर्ट फोटो (200x230 px | ~40 KB)</option>
+                                        <option value="sign">हस्ताक्षर / Signature (140x60 px | ~20 KB)</option>
+                                        <option value="doc">दस्तावेज स्कैन (800x1100 px | ~150 KB)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-extrabold text-slate-700 mb-1">लक्ष्य साइज (Target KB):</label>
+                                    <input type="number" id="resizer-target-kb" value="40" min="10" max="1000" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-bold">
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <button type="button" id="run-resizer-btn" class="w-full bg-cscBlue hover:bg-cscDark text-white font-extrabold py-3 px-5 rounded-xl shadow transition flex items-center justify-center gap-2 cursor-pointer">
+                                        <i class="fa-solid fa-sliders"></i>
+                                        <span>फोटो रिसाइज़ करें</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resizer Output -->
+                        <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-6 border border-slate-200 text-center space-y-4">
+                            <h4 class="font-extrabold text-slate-900 text-base">तैयार फोटो प्रीव्यू</h4>
+                            <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-center min-h-[160px]">
+                                <img id="resizer-preview-img" src="" alt="Preview" class="hidden max-h-40 rounded shadow-sm">
+                                <span id="resizer-empty-msg" class="text-xs text-slate-400 font-semibold">फोटो चुनकर "फोटो रिसाइज़ करें" दबाएं</span>
+                            </div>
+                            <p id="resizer-size-badge" class="hidden text-xs font-extrabold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-lg"></p>
+                            <a id="download-resized-btn" download="Rupesh_Computers_Resized.jpg" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-5 rounded-xl shadow flex items-center justify-center gap-2 transition">
+                                <i class="fa-solid fa-download"></i>
+                                <span>डाउनलोड करें (JPG)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Office Timings & Contact Footer -->
+    <footer id="contact" class="bg-slate-900 text-slate-300 pt-12 pb-8 px-4 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-slate-800">
+            <!-- About -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-cscOrange text-white flex items-center justify-center">
+                        <i class="fa-solid fa-desktop text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-english block text-lg font-extrabold text-white leading-none">RUPESH COMPUTERS</span>
+                        <span class="text-xs text-slate-400">ग्राहक सेवा केंद्र एवं ऑनलाइन सर्विसेज</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 leading-relaxed">
+                    सभी प्रकार के सरकारी प्रमाण पत्र, ऑनलाइन परीक्षा फॉर्म, बैंकिंग, पैन कार्ड, आयुष्मान कार्ड एवं डिजिटल सेवाओं के लिए आपकी सेवा में सदैव तत्पर।
+                </p>
+            </div>
+
+            <!-- Two Branches -->
+            <div class="space-y-3">
+                <h4 class="text-white font-extrabold text-base border-l-4 border-cscOrange pl-2.5">हमारी दोनों शाखाएं</h4>
+                <div class="space-y-2.5 text-sm">
+                    <div class="bg-slate-800/70 p-3 rounded-xl border border-slate-700">
+                        <p class="font-extrabold text-white">1. चोंगरीबहार (CHONGRIBAHAR)</p>
+                        <p class="text-slate-300 mt-0.5">मोबाइल: <a href="tel:+916264531630" class="text-amber-300 font-bold hover:underline">6264531630</a></p>
+                    </div>
+                    <div class="bg-slate-800/70 p-3 rounded-xl border border-slate-700">
+                        <p class="font-extrabold text-white">2. दोकड़ा (DOKDA)</p>
+                        <p class="text-slate-300 mt-0.5">मोबाइल: <a href="tel:+919713926390" class="text-amber-300 font-bold hover:underline">9713926390</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Office Timings -->
+            <div class="space-y-3">
+                <h4 class="text-white font-extrabold text-base border-l-4 border-cscBlue pl-2.5">ऑफिस खुलने का समय</h4>
+                <div class="bg-slate-800/70 p-4 rounded-xl border border-slate-700 space-y-2 text-sm">
+                    <p class="flex items-center justify-between">
+                        <span class="text-slate-400">सोमवार – शनिवार:</span>
+                        <strong class="text-emerald-400">सुबह 10:00 – शाम 6:00</strong>
+                    </p>
+                    <p class="flex items-center justify-between">
+                        <span class="text-slate-400">रविवार (Sunday):</span>
+                        <strong class="text-rose-400">रविवार को बंद</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <p>© <span id="footer-year"></span> <strong class="text-slate-300">RUPESH COMPUTERS</strong> (चोंगरीबहार एवं दोकड़ा). सर्वाधिकार सुरक्षित।</p>
+            <p>Digital Seva & Online Services Portal</p>
+        </div>
+    </footer>
+
+    <!-- 8. Branch Selector Modal for WhatsApp Inquiry -->
+    <div id="branch-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <span class="text-xs font-extrabold text-cscOrange uppercase">WhatsApp पूछताछ</span>
+                    <h3 class="text-lg font-extrabold text-slate-900">अपनी नजदीकी शाखा चुनें</h3>
+                </div>
+                <button type="button" onclick="closeBranchModal()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p class="text-sm text-slate-600">
+                चयनित सेवा: <strong id="modal-service-name" class="text-cscBlue">ऑनलाइन सेवा</strong>
+            </p>
+
+            <div class="space-y-3 pt-1">
+                <a id="modal-wa-chongri" href="#" target="_blank" rel="noopener" class="flex items-center justify-between p-4 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 transition">
+                    <div>
+                        <p class="font-extrabold text-cscBlue text-base">चोंगरीबहार शाखा (CHONGRIBAHAR)</p>
+                        <p class="text-xs font-bold text-slate-600">मोबाइल: 6264531630</p>
+                    </div>
+                    <span class="bg-emerald-600 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-base"></i> भेजें
+                    </span>
+                </a>
+
+                <a id="modal-wa-dokda" href="#" target="_blank" rel="noopener" class="flex items-center justify-between p-4 rounded-xl bg-orange-50 hover:bg-orange-100 border border-orange-200 transition">
+                    <div>
+                        <p class="font-extrabold text-cscOrange text-base">दोकड़ा शाखा (DOKDA)</p>
+                        <p class="text-xs font-bold text-slate-600">मोबाइल: 9713926390</p>
+                    </div>
+                    <span class="bg-emerald-600 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-base"></i> भेजें
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Message Box (No alert() used) -->
+    <div id="toast-box" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-sm font-bold px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2.5">
+        <i class="fa-solid fa-circle-info text-cscOrange"></i>
+        <span id="toast-msg">संदेश</span>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Configure PDF.js worker
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-msg').textContent = msg;
+            box.classList.remove('hidden');
+            setTimeout(() => box.classList.add('hidden'), 3500);
+        }
+
+        // 1. Live Office Status Bar (IST: Mon-Sat 10 AM to 6 PM, Closed Sunday)
+        function updateLiveOfficeStatus() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const ist = new Date(utc + (3600000 * 5.5));
+            const day = ist.getDay(); // 0 = Sunday
+            const hour = ist.getHours();
+
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+
+            if (day === 0) {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
+                text.textContent = 'रविवार को बंद (Closed Today)';
+            } else if (hour >= 10 && hour < 18) {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 live-indicator';
+                text.textContent = 'अभी खुला है (Open Now: 10 AM - 6 PM)';
+            } else {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+                text.textContent = 'अभी बंद है (खुलने का समय: सुबह 10:00 बजे)';
+            }
+        }
+
+        // 2. All 15 Services & Required Documents Data ("उसके लिए क्या लगेगा")
+        const servicesList = [
+            {
+                id: 1,
+                category: 'certificate',
+                icon: 'fa-file-invoice-dollar',
+                color: 'blue',
+                title: 'आय प्रमाण पत्र (Income Certificate)',
+                desc: 'छात्रवृत्ति, एडमिशन एवं सरकारी योजनाओं के लिए तहसील से जारी डिजिटल आय प्रमाण पत्र।',
+                docs: [
+                    'आधार कार्ड (आवेदक एवं अभिभावक का)',
+                    'राशन कार्ड की फोटोकॉपी',
+                    'स्व-घोषणा पत्र (Self Declaration)',
+                    'पटवारी प्रतिवेदन / वेतन पर्ची',
+                    'पासपोर्ट साइज फोटो एवं मोबाइल नंबर'
+                ]
+            },
+            {
+                id: 2,
+                category: 'certificate',
+                icon: 'fa-users-rectangle',
+                color: 'orange',
+                title: 'जाति प्रमाण पत्र (Caste Certificate)',
+                desc: 'ST, SC, OBC वर्ग के लिए स्थायी डिजिटल जाति प्रमाण पत्र (लोक सेवा केंद्र)।',
+                docs: [
+                    'आधार कार्ड एवं पासपोर्ट साइज फोटो',
+                    'मिसल / बी-1 खसरा / 1950 से पूर्व का रिकॉर्ड',
+                    'दाखिल-खारिज / अंकसूची (5वीं / 8वीं / 10वीं)',
+                    'वंशावली एवं राशन कार्ड की कॉपी'
+                ]
+            },
+            {
+                id: 3,
+                category: 'certificate',
+                icon: 'fa-house-chimney-user',
+                color: 'emerald',
+                title: 'निवास प्रमाण पत्र (Domicile Certificate)',
+                desc: 'छत्तीसगढ़ स्थानीय निवासी प्रमाण पत्र (नौकरी, कॉलेज एवं सरकारी कार्यों हेतु)।',
+                docs: [
+                    'आधार कार्ड एवं पासपोर्ट साइज फोटो',
+                    'राशन कार्ड / मतदाता परिचय पत्र',
+                    '10वीं अंकसूची / बिजली बिल / जमीन के कागजात',
+                    'पार्षद या सरपंच का प्रमाणीकरण पत्र'
+                ]
+            },
+            {
+                id: 4,
+                category: 'id',
+                icon: 'fa-id-card',
+                color: 'purple',
+                title: 'नया पैन कार्ड एवं सुधार (PAN Card)',
+                desc: 'NSDL एवं UTI द्वारा नया पैन कार्ड, नाम/जन्मतिथि/फोटो सुधार एवं ई-पैन डाउनलोड।',
+                docs: [
+                    'आधार कार्ड (मोबाइल नंबर लिंक होना अनिवार्य)',
+                    '2 पासपोर्ट साइज रंगीन फोटो',
+                    'हस्ताक्षर (Signature)',
+                    'पुराने पैन कार्ड की कॉपी (केवल सुधार हेतु)'
+                ]
+            },
+            {
+                id: 5,
+                category: 'id',
+                icon: 'fa-heart-pulse',
+                color: 'rose',
+                title: 'आयुष्मान भारत कार्ड (5 लाख मुफ्त इलाज)',
+                desc: 'सरकारी एवं प्राइवेट अस्पतालों में 5 लाख रुपये तक निःशुल्क इलाज हेतु हेल्थ कार्ड।',
+                docs: [
+                    'आधार कार्ड (सभी सदस्यों का)',
+                    'राशन कार्ड (BPL / APL)',
+                    'आधार से लिंक सक्रिय मोबाइल नंबर (OTP हेतु)'
+                ]
+            },
+            {
+                id: 6,
+                category: 'id',
+                icon: 'fa-helmet-safety',
+                color: 'amber',
+                title: 'ई-श्रम कार्ड एवं असंगठित कर्मकार कार्ड',
+                desc: 'श्रमिकों के लिए सरकारी योजना एवं बीमा लाभ हेतु e-Shram कार्ड पंजीयन व अपडेट।',
+                docs: [
+                    'आधार कार्ड',
+                    'बैंक पासबुक की फोटोकॉपी',
+                    'सक्रिय मोबाइल नंबर',
+                    'नॉमिनी (परिवार के सदस्य) का नाम व जन्मतिथि'
+                ]
+            },
+            {
+                id: 7,
+                category: 'banking',
+                icon: 'fa-building-columns',
+                color: 'emerald',
+                title: 'आधार बैंकिंग / मिनी एटीएम (AEPS)',
+                desc: 'किसी भी बैंक से आधार अंगूठा लगाकर पैसे निकासी, जमा, बैलेंस जांच एवं मनी ट्रांसफर।',
+                docs: [
+                    'आधार नंबर (बैंक खाते से लिंक)',
+                    'बैंक का नाम',
+                    'फिंगरप्रिंट (बायोमेट्रिक अंगूठा)'
+                ]
+            },
+            {
+                id: 8,
+                category: 'id',
+                icon: 'fa-check-to-slot',
+                color: 'blue',
+                title: 'नया मतदाता पहचान पत्र एवं सुधार (Voter ID)',
+                desc: 'NVSP पोर्टल से नया वोटर आईडी कार्ड बनाना, पता/नाम सुधार एवं पीवीसी कार्ड ऑर्डर।',
+                docs: [
+                    'आधार कार्ड',
+                    'जन्म प्रमाण पत्र / 10वीं की अंकसूची',
+                    'पासपोर्ट साइज रंगीन फोटो',
+                    'परिवार के किसी सदस्य का वोटर आईडी नंबर'
+                ]
+            },
+            {
+                id: 9,
+                category: 'id',
+                icon: 'fa-car',
+                color: 'orange',
+                title: 'ड्राइविंग लाइसेंस (Learning & Permanent DL)',
+                desc: 'दोपहिया एवं चारपहिया वाहन हेतु लर्निंग लाइसेंस, परमानेंट DL एवं रिन्यूअल आवेदन।',
+                docs: [
+                    'आधार कार्ड (मोबाइल नंबर लिंक)',
+                    '10वीं की अंकसूची (जन्मतिथि प्रमाण हेतु)',
+                    'ब्लड ग्रुप रिपोर्ट',
+                    'पासपोर्ट फोटो एवं हस्ताक्षर'
+                ]
+            },
+            {
+                id: 10,
+                category: 'id',
+                icon: 'fa-passport',
+                color: 'indigo',
+                title: 'पासपोर्ट आवेदन (Passport Seva)',
+                desc: 'नया पासपोर्ट (Fresh) एवं रिन्यूअल हेतु ऑनलाइन आवेदन व अपॉइंटमेंट बुकिंग।',
+                docs: [
+                    'आधार कार्ड एवं पैन कार्ड',
+                    '10वीं की अंकसूची (ECNR हेतु)',
+                    'बैंक पासबुक / जन्म प्रमाण पत्र',
+                    'सक्रिय मोबाइल नंबर एवं ईमेल आईडी'
+                ]
+            },
+            {
+                id: 11,
+                category: 'banking',
+                icon: 'fa-wheat-awn',
+                color: 'emerald',
+                title: 'प्रधानमंत्री किसान सम्मान निधि (PM Kisan)',
+                desc: 'नया किसान पंजीयन, पीएम किसान e-KYC, लैंड सीडिंग एवं किस्त स्टेटस जांच।',
+                docs: [
+                    'आधार कार्ड',
+                    'जमीन की ऋण पुस्तिका / बी-1 खसरा नकल',
+                    'बैंक पासबुक (NPCI / आधार लिंक)',
+                    'सक्रिय मोबाइल नंबर'
+                ]
+            },
+            {
+                id: 12,
+                category: 'certificate',
+                icon: 'fa-bowl-rice',
+                color: 'amber',
+                title: 'राशन कार्ड (नाम जोड़ना / सुधार / ई-केवाईसी)',
+                desc: 'नया राशन कार्ड आवेदन, सदस्य का नाम जोड़ना/हटाना एवं राशन कार्ड e-KYC।',
+                docs: [
+                    'मुखिया एवं सभी सदस्यों का आधार कार्ड',
+                    'पुराना राशन कार्ड',
+                    'मुखिया की बैंक पासबुक',
+                    'मुखिया की 2 पासपोर्ट साइज फोटो'
+                ]
+            },
+            {
+                id: 13,
+                category: 'forms',
+                icon: 'fa-graduation-cap',
+                color: 'blue',
+                title: 'सरकारी परीक्षा एवं कॉलेज फॉर्म (Vyapam/PSC)',
+                desc: 'CG Vyapam, CGPSC, SSC, Railway, Army, पुलिस भर्ती एवं कॉलेज एडमिशन/छात्रवृत्ति फॉर्म।',
+                docs: [
+                    '10वीं, 12वीं एवं स्नातक की अंकसूची',
+                    'आधार कार्ड, जाति एवं निवास प्रमाण पत्र',
+                    'पासपोर्ट साइज फोटो एवं हस्ताक्षर',
+                    'सक्रिय मोबाइल नंबर एवं ईमेल आईडी'
+                ]
+            },
+            {
+                id: 14,
+                category: 'banking',
+                icon: 'fa-bolt',
+                color: 'purple',
+                title: 'बिजली बिल, रिचार्ज, बीमा एवं टिकट बुकिंग',
+                desc: 'बिजली बिल भुगतान, मोबाइल/DTH रिचार्ज, बाइक/कार बीमा (Insurance) एवं ट्रेन टिकट बुकिंग।',
+                docs: [
+                    'बिजली बिल हेतु: कंज्यूमर नंबर (BP Number)',
+                    'वाहन बीमा हेतु: गाड़ी की आरसी (RC) व पुराना बीमा',
+                    'टिकट बुकिंग हेतु: यात्री का नाम, उम्र व आधार कार्ड'
+                ]
+            },
+            {
+                id: 15,
+                category: 'forms',
+                icon: 'fa-print',
+                color: 'rose',
+                title: 'प्रिंटिंग, कलर फोटोकॉपी, लेमिनेशन व स्कैनिंग',
+                desc: 'अर्जेंट पासपोर्ट फोटो, कलर/B&W प्रिंट, लेमिनेशन, हिंदी/अंग्रेजी टाइपिंग एवं PDF कार्य।',
+                docs: [
+                    'मूल दस्तावेज या WhatsApp / पेनड्राइव पर फाइल',
+                    'पासपोर्ट फोटो हेतु तत्काल फोटो खिंचवाने की सुविधा उपलब्ध'
+                ]
+            }
+        ];
+
+        function renderServices(filterCat = 'all', searchTerm = '') {
+            const grid = document.getElementById('services-grid');
+            const emptyBox = document.getElementById('no-service-found');
+            const q = searchTerm.trim().toLowerCase();
+
+            const filtered = servicesList.filter(item => {
+                const matchCat = filterCat === 'all' || item.category === filterCat;
+                const matchSearch = !q ||
+                    item.title.toLowerCase().includes(q) ||
+                    item.desc.toLowerCase().includes(q) ||
+                    item.docs.some(d => d.toLowerCase().includes(q));
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyBox.classList.remove('hidden');
+                return;
+            }
+
+            emptyBox.classList.add('hidden');
+            grid.innerHTML = filtered.map(srv => `
+                <div class="service-card bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="w-11 h-11 rounded-xl bg-blue-100 text-cscBlue flex items-center justify-center shrink-0">
+                                <i class="fa-solid ${srv.icon} text-lg"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold bg-white border border-slate-200 text-slate-600 px-2.5 py-1 rounded-full">
+                                सेवा #${srv.id}
+                            </span>
+                        </div>
+
+                        <h3 class="text-lg font-extrabold text-slate-900 leading-snug mb-1.5">${srv.title}</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">${srv.desc}</p>
+
+                        <!-- Required Documents Box: उसके लिए क्या लगेगा -->
+                        <div class="bg-white rounded-xl p-3.5 border border-blue-100 shadow-sm space-y-2">
+                            <p class="text-xs font-extrabold text-cscOrange flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                                <span>आवश्यक दस्तावेज (क्या-क्या लगेगा):</span>
+                            </p>
+                            <ul class="space-y-1.5 text-xs text-slate-700 font-medium">
+                                ${srv.docs.map(doc => `
+                                    <li class="flex items-start gap-2">
+                                        <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0"></i>
+                                        <span>${doc}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 pt-3 border-t border-slate-200/70">
+                        <button type="button" onclick="openBranchModal('${srv.title.replace(/'/g, "\\'")}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>WhatsApp पर पूछें / आवेदन करें</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Branch Selector Modal Logic
+        function openBranchModal(serviceTitle) {
+            document.getElementById('modal-service-name').textContent = serviceTitle;
+            const msgChongri = encodeURIComponent(`नमस्ते RUPESH COMPUTERS (चोंगरीबहार),\nमुझे "${serviceTitle}" के बारे में जानकारी चाहिए / आवेदन करवाना है।`);
+            const msgDokda = encodeURIComponent(`नमस्ते RUPESH COMPUTERS (दोकड़ा),\nमुझे "${serviceTitle}" के बारे में जानकारी चाहिए / आवेदन करवाना है।`);
+
+            document.getElementById('modal-wa-chongri').href = `https://wa.me/916264531630?text=${msgChongri}`;
+            document.getElementById('modal-wa-dokda').href = `https://wa.me/919713926390?text=${msgDokda}`;
+
+            document.getElementById('branch-modal').classList.remove('hidden');
+        }
+
+        function closeBranchModal() {
+            document.getElementById('branch-modal').classList.add('hidden');
+        }
+
+        // 3. PDF Tools Tab Switcher
+        function switchPdfTab(tabName) {
+            document.querySelectorAll('.pdf-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.pdf-tab-btn').forEach(b => {
+                b.classList.remove('border-cscBlue', 'bg-white', 'text-cscBlue');
+                b.classList.add('border-transparent', 'text-slate-600');
+            });
+
+            document.getElementById(`panel-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.add('border-cscBlue', 'bg-white', 'text-cscBlue');
+            activeBtn.classList.remove('border-transparent', 'text-slate-600');
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        // Initialize Everything on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
+            updateLiveOfficeStatus();
+            setInterval(updateLiveOfficeStatus, 60000);
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+            // Services Search & Filter
+            let currentCategory = 'all';
+            renderServices();
+
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.cat-btn').forEach(b => {
+                        b.classList.remove('bg-cscBlue', 'text-white');
+                        b.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+                    });
+                    btn.classList.add('bg-cscBlue', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+                    currentCategory = btn.dataset.cat;
+                    renderServices(currentCategory, document.getElementById('service-search').value);
+                });
+            });
+
+            document.getElementById('service-search').addEventListener('input', (e) => {
+                renderServices(currentCategory, e.target.value);
+            });
+
+            // Close modal on outside click
+            document.getElementById('branch-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'branch-modal') closeBranchModal();
+            });
+
+            // ==========================================
+            // TOOL 1: Client-Side PDF Compressor
+            // ==========================================
+            let selectedPdfFile = null;
+            const compressInput = document.getElementById('compress-pdf-input');
+            compressInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (file.type !== 'application/pdf') {
+                    showToast('कृपया केवल PDF फाइल चुनें।');
+                    return;
+                }
+                selectedPdfFile = file;
+                document.getElementById('compress-file-info').textContent = `चयनित फाइल: ${file.name} (${formatBytes(file.size)})`;
+                document.getElementById('compress-result').classList.add('hidden');
+                document.getElementById('compress-placeholder').classList.remove('hidden');
+            });
+
+            document.getElementById('start-compress-btn').addEventListener('click', async () => {
+                if (!selectedPdfFile) {
+                    showToast('पहले कोई PDF फाइल चुनें!');
+                    return;
+                }
+
+                const level = document.querySelector('input[name="comp-level"]:checked').value;
+                const scaleMap = { low: 1.0, medium: 1.35, high: 1.8 };
+                const qualityMap = { low: 0.45, medium: 0.65, high: 0.82 };
+                const scale = scaleMap[level];
+                const jpegQuality = qualityMap[level];
+
+                document.getElementById('compress-placeholder').classList.add('hidden');
+                document.getElementById('compress-result').classList.add('hidden');
+                document.getElementById('compress-loading').classList.remove('hidden');
+
+                try {
+                    const arrayBuffer = await selectedPdfFile.arrayBuffer();
+                    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    const newPdf = await PDFLib.PDFDocument.create();
+
+                    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                        document.getElementById('compress-progress-text').textContent = `पेज ${pageNum} / ${pdfDoc.numPages} प्रोसेस हो रहा है...`;
+                        const page = await pdfDoc.getPage(pageNum);
+                        const viewport = page.getViewport({ scale });
+
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+
+                        await page.render({ canvasContext: ctx, viewport }).promise;
+                        const jpgDataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
+                        const jpgBytes = await fetch(jpgDataUrl).then(r => r.arrayBuffer());
+                        const embeddedImg = await newPdf.embedJpg(jpgBytes);
+
+                        const newPage = newPdf.addPage([viewport.width, viewport.height]);
+                        newPage.drawImage(embeddedImg, {
+                            x: 0,
+                            y: 0,
+                            width: viewport.width,
+                            height: viewport.height
+                        });
+                    }
+
+                    const compressedBytes = await newPdf.save();
+                    const blob = new Blob([compressedBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+
+                    document.getElementById('orig-pdf-size').textContent = formatBytes(selectedPdfFile.size);
+                    document.getElementById('new-pdf-size').textContent = formatBytes(blob.size);
+                    const dlLink = document.getElementById('download-compressed-pdf');
+                    dlLink.href = url;
+                    dlLink.download = `Compressed_${selectedPdfFile.name}`;
+
+                    document.getElementById('compress-loading').classList.add('hidden');
+                    document.getElementById('compress-result').classList.remove('hidden');
+                    showToast('PDF सफलतापूर्वक कम्प्रेस हो गई है!');
+                } catch (err) {
+                    console.error(err);
+                    document.getElementById('compress-loading').classList.add('hidden');
+                    document.getElementById('compress-placeholder').classList.remove('hidden');
+                    showToast('PDF प्रोसेस करने में समस्या आई। कृपया दूसरी फाइल आजमाएं।');
+                }
+            });
+
+            // ==========================================
+            // TOOL 2: Images to PDF Maker
+            // ==========================================
+            let img2pdfFiles = [];
+            const img2pdfInput = document.getElementById('img2pdf-input');
+            const previewList = document.getElementById('img2pdf-preview-list');
+
+            function updateImg2PdfUI() {
+                document.getElementById('img2pdf-count').textContent = img2pdfFiles.length;
+                previewList.innerHTML = img2pdfFiles.map((item, idx) => `
+                    <div class="relative bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+                        <img src="${item.url}" alt="Page ${idx + 1}" class="w-full h-24 object-cover rounded-lg">
+                        <span class="absolute top-2.5 left-2.5 bg-cscBlue text-white text-[10px] font-bold px-1.5 py-0.5 rounded">पेज ${idx + 1}</span>
+                        <button type="button" onclick="removeImg2Pdf(${idx})" class="absolute top-2.5 right-2.5 bg-red-600 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center cursor-pointer">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            window.removeImg2Pdf = function(index) {
+                URL.revokeObjectURL(img2pdfFiles[index].url);
+                img2pdfFiles.splice(index, 1);
+                updateImg2PdfUI();
+            };
+
+            img2pdfInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        img2pdfFiles.push({ file, url: URL.createObjectURL(file) });
+                    }
+                });
+                updateImg2PdfUI();
+                img2pdfInput.value = '';
+            });
+
+            document.getElementById('clear-img2pdf-btn').addEventListener('click', () => {
+                img2pdfFiles.forEach(item => URL.revokeObjectURL(item.url));
+                img2pdfFiles = [];
+                updateImg2PdfUI();
+            });
+
+            document.getElementById('generate-pdf-btn').addEventListener('click', async () => {
+                if (img2pdfFiles.length === 0) {
+                    showToast('कृपया कम से कम एक फोटो जोड़ें!');
+                    return;
+                }
+
+                try {
+                    const pdfDoc = await PDFLib.PDFDocument.create();
+                    const a4Width = 595.28;
+                    const a4Height = 841.89;
+                    const margin = 24;
+
+                    for (const item of img2pdfFiles) {
+                        // Convert image via canvas to clean JPEG so WebP/PNG all work seamlessly
+                        const imgEl = new Image();
+                        imgEl.src = item.url;
+                        await new Promise(resolve => { imgEl.onload = resolve; });
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = imgEl.naturalWidth;
+                        canvas.height = imgEl.naturalHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(imgEl, 0, 0);
+
+                        const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        const jpgBytes = await fetch(jpgDataUrl).then(r => r.arrayBuffer());
+                        const embeddedImg = await pdfDoc.embedJpg(jpgBytes);
+
+                        const page = pdfDoc.addPage([a4Width, a4Height]);
+                        const maxW = a4Width - margin * 2;
+                        const maxH = a4Height - margin * 2;
+                        const ratio = Math.min(maxW / embeddedImg.width, maxH / embeddedImg.height);
+                        const drawW = embeddedImg.width * ratio;
+                        const drawH = embeddedImg.height * ratio;
+
+                        page.drawImage(embeddedImg, {
+                            x: (a4Width - drawW) / 2,
+                            y: (a4Height - drawH) / 2,
+                            width: drawW,
+                            height: drawH
+                        });
+                    }
+
+                    const pdfBytes = await pdfDoc.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const dlUrl = URL.createObjectURL(blob);
+
+                    const a = document.createElement('a');
+                    a.href = dlUrl;
+                    a.download = `Rupesh_Computers_Documents_${Date.now()}.pdf`;
+                    a.click();
+                    showToast('PDF बनकर डाउनलोड हो गई है!');
+                } catch (err) {
+                    console.error(err);
+                    showToast('PDF बनाने में त्रुटि हुई।');
+                }
+            });
+
+            // ==========================================
+            // TOOL 3: Photo & Signature Resizer
+            // ==========================================
+            let resizerImage = null;
+            const resizerPreset = document.getElementById('resizer-preset');
+            const resizerTargetKb = document.getElementById('resizer-target-kb');
+
+            resizerPreset.addEventListener('change', () => {
+                if (resizerPreset.value === 'photo') resizerTargetKb.value = 40;
+                else if (resizerPreset.value === 'sign') resizerTargetKb.value = 20;
+                else resizerTargetKb.value = 150;
+            });
+
+            document.getElementById('resizer-input').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const img = new Image();
+                img.onload = () => {
+                    resizerImage = img;
+                    showToast(`फोटो लोड हो गई (${formatBytes(file.size)})`);
+                };
+                img.src = URL.createObjectURL(file);
+            });
+
+            document.getElementById('run-resizer-btn').addEventListener('click', () => {
+                if (!resizerImage) {
+                    showToast('पहले कोई फोटो या हस्ताक्षर चुनें!');
+                    return;
+                }
+
+                const preset = resizerPreset.value;
+                const targetBytes = (parseInt(resizerTargetKb.value, 10) || 40) * 1024;
+
+                let targetW = 200, targetH = 230;
+                if (preset === 'sign') { targetW = 140; targetH = 60; }
+                else if (preset === 'doc') {
+                    const scale = Math.min(900 / resizerImage.naturalWidth, 1);
+                    targetW = Math.round(resizerImage.naturalWidth * scale);
+                    targetH = Math.round(resizerImage.naturalHeight * scale);
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = targetW;
+                canvas.height = targetH;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, targetW, targetH);
+                ctx.drawImage(resizerImage, 0, 0, targetW, targetH);
+
+                // Iteratively find JPEG quality close to target KB
+                let quality = 0.92;
+                let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                while (Math.round((dataUrl.length * 3) / 4) > targetBytes && quality > 0.1) {
+                    quality -= 0.08;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+
+                const approxBytes = Math.round((dataUrl.length * 3) / 4);
+                const previewImg = document.getElementById('resizer-preview-img');
+                previewImg.src = dataUrl;
+                previewImg.classList.remove('hidden');
+                document.getElementById('resizer-empty-msg').classList.add('hidden');
+
+                const badge = document.getElementById('resizer-size-badge');
+                badge.textContent = `नया साइज: ${formatBytes(approxBytes)} (${targetW}x${targetH} px)`;
+                badge.classList.remove('hidden');
+
+                const dlBtn = document.getElementById('download-resized-btn');
+                dlBtn.href = dataUrl;
+                dlBtn.classList.remove('hidden');
+                showToast('फोटो सफलतापूर्वक रिसाइज़ हो गई है!');
+            });
+        });
+    </script>
+</body>
+</html>
