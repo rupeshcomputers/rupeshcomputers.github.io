@@ -16,6 +16,10 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* स्टिकी हेडर के कारण सेक्शन पर स्क्रॉल करते समय सही मार्जिन बनाए रखने के लिए */
+        section, div[id] {
+            scroll-margin-top: 110px;
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -27,17 +31,33 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
+        /* टोस्ट नोटिफिकेशन एनीमेशन */
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast-show {
+            animation: slideIn 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- कस्टम टोस्ट नोटिफिकेशन (alert() की जगह) -->
+    <div id="toast-box" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden">
+        <div id="toast-msg" class="bg-slate-900 text-white text-xs sm:text-sm font-bold px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-amber-400"></i>
+            <span id="toast-text">संदेश</span>
+        </div>
+    </div>
 
     <!-- 1. Top Announcement Marquee -->
     <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-xs sm:text-sm py-2 px-4 shadow-inner">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap w-full">
-                <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">सुचना</span>
+                <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">सूचना</span>
                 <marquee behavior="scroll" direction="left" class="font-medium text-slate-200">
-                    🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क, आय-जाति-निवास प्रमाण पत्र एवं सभी ऑनलाइन कार्य तुरंत कराए जाते हैं। 📢 **सरकारी वैकेंसी और ताजा जानकारी के लिए हमारे व्हाट्सएप चैनल से जरूर जुड़ें!** | समय: सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश।
+                    🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क, आय-जाति-निवास प्रमाण पत्र, पासपोर्ट फोटो एवं सभी ऑनलाइन कार्य तुरंत कराए जाते हैं। 📢 सरकारी वैकेंसी और ताजा जानकारी के लिए हमारे व्हाट्सएप चैनल से जरूर जुड़ें! | समय: सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश।
                 </marquee>
             </div>
         </div>
@@ -48,63 +68,91 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo / Title -->
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center text-xl shadow-lg">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center text-xl shadow-lg">
                     <i class="fa-solid fa-laptop-code"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg sm:text-xl font-black tracking-tight text-slate-900">RUPESH COMPUTERS</h1>
-                    <p class="text-[11px] font-bold text-blue-700 tracking-wider uppercase">चोंगरीबहार & दोकड़ा शाखा</p>
+                    <h1 class="text-base sm:text-xl font-black tracking-tight text-slate-900">RUPESH COMPUTERS</h1>
+                    <p id="header-branch-subtitle" class="text-[11px] font-bold text-blue-700 tracking-wider uppercase">सक्रिय शाखा: चोंगरीबहार (मुख्य मार्ग)</p>
                 </div>
             </div>
 
-            <!-- Desktop & Responsive Navigation Menu with All Links -->
+            <!-- Desktop & Responsive Navigation Menu with Fixed Links -->
             <nav class="hidden xl:flex items-center gap-1">
                 <a href="#home" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-house text-blue-600"></i> होम</a>
                 <a href="#services" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-layer-group text-indigo-600"></i> सेवाएँ</a>
-                <a href="#tools" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-toolbox text-red-600"></i> JPEG to PDF & Tools</a>
-                <a href="#tools" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB & Age Calculator</a>
-                <a href="#scanner-section" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-barcode text-purple-600"></i> Barcode Reader</a>
+                <a href="#tools" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-toolbox text-red-600"></i> PDF & फोटो टूल्स</a>
+                <!-- ठीक किया गया सीधा Age Calculator लिंक -->
+                <a href="#age-calculator-card" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition flex items-center gap-1"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB & Age Calculator</a>
+                <a href="#qr-barcode-card" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-barcode text-indigo-600"></i> QR & Barcode</a>
                 <a href="#why-choose-us" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> विशेषताएँ</a>
                 <a href="#contact-footer" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-location-dot text-emerald-600"></i> शाखाएँ</a>
             </nav>
 
             <!-- Branch Selector Header Buttons -->
             <div class="flex items-center gap-2">
-                <button id="btn-chongribahar" onclick="switchBranch('chongribahar')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md">
-                    चोंगरीबहार
+                <button id="btn-chongribahar" onclick="switchBranch('chongribahar')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot text-[10px]"></i> चोंगरीबहार
                 </button>
-                <button id="btn-dokda" onclick="switchBranch('dokda')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300">
-                    दोकड़ा
+                <button id="btn-dokda" onclick="switchBranch('dokda')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot text-[10px]"></i> दोकड़ा
                 </button>
             </div>
         </div>
-        <!-- Mobile Navigation Sub-Bar -->
+
+        <!-- Mobile Navigation Sub-Bar (Fixed Age Calculator Link) -->
         <div class="xl:hidden flex overflow-x-auto px-4 py-2 bg-slate-50 border-t border-slate-200 gap-2 whitespace-nowrap">
             <a href="#home" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">होम</a>
             <a href="#services" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">सेवाएँ</a>
             <a href="#tools" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">JPEG to PDF</a>
-            <a href="#tools" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">DOB Calculator</a>
-            <a href="#scanner-section" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Barcode Reader</a>
+            <a href="#passport-tool-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">पासपोर्ट फोटो</a>
+            <a href="#age-calculator-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200 shadow-sm">DOB Calculator</a>
+            <a href="#qr-barcode-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Barcode Reader</a>
             <a href="#why-choose-us" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">विशेषताएँ</a>
             <a href="#contact-footer" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">शाखाएँ</a>
         </div>
     </header>
 
-    <!-- 3. Hero Section with Compact Sidebar Links -->
-    <section id="home" class="relative py-12 sm:py-20 bg-gradient-to-b from-blue-50/50 via-slate-50 to-white overflow-hidden">
+    <!-- 3. Hero Section with Compact Sidebar Links & Dynamic Branch Info -->
+    <section id="home" class="relative py-10 sm:py-16 bg-gradient-to-b from-blue-50/60 via-slate-50 to-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- सक्रिय शाखा सूचना कार्ड (Branch Switcher से तुरंत अपडेट होता है) -->
+            <div id="active-branch-banner" class="mb-8 bg-white border-2 border-blue-600/20 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start sm:items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg shrink-0 shadow">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span id="branch-badge" class="bg-blue-100 text-blue-800 text-[11px] font-black px-2.5 py-0.5 rounded-full">चयनित शाखा: चोंगरीबहार</span>
+                            <span class="text-xs font-bold text-emerald-600 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> सेवा उपलब्ध</span>
+                        </div>
+                        <p id="branch-address-text" class="text-sm font-bold text-slate-800 mt-1">पता: मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
+                        <p id="branch-operator-text" class="text-xs text-slate-500">संचालक: रूपेश प्रसाद | संपर्क: +91 6264531630</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <a id="branch-call-btn" href="tel:+916264531630" class="flex-1 sm:flex-initial justify-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-phone"></i> कॉल करें
+                    </a>
+                    <a id="branch-map-btn" href="https://maps.google.com/?q=Chongribahar" target="_blank" class="flex-1 sm:flex-initial justify-center bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-slate-300">
+                        <i class="fa-solid fa-map-location-dot text-red-600"></i> लोकेशन
+                    </a>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                
                 <!-- Main Hero Content (Left 8 Cols) -->
                 <div class="lg:col-span-8 text-center lg:text-left">
                     <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-3.5 py-1.5 rounded-full mb-4 shadow-sm">
-                        <i class="fa-solid fa-circle-check text-emerald-600"></i> छत्तीसगढ़ शासन स्वीकृत अधिकृत केंद्र
+                        <i class="fa-solid fa-circle-check text-emerald-600"></i> छत्तीसगढ़ शासन स्वीकृत अधिकृत केंद्र
                     </span>
                     <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
                         सभी डिजिटल एवं सरकारी सेवाएँ अब एक ही छत के नीचे!
                     </h2>
                     <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                        SBI कियोस्क बैंकिंग, आधार सेंटर, आय-जाति-निवास प्रमाण पत्र, लर्निंग लाइसेंस और सभी ऑनलाइन फॉर्म भरने के लिए आज ही संपर्क करें।
+                        SBI कियोस्क बैंकिंग, आधार सेंटर, आय-जाति-निवास प्रमाण पत्र, लर्निंग लाइसेंस, आयुष्मान कार्ड और सभी ऑनलाइन फॉर्म भरने के लिए आज ही संपर्क करें।
                     </p>
                     
                     <div class="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
@@ -114,6 +162,9 @@
                         <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-brands fa-whatsapp text-lg"></i> व्हाट्सएप चैनल
                         </a>
+                        <button onclick="toggleChat()" class="bg-slate-900 hover:bg-slate-800 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-robot text-amber-400"></i> AI से पूछें
+                        </button>
                     </div>
 
                     <!-- Timing Highlight Box -->
@@ -126,7 +177,7 @@
                 <!-- Compact Direct Links Sidebar (Right 4 Cols) -->
                 <div class="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
                     <h3 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2 pb-2 border-b border-slate-100">
-                        <i class="fa-solid fa-bolt text-amber-500"></i> महत्वपूर्ण सरकारी लिंक
+                        <i class="fa-solid fa-bolt text-amber-500"></i> महत्वपूर्ण सरकारी एवं योजना लिंक
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
                         <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
@@ -147,15 +198,15 @@
                         </a>
                         <a href="https://fci.cg.nic.in/DhanKharidi2025/index.aspx" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
                             <i class="fa-solid fa-wheat-awn text-orange-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">धान खरीदी</div>
+                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">धान खरीदी पोर्टल</div>
                         </a>
-                        <a href="https://dcs.cg.nic.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-laptop-file text-purple-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">DCS पोर्टल</div>
+                        <a href="https://mahtarivandan.cgstate.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-pink-50 border border-slate-200 rounded-xl text-center transition group">
+                            <i class="fa-solid fa-hand-holding-heart text-pink-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-pink-700">महतारी वंदन</div>
                         </a>
-                        <a href="https://voters.eci.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-address-card text-rose-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">मतदाता सूची</div>
+                        <a href="https://pmkisan.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl text-center transition group">
+                            <i class="fa-solid fa-tractor text-green-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-green-700">PM किसान सम्मान</div>
                         </a>
                         <a href="https://rationcard.cg.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
                             <i class="fa-solid fa-utensils text-teal-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
@@ -163,22 +214,27 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- 4. Services Section -->
+    <!-- 4. Services Section with Search Filter -->
     <section id="services" class="py-16 sm:py-24 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-10">
                 <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-3.5 py-1.5 rounded-full mb-3">
                     <i class="fa-solid fa-layer-group"></i> हमारी सेवाएँ एवं दस्तावेज
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-black text-slate-900">आवश्यक दस्तावेजों की पूरी जानकारी</h2>
-                <p class="mt-4 text-slate-600 text-sm sm:text-base">
-                    किसी भी प्रमाण पत्र या बैंकिंग कार्य के लिए कौन-कौन से दस्तावेज चाहिए, नीचे देखें और सीधे व्हाट्सएप पर साझा करें।
+                <p class="mt-3 text-slate-600 text-sm sm:text-base">
+                    किसी भी प्रमाण पत्र या बैंकिंग कार्य के लिए कौन-कौन से दस्तावेज चाहिए, नीचे खोजें और सीधे व्हाट्सएप पर साझा करें।
                 </p>
+
+                <!-- सेवा खोजें (Search Box) -->
+                <div class="mt-6 max-w-md mx-auto relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="service-search" onkeyup="filterServices()" placeholder="सेवा खोजें (जैसे: जाति, निवास, पैन, आधार, SBI)..." class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 shadow-inner">
+                </div>
             </div>
 
             <!-- Services Dynamic Grid -->
@@ -188,91 +244,134 @@
         </div>
     </section>
 
-    <!-- 5. PDF & Photo Tools Section -->
+    <!-- 5. PDF, Photo & Utility Tools Section -->
     <section id="tools" class="py-16 sm:py-24 bg-slate-100 border-t border-slate-200 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-red-700 bg-red-100 px-3.5 py-1 rounded-full mb-3">
                     <i class="fa-solid fa-toolbox"></i> उपयोगी डिजिटल टूल्स
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF & Image Resizer Tools</h2>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">डिजिटल डॉक्यूमेंट एवं फोटो टूल्स</h2>
                 <p class="mt-4 text-slate-600 text-sm sm:text-base">
                     ऑनलाइन फॉर्म भरने और रोजमर्रा के कामों के लिए आसान और सुरक्षित डिजिटल टूल्स।
                 </p>
             </div>
 
-            <!-- Image to PDF Tool -->
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                        <i class="fa-regular fa-images"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900">Photo(s) से PDF बनाएं</h3>
-                        <p class="text-sm text-slate-500">आय, जाति, निवास के दस्तावेजों को एक PDF में जोड़ें</p>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-8 text-center hover:bg-blue-50 transition cursor-pointer mb-4" onclick="document.getElementById('img2pdf-input').click()">
-                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-3"></i>
-                    <h4 class="font-bold text-slate-800">यहाँ क्लिक करके फोटो (JPEG/PNG) चुनें</h4>
-                    <p class="text-xs text-slate-500 mt-1">एक साथ कई फोटो चुन सकते हैं</p>
-                    <input type="file" id="img2pdf-input" accept="image/*" multiple class="hidden" onchange="handleImgSelection(event)">
-                </div>
-                
-                <div id="pdf-preview-container" class="hidden flex-col gap-4">
-                    <h4 class="font-bold text-sm text-slate-700">चुनी गई फोटो (रिव्यू करें):</h4>
-                    <div id="pdf-image-list" class="flex flex-wrap gap-3"></div>
-                    <button onclick="generatePdf()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-md">
-                        PDF बनाएं (Convert)
-                    </button>
-                </div>
-
-                <div id="img2pdf-status" class="mt-4 hidden text-sm font-semibold text-center text-green-700 bg-green-50 py-3 rounded-lg border border-green-200"></div>
-            </div>
-
-            <!-- Photo/Signature KB Resizer -->
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-compress"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900">फोटो / सिग्नेचर का Size (KB) कम करें</h3>
-                        <p class="text-sm text-slate-500">फॉर्म के लिए फोटो को 50KB या 20KB के अंदर करें</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-8 text-center hover:bg-emerald-50 transition cursor-pointer" onclick="document.getElementById('resizer-input').click()">
-                        <i class="fa-regular fa-image text-4xl text-emerald-500 mb-3"></i>
-                        <h4 class="font-bold text-slate-800">फोटो चुनें</h4>
-                        <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="previewImageToResize(event)">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Image to PDF Tool -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+                            <i class="fa-regular fa-images"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Photo(s) से PDF बनाएं</h3>
+                            <p class="text-sm text-slate-500">आय, जाति, निवास के दस्तावेजों को एक PDF में जोड़ें</p>
+                        </div>
                     </div>
                     
-                    <div id="resize-controls" class="hidden flex-col justify-center gap-4 p-4 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए? (लगभग)</label>
-                            <input type="number" id="target-kb" value="40" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <button onclick="resizeImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition">
-                            Size कम करें (Compress)
+                    <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-6 text-center hover:bg-blue-50 transition cursor-pointer mb-4" onclick="document.getElementById('img2pdf-input').click()">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-blue-500 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 text-sm">यहाँ क्लिक करके फोटो (JPEG/PNG) चुनें</h4>
+                        <p class="text-xs text-slate-500 mt-1">एक साथ कई फोटो चुन सकते हैं</p>
+                        <input type="file" id="img2pdf-input" accept="image/*" multiple class="hidden" onchange="handleImgSelection(event)">
+                    </div>
+                    
+                    <div id="pdf-preview-container" class="hidden flex-col gap-4">
+                        <h4 class="font-bold text-sm text-slate-700">चुनी गई फोटो (रिव्यू करें):</h4>
+                        <div id="pdf-image-list" class="flex flex-wrap gap-3"></div>
+                        <button onclick="generatePdf()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-md">
+                            PDF बनाएं (Convert)
                         </button>
                     </div>
+
+                    <div id="img2pdf-status" class="mt-4 hidden text-sm font-semibold text-center text-green-700 bg-green-50 py-3 rounded-lg border border-green-200"></div>
                 </div>
-                <div id="resize-result" class="mt-4"></div>
+
+                <!-- Photo/Signature KB Resizer -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-compress"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">फोटो / सिग्नेचर Size (KB) कम करें</h3>
+                            <p class="text-sm text-slate-500">ऑनलाइन फॉर्म के लिए फोटो को 50KB या 20KB के अंदर करें</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-6 text-center hover:bg-emerald-50 transition cursor-pointer flex flex-col justify-center" onclick="document.getElementById('resizer-input').click()">
+                            <i class="fa-regular fa-image text-3xl text-emerald-500 mb-2"></i>
+                            <h4 class="font-bold text-slate-800 text-sm">फोटो चुनें</h4>
+                            <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="previewImageToResize(event)">
+                        </div>
+                        
+                        <div id="resize-controls" class="hidden flex-col justify-center gap-3 p-4 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए?</label>
+                                <input type="number" id="target-kb" value="40" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            </div>
+                            <button onclick="resizeImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs transition">
+                                Size कम करें (Compress)
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resize-result" class="mt-4"></div>
+                </div>
             </div>
 
-            <!-- Additional Tools Grid (Age Calculator, QR & Barcode Generator, Live Scanner) -->
+            <!-- नया फीचर: पासपोर्ट साइज फोटो शीट मेकर (A4 Sheet) -->
+            <div id="passport-tool-card" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-id-badge"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">पासपोर्ट साइज फोटो मेकर (प्रिंट शीट)</h3>
+                            <p class="text-sm text-slate-500">एक क्लिक में 6 या 12 पासपोर्ट फोटो की प्रिंट-रेडी शीट तैयार करें</p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-100 text-amber-800 text-xs font-extrabold px-3 py-1 rounded-full self-start sm:self-center">नया टूल</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div class="border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-2xl p-6 text-center hover:bg-amber-50 transition cursor-pointer" onclick="document.getElementById('passport-input').click()">
+                        <i class="fa-solid fa-user-tie text-3xl text-amber-600 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 text-sm">पासपोर्ट फोटो अपलोड करें</h4>
+                        <input type="file" id="passport-input" accept="image/*" class="hidden" onchange="loadPassportPhoto(event)">
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">फोटो की संख्या चुनें:</label>
+                            <select id="passport-count" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-slate-50 outline-none">
+                                <option value="6">6 फोटो (1 लाइन - 4x6 शीट)</option>
+                                <option value="12" selected>12 फोटो (2 लाइन - प्रिंट शीट)</option>
+                            </select>
+                        </div>
+                        <button onclick="generatePassportSheet()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow">
+                            पासपोर्ट शीट बनाएं
+                        </button>
+                    </div>
+
+                    <div id="passport-result" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 min-h-[110px] flex flex-col items-center justify-center">
+                        <p class="text-xs text-slate-500">तैयार की गई पासपोर्ट फोटो शीट यहाँ दिखेगी</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Tools Grid (Age Calculator with ID, QR & Barcode Generator, Live Scanner) -->
             <div id="scanner-section" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- 1. Premium Age Calculator with Target Date -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                <!-- 1. Premium Age Calculator with Target Date (Dedicated ID for Direct Scroll) -->
+                <div id="age-calculator-card" class="bg-white border-2 border-purple-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
                             <i class="fa-solid fa-cake-candles"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">प्रीमियम उम्र कैलकुलेटर</h3>
+                        <h3 class="text-lg font-bold text-slate-900 mb-1">प्रीमियम उम्र कैलकुलेटर (DOB)</h3>
                         <p class="text-xs text-slate-500 mb-4">जन्मतिथि एवं किसी विशेष तारीख के अनुसार सटीक आयु निकालें।</p>
                         
                         <div class="space-y-3 mb-4">
@@ -294,14 +393,14 @@
                     </div>
                 </div>
 
-                <!-- 2. QR Code & Barcode Generator (Fixed & Separated) -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                <!-- 2. QR Code & Barcode Generator -->
+                <div id="qr-barcode-card" class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
                             <i class="fa-solid fa-barcode"></i>
                         </div>
                         <h3 class="text-lg font-bold text-slate-900 mb-1">QR और बारकोड जेनरेटर</h3>
-                        <p class="text-xs text-slate-500 mb-3">टेक्स्ट या नंबर से QR और बारकोड दोनों बनाएं।</p>
+                        <p class="text-xs text-slate-500 mb-3">टेक्स्ट, मोबाइल नंबर या लिंक से QR और बारकोड बनाएं।</p>
                         <div class="space-y-2 mb-3">
                             <input type="text" id="code-text-input" placeholder="यहाँ टेक्स्ट या नंबर लिखें..." class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
                         </div>
@@ -316,19 +415,20 @@
                             </button>
                         </div>
                         <div id="code-result-container" class="mt-2 text-center hidden bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                            <img id="generated-img" class="mx-auto max-w-full h-20 object-contain bg-white p-1 rounded border shadow-sm">
+                            <img id="generated-img" class="mx-auto max-w-full h-20 object-contain bg-white p-1 rounded border shadow-sm mb-2">
+                            <a id="download-code-btn" href="#" download="code.png" target="_blank" class="text-[11px] font-bold text-blue-600 hover:underline">इमेज खोलें / सेव करें</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. New Live QR / Barcode Scanner Studio -->
+                <!-- 3. Live QR / Barcode Scanner Studio -->
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">लाइव QR & बारकोड स्कैनर</h3>
-                        <p class="text-xs text-slate-500 mb-4">कैमरे से किसी भी QR कोड को स्कैन करें।</p>
+                        <h3 class="text-lg font-bold text-slate-900 mb-1">QR & बारकोड रीडर</h3>
+                        <p class="text-xs text-slate-500 mb-4">किसी भी QR कोड या बारकोड की फोटो अपलोड करके जानकारी देखें।</p>
                         
                         <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-4 text-center cursor-pointer mb-3" onclick="document.getElementById('scanner-file-input').click()">
                             <i class="fa-solid fa-image text-2xl text-emerald-600 mb-1"></i>
@@ -337,14 +437,13 @@
                         </div>
                     </div>
                     <div>
-                        <div id="scanner-result" class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center min-h-[40px] flex items-center justify-center">
+                        <div id="scanner-result" class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center min-h-[40px] flex items-center justify-center break-all">
                             स्कैन किया गया परिणाम यहाँ दिखेगा
                         </div>
                     </div>
                 </div>
 
             </div>
-
         </div>
     </section>
 
@@ -400,34 +499,36 @@
                 <h3 class="text-white text-xl font-black mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-laptop-code text-amber-400"></i> RUPESH COMPUTERS
                 </h3>
-                <p class="text-sm mb-4">सभी डिजिटल, बैंकिंग एवं सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
+                <p class="text-sm mb-4">सभी डिजिटल, बैंकिंग एवं सरकारी सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
                 <div class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-lg mb-3">
                     <i class="fa-regular fa-clock"></i> सोम - शनि: 10:00 AM - 06:00 PM (रविवार बंद)
                 </div>
-                <div class="flex gap-3">
-                    <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="w-10 h-10 rounded-full bg-white/10 hover:bg-emerald-600 flex items-center justify-center text-white transition">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                <div class="flex gap-3 mt-2">
+                    <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 flex items-center gap-2 text-white text-xs font-bold transition">
+                        <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp चैनल जॉइन करें
                     </a>
                 </div>
             </div>
             
-            <div>
-                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+            <div id="footer-card-chongribahar" class="p-4 rounded-2xl border border-amber-500/40 bg-slate-900/60 transition">
+                <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-location-dot text-amber-400"></i> चोंगरीबहार शाखा
                 </h4>
-                <p class="text-sm mb-2">मुख्य मार्ग, चोंगरीबहार</p>
-                <p class="text-xs text-slate-400 mb-2">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
+                <p class="text-sm mb-1">मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
+                <p class="text-xs text-emerald-400 font-bold mb-1"><i class="fa-solid fa-phone"></i> मोबाइल: <a href="tel:+916264531630" class="hover:underline">+91 6264531630</a></p>
+                <p class="text-xs text-slate-400 mb-3">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
                 <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="inline-flex items-center gap-1 text-xs text-amber-400 hover:underline font-bold">
                     <i class="fa-solid fa-map-location-dot"></i> गूगल मैप पर दिशा देखें
                 </a>
             </div>
 
-            <div>
-                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+            <div id="footer-card-dokda" class="p-4 rounded-2xl border border-slate-800 bg-slate-900/40 transition">
+                <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-location-dot text-amber-400"></i> दोकड़ा शाखा
                 </h4>
-                <p class="text-sm mb-2">ग्राम - दोकड़ा (मुख्य मार्ग)</p>
-                <p class="text-xs text-slate-400 mb-2">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
+                <p class="text-sm mb-1">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
+                <p class="text-xs text-emerald-400 font-bold mb-1"><i class="fa-solid fa-phone"></i> मोबाइल: <a href="tel:+919713926390" class="hover:underline">+91 9713926390</a></p>
+                <p class="text-xs text-slate-400 mb-3">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
                 <a href="https://maps.google.com/?q=Dokda" target="_blank" class="inline-flex items-center gap-1 text-xs text-amber-400 hover:underline font-bold">
                     <i class="fa-solid fa-map-location-dot"></i> गूगल मैप पर दिशा देखें
                 </a>
@@ -436,17 +537,17 @@
 
         <!-- Developed By Credits -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800 text-center text-xs pb-16">
-            <p class="text-slate-400 mb-2 bg-slate-900/60 p-3 rounded-xl border border-slate-800 inline-block max-w-2xl">
-                ⚠️ <b>अस्वीकरण (Disclaimer):</b> इस वेबसाइट पर दी गई सभी सरकारी लिंक और जानकारी केवल सुविधा के लिए हैं। यदि कोई जानकारी, लिंक या स्टेटस गलत या अपरिहार्य कारणों से त्रुटिपूर्ण पाया जाता है, तो इसके लिए रूपेश कंप्यूटर्स या संचालक जिम्मेदार नहीं होंगे। किसी भी त्रुटि के लिए संबंधित विभाग की आधिकारिक वेबसाइट या कार्यालय से पुष्टि करें।
+            <p class="text-slate-400 mb-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800 inline-block max-w-2xl">
+                ⚠️ <b>अस्वीकरण (Disclaimer):</b> इस वेबसाइट पर दी गई सभी सरकारी लिंक और जानकारी केवल सुविधा के लिए हैं। किसी भी त्रुटि के लिए संबंधित विभाग की आधिकारिक वेबसाइट या कार्यालय से पुष्टि करें।
             </p>
             <p class="text-slate-400 mb-1">&copy; 2026 Rupesh Computers (Chongribahar & Dokda). All rights reserved.</p>
             <p class="text-amber-400 font-bold tracking-wide">Website Created & Designed by: अविनाश प्रसाद & रूपेश प्रसाद</p>
         </div>
     </footer>
 
-    <!-- Fixed Bottom Quick Action Bar for Mobile -->
+    <!-- Fixed Bottom Quick Action Bar for Mobile (Dynamic Phone Link) -->
     <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2.5 px-4 shadow-lg sm:hidden flex justify-around items-center">
-        <a href="tel:9876543210" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
+        <a id="mobile-bottom-call" href="tel:+916264531630" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-phone"></i> कॉल करें
         </a>
         <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
@@ -457,11 +558,11 @@
         </button>
     </div>
 
-    <!-- 7. RUPESH AI Chatbot -->
+    <!-- 7. Upgraded RUPESH AI Chatbot -->
     <div id="chatbot-container" class="fixed bottom-20 right-6 z-50 flex flex-col items-end">
-        <div id="chat-window" class="hidden w-[90vw] sm:w-[380px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 mb-4 overflow-hidden flex-col transition-all origin-bottom-right backdrop-blur-xl">
+        <div id="chat-window" class="hidden w-[90vw] sm:w-[390px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 mb-4 overflow-hidden flex-col transition-all origin-bottom-right backdrop-blur-xl">
             <!-- Modern Gradient Header -->
-            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white p-4.5 flex justify-between items-center shadow-md">
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white p-4 flex justify-between items-center shadow-md">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center shadow-lg font-bold">
                         <i class="fa-solid fa-robot text-lg"></i>
@@ -469,7 +570,7 @@
                     <div>
                         <h4 class="font-black text-sm tracking-wide">रूपेश AI असिस्टेंट</h4>
                         <p class="text-[10px] text-amber-300 font-medium flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ऑनलाइन सेवा सहायता
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> दस्तावेज एवं स्टेटस गाइड
                         </p>
                     </div>
                 </div>
@@ -478,26 +579,26 @@
                 </button>
             </div>
             
-            <div id="chat-messages" class="h-[320px] overflow-y-auto p-4 space-y-4 bg-slate-50/50 text-sm">
+            <div id="chat-messages" class="h-[330px] overflow-y-auto p-4 space-y-4 bg-slate-50/50 text-sm">
                 <div class="flex gap-2.5">
                     <div class="w-7 h-7 rounded-xl bg-slate-900 shrink-0 flex items-center justify-center mt-1 shadow-sm">
                         <i class="fa-solid fa-robot text-xs text-amber-400"></i>
                     </div>
-                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs sm:text-sm leading-relaxed">
-                        नमस्ते! 🙏 मैं रूपेश कंप्यूटर्स का AI असिस्टेंट हूँ। दुकान खुलने का समय **सोमवार से शनिवार, सुबह 10:00 से शाम 6:00 बजे** तक है (रविवार अवकाश)। मैं आपकी कैसे मदद कर सकता हूँ?
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
+                        नमस्ते! 🙏 मैं <b>रूपेश AI असिस्टेंट</b> हूँ। आप मुझसे किसी भी प्रमाण पत्र (जाति, निवास, आय, पैन, आयुष्मान) के दस्तावेज, दुकान का समय या पता पूछ सकते हैं:
                         
-                        <div class="mt-3.5 flex flex-col gap-2">
-                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/60 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
-                                <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार कार्ड का स्टेटस चेक करें
+                        <div class="mt-3 flex flex-col gap-1.5">
+                            <button onclick="handleQuickAction('jati')" class="text-left bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-file-shield text-indigo-600"></i> जाति प्रमाण पत्र के दस्तावेज
                             </button>
-                            <button onclick="handleQuickAction('pan')" class="text-left bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/60 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
-                                <i class="fa-solid fa-id-card text-emerald-600"></i> पैन कार्ड का स्टेटस चेक करें
+                            <button onclick="handleQuickAction('niwas')" class="text-left bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-house-chimney text-violet-600"></i> निवास और आय प्रमाण पत्र दस्तावेज
                             </button>
-                            <button onclick="handleQuickAction('sewasetu')" class="text-left bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/60 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
-                                <i class="fa-solid fa-file-shield text-indigo-600"></i> लोक सेवा (आय/जाति/निवास) स्टेटस
+                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
                             </button>
-                            <button onclick="handleQuickAction('bhuiyan')" class="text-left bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/60 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
-                                <i class="fa-solid fa-seedling text-amber-600"></i> भुइयां (बी-1 / खसरा) देखें
+                            <button onclick="handleQuickAction('branch')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-emerald-600"></i> चोंगरीबहार और दोकड़ा शाखा का पता
                             </button>
                         </div>
                     </div>
@@ -506,21 +607,91 @@
 
             <div class="p-3 border-t border-slate-200 bg-white shadow-inner">
                 <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
-                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required autocomplete="off">
-                    <button type="submit" class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
+                    <input type="text" id="chat-input" placeholder="जैसे: जाति के लिए क्या लगेगा?" class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required autocomplete="off">
+                    <button type="submit" class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </form>
             </div>
         </div>
 
-        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-16 h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
+        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-15 h-15 w-16 h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
             <i class="fa-solid fa-robot group-hover:rotate-12 transition-transform text-amber-300"></i>
         </button>
     </div>
 
     <!-- 8. JavaScript Logic -->
     <script>
+        // टोस्ट नोटिफिकेशन फ़ंक्शन (बिना alert() के)
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            const text = document.getElementById('toast-text');
+            text.innerText = msg;
+            box.classList.remove('hidden');
+            box.classList.add('toast-show');
+            setTimeout(() => {
+                box.classList.add('hidden');
+                box.classList.remove('toast-show');
+            }, 3000);
+        }
+
+        // शाखाओं का पूरा डेटा
+        const branchData = {
+            chongribahar: {
+                name: "चोंगरीबहार",
+                subtitle: "सक्रिय शाखा: चोंगरीबहार (मुख्य मार्ग)",
+                badge: "चयनित शाखा: चोंगरीबहार",
+                address: "पता: मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)",
+                operator: "संचालक: रूपेश प्रसाद | संपर्क: +91 6264531630 | समय: सुबह 10:00 - शाम 6:00",
+                phoneHref: "tel:+916264531630",
+                mapHref: "https://maps.google.com/?q=Chongribahar"
+            },
+            dokda: {
+                name: "दोकड़ा",
+                subtitle: "सक्रिय शाखा: दोकड़ा (मुख्य मार्ग)",
+                badge: "चयनित शाखा: दोकड़ा",
+                address: "पता: ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)",
+                operator: "संचालक: रूपेश कंप्यूटर्स टीम | संपर्क: +91 9713926390 | समय: सुबह 10:00 - शाम 6:00",
+                phoneHref: "tel:+919713926390",
+                mapHref: "https://maps.google.com/?q=Dokda"
+            }
+        };
+
+        // सक्रिय शाखा स्विचर फ़ंक्शन
+        function switchBranch(branchKey) {
+            const data = branchData[branchKey];
+            if (!data) return;
+
+            const btnC = document.getElementById('btn-chongribahar');
+            const btnD = document.getElementById('btn-dokda');
+            const footerC = document.getElementById('footer-card-chongribahar');
+            const footerD = document.getElementById('footer-card-dokda');
+
+            if (branchKey === 'chongribahar') {
+                btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1";
+                btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center gap-1";
+                footerC.classList.add('border-amber-500/40', 'bg-slate-900/60');
+                footerD.classList.remove('border-amber-500/40', 'bg-slate-900/60');
+            } else {
+                btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1";
+                btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center gap-1";
+                footerD.classList.add('border-amber-500/40', 'bg-slate-900/60');
+                footerC.classList.remove('border-amber-500/40', 'bg-slate-900/60');
+            }
+
+            // UI अपडेट करें
+            document.getElementById('header-branch-subtitle').innerText = data.subtitle;
+            document.getElementById('branch-badge').innerText = data.badge;
+            document.getElementById('branch-address-text').innerText = data.address;
+            document.getElementById('branch-operator-text').innerText = data.operator;
+            document.getElementById('branch-call-btn').href = data.phoneHref;
+            document.getElementById('branch-map-btn').href = data.mapHref;
+            document.getElementById('mobile-bottom-call').href = data.phoneHref;
+
+            showToast(`✅ ${data.name} शाखा चुन ली गई है`);
+        }
+
+        // सेवाओं की सूची
         const services = [
             {
                 title: "SBI कियोस्क (पासबुक प्रिंट एवं माइक्रो एटीएम)",
@@ -562,12 +733,12 @@
                     "<b>1) पटवारी एवं सरपंच का प्रतिवेदन</b>",
                     "<b>2) स्व-घोषणा पत्र</b>",
                     "<b>3) अधिकार अभिलेख</b>",
-                    "<b>4) P-6 जमाबंदी की सत्यापित प्रति / मिसल (1950 के पूर्व का) अथवा 1950 के पूर्व का जाति का उल्लेख किया गया कोई शासकीय दस्तावेज</b>",
-                    "<b>5) कक्षा 5वीं/8वीं एवं 10वीं अथवा दाखिल ख़ारिज पंजी की प्रमाणित छायाप्रति</b>",
+                    "<b>4) P-6 जमाबंदी की सत्यापित प्रति / मिसल (1950 के पूर्व का)</b>",
+                    "<b>5) कक्षा 5वीं/8वीं एवं 10वीं अथवा दाखिल ख़ारिज पंजी</b>",
                     "<b>6) वंशावली सूची की मूल प्रति</b>",
                     "<b>7) वर्तमान वर्ष का बी-1 की मूल प्रति</b>",
                     "<b>8) पहचान पत्र (मतदाता परिचय पत्र/आधार कार्ड/राशन कार्ड)</b>",
-                    "<i>नोट: अन्य पिछड़ा वर्ग के लिए आय प्रमाण पत्र एवं 1984 से पूर्व का दस्तावेज आवश्यक।</i>"
+                    "<i>नोट: OBC के लिए आय प्रमाण पत्र एवं 1984 से पूर्व का दस्तावेज आवश्यक।</i>"
                 ]
             },
             {
@@ -601,9 +772,8 @@
                 color: "bg-teal-100 text-teal-700",
                 docs: [
                     "नया पैन कार्ड बनवाना",
-                    "आधार कार्ड",
-                    "पैन सुधार (Correction) कार्य",
-                    "मोबाइल नंबर लिंक की अनिवार्यता नहीं"
+                    "आधार कार्ड और 2 पासपोर्ट फोटो",
+                    "पैन सुधार (Correction) कार्य"
                 ]
             },
             {
@@ -617,20 +787,24 @@
                 ]
             },
             {
-                title: "ई-श्रम कार्ड (e-Shram)",
+                title: "ई-श्रम एवं अन्य ऑनलाइन फॉर्म",
                 icon: "fa-helmet-safety",
                 color: "bg-cyan-100 text-cyan-700",
                 docs: [
-                    "आधार कार्ड (मोबाइल लिंक होना चाहिए)",
-                    "बैंक पासबुक विवरण",
-                    "असंगठित मजदूरों का पंजीयन"
+                    "ई-श्रम कार्ड पंजीयन (आधार + बैंक पासबुक)",
+                    "स्कॉलरशिप, कॉलेज एवं सरकारी नौकरी फॉर्म",
+                    "फोटो कॉपी, लेमिनेशन एवं कलर प्रिंट"
                 ]
             }
         ];
 
-        function renderServices() {
+        function renderServices(list = services) {
             const container = document.getElementById('services-container');
-            container.innerHTML = services.map(service => `
+            if (list.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 font-bold">कोई सेवा नहीं मिली। कृपया दूसरा शब्द खोजें।</div>`;
+                return;
+            }
+            container.innerHTML = list.map(service => `
                 <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
                     <div>
                         <div class="flex items-center gap-4 mb-4">
@@ -647,18 +821,24 @@
                         </div>
                     </div>
                     <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="w-full bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp चैनल से जुड़ें
-                        </a>
-                        <button onclick="shareOnWhatsApp('${service.title.replace(/'/g, "\\'")}', \`${service.docs.join(', ')}\`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                        <button onclick="shareOnWhatsApp('${service.title.replace(/'/g, "\\'")}', \`${service.docs.join(', ')}\`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर दस्तावेज लिस्ट भेजें
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        window.addEventListener('DOMContentLoaded', renderServices);
+        function filterServices() {
+            const query = document.getElementById('service-search').value.toLowerCase();
+            const filtered = services.filter(s => 
+                s.title.toLowerCase().includes(query) || 
+                s.docs.some(d => d.toLowerCase().includes(query))
+            );
+            renderServices(filtered);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => renderServices());
 
         function shareOnWhatsApp(serviceTitle, docsText) {
             const cleanDocs = docsText.replace(/<[^>]*>?/gm, '');
@@ -667,8 +847,8 @@
             window.open(whatsappUrl, '_blank');
         }
 
+        // 1. Image to PDF Tool
         let selectedImages = [];
-
         function handleImgSelection(event) {
             const files = event.target.files;
             if (!files.length) return;
@@ -681,7 +861,6 @@
         function renderImagePreviews() {
             const container = document.getElementById('pdf-image-list');
             const previewContainer = document.getElementById('pdf-preview-container');
-            
             if (selectedImages.length > 0) {
                 previewContainer.classList.remove('hidden');
                 previewContainer.classList.add('flex');
@@ -691,7 +870,7 @@
             }
 
             container.innerHTML = selectedImages.map((file, index) => `
-                <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-white group">
+                <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-white">
                     <img src="${URL.createObjectURL(file)}" class="w-full h-full object-cover">
                     <button onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow transition">
                         <i class="fa-solid fa-xmark"></i>
@@ -723,7 +902,6 @@
                     } else {
                         image = await pdfDoc.embedJpg(imageBytes);
                     }
-
                     const page = pdfDoc.addPage([image.width, image.height]);
                     page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
                 }
@@ -740,12 +918,12 @@
                 renderImagePreviews();
             } catch (error) {
                 console.error(error);
-                statusDiv.innerText = "❌ PDF बनाने में त्रुटि हुई। कृपया पुनः प्रयास करें।";
+                statusDiv.innerText = "❌ PDF बनाने में त्रुटि हुई। केवल JPG या PNG फोटो चुनें।";
             }
         }
 
+        // 2. Photo Resizer
         let imageToResize = null;
-
         function previewImageToResize(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -758,7 +936,7 @@
             if (!imageToResize) return;
             const targetKB = parseInt(document.getElementById('target-kb').value) || 40;
             const resultDiv = document.getElementById('resize-result');
-            resultDiv.innerHTML = `<p class="text-sm font-bold text-emerald-700 bg-emerald-50 py-2 rounded text-center">फोटो कॉम्प्रेस की जा रही है...</p>`;
+            resultDiv.innerHTML = `<p class="text-xs font-bold text-emerald-700 bg-emerald-50 py-2 rounded text-center">फोटो कॉम्प्रेस की जा रही है...</p>`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -767,7 +945,6 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    
                     let quality = 0.9;
                     const maxDim = 1000;
                     if (width > maxDim || height > maxDim) {
@@ -775,30 +952,27 @@
                             height = Math.round((height * maxDim) / width);
                             width = maxDim;
                         } else {
-                            width = (width * maxDim) / height;
+                            width = Math.round((width * maxDim) / height);
                             height = maxDim;
                         }
                     }
-
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
                     let dataUrl = canvas.toDataURL('image/jpeg', quality);
-                    let base64Length = dataUrl.length - (dataUrl.indexOf(',') + 1);
-                    let currentKB = (base64Length * 3) / 4 / 1024;
+                    let currentKB = ((dataUrl.length - (dataUrl.indexOf(',') + 1)) * 3) / 4 / 1024;
 
                     while (currentKB > targetKB && quality > 0.1) {
                         quality -= 0.1;
                         dataUrl = canvas.toDataURL('image/jpeg', quality);
-                        base64Length = dataUrl.length - (dataUrl.indexOf(',') + 1);
-                        currentKB = (base64Length * 3) / 4 / 1024;
+                        currentKB = ((dataUrl.length - (dataUrl.indexOf(',') + 1)) * 3) / 4 / 1024;
                     }
 
                     resultDiv.innerHTML = `
-                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center">
-                            <p class="text-sm font-bold text-emerald-800 mb-2">✅ फोटो का साइज लगभग ${Math.round(currentKB)} KB हो गया है!</p>
+                        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center">
+                            <p class="text-xs font-bold text-emerald-800 mb-2">✅ साइज लगभग ${Math.round(currentKB)} KB हो गया है!</p>
                             <a href="${dataUrl}" download="compressed_photo.jpg" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
                                 फोटो डाउनलोड करें
                             </a>
@@ -810,6 +984,66 @@
             reader.readAsDataURL(imageToResize);
         }
 
+        // 3. Passport Photo Sheet Maker (New Tool)
+        let passportPhotoFile = null;
+        function loadPassportPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            passportPhotoFile = file;
+            showToast("फोटो लोड हो गई! अब 'पासपोर्ट शीट बनाएं' पर क्लिक करें।");
+        }
+
+        function generatePassportSheet() {
+            if (!passportPhotoFile) {
+                showToast("⚠️ कृपया पहले एक फोटो अपलोड करें!");
+                return;
+            }
+            const count = parseInt(document.getElementById('passport-count').value);
+            const resultBox = document.getElementById('passport-result');
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const cols = 6;
+                    const rows = count === 12 ? 2 : 1;
+                    const photoW = 200;
+                    const photoH = 250;
+                    const gap = 15;
+
+                    canvas.width = cols * photoW + (cols + 1) * gap;
+                    canvas.height = rows * photoH + (rows + 1) * gap;
+                    const ctx = canvas.getContext('2d');
+
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            const x = gap + c * (photoW + gap);
+                            const y = gap + r * (photoH + gap);
+                            ctx.drawImage(img, x, y, photoW, photoH);
+                            ctx.strokeStyle = "#cbd5e1";
+                            ctx.lineWidth = 2;
+                            ctx.strokeRect(x, y, photoW, photoH);
+                        }
+                    }
+
+                    const sheetUrl = canvas.toDataURL('image/jpeg', 0.95);
+                    resultBox.innerHTML = `
+                        <img src="${sheetUrl}" class="max-h-24 mx-auto rounded border shadow-sm mb-2">
+                        <a href="${sheetUrl}" download="Passport_Photo_Sheet_${count}.jpg" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs transition shadow">
+                            <i class="fa-solid fa-download"></i> ${count} फोटो शीट डाउनलोड करें
+                        </a>
+                    `;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(passportPhotoFile);
+        }
+
+        // 4. Age Calculator
         function calculateAge() {
             const dob = document.getElementById('dob-input').value;
             const targetDob = document.getElementById('target-date-input').value;
@@ -847,15 +1081,19 @@
             resultDiv.innerHTML = `🎉 सटीक आयु: <br><span class="text-sm font-black">${years} वर्ष, ${months} महीने, ${days} दिन</span>`;
         }
 
+        // 5. QR & Barcode Generator (Using Toast instead of alert)
         function generateQRCodeOnly() {
             const text = document.getElementById('code-text-input').value.trim();
             const container = document.getElementById('code-result-container');
             const img = document.getElementById('generated-img');
+            const dl = document.getElementById('download-code-btn');
             if (!text) {
-                alert("कृपया पहले टेक्स्ट या नंबर लिखें!");
+                showToast("⚠️ कृपया पहले टेक्स्ट या नंबर लिखें!");
                 return;
             }
-            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
+            const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
+            img.src = url;
+            dl.href = url;
             container.classList.remove('hidden');
         }
 
@@ -863,14 +1101,18 @@
             const text = document.getElementById('code-text-input').value.trim();
             const container = document.getElementById('code-result-container');
             const img = document.getElementById('generated-img');
+            const dl = document.getElementById('download-code-btn');
             if (!text) {
-                alert("कृपया पहले टेक्स्ट या नंबर लिखें!");
+                showToast("⚠️ कृपया पहले टेक्स्ट या नंबर लिखें!");
                 return;
             }
-            img.src = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(text)}&scale=2&height=40&includetext`;
+            const url = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(text)}&scale=2&height=40&includetext`;
+            img.src = url;
+            dl.href = url;
             container.classList.remove('hidden');
         }
 
+        // 6. QR Scanner
         function scanQRImage(event) {
             const file = event.target.files[0];
             const resultDiv = document.getElementById('scanner-result');
@@ -886,21 +1128,24 @@
                         .then(decodedItems => {
                             if (decodedItems.length > 0) {
                                 const val = decodedItems[0].rawValue;
-                                resultDiv.innerHTML = `✅ <a href="${val}" target="_blank" class="text-blue-600 font-bold underline">${val}</a>`;
+                                resultDiv.innerHTML = val.startsWith('http') 
+                                    ? `✅ <a href="${val}" target="_blank" class="text-blue-600 font-bold underline">${val}</a>`
+                                    : `✅ परिणाम: <span class="font-bold text-slate-900">${val}</span>`;
                             } else {
                                 resultDiv.innerHTML = "⚠️ इस फोटो में QR कोड नहीं मिला। साफ फोटो चुनें।";
                             }
                         })
-                        .catch(err => {
+                        .catch(() => {
                             resultDiv.innerHTML = "❌ स्कैन करने में असमर्थ। कृपया दूसरा फोटो चुनें।";
                         });
                 };
                 img.src = URL.createObjectURL(file);
             } else {
-                resultDiv.innerHTML = "✅ फोटो अपलोड हो गई! (QR इमेज सफलतापूर्वक लोड की गई)";
+                resultDiv.innerHTML = "⚠️ आपका ब्राउज़र इन-बिल्ट स्कैनर सपोर्ट नहीं करता। Chrome का उपयोग करें।";
             }
         }
 
+        // 7. Upgraded Chatbot Logic
         function toggleChat() {
             const chatWindow = document.getElementById('chat-window');
             if (chatWindow.classList.contains('hidden')) {
@@ -912,75 +1157,34 @@
             }
         }
 
-        function switchBranch(branch) {
-            const btnC = document.getElementById('btn-chongribahar');
-            const btnD = document.getElementById('btn-dokda');
-            
-            if (branch === 'chongribahar') {
-                btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md";
-                btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
-            } else {
-                btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md";
-                btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
-            }
+        function appendBotMessage(htmlContent) {
+            const messages = document.getElementById('chat-messages');
+            messages.innerHTML += `
+                <div class="flex gap-2">
+                    <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700 leading-relaxed">
+                        ${htmlContent}
+                    </div>
+                </div>
+            `;
+            messages.scrollTop = messages.scrollHeight;
         }
 
         function handleQuickAction(type) {
             const messages = document.getElementById('chat-messages');
-            if (type === 'aadhaar') {
-                messages.innerHTML += `
-                    <div class="flex gap-2 justify-end">
-                        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">आधार कार्ड का स्टेटस चेक करना है</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700">
-                            आधार कार्ड का स्टेटस चेक करने के लिए UIDAI लिंक:
-                            <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="block mt-2 font-bold text-blue-600 underline">👉 यहाँ क्लिक करें</a>
-                        </div>
-                    </div>
-                `;
-            } else if (type === 'pan') {
-                messages.innerHTML += `
-                    <div class="flex gap-2 justify-end">
-                        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">पैन कार्ड का स्टेटस चेक करना है</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700">
-                            UTI पैन कार्ड स्टेटस लिंक:
-                            <a href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" class="block mt-2 font-bold text-blue-600 underline">👉 यहाँ क्लिक करें</a>
-                        </div>
-                    </div>
-                `;
-            } else if (type === 'sewasetu') {
-                messages.innerHTML += `
-                    <div class="flex gap-2 justify-end">
-                        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">लोक सेवा स्टेटस</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700">
-                            सेवा सेतु स्टेटस लिंक:
-                            <a href="https://sewasetu.cgstate.gov.in/workflow/trackAppStatus.html" target="_blank" class="block mt-2 font-bold text-blue-600 underline">👉 यहाँ क्लिक करें</a>
-                        </div>
-                    </div>
-                `;
-            } else if (type === 'bhuiyan') {
-                messages.innerHTML += `
-                    <div class="flex gap-2 justify-end">
-                        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">बी-1 / खसरा देखना है</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700">
-                            भुइयां रिपोर्ट लिंक:
-                            <a href="https://revenue.cg.nic.in/bhuiyanuser/User/Selection_Report_For_KhasraDetail.aspx" target="_blank" class="block mt-2 font-bold text-blue-600 underline">👉 यहाँ क्लिक करें</a>
-                        </div>
-                    </div>
-                `;
+            if (type === 'jati') {
+                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">जाति प्रमाण पत्र के लिए क्या दस्तावेज लगेंगे?</div></div>`;
+                appendBotMessage(`<b>जाति प्रमाण पत्र के आवश्यक दस्तावेज:</b><br>1. पटवारी एवं सरपंच प्रतिवेदन<br>2. स्व-घोषणा पत्र एवं वंशावली<br>3. 1950 से पूर्व का मिसल / P-6 नकल (OBC हेतु 1984)<br>4. 5वीं/8वीं/10वीं अंकसूची एवं वर्तमान बी-1<br>5. आधार कार्ड एवं राशन कार्ड`);
+            } else if (type === 'niwas') {
+                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">निवास और आय प्रमाण पत्र के दस्तावेज</div></div>`;
+                appendBotMessage(`<b>निवास एवं आय प्रमाण पत्र हेतु:</b><br>• पटवारी एवं सरपंच प्रतिवेदन<br>• 5वीं/8वीं/10वीं की अंकसूची<br>• वर्तमान वर्ष का बी-1 (खसरा)<br>• आधार कार्ड एवं राशन कार्ड`);
+            } else if (type === 'aadhaar') {
+                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">आधार / पैन / सेवा सेतु स्टेटस लिंक दें</div></div>`;
+                appendBotMessage(`सीधे स्टेटस चेक करें:<br>• <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="text-blue-600 font-bold underline">आधार कार्ड स्टेटस</a><br>• <a href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" class="text-blue-600 font-bold underline">पैन कार्ड स्टेटस</a><br>• <a href="https://sewasetu.cgstate.gov.in/workflow/trackAppStatus.html" target="_blank" class="text-blue-600 font-bold underline">लोक सेवा (सेवा सेतु) स्टेटस</a>`);
+            } else if (type === 'branch') {
+                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">शाखा का पता और समय क्या है?</div></div>`;
+                appendBotMessage(`हमारी दो शाखाएँ हैं:<br>📍 <b>चोंगरीबहार शाखा:</b> मुख्य मार्ग, चोंगरीबहार (📞 6264531630)<br>📍 <b>दोकड़ा शाखा:</b> ग्राम - दोकड़ा मुख्य मार्ग (📞 9713926390)<br>⏰ <b>समय:</b> सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक), रविवार अवकाश।`);
             }
-            messages.scrollTop = messages.scrollHeight;
         }
 
         function handleChatSubmit(event) {
@@ -990,31 +1194,31 @@
             if (!message) return;
 
             const messages = document.getElementById('chat-messages');
-            messages.innerHTML += `
-                <div class="flex gap-2 justify-end">
-                    <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">${message}</div>
-                </div>
-            `;
+            messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">${message}</div></div>`;
             input.value = '';
 
             setTimeout(() => {
-                let reply = "धन्यवाद! रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में SBI कियोस्क, आधार सेंटर, और प्रमाण पत्र बनाए जाते हैं। समय: सोम-शनि सुबह 10 से शाम 6 बजे तक (रविवार अवकाश)।";
-                
                 const lower = message.toLowerCase();
-                if (lower.includes('time') || lower.includes('samay') || lower.includes('समय') || lower.includes('sunday') || lower.includes('रविवार')) {
+                let reply = "धन्यवाद! रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में सभी ऑनलाइन कार्य किए जाते हैं। अधिक सहायता के लिए ऊपर दिए गए बटन दबाएं या हमारी शाखा पर पधारें।";
+                
+                if (lower.includes('जाति') || lower.includes('caste') || lower.includes('jati')) {
+                    reply = "जाति प्रमाण पत्र के लिए पटवारी/सरपंच प्रतिवेदन, 1950 (OBC हेतु 1984) से पूर्व का रिकॉर्ड/मिसल, वंशावली, बी-1, अंकसूची और आधार कार्ड आवश्यक है।";
+                } else if (lower.includes('निवास') || lower.includes('domicile') || lower.includes('niwas')) {
+                    reply = "निवास प्रमाण पत्र के लिए पटवारी एवं सरपंच प्रतिवेदन, अंकसूची (5वीं/8वीं/10वीं), वर्तमान बी-1 और आधार/राशन कार्ड लगता है।";
+                } else if (lower.includes('आय') || lower.includes('income') || lower.includes('aay')) {
+                    reply = "आय प्रमाण पत्र के लिए पटवारी प्रतिवेदन, अंकसूची, बी-1 और आधार कार्ड आवश्यक है।";
+                } else if (lower.includes('time') || lower.includes('samay') || lower.includes('समय') || lower.includes('sunday') || lower.includes('रविवार')) {
                     reply = "दुकान सोमवार से शनिवार सुबह 10:00 से शाम 6:00 बजे तक खुली रहती है। रविवार को अवकाश रहता है।";
                 } else if (lower.includes('aadhar') || lower.includes('आधार')) {
-                    reply = "आधार कार्ड सुधार या नया नामांकन हमारी चोंगरीबहार और दोकड़ा शाखा में उपलब्ध है।";
+                    reply = "आधार कार्ड में नया नामांकन, मोबाइल लिंक, नाम या पता सुधार हमारी चोंगरीबहार और दोकड़ा शाखा में उपलब्ध है।";
+                } else if (lower.includes('pan') || lower.includes('पैन')) {
+                    reply = "नया पैन कार्ड (UTI/NSDL) और पैन सुधार के लिए केवल आधार कार्ड और 2 फोटो लेकर केंद्र पर आएं।";
+                } else if (lower.includes('number') || lower.includes('phone') || lower.includes('mobile') || lower.includes('नंबर') || lower.includes('संपर्क') || lower.includes('कॉल')) {
+                    reply = "चोंगरीबहार शाखा का मोबाइल नंबर 6264531630 है और दोकड़ा शाखा का मोबाइल नंबर 9713926390 है।";
                 }
 
-                messages.innerHTML += `
-                    <div class="flex gap-2">
-                        <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700">${reply}</div>
-                    </div>
-                `;
-                messages.scrollTop = messages.scrollHeight;
-            }, 500);
+                appendBotMessage(reply);
+            }, 400);
         }
     </script>
 </body>
