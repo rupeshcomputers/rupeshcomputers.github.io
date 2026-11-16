@@ -90,40 +90,37 @@
             </div>
         </div>
 
-        <!-- Dedicated Single-Line Attractive Navigation Bar -->
-        <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border-t border-slate-800 px-3 sm:px-6 py-2.5 shadow-inner">
-            <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap">
-                <button data-page="home" onclick="openPage('home')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition flex items-center gap-1.5 shrink-0">
+        <!-- Dedicated Attractive Navigation Bar (Full Visible Wrap on Mobile & Desktop) -->
+        <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border-t border-slate-800 px-2.5 sm:px-6 py-2.5 shadow-inner">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+                <button data-page="home" onclick="openPage('home')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition flex items-center gap-1.5">
                     <i class="fa-solid fa-house"></i> होम
                 </button>
-                <button data-page="services" onclick="openPage('services')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="services" onclick="openPage('services')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-layer-group text-amber-400"></i> सेवाएँ
                 </button>
-                <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-fire-flame-simple text-orange-400"></i> Indane गैस बुकिंग
                 </button>
-                <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-file-pdf text-rose-400"></i> JPEG to PDF
                 </button>
-                <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-id-badge text-cyan-400"></i> पासपोर्ट फोटो
                 </button>
-                <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-cake-candles text-purple-400"></i> DOB Calculator
                 </button>
-                <button data-page="scanner-tool" onclick="openPage('scanner-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="scanner-tool" onclick="openPage('scanner-tool')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-barcode text-emerald-400"></i> Barcode Reader
                 </button>
-                <button data-page="hindi-tool" onclick="openPage('hindi-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="hindi-tool" onclick="openPage('hindi-tool')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-language text-pink-400"></i> Hindi Typing & Kruti Dev
                 </button>
-                <button data-page="pwa-app" onclick="openPage('pwa-app')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="pwa-app" onclick="openPage('pwa-app')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-mobile-screen-button text-amber-300"></i> मोबाइल ऐप
                 </button>
-                <button data-page="why-choose-us" onclick="openPage('why-choose-us')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
-                    <i class="fa-solid fa-star text-yellow-400"></i> विशेषताएँ
-                </button>
-                <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-location-dot text-lime-400"></i> शाखाएँ
                 </button>
             </div>
@@ -268,6 +265,49 @@
                         </div>
                     </div>
 
+                </div>
+
+                <!-- Why Choose Us Section Integrated Directly on Home Page -->
+                <div class="mt-16 pt-12 border-t border-slate-200">
+                    <div class="text-center mb-10">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-3.5 py-1 rounded-full mb-3">
+                            <i class="fa-solid fa-star text-amber-500"></i> हमारी विशेषताएँ
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900">रूपेश कंप्यूटर्स क्यों चुनें?</h3>
+                        <p class="mt-2 text-slate-600 text-xs sm:text-sm">चोंगरीबहार और दोकड़ा क्षेत्र का सबसे भरोसेमंद डिजिटल सेवा केंद्र।</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4 font-bold">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <h4 class="text-lg font-black text-slate-900 mb-2">तुरंत एवं सटीक कार्य</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                सभी ऑनलाइन फॉर्म, आय-जाति-निवास और आधार संबंधी कार्य बिना किसी देरी के त्वरित गति से किए जाते हैं।
+                            </p>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4 font-bold">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h4 class="text-lg font-black text-slate-900 mb-2">100% सुरक्षित और विश्वसनीय</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                आपके व्यक्तिगत दस्तावेजों और बैंक लेन-देन (SBI कियोस्क) की पूरी सुरक्षा और गोपनीयता रखी जाती है।
+                            </p>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-4 font-bold">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <h4 class="text-lg font-black text-slate-900 mb-2">दो सुविधाजनक शाखाएँ</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                हमारी सेवाएँ आपके नजदीकी केंद्र <b>चोंगरीबहार</b> और <b>दोकड़ा</b> दोनों मुख्य शाखाओं पर उपलब्ध हैं।
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -427,6 +467,217 @@
                         <a href="https://cx.indianoil.in" target="_blank" class="mt-4 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl text-xs text-center transition">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> वेबसाइट खोलें
                         </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: JPEG TO PDF & PHOTO KB RESIZER TOOL -->
+        <section id="pdf-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-rose-700 bg-rose-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-file-pdf"></i> PDF एवं फोटो साइज टूल
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF & Photo KB Resizer</h2>
+                    <p class="mt-2 text-slate-600 text-sm">बिना किसी ऐप के सीधे अपने फोन में दस्तावेजों की PDF बनाएं और फोटो/सिग्नेचर का KB कम करें।</p>
+                </div>
+
+                <!-- Image to PDF Card -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+                            <i class="fa-regular fa-images"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">Photo(s) से PDF बनाएं</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">आय, जाति, निवास के दस्तावेजों को एक PDF में जोड़ें</p>
+                        </div>
+                    </div>
+
+                    <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-8 text-center hover:bg-blue-50 transition cursor-pointer mb-4" onclick="document.getElementById('img2pdf-input').click()">
+                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-3"></i>
+                        <h4 class="font-bold text-slate-800">यहाँ क्लिक करके फोटो (JPG/PNG) चुनें</h4>
+                        <p class="text-xs text-slate-500 mt-1">एक साथ कई फोटो चुन सकते हैं</p>
+                        <input type="file" id="img2pdf-input" accept="image/*" multiple class="hidden" onchange="handleImgSelection(event)">
+                    </div>
+
+                    <div id="pdf-preview-container" class="hidden flex-col gap-4">
+                        <h4 class="font-bold text-sm text-slate-700">चुनी गई फोटो (रिव्यू करें):</h4>
+                        <div id="pdf-image-list" class="flex flex-wrap gap-3"></div>
+                        <button type="button" onclick="generatePdf()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+                            PDF बनाएं और डाउनलोड करें
+                        </button>
+                    </div>
+                    <div id="img2pdf-status" class="mt-4 hidden text-sm font-semibold text-center text-green-700 bg-green-50 py-3 rounded-xl border border-green-200"></div>
+                </div>
+
+                <!-- Photo / Signature KB Resizer Card -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-compress"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">फोटो / सिग्नेचर का Size (KB) कम करें</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">ऑनलाइन फॉर्म के लिए फोटो को 20KB, 40KB या 50KB के अंदर करें</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-8 text-center hover:bg-emerald-50 transition cursor-pointer" onclick="document.getElementById('resizer-input').click()">
+                            <i class="fa-regular fa-image text-4xl text-emerald-500 mb-3"></i>
+                            <h4 class="font-bold text-slate-800">फोटो चुनें</h4>
+                            <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="previewImageToResize(event)">
+                        </div>
+
+                        <div id="resize-controls" class="hidden flex-col justify-center gap-4 p-5 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए? (लगभग)</label>
+                                <input type="number" id="target-kb" value="40" min="5" max="2000" class="w-full border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                            </div>
+                            <button type="button" onclick="resizeImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow">
+                                Size कम करें (Compress)
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resize-result" class="mt-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: PASSPORT PHOTO SHEET MAKER -->
+        <section id="passport-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-cyan-700 bg-cyan-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-id-badge"></i> प्रिंट-रेडी फोटो शीट
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">पासपोर्ट साइज फोटो शीट मेकर</h2>
+                    <p class="mt-2 text-slate-600 text-sm">एक ही फोटो से 4x6 पेपर पर 6 या 12 पासपोर्ट फोटो की प्रिंट-रेडी शीट तैयार करें।</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="border-2 border-dashed border-cyan-300 bg-cyan-50/50 rounded-2xl p-8 text-center hover:bg-cyan-50 transition cursor-pointer" onclick="document.getElementById('passport-input').click()">
+                            <i class="fa-solid fa-camera text-4xl text-cyan-600 mb-3"></i>
+                            <h4 class="font-bold text-slate-800">अपनी फोटो चुनें</h4>
+                            <p class="text-xs text-slate-500 mt-1">JPG या PNG फोटो अपलोड करें</p>
+                            <input type="file" id="passport-input" accept="image/*" class="hidden" onchange="loadPassportImage(event)">
+                        </div>
+
+                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">शीट पर कितनी फोटो चाहिए?</label>
+                                <select id="passport-count" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="12">12 पासपोर्ट फोटो (4x6 शीट)</option>
+                                    <option value="6">6 पासपोर्ट फोटो (4x6 शीट)</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="generatePassportSheet()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-black py-3 rounded-xl text-sm transition shadow">
+                                पासपोर्ट शीट तैयार करें
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="passport-result" class="hidden mt-8 pt-6 border-t border-slate-200 text-center">
+                        <h4 class="text-sm font-bold text-slate-800 mb-3">प्रिंट-रेडी पासपोर्ट शीट:</h4>
+                        <img id="passport-preview-img" class="mx-auto max-w-full max-h-72 rounded-xl border border-slate-300 shadow mb-4" alt="Passport Sheet">
+                        <a id="passport-download-btn" download="Rupesh_Computers_Passport_Sheet.jpg" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm shadow transition">
+                            <i class="fa-solid fa-download"></i> पासपोर्ट शीट डाउनलोड करें
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 6: DOB & AGE CALCULATOR -->
+        <section id="dob-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
+            <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-purple-700 bg-purple-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-cake-candles"></i> सटीक आयु गणना
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900">DOB & Age Calculator</h2>
+                    <p class="mt-2 text-slate-600 text-sm">सरकारी भर्ती व ऑनलाइन फॉर्म के लिए अपनी सही उम्र (वर्ष, महीने, दिन) जानें।</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="space-y-4 mb-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">अपनी जन्मतिथि (Date of Birth):</label>
+                            <input type="date" id="dob-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">किस तारीख तक उम्र देखनी है? (वैकल्पिक - खाली छोड़ने पर आज की तारीख):</label>
+                            <input type="date" id="target-date-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="calculateAge()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3 rounded-xl text-sm transition shadow-md">
+                        सटीक आयु गणना करें
+                    </button>
+                    <div id="age-result" class="mt-4 text-sm font-bold text-purple-900 text-center hidden bg-purple-50 p-4 rounded-2xl border border-purple-200"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 7: QR & BARCODE READER / GENERATOR -->
+        <section id="scanner-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-barcode"></i> QR एवं बारकोड स्टूडियो
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">QR Code & Barcode Reader / Generator</h2>
+                    <p class="mt-2 text-slate-600 text-sm">किसी भी QR कोड या बारकोड की फोटो स्कैन करें या नया QR/बारकोड बनाएं।</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- QR / Barcode Reader -->
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-camera-retro"></i>
+                            </div>
+                            <h3 class="text-xl font-black text-slate-900 mb-1">QR & बारकोड स्कैनर (Reader)</h3>
+                            <p class="text-xs text-slate-500 mb-4">गैलरी से QR कोड या बारकोड की फोटो चुनकर उसका लिंक/नंबर देखें।</p>
+
+                            <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-6 text-center cursor-pointer mb-4 hover:bg-emerald-50 transition" onclick="document.getElementById('scanner-file-input').click()">
+                                <i class="fa-solid fa-image text-3xl text-emerald-600 mb-2"></i>
+                                <p class="text-xs font-bold text-slate-700">यहाँ क्लिक करके QR / Barcode फोटो चुनें</p>
+                                <input type="file" id="scanner-file-input" accept="image/*" class="hidden" onchange="scanQRImage(event)">
+                            </div>
+                        </div>
+                        <div id="scanner-result" class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-700 text-center min-h-[48px] flex items-center justify-center break-all">
+                            स्कैन किया गया परिणाम यहाँ दिखेगा
+                        </div>
+                    </div>
+
+                    <!-- QR / Barcode Generator -->
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <h3 class="text-xl font-black text-slate-900 mb-1">QR & बारकोड जेनरेटर</h3>
+                            <p class="text-xs text-slate-500 mb-4">कोई भी वेबसाइट लिंक, मोबाइल नंबर या टेक्स्ट लिखकर QR/बारकोड बनाएं।</p>
+
+                            <input type="text" id="code-text-input" placeholder="यहाँ टेक्स्ट, लिंक या नंबर लिखें..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 mb-4">
+
+                            <div class="flex gap-2">
+                                <button type="button" onclick="generateQRCodeOnly()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow">
+                                    QR कोड बनाएं
+                                </button>
+                                <button type="button" onclick="generateBarcodeOnly()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl text-xs transition shadow">
+                                    बारकोड बनाएं
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="code-result-container" class="mt-4 text-center hidden bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <img id="generated-img" class="mx-auto max-w-full h-28 object-contain bg-white p-2 rounded-xl border shadow-sm" alt="Generated Code">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -602,7 +853,7 @@
             </div>
         </section>
 
-        <!-- PAGE 9: WHY CHOOSE US -->
+        <!-- PAGE 9: BRANCHES & CONTACT PAGE -->
         <section id="why-choose-us" class="page-section page-fade hidden py-12 sm:py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -909,7 +1160,7 @@
         }
 
         // Single-File Multi-Page Navigation
-        const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'scanner-tool', 'hindi-tool', 'pwa-app', 'why-choose-us', 'branches'];
+        const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'scanner-tool', 'hindi-tool', 'pwa-app', 'branches'];
 
         function openPage(pageId, updateHash = true) {
             if (!validPages.includes(pageId)) pageId = 'home';
@@ -924,9 +1175,9 @@
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if (btn.getAttribute('data-page') === pageId) {
-                    btn.className = "nav-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition flex items-center gap-1.5 shrink-0";
+                    btn.className = "nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition flex items-center gap-1.5";
                 } else {
-                    btn.className = "nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0";
+                    btn.className = "nav-btn px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5";
                 }
             });
 
@@ -1567,37 +1818,68 @@
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
+                const hdrBtn = document.getElementById('header-pwa-btn');
+                if (hdrBtn) hdrBtn.classList.remove('hidden');
             });
+
+            if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+                const swCode = `
+                    self.addEventListener('install', (e) => self.skipWaiting());
+                    self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+                    self.addEventListener('fetch', (e) => {
+                        e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                    });
+                `;
+                const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+            }
         }
 
         async function triggerPwaInstall() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showToast("✅ RUPESH COMPUTERS ऐप इंस्टॉल हो गया है!");
+                }
                 deferredPrompt = null;
             } else {
                 openPage('pwa-app');
-                showToast("ब्राउज़र मेनू (⋮) से 'Install app' या 'Add to Home screen' चुनें।");
+                showToast("ऐप इंस्टॉल करने के लिए ब्राउज़र के 3 डॉट (⋮) मेनू में 'Install app / Add to Home screen' दबाएं।");
             }
         }
 
-        // Live Visitor Counter (Increments every time the page is opened)
+        // Global Live Visitor Counter (Shared across all devices & increments on every visit/refresh)
         async function initVisitorCounter() {
             const countEl = document.getElementById('visitor-count');
             if (!countEl) return;
 
-            const endpoint = 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-live/visitors/up';
-
-            try {
-                const res = await fetch(endpoint);
-                const data = await res.json();
-                if (data && typeof data.count === 'number') {
-                    localStorage.setItem('rc_last_visitor_count', String(data.count));
-                    countEl.textContent = data.count.toLocaleString('en-IN');
-                    return;
+            const cacheBuster = Date.now();
+            const apis = [
+                {
+                    url: `https://api.counterapi.dev/v1/rupeshcomputers-global-2026/visits/up?t=${cacheBuster}`,
+                    extract: (d) => d && typeof d.count === 'number' ? d.count : null
+                },
+                {
+                    url: `https://abacus.jasoncameron.dev/hit/rupeshcomputers.github.io/visits?t=${cacheBuster}`,
+                    extract: (d) => d && typeof d.value === 'number' ? d.value : null
                 }
-            } catch (e) {
-                // Fallback if offline
+            ];
+
+            for (const api of apis) {
+                try {
+                    const res = await fetch(api.url, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    const total = api.extract(data);
+                    if (total !== null) {
+                        localStorage.setItem('rc_last_visitor_count', String(total));
+                        countEl.textContent = total.toLocaleString('en-IN');
+                        return;
+                    }
+                } catch (e) {
+                    // Try next global counter API
+                }
             }
 
             let localCount = parseInt(localStorage.getItem('rc_last_visitor_count') || '0', 10) + 1;
