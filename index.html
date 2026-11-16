@@ -1529,18 +1529,37 @@
         async function initVisitorCounter() {
             const countEl = document.getElementById('visitor-count');
             if (!countEl) return;
+
+            // Prevent inflated counts when the same user refreshes repeatedly on the same day
+            const todayKey = 'rc_visited_' + new Date().toISOString().slice(0, 10);
+            const alreadyCountedToday = localStorage.getItem(todayKey);
+            const endpoint = alreadyCountedToday
+                ? 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-2026/visitors'
+                : 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-2026/visitors/up';
+
             try {
-                const res = await fetch('https://api.counterapi.dev/v1/rupeshcomputers-portal/visits/up');
+                const res = await fetch(endpoint);
                 const data = await res.json();
                 if (data && typeof data.count === 'number') {
+                    if (!alreadyCountedToday) {
+                        localStorage.setItem(todayKey, '1');
+                    }
+                    localStorage.setItem('rc_last_visitor_count', String(data.count));
                     countEl.textContent = data.count.toLocaleString('en-IN');
                     return;
                 }
             } catch (e) {
                 // Fallback if offline
             }
-            const baseCount = 14820 + Math.floor((Date.now() - 1730000000000) / 3600000);
-            countEl.textContent = baseCount.toLocaleString('en-IN');
+
+            // Clean local fallback starting from 1 instead of a large artificial number
+            let localCount = parseInt(localStorage.getItem('rc_last_visitor_count') || '0', 10);
+            if (!alreadyCountedToday) {
+                localCount += 1;
+                localStorage.setItem(todayKey, '1');
+                localStorage.setItem('rc_last_visitor_count', String(localCount));
+            }
+            countEl.textContent = Math.max(1, localCount).toLocaleString('en-IN');
         }
 
         // Gemini AI Chatbot Logic
