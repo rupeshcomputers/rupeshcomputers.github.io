@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUPESH COMPUTERS - डिजिटल सेवा एवं ऑनलाइन केंद्र</title>
+    <!-- PWA Theme & Mobile App Meta Tags -->
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rupesh Computers">
+    <link id="pwa-manifest-link" rel="manifest" href="">
+    <link id="pwa-apple-icon" rel="apple-touch-icon" href="">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -72,7 +79,7 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap w-full">
                 <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">सूचना</span>
-                <marquee behavior="scroll" direction="left" class="font-medium text-slate-200">
+                <marquee id="top-marquee-text" behavior="scroll" direction="left" class="font-medium text-slate-200">
                     🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क, आय-जाति-निवास प्रमाण पत्र, पासपोर्ट फोटो एवं सभी ऑनलाइन कार्य तुरंत कराए जाते हैं। 📢 सरकारी वैकेंसी और ताजा जानकारी के लिए हमारे व्हाट्सएप चैनल से जरूर जुड़ें! | समय: सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश।
                 </marquee>
             </div>
@@ -81,7 +88,7 @@
 
     <!-- 2. Modern Navigation Header & Complete Menu Bar -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             <!-- Brand Logo / Title -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="openPage('home')">
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center text-xl shadow-lg">
@@ -93,21 +100,11 @@
                 </div>
             </div>
 
-            <!-- Desktop & Responsive Navigation Menu (Multi-Page Tabs) -->
-            <nav class="hidden xl:flex items-center gap-1" id="desktop-nav">
-                <button data-page="home" onclick="openPage('home')" class="nav-btn nav-tab-active px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-house text-blue-600"></i> होम</button>
-                <button data-page="services" onclick="openPage('services')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-layer-group text-indigo-600"></i> सेवाएँ</button>
-                <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग</button>
-                <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-file-pdf text-red-600"></i> JPEG to PDF</button>
-                <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-id-badge text-amber-600"></i> पासपोर्ट फोटो</button>
-                <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB Calculator</button>
-                <button data-page="barcode-tool" onclick="openPage('barcode-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-barcode text-indigo-600"></i> Barcode Reader</button>
-                <button data-page="features" onclick="openPage('features')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> विशेषताएँ</button>
-                <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-location-dot text-emerald-600"></i> शाखाएँ</button>
-            </nav>
-
-            <!-- Branch Selector Header Buttons -->
-            <div class="flex items-center gap-2">
+            <!-- Branch Selector Header Buttons & PWA Install Button -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <button id="pwa-install-btn" onclick="triggerPwaInstall()" class="hidden px-3 py-2 rounded-full text-xs font-black transition bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-md items-center gap-1 animate-pulse">
+                    <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">ऐप इंस्टॉल करें</span><span class="sm:hidden">App</span>
+                </button>
                 <button id="btn-chongribahar" onclick="switchBranch('chongribahar')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1">
                     <i class="fa-solid fa-location-dot text-[10px]"></i> चोंगरीबहार
                 </button>
@@ -117,17 +114,19 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation Sub-Bar (Multi-Page Tabs) -->
-        <div class="xl:hidden flex overflow-x-auto px-4 py-2 bg-slate-50 border-t border-slate-200 gap-2 whitespace-nowrap" id="mobile-nav">
-            <button data-page="home" onclick="openPage('home')" class="nav-btn nav-tab-active px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">होम</button>
-            <button data-page="services" onclick="openPage('services')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">सेवाएँ</button>
-            <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Indane गैस बुकिंग</button>
-            <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">JPEG to PDF</button>
-            <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">पासपोर्ट फोटो</button>
-            <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">DOB Calculator</button>
-            <button data-page="barcode-tool" onclick="openPage('barcode-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Barcode Reader</button>
-            <button data-page="features" onclick="openPage('features')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">विशेषताएँ</button>
-            <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">शाखाएँ</button>
+        <!-- नई आकर्षक एक-लाइन नेविगेशन पट्टी (Desktop & Mobile दोनों के लिए) -->
+        <div class="bg-gradient-to-r from-slate-100 via-blue-50/80 to-slate-100 border-t border-slate-200/90 shadow-inner">
+            <nav id="main-nav-bar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-start lg:justify-center gap-2 overflow-x-auto whitespace-nowrap">
+                <button data-page="home" onclick="openPage('home')" class="nav-btn nav-tab-active px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-house text-blue-600"></i> होम</button>
+                <button data-page="services" onclick="openPage('services')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-layer-group text-indigo-600"></i> सेवाएँ</button>
+                <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग</button>
+                <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-file-pdf text-red-600"></i> JPEG to PDF</button>
+                <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-id-badge text-amber-600"></i> पासपोर्ट फोटो</button>
+                <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB Calculator</button>
+                <button data-page="barcode-tool" onclick="openPage('barcode-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-barcode text-indigo-600"></i> Barcode Reader</button>
+                <button data-page="pwa-app" onclick="openPage('pwa-app')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> मोबाइल ऐप</button>
+                <button data-page="features" onclick="openPage('features')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200/80 hover:bg-blue-50 hover:border-blue-300 transition flex items-center gap-1.5 shadow-2xs shrink-0"><i class="fa-solid fa-star text-amber-500"></i> विशेषताएँ</button>
+            </nav>
         </div>
     </header>
 
@@ -175,92 +174,23 @@
                     <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                         SBI कियोस्क बैंकिंग, आधार सेंटर, आय-जाति-निवास प्रमाण पत्र, लर्निंग लाइसेंस, आयुष्मान कार्ड और सभी ऑनलाइन फॉर्म भरने के लिए आज ही संपर्क करें।
                     </p>
+
+                    <!-- 100% सुरक्षित व विज्ञापन-मुक्त (No Ads & Privacy) बैज -->
+                    <div class="mt-4 inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-900 px-3.5 py-2 rounded-2xl text-xs font-bold shadow-2xs">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-ban text-red-600"></i> कोई विज्ञापन (No Ads) नहीं</span>
+                        <span class="text-emerald-300">|</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-lock text-emerald-600"></i> 100% सुरक्षित — आपका कोई भी डेटा कहीं सेव या शेयर नहीं होता</span>
+                    </div>
                     
-                    <div class="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
+                    <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-4">
                         <button onclick="openPage('services')" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-solid fa-list-check"></i> सभी सेवाएँ देखें
                         </button>
+                        <button onclick="openPage('pwa-app')" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-amber-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-mobile-screen-button text-lg"></i> मोबाइल ऐप व सुरक्षा
+                        </button>
                         <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-brands fa-whatsapp text-lg"></i> व्हाट्सएप चैनल
-                        </a>
-                        <button onclick="toggleChat()" class="bg-slate-900 hover:bg-slate-800 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
-                            <i class="fa-solid fa-robot text-amber-400"></i> AI से पूछें
-                        </button>
-                    </div>
-
-                    <!-- होम पेज पर सभी टूल्स और पेजों के क्विक शॉर्टकट कार्ड -->
-                    <div class="mt-10 grid grid-cols-2 sm:grid-cols-5 gap-3 text-left">
-                        <div onclick="openPage('lpg-booking')" class="cursor-pointer bg-orange-50/70 p-3.5 rounded-2xl border border-orange-200 hover:border-orange-500 hover:shadow-md transition">
-                            <i class="fa-solid fa-fire-flame-simple text-orange-600 text-xl mb-1.5"></i>
-                            <div class="text-xs font-black text-slate-800">Indane गैस बुकिंग</div>
-                            <div class="text-[10px] text-slate-600">WhatsApp व मिस्ड कॉल से बुक करें</div>
-                        </div>
-                        <div onclick="openPage('pdf-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-red-400 hover:shadow-md transition">
-                            <i class="fa-solid fa-file-pdf text-red-600 text-xl mb-1.5"></i>
-                            <div class="text-xs font-black text-slate-800">JPEG to PDF</div>
-                            <div class="text-[10px] text-slate-500">फोटो से PDF व KB कम करें</div>
-                        </div>
-                        <div onclick="openPage('passport-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-amber-400 hover:shadow-md transition">
-                            <i class="fa-solid fa-id-badge text-amber-600 text-xl mb-1.5"></i>
-                            <div class="text-xs font-black text-slate-800">पासपोर्ट फोटो</div>
-                            <div class="text-[10px] text-slate-500">6 या 12 फोटो शीट बनाएं</div>
-                        </div>
-                        <div onclick="openPage('dob-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-purple-400 hover:shadow-md transition">
-                            <i class="fa-solid fa-cake-candles text-purple-600 text-xl mb-1.5"></i>
-                            <div class="text-xs font-black text-slate-800">DOB Calculator</div>
-                            <div class="text-[10px] text-slate-500">सटीक उम्र निकालें</div>
-                        </div>
-                        <div onclick="openPage('barcode-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition">
-                            <i class="fa-solid fa-barcode text-indigo-600 text-xl mb-1.5"></i>
-                            <div class="text-xs font-black text-slate-800">Barcode Reader</div>
-                            <div class="text-[10px] text-slate-500">QR व बारकोड स्कैन/जेनरेट</div>
-                        </div>
-                    </div>
-
-                    <!-- Timing Highlight Box -->
-                    <div class="mt-8 inline-flex items-center gap-3 bg-amber-50 border border-amber-200 text-amber-900 px-4 py-3 rounded-2xl text-xs sm:text-sm font-bold shadow-sm">
-                        <i class="fa-regular fa-clock text-amber-600 text-lg"></i>
-                        <span>दुकान खुलने का समय: सोमवार से शनिवार (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश</span>
-                    </div>
-                </div>
-
-                <!-- Compact Direct Links Sidebar (Right 4 Cols) -->
-                <div class="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-5 shadow-sm">
-                    <h3 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2 pb-2 border-b border-slate-100">
-                        <i class="fa-solid fa-bolt text-amber-500"></i> महत्वपूर्ण सरकारी एवं योजना लिंक
-                    </h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-fingerprint text-blue-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">आधार स्टेटस</div>
-                        </a>
-                        <a href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-id-card text-emerald-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">पैन स्टेटस</div>
-                        </a>
-                        <a href="https://sewasetu.cgstate.gov.in/workflow/trackAppStatus.html" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-file-shield text-indigo-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">सेवा सेतु स्टेटस</div>
-                        </a>
-                        <a href="https://revenue.cg.nic.in/bhuiyanuser/User/Selection_Report_For_KhasraDetail.aspx" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-seedling text-amber-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">बी-1 / खसरा</div>
-                        </a>
-                        <a href="https://fci.cg.nic.in/DhanKharidi2025/index.aspx" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-wheat-awn text-orange-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">धान खरीदी पोर्टल</div>
-                        </a>
-                        <a href="https://mahtarivandan.cgstate.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-pink-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-hand-holding-heart text-pink-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-pink-700">महतारी वंदन</div>
-                        </a>
-                        <a href="https://pmkisan.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-green-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-tractor text-green-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-green-700">PM किसान सम्मान</div>
-                        </a>
-                        <a href="https://rationcard.cg.gov.in/" target="_blank" class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl text-center transition group">
-                            <i class="fa-solid fa-utensils text-teal-600 text-base mb-1 group-hover:scale-110 transition-transform"></i>
-                            <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700">राशन कार्ड</div>
                         </a>
                     </div>
                 </div>
@@ -717,60 +647,77 @@
         </div>
     </section>
 
-    <!-- 6. Branches Dedicated View + Footer (शाखाएँ पेज और फुटर) -->
-    <section id="branches-page" data-view="branches" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[65vh]">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 5.5 नया स्वतंत्र पेज: मोबाइल ऐप (PWA) एवं गोपनीयता गाइड -->
+    <section id="pwa-app-page" data-view="pwa-app" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-50 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-6">
                 <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
                     <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
                 </button>
             </div>
-            <div class="text-center mb-10">
-                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full mb-3">
-                    <i class="fa-solid fa-location-dot"></i> हमारी शाखाएँ एवं संपर्क
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">रूपेश कंप्यूटर्स की मुख्य शाखाएँ</h2>
-                <p class="mt-2 text-slate-600 text-sm">सोमवार से शनिवार (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश</p>
+
+            <!-- 100% No Ads & Zero Data Collection Guarantee Banner -->
+            <div class="mb-8 bg-emerald-50 border-2 border-emerald-500 rounded-3xl p-5 sm:p-6 shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl shrink-0 shadow">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-xl font-black text-emerald-950">🔒 100% गोपनीयता गारंटी: कोई विज्ञापन (No Ads) नहीं, कोई डेटा कहीं नहीं जाएगा!</h3>
+                        <p class="text-xs sm:text-sm text-emerald-900 font-medium mt-1.5 leading-relaxed">
+                            यह वेबसाइट और मोबाइल ऐप पूरी तरह <b>विज्ञापन-मुक्त (Ad-Free)</b> है—यहाँ कोई फालतू प्रचार या पॉपअप नहीं दिखेगा। साथ ही, जब आप <b>PDF मेकर, फोटो KB रिसाइज़र, पासपोर्ट फोटो शीट, उम्र कैलकुलेटर या QR स्कैनर</b> का उपयोग करते हैं, तो <b>आपकी कोई भी फोटो, दस्तावेज़ या निजी जानकारी किसी भी बाहरी सर्वर पर अपलोड या सेव नहीं होती।</b> सारा काम सीधे आपके अपने मोबाइल/कंप्यूटर के अंदर ही सुरक्षित रूप से होता है।
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white border-2 border-blue-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-store"></i>
+
+            <!-- PWA मोबाइल ऐप इंस्टॉल गाइड और फीचर्स बॉक्स -->
+            <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-blue-800/40">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 px-3 py-1 rounded-full mb-3">
+                            <i class="fa-solid fa-mobile-screen"></i> RUPESH COMPUTERS मोबाइल ऐप (PWA)
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black">बिना Play Store के सीधे अपने मोबाइल में ऐप इंस्टॉल करें!</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                            यह वेबसाइट आधुनिक <b>PWA (Progressive Web App)</b> तकनीक से बनी है। इसे अपने मोबाइल में इंस्टॉल करने पर यह बिल्कुल एक असली Android/iPhone ऐप की तरह काम करती है—वह भी बिना किसी विज्ञापन और बिना डेटा चोरी के डर के।
+                        </p>
                     </div>
-                    <h3 class="text-xl font-black text-slate-900 mb-2">चोंगरीबहार शाखा</h3>
-                    <p class="text-sm text-slate-600 mb-2">मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
-                    <p class="text-sm font-bold text-emerald-700 mb-1"><i class="fa-solid fa-phone"></i> कॉल / WhatsApp: +91 6264531630</p>
-                    <p class="text-xs font-semibold text-slate-500 mb-4"><i class="fa-solid fa-envelope text-blue-600"></i> ईमेल: <a href="mailto:chongribahar@rupeshcomputers.in" class="hover:underline text-blue-700">chongribahar@rupeshcomputers.in</a></p>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="tel:+916264531630" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-solid fa-phone"></i> कॉल करें</a>
-                        <a href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                        <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
-                    </div>
+                    <button onclick="triggerPwaInstall()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-6 py-3.5 rounded-2xl shadow-lg transition flex items-center gap-2 text-sm shrink-0">
+                        <i class="fa-solid fa-download"></i> अभी ऐप इंस्टॉल करें
+                    </button>
                 </div>
-                <div class="bg-white border-2 border-indigo-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-store"></i>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- इंस्टॉल होने के बाद मिलने वाले फीचर्स -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                        <h4 class="text-base font-black text-amber-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-star"></i> इंस्टॉल होने के बाद ऐप में क्या-क्या फीचर्स मिलेंगे?
+                        </h4>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-200">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span><b>कोई विज्ञापन नहीं & 100% प्राइवेसी:</b> कोई Add नहीं आएगा और आपकी कोई भी फाइल या डेटा कहीं नहीं जाएगा।</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span><b>होम स्क्रीन पर अपना आइकन:</b> फोन की स्क्रीन पर Rupesh Computers का आइकन बन जाएगा, जिससे एक टच में ऐप खुलेगा।</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span><b>फुल-स्क्रीन ऐप अनुभव:</b> ऊपर ब्राउज़र की एड्रेस पट्टी नहीं दिखेगी, बिल्कुल असली मोबाइल ऐप जैसा अनुभव मिलेगा।</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span><b>सभी डिजिटल टूल्स एक साथ:</b> JPEG से PDF बनाना, फोटो का KB साइज कम करना, पासपोर्ट फोटो शीट बनाना, उम्र कैलकुलेटर और QR/बारकोड रीडर सीधे ऐप के अंदर चलेंगे।</span></li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span><b>ऑफलाइन सपोर्ट (बिना इंटरनेट भी चलेगा):</b> एक बार इंस्टॉल होने के बाद कम नेटवर्क या बिना इंटरनेट के भी टूल्स, दस्तावेजों की सूची और गैस बुकिंग नियम खुलेंगे।</span></li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-black text-slate-900 mb-2">दोकड़ा शाखा</h3>
-                    <p class="text-sm text-slate-600 mb-2">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
-                    <p class="text-sm font-bold text-emerald-700 mb-1"><i class="fa-solid fa-phone"></i> कॉल / WhatsApp: +91 9713926390</p>
-                    <p class="text-xs font-semibold text-slate-500 mb-4"><i class="fa-solid fa-envelope text-indigo-600"></i> ईमेल: <a href="mailto:dokda@rupeshcomputers.in" class="hover:underline text-indigo-700">dokda@rupeshcomputers.in</a></p>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="tel:+919713926390" class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-solid fa-phone"></i> कॉल करें</a>
-                        <a href="https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                        <a href="https://maps.google.com/?q=Dokda" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
-                    </div>
-                </div>
-                <div class="bg-white border-2 border-indigo-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
-                        <i class="fa-solid fa-store"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-slate-900 mb-2">दोकड़ा शाखा</h3>
-                    <p class="text-sm text-slate-600 mb-3">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
-                    <p class="text-sm font-bold text-emerald-700 mb-4"><i class="fa-solid fa-phone"></i> मोबाइल: +91 9713926390</p>
-                    <div class="flex gap-3">
-                        <a href="tel:+919713926390" class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition">कॉल करें</a>
-                        <a href="https://maps.google.com/?q=Dokda" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
+
+                    <!-- मोबाइल में इंस्टॉल करने का तरीका -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                        <h4 class="text-base font-black text-sky-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-question"></i> अपने फोन में इंस्टॉल कैसे करें? (आसान तरीका)
+                        </h4>
+                        <div class="space-y-3 text-xs sm:text-sm text-slate-200">
+                            <div class="bg-white/5 p-3.5 rounded-xl border border-white/10">
+                                <div class="font-bold text-emerald-300 mb-1"><i class="fa-brands fa-android"></i> Android फोन (Chrome ब्राउज़र में):</div>
+                                <p>1. ऊपर <b>"अभी ऐप इंस्टॉल करें"</b> बटन दबाएं या Chrome के ऊपर दाईं ओर <b>3 डॉट (⋮)</b> पर क्लिक करें।<br>2. <b>"Install app"</b> या <b>"Add to Home screen"</b> चुनें और <b>Install</b> दबाएं।</p>
+                            </div>
+                            <div class="bg-white/5 p-3.5 rounded-xl border border-white/10">
+                                <div class="font-bold text-amber-300 mb-1"><i class="fa-brands fa-apple"></i> iPhone / iPad (Safari ब्राउज़र में):</div>
+                                <p>1. नीचे बीच में <b>Share बटन (<i class="fa-solid fa-arrow-up-from-bracket"></i>)</b> दबाएं।<br>2. नीचे स्क्रॉल करके <b>"Add to Home Screen"</b> चुनें और ऊपर <b>Add</b> दबा दें।</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -796,6 +743,12 @@
                     <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 flex items-center gap-2 text-white text-xs font-bold transition">
                         <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp चैनल जॉइन करें
                     </a>
+                </div>
+                <!-- लाइव विज़िटर काउंटर बैज -->
+                <div class="mt-4 inline-flex items-center gap-2.5 bg-slate-900 border border-slate-700 px-3.5 py-2 rounded-xl shadow-inner">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-bold text-slate-300">कुल विज़िटर्स (Visitors):</span>
+                    <span id="visitor-count" class="text-sm font-black text-amber-400 tracking-wider">...</span>
                 </div>
             </div>
             
@@ -884,20 +837,23 @@
                         <i class="fa-solid fa-robot text-xs text-amber-400"></i>
                     </div>
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
-                        नमस्ते! 🙏 मैं <b>रूपेश AI असिस्टेंट</b> हूँ। आप मुझसे किसी भी प्रमाण पत्र (जाति, निवास, आय, पैन, आयुष्मान) के दस्तावेज, दुकान का समय या पता पूछ सकते हैं:
+                        नमस्ते! 🙏 मैं <b>रूपेश AI असिस्टेंट</b> हूँ। यह पोर्टल <b>100% विज्ञापन-मुक्त (No Ads)</b> है और आपका कोई भी डेटा कहीं नहीं जाता। नीचे दिए बटन चुनें या अपना सवाल पूछें:
                         
                         <div class="mt-3 flex flex-col gap-1.5">
                             <button onclick="handleQuickAction('jati')" class="text-left bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-file-shield text-indigo-600"></i> जाति प्रमाण पत्र के दस्तावेज
+                                <i class="fa-solid fa-file-shield text-indigo-600"></i> जाति / निवास / आय दस्तावेज
                             </button>
-                            <button onclick="handleQuickAction('niwas')" class="text-left bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-house-chimney text-violet-600"></i> निवास और आय प्रमाण पत्र दस्तावेज
+                            <button onclick="handleQuickAction('gas')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग नियम
+                            </button>
+                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-user-shield text-emerald-600"></i> डेटा सुरक्षा व मोबाइल ऐप (PWA)
                             </button>
                             <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
                             </button>
-                            <button onclick="handleQuickAction('branch')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-emerald-600"></i> चोंगरीबहार और दोकड़ा शाखा का पता
+                            <button onclick="handleQuickAction('branch')" class="text-left bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-red-600"></i> चोंगरीबहार और दोकड़ा शाखा पता
                             </button>
                         </div>
                     </div>
@@ -951,85 +907,83 @@
         // URL हैश (#services, #dob-tool आदि) से सीधे उसी पेज को खोलें
         window.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash.replace('#', '');
-            const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'barcode-tool', 'features', 'branches'];
+            const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'barcode-tool', 'pwa-app', 'features', 'branches'];
             if (validPages.includes(hash)) {
                 openPage(hash, false);
             } else {
                 openPage('home', false);
             }
+            renderServices();
+            initVisitorCounter();
+            setupPwa();
         });
 
-        // टोस्ट नोटिफिकेशन फ़ंक्शन (बिना alert() के)
+        // कस्टम टोस्ट नोटिफिकेशन फंक्शन
         function showToast(msg) {
             const box = document.getElementById('toast-box');
             const text = document.getElementById('toast-text');
-            text.innerText = msg;
+            if (!box || !text) return;
+            text.textContent = msg;
             box.classList.remove('hidden');
             box.classList.add('toast-show');
             setTimeout(() => {
                 box.classList.add('hidden');
                 box.classList.remove('toast-show');
-            }, 3000);
+            }, 3500);
         }
 
-        // शाखाओं का पूरा डेटा
+        // शाखा जानकारी एवं स्विचर लॉजिक
         const branchData = {
             chongribahar: {
-                name: "चोंगरीबहार",
-                subtitle: "सक्रिय शाखा: चोंगरीबहार (मुख्य मार्ग)",
-                badge: "चयनित शाखा: चोंगरीबहार",
-                address: "पता: मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)",
-                operator: "संचालक: रूपेश प्रसाद | कॉल/WhatsApp: +91 6264531630 | ईमेल: chongribahar@rupeshcomputers.in",
-                phoneHref: "tel:+916264531630",
-                waHref: "https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4",
-                mapHref: "https://maps.google.com/?q=Chongribahar"
+                name: 'चोंगरीबहार',
+                subtitle: 'सक्रिय शाखा: चोंगरीबहार (मुख्य मार्ग)',
+                badge: 'चयनित शाखा: चोंगरीबहार',
+                address: 'पता: मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)',
+                operator: 'संचालक: रूपेश प्रसाद | संपर्क: +91 6264531630',
+                phone: '+916264531630',
+                wa: 'https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4',
+                map: 'https://maps.google.com/?q=Chongribahar'
             },
             dokda: {
-                name: "दोकड़ा",
-                subtitle: "सक्रिय शाखा: दोकड़ा (मुख्य मार्ग)",
-                badge: "चयनित शाखा: दोकड़ा",
-                address: "पता: ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)",
-                operator: "संचालक: रूपेश कंप्यूटर्स टीम | कॉल/WhatsApp: +91 9713926390 | ईमेल: dokda@rupeshcomputers.in",
-                phoneHref: "tel:+919713926390",
-                waHref: "https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4",
-                mapHref: "https://maps.google.com/?q=Dokda"
+                name: 'दोकड़ा',
+                subtitle: 'सक्रिय शाखा: दोकड़ा (मुख्य मार्ग)',
+                badge: 'चयनित शाखा: दोकड़ा',
+                address: 'पता: ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)',
+                operator: 'संचालक: रूपेश प्रसाद | संपर्क: +91 9713926390',
+                phone: '+919713926390',
+                wa: 'https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4',
+                map: 'https://maps.google.com/?q=Dokda'
             }
         };
 
-        // सक्रिय शाखा स्विचर फ़ंक्शन
         function switchBranch(branchKey) {
-            const data = branchData[branchKey];
-            if (!data) return;
-
+            const data = branchData[branchKey] || branchData.chongribahar;
             const btnC = document.getElementById('btn-chongribahar');
             const btnD = document.getElementById('btn-dokda');
-            const footerC = document.getElementById('footer-card-chongribahar');
-            const footerD = document.getElementById('footer-card-dokda');
 
             if (branchKey === 'chongribahar') {
                 btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1";
                 btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center gap-1";
-                footerC.classList.add('border-amber-500/40', 'bg-slate-900/60');
-                footerD.classList.remove('border-amber-500/40', 'bg-slate-900/60');
+                document.getElementById('footer-card-chongribahar')?.classList.add('border-amber-500/40', 'bg-slate-900/60');
+                document.getElementById('footer-card-dokda')?.classList.remove('border-amber-500/40', 'bg-slate-900/60');
             } else {
                 btnD.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md flex items-center gap-1";
                 btnC.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300 flex items-center gap-1";
-                footerD.classList.add('border-amber-500/40', 'bg-slate-900/60');
-                footerC.classList.remove('border-amber-500/40', 'bg-slate-900/60');
+                document.getElementById('footer-card-dokda')?.classList.add('border-amber-500/40', 'bg-slate-900/60');
+                document.getElementById('footer-card-chongribahar')?.classList.remove('border-amber-500/40', 'bg-slate-900/60');
             }
 
-            // UI अपडेट करें
-            document.getElementById('header-branch-subtitle').innerText = data.subtitle;
-            document.getElementById('branch-badge').innerText = data.badge;
-            document.getElementById('branch-address-text').innerText = data.address;
-            document.getElementById('branch-operator-text').innerText = data.operator;
-            document.getElementById('branch-call-btn').href = data.phoneHref;
-            document.getElementById('branch-wa-btn').href = data.waHref;
-            document.getElementById('branch-map-btn').href = data.mapHref;
-            document.getElementById('mobile-bottom-call').href = data.phoneHref;
-            document.getElementById('mobile-bottom-wa').href = data.waHref;
+            document.getElementById('header-branch-subtitle').textContent = data.subtitle;
+            document.getElementById('branch-badge').textContent = data.badge;
+            document.getElementById('branch-address-text').textContent = data.address;
+            document.getElementById('branch-operator-text').textContent = data.operator;
+            document.getElementById('branch-call-btn').href = 'tel:' + data.phone;
+            document.getElementById('branch-wa-btn').href = data.wa;
+            document.getElementById('branch-map-btn').href = data.map;
+            document.getElementById('mobile-bottom-call').href = 'tel:' + data.phone;
+            document.getElementById('mobile-bottom-wa').href = data.wa;
 
-            showToast(`✅ ${data.name} शाखा चुन ली गई है`);
+            showToast(`${data.name} शाखा चुनी गई है`);
         }
 
         // सेवाओं की सूची
@@ -1076,10 +1030,8 @@
                     "<b>3) अधिकार अभिलेख</b>",
                     "<b>4) P-6 जमाबंदी की सत्यापित प्रति / मिसल (1950 के पूर्व का)</b>",
                     "<b>5) कक्षा 5वीं/8वीं एवं 10वीं अथवा दाखिल ख़ारिज पंजी</b>",
-                    "<b>6) वंशावली सूची की मूल प्रति</b>",
-                    "<b>7) वर्तमान वर्ष का बी-1 की मूल प्रति</b>",
-                    "<b>8) पहचान पत्र (मतदाता परिचय पत्र/आधार कार्ड/राशन कार्ड)</b>",
-                    "<i>नोट: OBC के लिए आय प्रमाण पत्र एवं 1984 से पूर्व का दस्तावेज आवश्यक।</i>"
+                    "<b>6) वंशावली सूची की मूल प्रति एवं वर्तमान बी-1</b>",
+                    "<b>7) पहचान पत्र (मतदाता परिचय पत्र/आधार कार्ड/राशन कार्ड)</b>"
                 ]
             },
             {
@@ -1089,10 +1041,8 @@
                 docs: [
                     "<b>1) पटवारी एवं सरपंच का प्रतिवेदन</b>",
                     "<b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं / 12वीं अंकसूची)</b>",
-                    "<b>3) वर्तमान वर्ष का बी-1</b>",
-                    "<b>4) स्व-घोषणा पत्र</b>",
-                    "<b>5) पहचान पत्र (मतदाता परिचय पत्र / आधार कार्ड / राशन कार्ड)</b>",
-                    "<b>6) शासकीय सेवकों हेतु सेवा-पुस्तिका की सत्यापित प्रति</b>"
+                    "<b>3) वर्तमान वर्ष का बी-1 एवं स्व-घोषणा पत्र</b>",
+                    "<b>4) पहचान पत्र (मतदाता परिचय पत्र / आधार कार्ड / राशन कार्ड)</b>"
                 ]
             },
             {
@@ -1102,9 +1052,8 @@
                 docs: [
                     "<b>1) पटवारी का प्रतिवेदन</b>",
                     "<b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं)</b>",
-                    "<b>3) स्व-घोषणा पत्र</b>",
-                    "<b>4) वर्तमान वर्ष का बी-1 (यदि कृषि से आय हो)</b>",
-                    "<b>5) पहचान पत्र (मतदाता परिचय पत्र / आधार कार्ड / राशन कार्ड)</b>"
+                    "<b>3) स्व-घोषणा पत्र एवं वर्तमान वर्ष का बी-1</b>",
+                    "<b>4) पहचान पत्र (मतदाता परिचय पत्र / आधार कार्ड / राशन कार्ड)</b>"
                 ]
             },
             {
@@ -1112,9 +1061,9 @@
                 icon: "fa-id-card",
                 color: "bg-teal-100 text-teal-700",
                 docs: [
-                    "नया पैन कार्ड बनवाना",
-                    "आधार कार्ड और 2 पासपोर्ट फोटो",
-                    "पैन सुधार (Correction) कार्य"
+                    "नया पैन कार्ड बनवाना एवं सुधार (Correction)",
+                    "आधार कार्ड व पासपोर्ट साइज फोटो",
+                    "मोबाइल नंबर लिंक की अनिवार्यता नहीं"
                 ]
             },
             {
@@ -1122,29 +1071,24 @@
                 icon: "fa-notes-medical",
                 color: "bg-rose-100 text-rose-700",
                 docs: [
-                    "आधार कार्ड",
-                    "राशन कार्ड (सूची में नाम होना अनिवार्य)",
-                    "मोबाइल नंबर (OTP के लिए)"
+                    "आधार कार्ड एवं राशन कार्ड (सूची में नाम अनिवार्य)",
+                    "मोबाइल नंबर (OTP सत्यापन के लिए)"
                 ]
             },
             {
-                title: "ई-श्रम एवं अन्य ऑनलाइन फॉर्म",
+                title: "ई-श्रम कार्ड (e-Shram)",
                 icon: "fa-helmet-safety",
                 color: "bg-cyan-100 text-cyan-700",
                 docs: [
-                    "ई-श्रम कार्ड पंजीयन (आधार + बैंक पासबुक)",
-                    "स्कॉलरशिप, कॉलेज एवं सरकारी नौकरी फॉर्म",
-                    "फोटो कॉपी, लेमिनेशन एवं कलर प्रिंट"
+                    "आधार कार्ड (मोबाइल नंबर लिंक होना चाहिए)",
+                    "बैंक पासबुक विवरण"
                 ]
             }
         ];
 
         function renderServices(list = services) {
             const container = document.getElementById('services-container');
-            if (list.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 font-bold">कोई सेवा नहीं मिली। कृपया दूसरा शब्द खोजें।</div>`;
-                return;
-            }
+            if (!container) return;
             container.innerHTML = list.map(service => `
                 <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
                     <div>
@@ -1163,7 +1107,7 @@
                     </div>
                     <div class="mt-6 pt-4 flex flex-col gap-2">
                         <button onclick="shareOnWhatsApp('${service.title.replace(/'/g, "\\'")}', \`${service.docs.join(', ')}\`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर दस्तावेज लिस्ट भेजें
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
                         </button>
                     </div>
                 </div>
@@ -1171,37 +1115,34 @@
         }
 
         function filterServices() {
-            const query = document.getElementById('service-search').value.toLowerCase();
-            const filtered = services.filter(s => 
-                s.title.toLowerCase().includes(query) || 
-                s.docs.some(d => d.toLowerCase().includes(query))
+            const q = (document.getElementById('service-search')?.value || '').toLowerCase();
+            const filtered = services.filter(s =>
+                s.title.toLowerCase().includes(q) ||
+                s.docs.some(d => d.toLowerCase().includes(q))
             );
             renderServices(filtered);
         }
 
-        window.addEventListener('DOMContentLoaded', () => renderServices());
-
         function shareOnWhatsApp(serviceTitle, docsText) {
             const cleanDocs = docsText.replace(/<[^>]*>?/gm, '');
-            const message = `*RUPESH COMPUTERS (चोंगरीबहार और दोकड़ा)*\n\n📌 *सेवा:* ${serviceTitle}\n\n*आवश्यक दस्तावेज / जानकारी:*\n- ${cleanDocs.split(', ').join('\n- ')}\n\n⏰ समय: सोम-शनि (सुबह 10 से शाम 6)\nअधिक जानकारी के लिए संपर्क करें!`;
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            const message = `*RUPESH COMPUTERS (चोंगरीबहार और दोकड़ा)*\n\n📌 *सेवा:* ${serviceTitle}\n\n*आवश्यक दस्तावेज / जानकारी:*\n- ${cleanDocs.split(', ').join('\n- ')}\n\n⏰ समय: सोम-शनि (सुबह 10 से शाम 6)`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // 1. Image to PDF Tool
+        // JPEG to PDF टूल
         let selectedImages = [];
         function handleImgSelection(event) {
             const files = event.target.files;
             if (!files.length) return;
-            for (let file of files) {
-                selectedImages.push(file);
-            }
+            for (let file of files) selectedImages.push(file);
             renderImagePreviews();
         }
 
         function renderImagePreviews() {
             const container = document.getElementById('pdf-image-list');
             const previewContainer = document.getElementById('pdf-preview-container');
+            if (!container || !previewContainer) return;
+
             if (selectedImages.length > 0) {
                 previewContainer.classList.remove('hidden');
                 previewContainer.classList.add('flex');
@@ -1213,7 +1154,7 @@
             container.innerHTML = selectedImages.map((file, index) => `
                 <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-white">
                     <img src="${URL.createObjectURL(file)}" class="w-full h-full object-cover">
-                    <button onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow transition">
+                    <button onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -1229,24 +1170,19 @@
             if (selectedImages.length === 0) return;
             const statusDiv = document.getElementById('img2pdf-status');
             statusDiv.classList.remove('hidden');
-            statusDiv.innerText = "PDF तैयार हो रहा है, कृपया प्रतीक्षा करें...";
+            statusDiv.textContent = "PDF तैयार हो रहा है, कृपया प्रतीक्षा करें...";
 
             try {
                 const { PDFDocument } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
-
                 for (let file of selectedImages) {
                     const imageBytes = await file.arrayBuffer();
-                    let image;
-                    if (file.type === 'image/png') {
-                        image = await pdfDoc.embedPng(imageBytes);
-                    } else {
-                        image = await pdfDoc.embedJpg(imageBytes);
-                    }
+                    const image = file.type === 'image/png'
+                        ? await pdfDoc.embedPng(imageBytes)
+                        : await pdfDoc.embedJpg(imageBytes);
                     const page = pdfDoc.addPage([image.width, image.height]);
                     page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
                 }
-
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
@@ -1254,23 +1190,24 @@
                 link.download = 'Rupesh_Computers_Document.pdf';
                 link.click();
 
-                statusDiv.innerText = "✅ PDF सफलतापूर्वक डाउनलोड हो गया है!";
+                statusDiv.textContent = "✅ PDF सफलतापूर्वक डाउनलोड हो गया है!";
                 selectedImages = [];
                 renderImagePreviews();
             } catch (error) {
                 console.error(error);
-                statusDiv.innerText = "❌ PDF बनाने में त्रुटि हुई। केवल JPG या PNG फोटो चुनें।";
+                statusDiv.textContent = "❌ PDF बनाने में त्रुटि हुई। कृपया केवल JPG या PNG फोटो चुनें।";
             }
         }
 
-        // 2. Photo Resizer
+        // Photo KB Resizer
         let imageToResize = null;
         function previewImageToResize(event) {
             const file = event.target.files[0];
             if (!file) return;
             imageToResize = file;
-            document.getElementById('resize-controls').classList.remove('hidden');
-            document.getElementById('resize-controls').classList.add('flex');
+            const controls = document.getElementById('resize-controls');
+            controls.classList.remove('hidden');
+            controls.classList.add('flex');
         }
 
         function resizeImage() {
@@ -1286,8 +1223,7 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    let quality = 0.9;
-                    const maxDim = 1000;
+                    const maxDim = 900;
                     if (width > maxDim || height > maxDim) {
                         if (width > height) {
                             height = Math.round((height * maxDim) / width);
@@ -1299,21 +1235,21 @@
                     }
                     canvas.width = width;
                     canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
+                    let quality = 0.9;
                     let dataUrl = canvas.toDataURL('image/jpeg', quality);
                     let currentKB = ((dataUrl.length - (dataUrl.indexOf(',') + 1)) * 3) / 4 / 1024;
 
                     while (currentKB > targetKB && quality > 0.1) {
-                        quality -= 0.1;
+                        quality -= 0.08;
                         dataUrl = canvas.toDataURL('image/jpeg', quality);
                         currentKB = ((dataUrl.length - (dataUrl.indexOf(',') + 1)) * 3) / 4 / 1024;
                     }
 
                     resultDiv.innerHTML = `
-                        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center">
-                            <p class="text-xs font-bold text-emerald-800 mb-2">✅ साइज लगभग ${Math.round(currentKB)} KB हो गया है!</p>
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center">
+                            <p class="text-xs font-bold text-emerald-800 mb-2">✅ फोटो का साइज लगभग ${Math.round(currentKB)} KB हो गया है!</p>
                             <a href="${dataUrl}" download="compressed_photo.jpg" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow">
                                 फोटो डाउनलोड करें
                             </a>
@@ -1325,39 +1261,35 @@
             reader.readAsDataURL(imageToResize);
         }
 
-        // 3. Passport Photo Sheet Maker (New Tool)
-        let passportPhotoFile = null;
+        // पासपोर्ट साइज फोटो शीट मेकर
+        let passportFile = null;
         function loadPassportPhoto(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            passportPhotoFile = file;
-            showToast("फोटो लोड हो गई! अब 'पासपोर्ट शीट बनाएं' पर क्लिक करें।");
+            passportFile = event.target.files[0];
+            if (passportFile) {
+                showToast("पासपोर्ट फोटो अपलोड हो गई है! अब 'पासपोर्ट शीट बनाएं' दबाएं।");
+            }
         }
 
         function generatePassportSheet() {
-            if (!passportPhotoFile) {
-                showToast("⚠️ कृपया पहले एक फोटो अपलोड करें!");
+            if (!passportFile) {
+                showToast("⚠️ कृपया पहले पासपोर्ट फोटो अपलोड करें!");
                 return;
             }
-            const count = parseInt(document.getElementById('passport-count').value);
-            const resultBox = document.getElementById('passport-result');
+            const count = parseInt(document.getElementById('passport-count').value) || 12;
+            const cols = 6;
+            const rows = count === 6 ? 1 : 2;
             const reader = new FileReader();
-
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
+                    const photoW = 280;
+                    const photoH = 350;
+                    const gap = 18;
                     const canvas = document.createElement('canvas');
-                    const cols = 6;
-                    const rows = count === 12 ? 2 : 1;
-                    const photoW = 200;
-                    const photoH = 250;
-                    const gap = 15;
-
                     canvas.width = cols * photoW + (cols + 1) * gap;
                     canvas.height = rows * photoH + (rows + 1) * gap;
                     const ctx = canvas.getContext('2d');
-
-                    ctx.fillStyle = "#ffffff";
+                    ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                     for (let r = 0; r < rows; r++) {
@@ -1365,46 +1297,42 @@
                             const x = gap + c * (photoW + gap);
                             const y = gap + r * (photoH + gap);
                             ctx.drawImage(img, x, y, photoW, photoH);
-                            ctx.strokeStyle = "#cbd5e1";
+                            ctx.strokeStyle = '#cbd5e1';
                             ctx.lineWidth = 2;
                             ctx.strokeRect(x, y, photoW, photoH);
                         }
                     }
-
                     const sheetUrl = canvas.toDataURL('image/jpeg', 0.95);
-                    resultBox.innerHTML = `
+                    document.getElementById('passport-result').innerHTML = `
                         <img src="${sheetUrl}" class="max-h-24 mx-auto rounded border shadow-sm mb-2">
-                        <a href="${sheetUrl}" download="Passport_Photo_Sheet_${count}.jpg" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs transition shadow">
-                            <i class="fa-solid fa-download"></i> ${count} फोटो शीट डाउनलोड करें
+                        <a href="${sheetUrl}" download="passport_sheet_${count}.jpg" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs shadow">
+                            प्रिंट शीट डाउनलोड करें (${count} फोटो)
                         </a>
                     `;
                 };
                 img.src = e.target.result;
             };
-            reader.readAsDataURL(passportPhotoFile);
+            reader.readAsDataURL(passportFile);
         }
 
-        // 4. Age Calculator
+        // DOB & Age Calculator
         function calculateAge() {
             const dob = document.getElementById('dob-input').value;
             const targetDob = document.getElementById('target-date-input').value;
             const resultDiv = document.getElementById('age-result');
-            
+
             if (!dob) {
                 resultDiv.classList.remove('hidden');
-                resultDiv.innerText = "⚠️ कृपया अपनी जन्मतिथि (DOB) चुनें!";
+                resultDiv.textContent = "⚠️ कृपया अपनी जन्मतिथि (DOB) चुनें!";
                 return;
             }
-            
             const birthDate = new Date(dob);
             const compareDate = targetDob ? new Date(targetDob) : new Date();
-            
             if (birthDate > compareDate) {
                 resultDiv.classList.remove('hidden');
-                resultDiv.innerText = "❌ जन्मतिथि भविष्य की तारीख नहीं हो सकती!";
+                resultDiv.textContent = "❌ जन्मतिथि भविष्य की तारीख नहीं हो सकती!";
                 return;
             }
-            
             let years = compareDate.getFullYear() - birthDate.getFullYear();
             let months = compareDate.getMonth() - birthDate.getMonth();
             let days = compareDate.getDate() - birthDate.getDate();
@@ -1417,76 +1345,161 @@
                 years--;
                 months += 12;
             }
-
             resultDiv.classList.remove('hidden');
-            resultDiv.innerHTML = `🎉 सटीक आयु: <br><span class="text-sm font-black">${years} वर्ष, ${months} महीने, ${days} दिन</span>`;
+            resultDiv.innerHTML = `🎉 सटीक आयु: <br><span class="text-base font-black">${years} वर्ष, ${months} महीने, ${days} दिन</span>`;
         }
 
-        // 5. QR & Barcode Generator (Using Toast instead of alert)
+        // QR Code & Barcode Generator + Scanner
         function generateQRCodeOnly() {
             const text = document.getElementById('code-text-input').value.trim();
-            const container = document.getElementById('code-result-container');
-            const img = document.getElementById('generated-img');
-            const dl = document.getElementById('download-code-btn');
             if (!text) {
                 showToast("⚠️ कृपया पहले टेक्स्ट या नंबर लिखें!");
                 return;
             }
-            const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
-            img.src = url;
-            dl.href = url;
-            container.classList.remove('hidden');
+            const url = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(text)}`;
+            document.getElementById('generated-img').src = url;
+            document.getElementById('download-code-btn').href = url;
+            document.getElementById('code-result-container').classList.remove('hidden');
         }
 
         function generateBarcodeOnly() {
             const text = document.getElementById('code-text-input').value.trim();
-            const container = document.getElementById('code-result-container');
-            const img = document.getElementById('generated-img');
-            const dl = document.getElementById('download-code-btn');
             if (!text) {
                 showToast("⚠️ कृपया पहले टेक्स्ट या नंबर लिखें!");
                 return;
             }
             const url = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${encodeURIComponent(text)}&scale=2&height=40&includetext`;
-            img.src = url;
-            dl.href = url;
-            container.classList.remove('hidden');
+            document.getElementById('generated-img').src = url;
+            document.getElementById('download-code-btn').href = url;
+            document.getElementById('code-result-container').classList.remove('hidden');
         }
 
-        // 6. QR Scanner
         function scanQRImage(event) {
             const file = event.target.files[0];
             const resultDiv = document.getElementById('scanner-result');
             if (!file) return;
+            resultDiv.textContent = "🔍 QR कोड स्कैन किया जा रहा है...";
 
-            resultDiv.innerHTML = "🔍 QR कोड स्कैन किया जा रहा है...";
-            
             if ('BarcodeDetector' in window) {
                 const barcodeDetector = new BarcodeDetector({ formats: ['qr_code', 'code_128', 'ean_13'] });
                 const img = new Image();
                 img.onload = function() {
                     barcodeDetector.detect(img)
-                        .then(decodedItems => {
-                            if (decodedItems.length > 0) {
-                                const val = decodedItems[0].rawValue;
-                                resultDiv.innerHTML = val.startsWith('http') 
+                        .then(items => {
+                            if (items.length > 0) {
+                                const val = items[0].rawValue;
+                                resultDiv.innerHTML = val.startsWith('http')
                                     ? `✅ <a href="${val}" target="_blank" class="text-blue-600 font-bold underline">${val}</a>`
-                                    : `✅ परिणाम: <span class="font-bold text-slate-900">${val}</span>`;
+                                    : `✅ परिणाम: <b>${val}</b>`;
                             } else {
-                                resultDiv.innerHTML = "⚠️ इस फोटो में QR कोड नहीं मिला। साफ फोटो चुनें।";
+                                resultDiv.textContent = "⚠️ इस फोटो में QR/बारकोड नहीं मिला। साफ फोटो चुनें।";
                             }
                         })
                         .catch(() => {
-                            resultDiv.innerHTML = "❌ स्कैन करने में असमर्थ। कृपया दूसरा फोटो चुनें।";
+                            resultDiv.textContent = "❌ स्कैन करने में असमर्थ। कृपया दूसरा फोटो चुनें।";
                         });
                 };
                 img.src = URL.createObjectURL(file);
             } else {
-                resultDiv.innerHTML = "⚠️ आपका ब्राउज़र इन-बिल्ट स्कैनर सपोर्ट नहीं करता। Chrome का उपयोग करें।";
+                resultDiv.textContent = "ℹ️ आपका ब्राउज़र इन-बिल्ट कैमरा स्कैन सपोर्ट नहीं करता, कृपया Google Lens का उपयोग करें।";
             }
         }
 
-        // 7. Upgraded Chatbot Logic
+        // लाइव विज़िटर काउंटर (GitHub Pages के लिए CountAPI + लोकल फॉलबैक)
+        function initVisitorCounter() {
+            const el = document.getElementById('visitor-count');
+            if (!el) return;
+            const baseOffset = 1420;
+            let localHits = parseInt(localStorage.getItem('rc_local_visits') || '0', 10) + 1;
+            localStorage.setItem('rc_local_visits', String(localHits));
+
+            fetch('https://api.counterapi.dev/v1/rupeshcomputers-jashpur/visits/up')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && typeof data.count === 'number') {
+                        el.textContent = (baseOffset + data.count).toLocaleString('en-IN');
+                    } else {
+                        el.textContent = (baseOffset + localHits).toLocaleString('en-IN');
+                    }
+                })
+                .catch(() => {
+                    el.textContent = (baseOffset + localHits).toLocaleString('en-IN');
+                });
+        }
+
+        // PWA (Progressive Web App) सेटअप और इंस्टॉल फंक्शन
+        let deferredPrompt = null;
+
+        function setupPwa() {
+            try {
+                // डायनामिक SVG आइकन बनाएं
+                const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#1e3a8a"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="220" fill="#fbbf24">RC</text></svg>`;
+                const iconUrl = 'data:image/svg+xml;base64,' + btoa(svgIcon);
+                const appleIcon = document.getElementById('pwa-apple-icon');
+                if (appleIcon) appleIcon.href = iconUrl;
+
+                // डायनामिक Web App Manifest बनाएं
+                const manifest = {
+                    name: "RUPESH COMPUTERS - डिजिटल सेवा केंद्र",
+                    short_name: "Rupesh Computers",
+                    start_url: window.location.href.split('#')[0],
+                    display: "standalone",
+                    background_color: "#f8fafc",
+                    theme_color: "#1e3a8a",
+                    icons: [
+                        { src: iconUrl, sizes: "192x192", type: "image/svg+xml" },
+                        { src: iconUrl, sizes: "512x512", type: "image/svg+xml" }
+                    ]
+                };
+                const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+                const manifestLink = document.getElementById('pwa-manifest-link');
+                if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
+
+                // Service Worker रजिस्टर करें (केवल https या localhost पर)
+                if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+                    const swCode = `
+                        const CACHE_NAME = 'rupesh-computers-v1';
+                        self.addEventListener('install', e => {
+                            e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll([self.location.href])));
+                            self.skipWaiting();
+                        });
+                        self.addEventListener('fetch', e => {
+                            e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                        });
+                    `;
+                    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+                }
+            } catch (err) {
+                console.warn('PWA setup skipped in preview sandbox:', err);
+            }
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const btn = document.getElementById('pwa-install-btn');
+                if (btn) {
+                    btn.classList.remove('hidden');
+                    btn.classList.add('flex');
+                }
+            });
+        }
+
+        async function triggerPwaInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showToast("✅ ऐप इंस्टॉल हो रहा है!");
+                }
+                deferredPrompt = null;
+            } else {
+                openPage('pwa-app');
+                showToast("नीचे दी गई विधि से अपने ब्राउज़र मेनू से 'Install App / Add to Home Screen' चुनें।");
+            }
+        }
+
+        // AI चैटबॉट लॉजिक
         function toggleChat() {
             const chatWindow = document.getElementById('chat-window');
             if (chatWindow.classList.contains('hidden')) {
@@ -1498,33 +1511,50 @@
             }
         }
 
-        function appendBotMessage(htmlContent) {
+        function appendBotReply(userText, botHtml) {
             const messages = document.getElementById('chat-messages');
+            if (userText) {
+                messages.innerHTML += `
+                    <div class="flex gap-2 justify-end">
+                        <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none text-xs">${userText}</div>
+                    </div>
+                `;
+            }
             messages.innerHTML += `
                 <div class="flex gap-2">
                     <div class="w-6 h-6 rounded-full bg-slate-900 shrink-0 flex items-center justify-center mt-1"><i class="fa-solid fa-robot text-[10px] text-amber-400"></i></div>
-                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700 leading-relaxed">
-                        ${htmlContent}
-                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-xs text-slate-700 leading-relaxed">${botHtml}</div>
                 </div>
             `;
             messages.scrollTop = messages.scrollHeight;
         }
 
         function handleQuickAction(type) {
-            const messages = document.getElementById('chat-messages');
             if (type === 'jati') {
-                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">जाति प्रमाण पत्र के लिए क्या दस्तावेज लगेंगे?</div></div>`;
-                appendBotMessage(`<b>जाति प्रमाण पत्र के आवश्यक दस्तावेज:</b><br>1. पटवारी एवं सरपंच प्रतिवेदन<br>2. स्व-घोषणा पत्र एवं वंशावली<br>3. 1950 से पूर्व का मिसल / P-6 नकल (OBC हेतु 1984)<br>4. 5वीं/8वीं/10वीं अंकसूची एवं वर्तमान बी-1<br>5. आधार कार्ड एवं राशन कार्ड`);
-            } else if (type === 'niwas') {
-                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">निवास और आय प्रमाण पत्र के दस्तावेज</div></div>`;
-                appendBotMessage(`<b>निवास एवं आय प्रमाण पत्र हेतु:</b><br>• पटवारी एवं सरपंच प्रतिवेदन<br>• 5वीं/8वीं/10वीं की अंकसूची<br>• वर्तमान वर्ष का बी-1 (खसरा)<br>• आधार कार्ड एवं राशन कार्ड`);
+                appendBotReply(
+                    "जाति / निवास / आय दस्तावेज बताएं",
+                    `<b>जाति प्रमाण पत्र:</b> पटवारी/सरपंच प्रतिवेदन, स्व-घोषणा पत्र, अधिकार अभिलेख, P-6/मिसल (1950 पूर्व), 5वीं/8वीं/10वीं अंकसूची, वंशावली, वर्तमान बी-1 और आधार/राशन कार्ड।<br><button onclick="openPage('services'); toggleChat();" class="mt-2 text-blue-600 font-bold underline">👉 सभी सेवाओं की सूची खोलें</button>`
+                );
+            } else if (type === 'gas') {
+                appendBotReply(
+                    "Indane गैस बुकिंग नियम",
+                    `Indane गैस बुकिंग के लिए WhatsApp (<b>7588888824</b>) पर <b>Hi</b> भेजें या <b>8454955555</b> पर मिस्ड कॉल करें।<br>⚠️ <b>सावधानी:</b> बुकिंग के समय किसी भी पेमेंट लिंक पर पेमेंट न करें, केवल सिलेंडर की डिलीवरी मिलने के बाद ही भुगतान करें।<br><button onclick="openPage('lpg-booking'); toggleChat();" class="mt-2 text-orange-600 font-bold underline">👉 पूरा गैस बुकिंग पेज देखें</button>`
+                );
+            } else if (type === 'privacy') {
+                appendBotReply(
+                    "डेटा सुरक्षा व मोबाइल ऐप (PWA)",
+                    `यह पोर्टल <b>100% विज्ञापन-मुक्त (No Ads)</b> है और आपकी कोई भी फोटो या PDF किसी सर्वर पर नहीं जाती। आप इसे बिना Play Store के मोबाइल ऐप की तरह इंस्टॉल भी कर सकते हैं।<br><button onclick="openPage('pwa-app'); toggleChat();" class="mt-2 text-emerald-600 font-bold underline">👉 मोबाइल ऐप पेज खोलें</button>`
+                );
             } else if (type === 'aadhaar') {
-                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">आधार / पैन / सेवा सेतु स्टेटस लिंक दें</div></div>`;
-                appendBotMessage(`सीधे स्टेटस चेक करें:<br>• <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="text-blue-600 font-bold underline">आधार कार्ड स्टेटस</a><br>• <a href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" class="text-blue-600 font-bold underline">पैन कार्ड स्टेटस</a><br>• <a href="https://sewasetu.cgstate.gov.in/workflow/trackAppStatus.html" target="_blank" class="text-blue-600 font-bold underline">लोक सेवा (सेवा सेतु) स्टेटस</a>`);
+                appendBotReply(
+                    "आधार / पैन / सेवा सेतु स्टेटस लिंक",
+                    `• <a href="https://myaadhaarbeta.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" class="text-blue-600 font-bold underline">आधार कार्ड स्टेटस चेक करें</a><br>• <a href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" class="text-blue-600 font-bold underline">UTI पैन कार्ड स्टेटस चेक करें</a><br>• <a href="https://sewasetu.cgstate.gov.in/workflow/trackAppStatus.html" target="_blank" class="text-blue-600 font-bold underline">CG सेवा सेतु (आय/जाति/निवास) स्टेटस</a>`
+                );
             } else if (type === 'branch') {
-                messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">शाखा का पता और समय क्या है?</div></div>`;
-                appendBotMessage(`हमारी दो शाखाएँ हैं:<br>📍 <b>चोंगरीबहार शाखा:</b> मुख्य मार्ग, चोंगरीबहार (📞 6264531630)<br>📍 <b>दोकड़ा शाखा:</b> ग्राम - दोकड़ा मुख्य मार्ग (📞 9713926390)<br>⏰ <b>समय:</b> सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक), रविवार अवकाश।`);
+                appendBotReply(
+                    "चोंगरीबहार और दोकड़ा शाखा पता",
+                    `<b>1. चोंगरीबहार शाखा:</b> मुख्य मार्ग, चोंगरीबहार | संपर्क: <a href="tel:+916264531630" class="text-blue-600 font-bold">6264531630</a><br><b>2. दोकड़ा शाखा:</b> ग्राम दोकड़ा (मुख्य मार्ग) | संपर्क: <a href="tel:+919713926390" class="text-blue-600 font-bold">9713926390</a><br>⏰ समय: सोम-शनि (10:00 AM - 6:00 PM)`
+                );
             }
         }
 
@@ -1533,35 +1563,22 @@
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
             if (!message) return;
-
-            const messages = document.getElementById('chat-messages');
-            messages.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none text-xs">${message}</div></div>`;
             input.value = '';
 
-            setTimeout(() => {
-                const lower = message.toLowerCase();
-                let reply = "धन्यवाद! रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में सभी ऑनलाइन कार्य किए जाते हैं। अधिक सहायता के लिए ऊपर दिए गए बटन दबाएं या हमारी शाखा पर पधारें।";
-                
-                if (lower.includes('gas') || lower.includes('lpg') || lower.includes('indane') || lower.includes('गैस') || lower.includes('सिलेंडर') || lower.includes('इंडेन')) {
-                    reply = "Indane गैस WhatsApp बुकिंग के लिए 7588888824 पर पहले 'Hi' लिखें, भाषा चुनें, नाम कन्फर्म करें और 'रिफिल बुक करें' दबाएं। बुक होने पर ऑर्डर नंबर और 24 घंटे में DAC/DCE कोड आएगा। ध्यान रहे: बुकिंग के समय किसी भी पेमेंट लिंक पर पेमेंट न करें, केवल सिलेंडर की डिलीवरी मिलने के बाद ही भुगतान करें!";
-                } else if (lower.includes('जाति') || lower.includes('caste') || lower.includes('jati')) {
-                    reply = "जाति प्रमाण पत्र के लिए पटवारी/सरपंच प्रतिवेदन, 1950 (OBC हेतु 1984) से पूर्व का रिकॉर्ड/मिसल, वंशावली, बी-1, अंकसूची और आधार कार्ड आवश्यक है।";
-                } else if (lower.includes('निवास') || lower.includes('domicile') || lower.includes('niwas')) {
-                    reply = "निवास प्रमाण पत्र के लिए पटवारी एवं सरपंच प्रतिवेदन, अंकसूची (5वीं/8वीं/10वीं), वर्तमान बी-1 और आधार/राशन कार्ड लगता है।";
-                } else if (lower.includes('आय') || lower.includes('income') || lower.includes('aay')) {
-                    reply = "आय प्रमाण पत्र के लिए पटवारी प्रतिवेदन, अंकसूची, बी-1 और आधार कार्ड आवश्यक है।";
-                } else if (lower.includes('time') || lower.includes('samay') || lower.includes('समय') || lower.includes('sunday') || lower.includes('रविवार')) {
-                    reply = "दुकान सोमवार से शनिवार सुबह 10:00 से शाम 6:00 बजे तक खुली रहती है। रविवार को अवकाश रहता है।";
-                } else if (lower.includes('aadhar') || lower.includes('आधार')) {
-                    reply = "आधार कार्ड में नया नामांकन, मोबाइल लिंक, नाम या पता सुधार हमारी चोंगरीबहार और दोकड़ा शाखा में उपलब्ध है।";
-                } else if (lower.includes('pan') || lower.includes('पैन')) {
-                    reply = "नया पैन कार्ड (UTI/NSDL) और पैन सुधार के लिए केवल आधार कार्ड और 2 फोटो लेकर केंद्र पर आएं।";
-                } else if (lower.includes('number') || lower.includes('phone') || lower.includes('mobile') || lower.includes('नंबर') || lower.includes('संपर्क') || lower.includes('कॉल')) {
-                    reply = "चोंगरीबहार शाखा का मोबाइल नंबर 6264531630 है और दोकड़ा शाखा का मोबाइल नंबर 9713926390 है।";
-                }
+            const lower = message.toLowerCase();
+            let reply = "धन्यवाद! रूपेश कंप्यूटर्स (चोंगरीबहार: 6264531630 और दोकड़ा: 9713926390) में SBI कियोस्क, आधार सेंटर, और प्रमाण पत्र बनाए जाते हैं। समय: सोम-शनि सुबह 10 से शाम 6 बजे तक।";
 
-                appendBotMessage(reply);
-            }, 400);
+            if (lower.includes('gas') || lower.includes('lpg') || lower.includes('indane') || lower.includes('गैस')) {
+                reply = "Indane गैस बुकिंग के लिए WhatsApp (7588888824) पर Hi भेजें या 8454955555 पर मिस्ड कॉल करें। ध्यान रहे: बुकिंग के समय किसी भी लिंक से पेमेंट न करें, केवल डिलीवरी मिलने के बाद ही पेमेंट करें।";
+            } else if (lower.includes('jati') || lower.includes('जाति') || lower.includes('niwas') || lower.includes('निवास') || lower.includes('aay') || lower.includes('आय')) {
+                reply = "जाति, निवास व आय प्रमाण पत्र के लिए पटवारी/सरपंच प्रतिवेदन, स्व-घोषणा पत्र, अंकसूची, वर्तमान बी-1 और आधार/राशन कार्ड आवश्यक हैं। पूरी सूची 'सेवाएँ' पेज पर देखें।";
+            } else if (lower.includes('time') || lower.includes('samay') || lower.includes('समय') || lower.includes('रविवार')) {
+                reply = "दुकान सोमवार से शनिवार सुबह 10:00 से शाम 6:00 बजे तक खुली रहती है। रविवार को अवकाश रहता है।";
+            } else if (lower.includes('app') || lower.includes('pwa') || lower.includes('install') || lower.includes('ऐप')) {
+                reply = "आप ऊपर 'मोबाइल ऐप' बटन पर क्लिक करके इस वेबसाइट को बिना Play Store के अपने फोन में इंस्टॉल कर सकते हैं। यह 100% विज्ञापन-मुक्त और सुरक्षित है।";
+            }
+
+            setTimeout(() => appendBotReply(message, reply), 300);
         }
     </script>
 </body>
