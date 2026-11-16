@@ -114,6 +114,9 @@
                 <button data-page="scanner-tool" onclick="openPage('scanner-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
                     <i class="fa-solid fa-barcode text-emerald-400"></i> Barcode Reader
                 </button>
+                <button data-page="hindi-tool" onclick="openPage('hindi-tool')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-language text-pink-400"></i> Hindi Typing & Kruti Dev
+                </button>
                 <button data-page="pwa-app" onclick="openPage('pwa-app')" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 text-slate-100 hover:bg-white/20 transition flex items-center gap-1.5 shrink-0">
                     <i class="fa-solid fa-mobile-screen-button text-amber-300"></i> मोबाइल ऐप
                 </button>
@@ -190,7 +193,7 @@
                         </div>
 
                         <!-- Quick Tool Launch Cards -->
-                        <div class="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                        <div class="mt-8 grid grid-cols-2 sm:grid-cols-6 gap-2.5">
                             <button onclick="openPage('lpg-booking')" class="bg-orange-50 border border-orange-200 hover:border-orange-500 p-3 rounded-2xl text-center shadow-2xs transition group">
                                 <i class="fa-solid fa-fire-flame-simple text-orange-600 text-lg mb-1 group-hover:scale-110 transition-transform"></i>
                                 <div class="text-xs font-extrabold text-orange-950">Indane गैस बुकिंग</div>
@@ -207,9 +210,13 @@
                                 <i class="fa-solid fa-cake-candles text-purple-600 text-lg mb-1 group-hover:scale-110 transition-transform"></i>
                                 <div class="text-xs font-extrabold text-slate-800">DOB Calculator</div>
                             </button>
-                            <button onclick="openPage('scanner-tool')" class="bg-white border border-slate-200 hover:border-blue-500 p-3 rounded-2xl text-center shadow-2xs transition group col-span-2 sm:col-span-1">
+                            <button onclick="openPage('scanner-tool')" class="bg-white border border-slate-200 hover:border-blue-500 p-3 rounded-2xl text-center shadow-2xs transition group">
                                 <i class="fa-solid fa-barcode text-emerald-600 text-lg mb-1 group-hover:scale-110 transition-transform"></i>
                                 <div class="text-xs font-extrabold text-slate-800">Barcode Reader</div>
+                            </button>
+                            <button onclick="openPage('hindi-tool')" class="bg-pink-50 border border-pink-200 hover:border-pink-500 p-3 rounded-2xl text-center shadow-2xs transition group">
+                                <i class="fa-solid fa-language text-pink-600 text-lg mb-1 group-hover:scale-110 transition-transform"></i>
+                                <div class="text-xs font-extrabold text-pink-950">Hindi & Kruti Dev</div>
                             </button>
                         </div>
 
@@ -425,213 +432,97 @@
             </div>
         </section>
 
-        <!-- PAGE 4: JPEG TO PDF & KB RESIZER -->
-        <section id="pdf-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- PAGE 7B: HINDI TYPING & KRUTI DEV TO MANGAL CONVERTER -->
+        <section id="hindi-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-10">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-red-700 bg-red-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-file-pdf"></i> PDF एवं फोटो साइज टूल
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-pink-700 bg-pink-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-language"></i> हिंदी टाइपिंग एवं फॉन्ट कन्वर्टर
                     </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF & Photo KB Resizer</h2>
-                    <p class="mt-2 text-slate-600 text-sm">आपकी सभी फाइलें केवल आपके मोबाइल/कंप्यूटर में ही प्रोसेस होती हैं — 100% सुरक्षित व विज्ञापन-मुक्त।</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Hindi Typing & Kruti Dev ↔ Mangal Converter</h2>
+                    <p class="mt-2 text-slate-600 text-sm">अंग्रेजी में लिखकर (या बोलकर) तुरंत हिंदी टाइप करें और Kruti Dev 010 को Mangal (Unicode) या Mangal को Kruti Dev में बदलें।</p>
                 </div>
 
-                <!-- Image to PDF Tool -->
+                <!-- 1. Easy English-to-Hindi Typing & Voice Typing Box -->
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                            <i class="fa-regular fa-images"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-900">Photo(s) से PDF बनाएं</h3>
-                            <p class="text-sm text-slate-500">आय, जाति, निवास के दस्तावेजों को एक PDF में जोड़ें</p>
-                        </div>
-                    </div>
-                    
-                    <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-8 text-center hover:bg-blue-50 transition cursor-pointer mb-4" onclick="document.getElementById('img2pdf-input').click()">
-                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-3"></i>
-                        <h4 class="font-bold text-slate-800">यहाँ क्लिक करके फोटो (JPEG/PNG) चुनें</h4>
-                        <p class="text-xs text-slate-500 mt-1">एक साथ कई फोटो चुन सकते हैं</p>
-                        <input type="file" id="img2pdf-input" accept="image/*" multiple class="hidden" onchange="handleImgSelection(event)">
-                    </div>
-                    
-                    <div id="pdf-preview-container" class="hidden flex-col gap-4">
-                        <h4 class="font-bold text-sm text-slate-700">चुनी गई फोटो (रिव्यू करें):</h4>
-                        <div id="pdf-image-list" class="flex flex-wrap gap-3"></div>
-                        <button onclick="generatePdf()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-md">
-                            PDF बनाएं और डाउनलोड करें
-                        </button>
-                    </div>
-
-                    <div id="img2pdf-status" class="mt-4 hidden text-sm font-semibold text-center text-green-700 bg-green-50 py-3 rounded-lg border border-green-200"></div>
-                </div>
-
-                <!-- Photo/Signature KB Resizer -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-compress"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-900">फोटो / सिग्नेचर का Size (KB) कम करें</h3>
-                            <p class="text-sm text-slate-500">ऑनलाइन फॉर्म के लिए फोटो को 50KB या 20KB के अंदर करें</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-8 text-center hover:bg-emerald-50 transition cursor-pointer" onclick="document.getElementById('resizer-input').click()">
-                            <i class="fa-regular fa-image text-4xl text-emerald-500 mb-3"></i>
-                            <h4 class="font-bold text-slate-800">फोटो चुनें</h4>
-                            <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="previewImageToResize(event)">
-                        </div>
-                        
-                        <div id="resize-controls" class="hidden flex-col justify-center gap-4 p-4 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए? (लगभग)</label>
-                                <input type="number" id="target-kb" value="40" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-keyboard"></i>
                             </div>
-                            <button onclick="resizeImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition">
-                                Size कम करें (Compress)
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900">आसान हिंदी टाइपिंग (अंग्रेजी में लिखें → हिंदी बनेगा)</h3>
+                                <p class="text-xs text-slate-500">उदाहरण: <b>"mera naam rupesh hai"</b> लिखकर Space दबाएं → <b>"मेरा नाम रूपेश है"</b> बन जाएगा</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" id="hindi-voice-btn" onclick="startHindiVoiceTyping()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-microphone"></i> बोलकर लिखें
                             </button>
-                        </div>
-                    </div>
-                    <div id="resize-result" class="mt-4"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 5: PASSPORT PHOTO SHEET MAKER -->
-        <section id="passport-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-2xl mx-auto mb-10">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-id-badge"></i> प्रिंट-रेडी फोटो टूल
-                    </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">पासपोर्ट साइज फोटो शीट मेकर</h2>
-                    <p class="mt-2 text-slate-600 text-sm">किसी भी एक फोटो से तुरंत 4x6 पेपर पर 6 या 12 पासपोर्ट साइज फोटो की शीट तैयार करें।</p>
-                </div>
-
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <div class="border-2 border-dashed border-indigo-300 bg-indigo-50/50 rounded-2xl p-8 text-center hover:bg-indigo-50 transition cursor-pointer" onclick="document.getElementById('passport-input').click()">
-                            <i class="fa-solid fa-camera text-4xl text-indigo-500 mb-3"></i>
-                            <h4 class="font-bold text-slate-800">पासपोर्ट फोटो चुनें</h4>
-                            <p class="text-xs text-slate-500 mt-1">JPG या PNG इमेज अपलोड करें</p>
-                            <input type="file" id="passport-input" accept="image/*" class="hidden" onchange="loadPassportImage(event)">
-                        </div>
-
-                        <div class="space-y-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">फोटो की संख्या चुनें (4x6 शीट):</label>
-                                <select id="passport-count" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-white outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="6">6 पासपोर्ट फोटो (3x2 ग्रिड)</option>
-                                    <option value="12" selected>12 पासपोर्ट फोटो (4x3 ग्रिड)</option>
-                                </select>
-                            </div>
-                            <button onclick="generatePassportSheet()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm transition shadow">
-                                पासपोर्ट शीट तैयार करें
+                            <button type="button" onclick="copyTextField('hindi-typing-box')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow">
+                                <i class="fa-regular fa-copy"></i> कॉपी करें
+                            </button>
+                            <button type="button" onclick="document.getElementById('hindi-typing-box').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-2 rounded-xl text-xs transition">
+                                साफ करें
                             </button>
                         </div>
                     </div>
 
-                    <div id="passport-result" class="mt-6 hidden text-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                        <img id="passport-preview-img" class="mx-auto max-h-72 rounded-lg border shadow-sm mb-4 bg-white p-1">
-                        <a id="passport-download-btn" href="#" download="Passport_Photo_Sheet.jpg" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow">
-                            <i class="fa-solid fa-download"></i> प्रिंट शीट डाउनलोड करें
-                        </a>
+                    <textarea id="hindi-typing-box" rows="4" onkeyup="handleHindiTransliteration(event)" placeholder="यहाँ अंग्रेजी अक्षरों में हिंदी लिखें (जैसे: namaste chongribahar) या माइक दबाकर बोलें..." class="w-full border border-slate-300 rounded-2xl p-4 text-base focus:ring-2 focus:ring-pink-500 outline-none bg-slate-50 focus:bg-white leading-relaxed"></textarea>
+                    <div id="hindi-word-suggestions" class="mt-2.5 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                        <span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- PAGE 6: DOB & AGE CALCULATOR -->
-        <section id="dob-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- 2. Kruti Dev 010 <-> Mangal (Unicode) Converter -->
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xl font-bold shadow-md">
-                            <i class="fa-solid fa-cake-candles"></i>
+                        <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-arrows-rotate"></i>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-black text-slate-900">DOB & Age Calculator</h2>
-                            <p class="text-xs text-slate-500">सरकारी फॉर्म और भर्ती के लिए सटीक आयु (वर्ष, महीने, दिन) निकालें</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-4 mb-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">अपनी जन्मतिथि (Date of Birth):</label>
-                            <input type="date" id="dob-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">इस तारीख तक उम्र देखें (वैकल्पिक — खाली छोड़ने पर आज की तारीख):</label>
-                            <input type="date" id="target-date-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900">Kruti Dev 010 ↔ Mangal (Unicode) कन्वर्टर</h3>
+                            <p class="text-xs text-slate-500">सरकारी पोर्टल, MS Word और PageMaker के लिए तुरंत फॉन्ट बदलें</p>
                         </div>
                     </div>
 
-                    <button onclick="calculateAge()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3.5 rounded-xl text-sm transition shadow-md">
-                        सटीक आयु गणना करें
-                    </button>
-                    <div id="age-result" class="mt-4 text-sm font-bold text-purple-900 text-center hidden bg-purple-50 p-4 rounded-2xl border border-purple-200"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 7: BARCODE & QR SCANNER / GENERATOR -->
-        <section id="scanner-tool" class="page-section page-fade hidden py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-2xl mx-auto mb-10">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-barcode"></i> स्कैनर एवं जेनरेटर स्टूडियो
-                    </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">QR कोड एवं Barcode Reader</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- QR & Barcode Generator -->
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
-                                <i class="fa-solid fa-qrcode"></i>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Kruti Dev Box -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-black uppercase tracking-wider text-indigo-800">Kruti Dev 010 टेक्स्ट</label>
+                                <div class="flex gap-1.5">
+                                    <button type="button" onclick="copyTextField('krutidev-text')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">
+                                        <i class="fa-regular fa-copy"></i> कॉपी
+                                    </button>
+                                    <button type="button" onclick="document.getElementById('krutidev-text').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-1 rounded-lg text-[11px]">
+                                        साफ
+                                    </button>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-1">QR और बारकोड जेनरेटर</h3>
-                            <p class="text-xs text-slate-500 mb-4">किसी भी टेक्स्ट, लिंक या नंबर से QR कोड या बारकोड बनाएं।</p>
-                            <input type="text" id="code-text-input" placeholder="यहाँ टेक्स्ट, लिंक या नंबर लिखें..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 mb-4">
+                            <textarea id="krutidev-text" rows="6" placeholder="यहाँ Kruti Dev 010 वाला टेक्स्ट पेस्ट करें (जैसे: :is'k dEI;wVlZ)..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-mono"></textarea>
+                            <button type="button" onclick="convertKrutiToUnicode()" class="mt-3 w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
+                                Kruti Dev → Mangal (Unicode) में बदलें <i class="fa-solid fa-arrow-right"></i>
+                            </button>
                         </div>
-                        <div>
-                            <div class="flex gap-2 mb-3">
-                                <button onclick="generateQRCodeOnly()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md">
-                                    QR कोड बनाएं
-                                </button>
-                                <button onclick="generateBarcodeOnly()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md">
-                                    बारकोड बनाएं
-                                </button>
-                            </div>
-                            <div id="code-result-container" class="mt-3 text-center hidden bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                                <img id="generated-img" class="mx-auto max-w-full h-28 object-contain bg-white p-2 rounded border shadow-sm">
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- QR / Barcode Scanner -->
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
-                                <i class="fa-solid fa-camera-retro"></i>
+                        <!-- Mangal Unicode Box -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-black uppercase tracking-wider text-emerald-800">Mangal (Unicode हिंदी) टेक्स्ट</label>
+                                <div class="flex gap-1.5">
+                                    <button type="button" onclick="copyTextField('unicode-text')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">
+                                        <i class="fa-regular fa-copy"></i> कॉपी
+                                    </button>
+                                    <button type="button" onclick="document.getElementById('unicode-text').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-1 rounded-lg text-[11px]">
+                                        साफ
+                                    </button>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-1">QR & बारकोड रीडर (Scanner)</h3>
-                            <p class="text-xs text-slate-500 mb-4">किसी भी QR कोड या बारकोड की फोटो चुनकर उसका डेटा पढ़ें।</p>
-                            
-                            <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-6 text-center cursor-pointer mb-4 hover:bg-emerald-50 transition" onclick="document.getElementById('scanner-file-input').click()">
-                                <i class="fa-solid fa-image text-3xl text-emerald-600 mb-2"></i>
-                                <p class="text-xs font-bold text-slate-700">QR / बारकोड फोटो अपलोड करके स्कैन करें</p>
-                                <input type="file" id="scanner-file-input" accept="image/*" class="hidden" onchange="scanQRImage(event)">
-                            </div>
-                        </div>
-                        <div>
-                            <div id="scanner-result" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center min-h-[52px] flex items-center justify-center break-all">
-                                स्कैन किया गया परिणाम यहाँ दिखेगा
-                            </div>
+                            <textarea id="unicode-text" rows="6" placeholder="यहाँ मंगल (यूनिकोड हिंदी) टेक्स्ट पेस्ट करें या देखें (जैसे: रूपेश कंप्यूटर्स)..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white"></textarea>
+                            <button type="button" onclick="convertUnicodeToKruti()" class="mt-3 w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrow-left"></i> Mangal (Unicode) → Kruti Dev में बदलें
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1018,7 +909,7 @@
         }
 
         // Single-File Multi-Page Navigation
-        const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'scanner-tool', 'pwa-app', 'why-choose-us', 'branches'];
+        const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'scanner-tool', 'hindi-tool', 'pwa-app', 'why-choose-us', 'branches'];
 
         function openPage(pageId, updateHash = true) {
             if (!validPages.includes(pageId)) pageId = 'home';
@@ -1484,6 +1375,171 @@
             }
         }
 
+        // Clipboard Copy Helper (Safe for iFrames & Browsers)
+        function copyTextField(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el || !el.value.trim()) {
+                showToast("कॉपी करने के लिए पहले कुछ टेक्स्ट लिखें!");
+                return;
+            }
+            el.select();
+            el.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast("✅ टेक्स्ट सफलतापूर्वक कॉपी हो गया!");
+            } catch (e) {
+                showToast("कॉपी करने के लिए Ctrl+C दबाएं।");
+            }
+        }
+
+        // Easy English-to-Hindi Transliteration & Voice Typing
+        let lastTranslitWord = "";
+        async function handleHindiTransliteration(event) {
+            if (event.key !== ' ' && event.key !== 'Enter') return;
+            const box = document.getElementById('hindi-typing-box');
+            const cursorPos = box.selectionStart;
+            const textBefore = box.value.slice(0, cursorPos);
+            const textAfter = box.value.slice(cursorPos);
+
+            const match = textBefore.match(/([a-zA-Z]+)([\s\n])$/);
+            if (!match) return;
+
+            const engWord = match[1];
+            const separator = match[2];
+            if (engWord === lastTranslitWord) return;
+            lastTranslitWord = engWord;
+
+            try {
+                const url = `https://inputtools.google.com/request?text=${encodeURIComponent(engWord)}&itc=hi-t-i0-und&num=4&cp=0&cs=1&ie=utf-8&oe=utf-8`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data[0] === 'SUCCESS' && data[1]?.[0]?.[1]?.length > 0) {
+                    const suggestions = data[1][0][1];
+                    const bestHindi = suggestions[0];
+                    const replacedBefore = textBefore.slice(0, textBefore.length - match[0].length) + bestHindi + separator;
+                    box.value = replacedBefore + textAfter;
+                    box.selectionStart = box.selectionEnd = replacedBefore.length;
+
+                    const sugDiv = document.getElementById('hindi-word-suggestions');
+                    if (sugDiv) {
+                        sugDiv.innerHTML = `<span class="font-bold text-slate-600">विकल्प चुनें:</span> ` +
+                            suggestions.map(w => `<button type="button" onclick="replaceLastHindiWord('${bestHindi}', '${w}')" class="px-2.5 py-0.5 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 font-bold">${w}</button>`).join('');
+                    }
+                }
+            } catch (e) {
+                // Silent fallback if offline
+            }
+        }
+
+        function replaceLastHindiWord(oldWord, newWord) {
+            const box = document.getElementById('hindi-typing-box');
+            const idx = box.value.lastIndexOf(oldWord);
+            if (idx !== -1) {
+                box.value = box.value.slice(0, idx) + newWord + box.value.slice(idx + oldWord.length);
+            }
+        }
+
+        function startHindiVoiceTyping() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast("आपका ब्राउज़र वॉइस टाइपिंग सपोर्ट नहीं करता। कृपया Google Chrome का उपयोग करें।");
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'hi-IN';
+            recognition.interimResults = false;
+            const btn = document.getElementById('hindi-voice-btn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> सुन रहा है...`;
+
+            recognition.onresult = (event) => {
+                const spoken = event.results[0][0].transcript;
+                const box = document.getElementById('hindi-typing-box');
+                box.value = (box.value ? box.value + ' ' : '') + spoken;
+                showToast("✅ आवाज से हिंदी लिख दी गई!");
+            };
+            recognition.onerror = () => {
+                showToast("माइक अनुमति दें या पुनः प्रयास करें।");
+            };
+            recognition.onend = () => {
+                btn.innerHTML = `<i class="fa-solid fa-microphone"></i> बोलकर लिखें`;
+            };
+            recognition.start();
+        }
+
+        // Kruti Dev 010 <-> Mangal (Unicode) Converter Engine
+        function convertKrutiToUnicode() {
+            let str = document.getElementById('krutidev-text').value;
+            if (!str.trim()) {
+                showToast("कृपया पहले Kruti Dev 010 बॉक्स में टेक्स्ट लिखें या पेस्ट करें!");
+                return;
+            }
+
+            const krutiMap = [
+                ["ñ", "॰"], ["Q+Z", "फ़्"], ["sas", "सा"], ["aa", "ा"], ["ZZ", "र्"],
+                ["=kk", "ौ"], ["f=k", "कि"], ["[k", "ख"], ["[", "ख्"], ["x", "ग"],
+                ["?", "घ"], ["³", "ङ"], ["p", "च"], ["N", "छ"], ["t", "ज"],
+                [">", "झ"], ["¥", "ञ"], ["V", "ट"], ["B", "ठ"], ["M", "ड"],
+                ["<", "ढ"], [".k", "ण"], ["r", "त"], ["Fk", "थ"], ["F", "थ्"],
+                ["n", "द"], ["/", "ध"], ["u", "न"], ["i", "प"], ["Q", "फ"],
+                ["c", "ब"], ["Hk", "भ"], ["H", "भ्"], ["e", "म"], [";", "य"],
+                ["j", "र"], ["y", "ल"], ["o", "व"], ["'k", "श"], ["'", "श्"],
+                ["\"k", "ष"], ["\"", "ष्"], ["l", "स"], ["g", "ह"], ["{k", "क्ष"],
+                ["{", "क्ष्"], ["=", "त्र"], ["«", "त्र्"], ["K", "ज्ञ"], ["J", "श्र"],
+                ["d", "क"], ["D", "क्"], ["X", "ग्"], ["?", "घ"], ["P", "च्"],
+                ["T", "ज्"], ["R", "त्"], ["U", "न्"], ["I", "प्"], ["C", "ब्"],
+                ["E", "म्"], ["Y", "ल्"], ["O", "व्"], ["L", "स्"], ["G", "ह्"],
+                ["k", "ा"], ["h", "ी"], ["q", "ु"], ["w", "ू"], ["`", "ृ"],
+                ["s", "े"], ["S", "ै"], ["ks", "ो"], ["kS", "ौ"], ["a", "ं"],
+                ["¡", "ँ"], ["%", "ः"], ["~", "्"], ["^", "‘"], ["*", "’"],
+                ["A", "।"], ["-", "."], ["&", "-"]
+            ];
+
+            // Handle 'f' (छोटी इ की मात्रा) reordering
+            str = str.replace(/f([k|K|d|D|\[|x|X|\?|p|P|N|t|T|>|V|B|M|<|\.|r|R|F|n|\/|u|U|i|I|Q|c|C|H|e|E|;|j|y|Y|o|O|'|\"|l|L|g|G|\{|J])/g, "$1ि");
+
+            for (const [k, u] of krutiMap) {
+                str = str.split(k).join(u);
+            }
+
+            // Fix matra combinations after conversion
+            str = str.replace(/ाे/g, "ो").replace(/ाै/g, "ौ").replace(/अा/g, "आ").replace(/आे/g, "ओ").replace(/आै/g, "औ");
+            document.getElementById('unicode-text').value = str;
+            showToast("✅ Kruti Dev से Mangal (Unicode) में बदल दिया गया!");
+        }
+
+        function convertUnicodeToKruti() {
+            let str = document.getElementById('unicode-text').value;
+            if (!str.trim()) {
+                showToast("कृपया पहले Mangal (Unicode) बॉक्स में हिंदी टेक्स्ट लिखें!");
+                return;
+            }
+
+            // Reorder छोटी इ की मात्रा before consonant for Kruti Dev
+            str = str.replace(/([क-हक़-य़क्षत्रज्ञ])ि/g, "f$1");
+
+            const unicodeToKrutiMap = [
+                ["क्ष्", "{"], ["क्ष", "{k"], ["त्र्", "«"], ["त्र", "="], ["ज्ञ", "K"], ["श्र", "J"],
+                ["क्", "D"], ["क", "d"], ["ख्", "["], ["ख", "[k"], ["ग्", "X"], ["ग", "x"],
+                ["घ", "?"], ["ङ", "³"], ["च्", "P"], ["च", "p"], ["छ", "N"], ["ज्", "T"],
+                ["ज", "t"], ["झ", ">"], ["ञ", "¥"], ["ट", "V"], ["ठ", "B"], ["ड", "M"],
+                ["ढ", "<"], ["ण", ".k"], ["त्", "R"], ["त", "r"], ["थ्", "F"], ["थ", "Fk"],
+                ["द", "n"], ["ध", "/"], ["न्", "U"], ["न", "u"], ["प्", "I"], ["प", "i"],
+                ["फ", "Q"], ["ब्", "C"], ["ब", "c"], ["भ्", "H"], ["भ", "Hk"], ["म्", "E"],
+                ["म", "e"], ["य", ";"], ["र", "j"], ["ल्", "Y"], ["ल", "y"], ["व्", "O"],
+                ["व", "o"], ["श्", "'"], ["श", "'k"], ["ष्", "\""], ["ष", "\"k"], ["स्", "L"],
+                ["स", "l"], ["ह्", "G"], ["ह", "g"], ["ो", "ks"], ["ौ", "kS"], ["ा", "k"],
+                ["ी", "h"], ["ु", "q"], ["ू", "w"], ["ृ", "`"], ["े", "s"], ["ै", "S"],
+                ["ं", "a"], ["ँ", "¡"], ["ः", "%"], ["्", "~"], ["।", "A"]
+            ];
+
+            for (const [u, k] of unicodeToKrutiMap) {
+                str = str.split(u).join(k);
+            }
+
+            document.getElementById('krutidev-text').value = str;
+            showToast("✅ Mangal (Unicode) से Kruti Dev में बदल दिया गया!");
+        }
+
         // PWA Setup & Install Prompt
         let deferredPrompt = null;
         function setupPwa() {
@@ -1525,25 +1581,17 @@
             }
         }
 
-        // Live Visitor Counter (Works on GitHub Pages without backend)
+        // Live Visitor Counter (Increments every time the page is opened)
         async function initVisitorCounter() {
             const countEl = document.getElementById('visitor-count');
             if (!countEl) return;
 
-            // Prevent inflated counts when the same user refreshes repeatedly on the same day
-            const todayKey = 'rc_visited_' + new Date().toISOString().slice(0, 10);
-            const alreadyCountedToday = localStorage.getItem(todayKey);
-            const endpoint = alreadyCountedToday
-                ? 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-2026/visitors'
-                : 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-2026/visitors/up';
+            const endpoint = 'https://api.counterapi.dev/v1/rupeshcomputers-jashpur-live/visitors/up';
 
             try {
                 const res = await fetch(endpoint);
                 const data = await res.json();
                 if (data && typeof data.count === 'number') {
-                    if (!alreadyCountedToday) {
-                        localStorage.setItem(todayKey, '1');
-                    }
                     localStorage.setItem('rc_last_visitor_count', String(data.count));
                     countEl.textContent = data.count.toLocaleString('en-IN');
                     return;
@@ -1552,14 +1600,9 @@
                 // Fallback if offline
             }
 
-            // Clean local fallback starting from 1 instead of a large artificial number
-            let localCount = parseInt(localStorage.getItem('rc_last_visitor_count') || '0', 10);
-            if (!alreadyCountedToday) {
-                localCount += 1;
-                localStorage.setItem(todayKey, '1');
-                localStorage.setItem('rc_last_visitor_count', String(localCount));
-            }
-            countEl.textContent = Math.max(1, localCount).toLocaleString('en-IN');
+            let localCount = parseInt(localStorage.getItem('rc_last_visitor_count') || '0', 10) + 1;
+            localStorage.setItem('rc_last_visitor_count', String(localCount));
+            countEl.textContent = localCount.toLocaleString('en-IN');
         }
 
         // Gemini AI Chatbot Logic
