@@ -20,6 +20,22 @@
         section, div[id] {
             scroll-margin-top: 110px;
         }
+        /* सक्रिय नेविगेशन टैब स्टाइल */
+        .nav-tab-active {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .nav-tab-active i {
+            color: #ffffff !important;
+        }
+        @keyframes fadePage {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page-fade {
+            animation: fadePage 0.28s ease-out forwards;
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -67,7 +83,7 @@
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo / Title -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="openPage('home')">
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center text-xl shadow-lg">
                     <i class="fa-solid fa-laptop-code"></i>
                 </div>
@@ -77,16 +93,17 @@
                 </div>
             </div>
 
-            <!-- Desktop & Responsive Navigation Menu with Fixed Links -->
-            <nav class="hidden xl:flex items-center gap-1">
-                <a href="#home" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-house text-blue-600"></i> होम</a>
-                <a href="#services" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-layer-group text-indigo-600"></i> सेवाएँ</a>
-                <a href="#tools" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-toolbox text-red-600"></i> PDF & फोटो टूल्स</a>
-                <!-- ठीक किया गया सीधा Age Calculator लिंक -->
-                <a href="#age-calculator-card" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition flex items-center gap-1"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB & Age Calculator</a>
-                <a href="#qr-barcode-card" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-barcode text-indigo-600"></i> QR & Barcode</a>
-                <a href="#why-choose-us" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> विशेषताएँ</a>
-                <a href="#contact-footer" class="px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-blue-700 transition flex items-center gap-1"><i class="fa-solid fa-location-dot text-emerald-600"></i> शाखाएँ</a>
+            <!-- Desktop & Responsive Navigation Menu (Multi-Page Tabs) -->
+            <nav class="hidden xl:flex items-center gap-1" id="desktop-nav">
+                <button data-page="home" onclick="openPage('home')" class="nav-btn nav-tab-active px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-house text-blue-600"></i> होम</button>
+                <button data-page="services" onclick="openPage('services')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-layer-group text-indigo-600"></i> सेवाएँ</button>
+                <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग</button>
+                <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-file-pdf text-red-600"></i> JPEG to PDF</button>
+                <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-id-badge text-amber-600"></i> पासपोर्ट फोटो</button>
+                <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-cake-candles text-purple-600"></i> DOB Calculator</button>
+                <button data-page="barcode-tool" onclick="openPage('barcode-tool')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-barcode text-indigo-600"></i> Barcode Reader</button>
+                <button data-page="features" onclick="openPage('features')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> विशेषताएँ</button>
+                <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-2.5 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center gap-1"><i class="fa-solid fa-location-dot text-emerald-600"></i> शाखाएँ</button>
             </nav>
 
             <!-- Branch Selector Header Buttons -->
@@ -100,21 +117,22 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation Sub-Bar (Fixed Age Calculator Link) -->
-        <div class="xl:hidden flex overflow-x-auto px-4 py-2 bg-slate-50 border-t border-slate-200 gap-2 whitespace-nowrap">
-            <a href="#home" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">होम</a>
-            <a href="#services" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">सेवाएँ</a>
-            <a href="#tools" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">JPEG to PDF</a>
-            <a href="#passport-tool-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">पासपोर्ट फोटो</a>
-            <a href="#age-calculator-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200 shadow-sm">DOB Calculator</a>
-            <a href="#qr-barcode-card" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Barcode Reader</a>
-            <a href="#why-choose-us" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">विशेषताएँ</a>
-            <a href="#contact-footer" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">शाखाएँ</a>
+        <!-- Mobile Navigation Sub-Bar (Multi-Page Tabs) -->
+        <div class="xl:hidden flex overflow-x-auto px-4 py-2 bg-slate-50 border-t border-slate-200 gap-2 whitespace-nowrap" id="mobile-nav">
+            <button data-page="home" onclick="openPage('home')" class="nav-btn nav-tab-active px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">होम</button>
+            <button data-page="services" onclick="openPage('services')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">सेवाएँ</button>
+            <button data-page="lpg-booking" onclick="openPage('lpg-booking')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Indane गैस बुकिंग</button>
+            <button data-page="pdf-tool" onclick="openPage('pdf-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">JPEG to PDF</button>
+            <button data-page="passport-tool" onclick="openPage('passport-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">पासपोर्ट फोटो</button>
+            <button data-page="dob-tool" onclick="openPage('dob-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">DOB Calculator</button>
+            <button data-page="barcode-tool" onclick="openPage('barcode-tool')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">Barcode Reader</button>
+            <button data-page="features" onclick="openPage('features')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">विशेषताएँ</button>
+            <button data-page="branches" onclick="openPage('branches')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 shadow-sm">शाखाएँ</button>
         </div>
     </header>
 
-    <!-- 3. Hero Section with Compact Sidebar Links & Dynamic Branch Info -->
-    <section id="home" class="relative py-10 sm:py-16 bg-gradient-to-b from-blue-50/60 via-slate-50 to-white overflow-hidden">
+    <!-- 3. Hero Section (होम पेज) -->
+    <section id="home" data-view="home" class="page-view page-fade relative py-10 sm:py-16 bg-gradient-to-b from-blue-50/60 via-slate-50 to-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- सक्रिय शाखा सूचना कार्ड (Branch Switcher से तुरंत अपडेट होता है) -->
@@ -136,6 +154,9 @@
                     <a id="branch-call-btn" href="tel:+916264531630" class="flex-1 sm:flex-initial justify-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow">
                         <i class="fa-solid fa-phone"></i> कॉल करें
                     </a>
+                    <a id="branch-wa-btn" href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" class="flex-1 sm:flex-initial justify-center bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                    </a>
                     <a id="branch-map-btn" href="https://maps.google.com/?q=Chongribahar" target="_blank" class="flex-1 sm:flex-initial justify-center bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-slate-300">
                         <i class="fa-solid fa-map-location-dot text-red-600"></i> लोकेशन
                     </a>
@@ -156,15 +177,44 @@
                     </p>
                     
                     <div class="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
-                        <a href="#services" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
+                        <button onclick="openPage('services')" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-solid fa-list-check"></i> सभी सेवाएँ देखें
-                        </a>
+                        </button>
                         <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-brands fa-whatsapp text-lg"></i> व्हाट्सएप चैनल
                         </a>
                         <button onclick="toggleChat()" class="bg-slate-900 hover:bg-slate-800 text-white font-black px-6 py-3.5 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-sm sm:text-base flex items-center gap-2">
                             <i class="fa-solid fa-robot text-amber-400"></i> AI से पूछें
                         </button>
+                    </div>
+
+                    <!-- होम पेज पर सभी टूल्स और पेजों के क्विक शॉर्टकट कार्ड -->
+                    <div class="mt-10 grid grid-cols-2 sm:grid-cols-5 gap-3 text-left">
+                        <div onclick="openPage('lpg-booking')" class="cursor-pointer bg-orange-50/70 p-3.5 rounded-2xl border border-orange-200 hover:border-orange-500 hover:shadow-md transition">
+                            <i class="fa-solid fa-fire-flame-simple text-orange-600 text-xl mb-1.5"></i>
+                            <div class="text-xs font-black text-slate-800">Indane गैस बुकिंग</div>
+                            <div class="text-[10px] text-slate-600">WhatsApp व मिस्ड कॉल से बुक करें</div>
+                        </div>
+                        <div onclick="openPage('pdf-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-red-400 hover:shadow-md transition">
+                            <i class="fa-solid fa-file-pdf text-red-600 text-xl mb-1.5"></i>
+                            <div class="text-xs font-black text-slate-800">JPEG to PDF</div>
+                            <div class="text-[10px] text-slate-500">फोटो से PDF व KB कम करें</div>
+                        </div>
+                        <div onclick="openPage('passport-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-amber-400 hover:shadow-md transition">
+                            <i class="fa-solid fa-id-badge text-amber-600 text-xl mb-1.5"></i>
+                            <div class="text-xs font-black text-slate-800">पासपोर्ट फोटो</div>
+                            <div class="text-[10px] text-slate-500">6 या 12 फोटो शीट बनाएं</div>
+                        </div>
+                        <div onclick="openPage('dob-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-purple-400 hover:shadow-md transition">
+                            <i class="fa-solid fa-cake-candles text-purple-600 text-xl mb-1.5"></i>
+                            <div class="text-xs font-black text-slate-800">DOB Calculator</div>
+                            <div class="text-[10px] text-slate-500">सटीक उम्र निकालें</div>
+                        </div>
+                        <div onclick="openPage('barcode-tool')" class="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition">
+                            <i class="fa-solid fa-barcode text-indigo-600 text-xl mb-1.5"></i>
+                            <div class="text-xs font-black text-slate-800">Barcode Reader</div>
+                            <div class="text-[10px] text-slate-500">QR व बारकोड स्कैन/जेनरेट</div>
+                        </div>
                     </div>
 
                     <!-- Timing Highlight Box -->
@@ -218,9 +268,14 @@
         </div>
     </section>
 
-    <!-- 4. Services Section with Search Filter -->
-    <section id="services" class="py-16 sm:py-24 bg-white border-t border-slate-200">
+    <!-- 4. Services Section with Search Filter (सेवाएँ पेज) -->
+    <section id="services" data-view="services" class="page-view hidden page-fade py-12 sm:py-16 bg-white border-t border-slate-200 min-h-[70vh]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-slate-100 px-3.5 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
             <div class="text-center max-w-3xl mx-auto mb-10">
                 <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-3.5 py-1.5 rounded-full mb-3">
                     <i class="fa-solid fa-layer-group"></i> हमारी सेवाएँ एवं दस्तावेज
@@ -244,20 +299,164 @@
         </div>
     </section>
 
-    <!-- 5. PDF, Photo & Utility Tools Section -->
-    <section id="tools" class="py-16 sm:py-24 bg-slate-100 border-t border-slate-200 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-red-700 bg-red-100 px-3.5 py-1 rounded-full mb-3">
-                    <i class="fa-solid fa-toolbox"></i> उपयोगी डिजिटल टूल्स
+    <!-- 4.5 नया स्वतंत्र पेज: Indane LPG गैस बुकिंग गाइड -->
+    <section id="lpg-booking-page" data-view="lpg-booking" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-50 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+
+            <div class="text-center max-w-3xl mx-auto mb-8">
+                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-orange-700 bg-orange-100 px-3.5 py-1.5 rounded-full mb-3">
+                    <i class="fa-solid fa-fire-flame-simple"></i> पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय (भारत सरकार)
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">डिजिटल डॉक्यूमेंट एवं फोटो टूल्स</h2>
-                <p class="mt-4 text-slate-600 text-sm sm:text-base">
-                    ऑनलाइन फॉर्म भरने और रोजमर्रा के कामों के लिए आसान और सुरक्षित डिजिटल टूल्स।
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Indane (इंडेन) गैस सिलेंडर बुकिंग आसान तरीका</h2>
+                <p class="mt-3 text-slate-600 text-sm sm:text-base">
+                    अब गैस एजेंसी जाने या लाइन लगाने की जरूरत नहीं! अपने रजिस्टर्ड मोबाइल नंबर से घर बैठे 1 मिनट में सिलेंडर बुक करें।
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- अति महत्वपूर्ण सुरक्षा चेतावनी (Payment Warning Banner) -->
+            <div class="mb-8 bg-red-50 border-2 border-red-500 rounded-3xl p-5 sm:p-6 shadow-md">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center text-2xl shrink-0 shadow">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-red-800">⚠️ आवश्यक सावधानी: बुकिंग के समय किसी भी पेमेंट लिंक पर पेमेंट न करें!</h3>
+                        <p class="text-xs sm:text-sm text-red-900 font-semibold mt-1 leading-relaxed">
+                            गैस बुकिंग करते समय WhatsApp, SMS या किसी भी अनजान नंबर से यदि <b>कोई भी पेमेंट (Payment) का लिंक आए, तो उस पर बिल्कुल भी पेमेंट न करें।</b> हमेशा <b>सिलेंडर की डिलीवरी मिलने के बाद ही नकद (Cash) या ऑनलाइन भुगतान करें।</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indane बुकिंग के आसान माध्यम -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- 1. WhatsApp Booking (Step-by-Step) -->
+                <div class="bg-white border-2 border-emerald-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-800 text-[11px] font-black px-3 py-1 rounded-full">सबसे आसान तरीका</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">1. WhatsApp से बुकिंग का पूरा तरीका</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            आधिकारिक नंबर <b class="text-slate-900">7588888824</b> को सेव करें और अपने रजिस्टर्ड मोबाइल नंबर से नीचे दिए क्रम में बुकिंग करें:
+                        </p>
+                        <ol class="text-xs text-slate-700 space-y-1.5 bg-emerald-50/70 p-3.5 rounded-2xl border border-emerald-100 mb-4 list-decimal list-inside font-medium">
+                            <li>सबसे पहले WhatsApp पर <b>Hi</b> लिखकर भेजें।</li>
+                            <li>इसके बाद अपनी <b>भाषा (हिंदी / English)</b> चुनें।</li>
+                            <li>स्क्रीन पर आपका <b>नाम</b> दिखाई देगा, उसे <b>कन्फर्म (Confirm)</b> करें।</li>
+                            <li>अब <b>"रिफिल बुक करें" (Book Refill)</b> विकल्प पर क्लिक करें।</li>
+                            <li>बुक होते ही आपको <b>ऑर्डर नंबर (Order No.)</b> मिल जाएगा और <b>24 घंटे के भीतर DAC / DCE कोड</b> भी SMS/WhatsApp पर आ जाएगा (जिसे सिलेंडर लेते समय दिखाना होता है)।</li>
+                        </ol>
+                    </div>
+                    <a href="https://wa.me/917588888824?text=Hi" target="_blank" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> सीधे WhatsApp पर "Hi" भेजें (7588888824)
+                    </a>
+                </div>
+
+                <!-- 2. Missed Call Booking -->
+                <div class="bg-white border-2 border-orange-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl">
+                                <i class="fa-solid fa-phone-volume"></i>
+                            </div>
+                            <span class="bg-orange-100 text-orange-800 text-[11px] font-black px-3 py-1 rounded-full">बिल्कुल निःशुल्क</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">2. मिस्ड कॉल (Missed Call) से बुकिंग</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            अपने रजिस्टर्ड मोबाइल नंबर से <b class="text-slate-900">8454955555</b> पर कॉल करें। एक घंटी बजने के बाद कॉल अपने आप कट जाएगी, आपका सिलेंडर बुक होकर ऑर्डर नंबर व 24 घंटे में DAC/DCE कोड आ जाएगा।
+                        </p>
+                        <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-xs text-amber-900 font-semibold mb-3">
+                            📌 <b>महत्वपूर्ण नियम:</b> बुकिंग के समय पहले आने वाले किसी भी लिंक से भुगतान न करें। केवल <b>सिलेंडर की डिलीवरी मिलने के बाद ही पेमेंट करें</b> और साथ में अपना ऑर्डर नंबर / DAC कोड रखें।
+                        </div>
+                    </div>
+                    <a href="tel:8454955555" class="mt-2 w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-phone"></i> अभी मिस्ड कॉल करें (8454955555)
+                    </a>
+                </div>
+
+                <!-- 3. IVRS Call Booking -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">3. IVRS नंबर पर कॉल करके</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            24x7 बुकिंग के लिए <b class="text-slate-900">7718955555</b> पर कॉल करें, अपनी भाषा चुनें और निर्देशानुसार बटन दबाकर गैस सिलेंडर बुक करें।
+                        </p>
+                    </div>
+                    <a href="tel:7718955555" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-phone"></i> IVRS पर कॉल करें (7718955555)
+                    </a>
+                </div>
+
+                <!-- 4. Mobile App & Website -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">4. IndianOil One ऐप या वेबसाइट से</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            Play Store से <b>IndianOil One</b> ऐप डाउनलोड करें या आधिकारिक पोर्टल <b>cx.indianoil.in</b> पर जाकर लॉगिन करें। (बुकिंग के समय पहले पेमेंट न करें, केवल सिलेंडर की डिलीवरी मिलने के बाद ही भुगतान करें)।
+                        </p>
+                    </div>
+                    <a href="https://cx.indianoil.in" target="_blank" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-globe"></i> आधिकारिक वेबसाइट खोलें (cx.indianoil.in)
+                    </a>
+                </div>
+            </div>
+
+            <!-- अन्य कंपनियों की जानकारी (संक्षिप्त संदर्भ) -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h4 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-blue-600"></i> अन्य गैस कंपनियों के आधिकारिक बुकिंग नंबर (केवल जानकारी हेतु)
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="font-black text-blue-800 mb-1">Bharatgas (भारत गैस)</div>
+                        <p class="text-slate-600">WhatsApp: <b>1800 22 4344</b> | Missed Call: <b>7710955555</b> | IVRS: <b>7715012345</b></p>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="font-black text-indigo-800 mb-1">HP Gas (एचपी गैस)</div>
+                        <p class="text-slate-600">WhatsApp: <b>9222201122</b> | Missed Call: <b>9493602222</b> | IVRS: <b>8888823456</b></p>
+                    </div>
+                </div>
+                <p class="mt-4 text-center text-xs font-bold text-slate-600">
+                    💡 ध्यान रखें: किसी भी कंपनी की गैस बुकिंग के समय एडवांस पेमेंट लिंक पर भुगतान न करें; केवल सिलेंडर की डिलीवरी मिलने के बाद ही पेमेंट करें।
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.1 JPEG to PDF & Image Resizer Page -->
+    <section id="tools" data-view="pdf-tool" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-red-700 bg-red-100 px-3.5 py-1 rounded-full mb-3">
+                    <i class="fa-solid fa-file-pdf"></i> PDF एवं इमेज टूल्स
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF एवं फोटो Size (KB) कम करें</h2>
+                <p class="mt-3 text-slate-600 text-sm sm:text-base">
+                    ऑनलाइन फॉर्म के लिए दस्तावेजों की PDF बनाएं और फोटो/सिग्नेचर का साइज कम करें।
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Image to PDF Tool -->
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
@@ -320,20 +519,29 @@
                     <div id="resize-result" class="mt-4"></div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- नया फीचर: पासपोर्ट साइज फोटो शीट मेकर (A4 Sheet) -->
-            <div id="passport-tool-card" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
+    <!-- 5.2 नया स्वतंत्र पेज: पासपोर्ट साइज फोटो शीट मेकर -->
+    <section id="passport-tool-card" data-view="passport-tool" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-id-badge"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900">पासपोर्ट साइज फोटो मेकर (प्रिंट शीट)</h3>
+                            <h3 class="text-2xl font-black text-slate-900">पासपोर्ट साइज फोटो मेकर (प्रिंट शीट)</h3>
                             <p class="text-sm text-slate-500">एक क्लिक में 6 या 12 पासपोर्ट फोटो की प्रिंट-रेडी शीट तैयार करें</p>
                         </div>
                     </div>
-                    <span class="bg-amber-100 text-amber-800 text-xs font-extrabold px-3 py-1 rounded-full self-start sm:self-center">नया टूल</span>
+                    <span class="bg-amber-100 text-amber-800 text-xs font-extrabold px-3 py-1 rounded-full self-start sm:self-center">प्रिंट रेडी</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
@@ -356,100 +564,117 @@
                         </button>
                     </div>
 
-                    <div id="passport-result" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 min-h-[110px] flex flex-col items-center justify-center">
+                    <div id="passport-result" class="text-center bg-slate-50 border border-slate-200 rounded-2xl p-4 min-h-[130px] flex flex-col items-center justify-center">
                         <p class="text-xs text-slate-500">तैयार की गई पासपोर्ट फोटो शीट यहाँ दिखेगी</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Additional Tools Grid (Age Calculator with ID, QR & Barcode Generator, Live Scanner) -->
-            <div id="scanner-section" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- 5.3 स्वतंत्र पेज: DOB & Age Calculator -->
+    <section id="age-calculator-card" data-view="dob-tool" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+            <div class="bg-white border-2 border-purple-200 rounded-3xl p-6 sm:p-8 shadow-md">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-2xl mb-4 font-bold shadow-md">
+                    <i class="fa-solid fa-cake-candles"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 mb-1">प्रीमियम उम्र कैलकुलेटर (DOB)</h3>
+                <p class="text-xs sm:text-sm text-slate-500 mb-6">सरकारी भर्ती व फॉर्म भरने के लिए जन्मतिथि से सटीक आयु (वर्ष, महीने, दिन) निकालें।</p>
                 
-                <!-- 1. Premium Age Calculator with Target Date (Dedicated ID for Direct Scroll) -->
-                <div id="age-calculator-card" class="bg-white border-2 border-purple-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+                <div class="space-y-4 mb-6">
                     <div>
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
-                            <i class="fa-solid fa-cake-candles"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">प्रीमियम उम्र कैलकुलेटर (DOB)</h3>
-                        <p class="text-xs text-slate-500 mb-4">जन्मतिथि एवं किसी विशेष तारीख के अनुसार सटीक आयु निकालें।</p>
-                        
-                        <div class="space-y-3 mb-4">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-700 mb-1">अपनी जन्मतिथि (DOB):</label>
-                                <input type="date" id="dob-input" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-700 mb-1">इस तारीख तक उम्र देखें (वैकल्पिक):</label>
-                                <input type="date" id="target-date-input" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
-                            </div>
-                        </div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">अपनी जन्मतिथि (Date of Birth):</label>
+                        <input type="date" id="dob-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
                     </div>
                     <div>
-                        <button onclick="calculateAge()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md">
-                            सटीक आयु गणना करें
-                        </button>
-                        <div id="age-result" class="mt-3 text-xs font-bold text-purple-800 text-center hidden bg-purple-50 p-3 rounded-xl border border-purple-200"></div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">इस तारीख तक उम्र देखें (वैकल्पिक - खाली छोड़ने पर आज की तारीख):</label>
+                        <input type="date" id="target-date-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
                     </div>
                 </div>
+                <button onclick="calculateAge()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3.5 rounded-xl text-sm transition shadow-lg">
+                    सटीक आयु गणना करें
+                </button>
+                <div id="age-result" class="mt-4 text-sm font-bold text-purple-800 text-center hidden bg-purple-50 p-4 rounded-2xl border border-purple-200"></div>
+            </div>
+        </div>
+    </section>
 
-                <!-- 2. QR Code & Barcode Generator -->
-                <div id="qr-barcode-card" class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
-                            <i class="fa-solid fa-barcode"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">QR और बारकोड जेनरेटर</h3>
-                        <p class="text-xs text-slate-500 mb-3">टेक्स्ट, मोबाइल नंबर या लिंक से QR और बारकोड बनाएं।</p>
-                        <div class="space-y-2 mb-3">
-                            <input type="text" id="code-text-input" placeholder="यहाँ टेक्स्ट या नंबर लिखें..." class="w-full border border-slate-300 rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex gap-2 mb-2">
-                            <button onclick="generateQRCodeOnly()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-[11px] transition shadow-md">
-                                QR कोड बनाएं
-                            </button>
-                            <button onclick="generateBarcodeOnly()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded-xl text-[11px] transition shadow-md">
-                                बारकोड बनाएं
-                            </button>
-                        </div>
-                        <div id="code-result-container" class="mt-2 text-center hidden bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                            <img id="generated-img" class="mx-auto max-w-full h-20 object-contain bg-white p-1 rounded border shadow-sm mb-2">
-                            <a id="download-code-btn" href="#" download="code.png" target="_blank" class="text-[11px] font-bold text-blue-600 hover:underline">इमेज खोलें / सेव करें</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Live QR / Barcode Scanner Studio -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+    <!-- 5.4 स्वतंत्र पेज: QR & Barcode Reader + Generator -->
+    <section id="scanner-section" data-view="barcode-tool" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[70vh]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Live QR / Barcode Scanner Studio -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-1">QR & बारकोड रीडर</h3>
-                        <p class="text-xs text-slate-500 mb-4">किसी भी QR कोड या बारकोड की फोटो अपलोड करके जानकारी देखें।</p>
+                        <h3 class="text-xl font-black text-slate-900 mb-1">QR & बारकोड रीडर (Scanner)</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mb-4">किसी भी QR कोड या बारकोड की फोटो अपलोड करके उसमें छिपी जानकारी पढ़ें।</p>
                         
-                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-4 text-center cursor-pointer mb-3" onclick="document.getElementById('scanner-file-input').click()">
-                            <i class="fa-solid fa-image text-2xl text-emerald-600 mb-1"></i>
-                            <p class="text-[11px] font-bold text-slate-700">QR फोटो अपलोड करके स्कैन करें</p>
+                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-6 text-center cursor-pointer mb-4" onclick="document.getElementById('scanner-file-input').click()">
+                            <i class="fa-solid fa-image text-3xl text-emerald-600 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700">QR या बारकोड फोटो अपलोड करें</p>
                             <input type="file" id="scanner-file-input" accept="image/*" class="hidden" onchange="scanQRImage(event)">
                         </div>
                     </div>
                     <div>
-                        <div id="scanner-result" class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center min-h-[40px] flex items-center justify-center break-all">
+                        <div id="scanner-result" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center min-h-[48px] flex items-center justify-center break-all">
                             स्कैन किया गया परिणाम यहाँ दिखेगा
                         </div>
                     </div>
                 </div>
 
+                <!-- QR Code & Barcode Generator -->
+                <div id="qr-barcode-card" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xl mb-4 font-bold shadow-md">
+                            <i class="fa-solid fa-barcode"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-1">QR और बारकोड जेनरेटर</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mb-4">टेक्स्ट, मोबाइल नंबर या वेबसाइट लिंक से QR और बारकोड बनाएं।</p>
+                        <div class="space-y-2 mb-4">
+                            <input type="text" id="code-text-input" placeholder="यहाँ टेक्स्ट या नंबर लिखें..." class="w-full border border-slate-300 rounded-xl p-3 text-xs focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex gap-2 mb-3">
+                            <button onclick="generateQRCodeOnly()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md">
+                                QR कोड बनाएं
+                            </button>
+                            <button onclick="generateBarcodeOnly()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-md">
+                                बारकोड बनाएं
+                            </button>
+                        </div>
+                        <div id="code-result-container" class="mt-2 text-center hidden bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                            <img id="generated-img" class="mx-auto max-w-full h-24 object-contain bg-white p-1 rounded border shadow-sm mb-2">
+                            <a id="download-code-btn" href="#" download="code.png" target="_blank" class="text-xs font-bold text-blue-600 hover:underline">इमेज खोलें / सेव करें</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
-    <section id="why-choose-us" class="py-16 bg-white border-t border-slate-200">
+    <!-- Why Choose Us Section (विशेषताएँ पेज) -->
+    <section id="why-choose-us" data-view="features" class="page-view hidden page-fade py-12 sm:py-16 bg-white border-t border-slate-200 min-h-[70vh]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-slate-100 px-3.5 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
             <div class="text-center mb-12">
                 <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-3.5 py-1 rounded-full mb-3">
                     <i class="fa-solid fa-star text-amber-500"></i> हमारी विशेषताएँ
@@ -492,6 +717,66 @@
         </div>
     </section>
 
+    <!-- 6. Branches Dedicated View + Footer (शाखाएँ पेज और फुटर) -->
+    <section id="branches-page" data-view="branches" class="page-view hidden page-fade py-12 sm:py-16 bg-slate-100 border-t border-slate-200 min-h-[65vh]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <button onclick="openPage('home')" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-700 bg-white px-3.5 py-2 rounded-xl shadow-sm transition">
+                    <i class="fa-solid fa-arrow-left"></i> होम पेज पर वापस जाएं
+                </button>
+            </div>
+            <div class="text-center mb-10">
+                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full mb-3">
+                    <i class="fa-solid fa-location-dot"></i> हमारी शाखाएँ एवं संपर्क
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">रूपेश कंप्यूटर्स की मुख्य शाखाएँ</h2>
+                <p class="mt-2 text-slate-600 text-sm">सोमवार से शनिवार (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white border-2 border-blue-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 mb-2">चोंगरीबहार शाखा</h3>
+                    <p class="text-sm text-slate-600 mb-2">मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
+                    <p class="text-sm font-bold text-emerald-700 mb-1"><i class="fa-solid fa-phone"></i> कॉल / WhatsApp: +91 6264531630</p>
+                    <p class="text-xs font-semibold text-slate-500 mb-4"><i class="fa-solid fa-envelope text-blue-600"></i> ईमेल: <a href="mailto:chongribahar@rupeshcomputers.in" class="hover:underline text-blue-700">chongribahar@rupeshcomputers.in</a></p>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="tel:+916264531630" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-solid fa-phone"></i> कॉल करें</a>
+                        <a href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
+                    </div>
+                </div>
+                <div class="bg-white border-2 border-indigo-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 mb-2">दोकड़ा शाखा</h3>
+                    <p class="text-sm text-slate-600 mb-2">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
+                    <p class="text-sm font-bold text-emerald-700 mb-1"><i class="fa-solid fa-phone"></i> कॉल / WhatsApp: +91 9713926390</p>
+                    <p class="text-xs font-semibold text-slate-500 mb-4"><i class="fa-solid fa-envelope text-indigo-600"></i> ईमेल: <a href="mailto:dokda@rupeshcomputers.in" class="hover:underline text-indigo-700">dokda@rupeshcomputers.in</a></p>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="tel:+919713926390" class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-solid fa-phone"></i> कॉल करें</a>
+                        <a href="https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://maps.google.com/?q=Dokda" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
+                    </div>
+                </div>
+                <div class="bg-white border-2 border-indigo-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 mb-2">दोकड़ा शाखा</h3>
+                    <p class="text-sm text-slate-600 mb-3">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
+                    <p class="text-sm font-bold text-emerald-700 mb-4"><i class="fa-solid fa-phone"></i> मोबाइल: +91 9713926390</p>
+                    <div class="flex gap-3">
+                        <a href="tel:+919713926390" class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition">कॉल करें</a>
+                        <a href="https://maps.google.com/?q=Dokda" target="_blank" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-xl text-xs transition border border-slate-300">गूगल मैप</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 6. Footer -->
     <footer id="contact-footer" class="bg-slate-950 text-slate-300 py-12 border-t-4 border-amber-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -499,7 +784,11 @@
                 <h3 class="text-white text-xl font-black mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-laptop-code text-amber-400"></i> RUPESH COMPUTERS
                 </h3>
-                <p class="text-sm mb-4">सभी डिजिटल, बैंकिंग एवं सरकारी सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
+                <p class="text-sm mb-3">सभी डिजिटल, बैंकिंग एवं सरकारी सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
+                <p class="text-xs text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-envelope text-amber-400"></i>
+                    <a href="mailto:help@rupeshcomputers.in" class="hover:text-amber-400 underline font-semibold">help@rupeshcomputers.in</a>
+                </p>
                 <div class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-lg mb-3">
                     <i class="fa-regular fa-clock"></i> सोम - शनि: 10:00 AM - 06:00 PM (रविवार बंद)
                 </div>
@@ -515,7 +804,12 @@
                     <i class="fa-solid fa-location-dot text-amber-400"></i> चोंगरीबहार शाखा
                 </h4>
                 <p class="text-sm mb-1">मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
-                <p class="text-xs text-emerald-400 font-bold mb-1"><i class="fa-solid fa-phone"></i> मोबाइल: <a href="tel:+916264531630" class="hover:underline">+91 6264531630</a></p>
+                <p class="text-xs text-emerald-400 font-bold mb-1 flex items-center gap-2 flex-wrap">
+                    <span><i class="fa-solid fa-phone"></i> <a href="tel:+916264531630" class="hover:underline">+91 6264531630</a></span>
+                    <span>|</span>
+                    <a href="https://wa.me/916264531630" target="_blank" class="hover:underline text-emerald-300"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                </p>
+                <p class="text-xs text-slate-300 mb-1"><i class="fa-solid fa-envelope text-amber-400"></i> <a href="mailto:chongribahar@rupeshcomputers.in" class="hover:underline">chongribahar@rupeshcomputers.in</a></p>
                 <p class="text-xs text-slate-400 mb-3">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
                 <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="inline-flex items-center gap-1 text-xs text-amber-400 hover:underline font-bold">
                     <i class="fa-solid fa-map-location-dot"></i> गूगल मैप पर दिशा देखें
@@ -527,7 +821,12 @@
                     <i class="fa-solid fa-location-dot text-amber-400"></i> दोकड़ा शाखा
                 </h4>
                 <p class="text-sm mb-1">ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)</p>
-                <p class="text-xs text-emerald-400 font-bold mb-1"><i class="fa-solid fa-phone"></i> मोबाइल: <a href="tel:+919713926390" class="hover:underline">+91 9713926390</a></p>
+                <p class="text-xs text-emerald-400 font-bold mb-1 flex items-center gap-2 flex-wrap">
+                    <span><i class="fa-solid fa-phone"></i> <a href="tel:+919713926390" class="hover:underline">+91 9713926390</a></span>
+                    <span>|</span>
+                    <a href="https://wa.me/919713926390" target="_blank" class="hover:underline text-emerald-300"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                </p>
+                <p class="text-xs text-slate-300 mb-1"><i class="fa-solid fa-envelope text-amber-400"></i> <a href="mailto:dokda@rupeshcomputers.in" class="hover:underline">dokda@rupeshcomputers.in</a></p>
                 <p class="text-xs text-slate-400 mb-3">समय: सुबह 10:00 से शाम 6:00 बजे तक (सोम-शनि)</p>
                 <a href="https://maps.google.com/?q=Dokda" target="_blank" class="inline-flex items-center gap-1 text-xs text-amber-400 hover:underline font-bold">
                     <i class="fa-solid fa-map-location-dot"></i> गूगल मैप पर दिशा देखें
@@ -545,12 +844,12 @@
         </div>
     </footer>
 
-    <!-- Fixed Bottom Quick Action Bar for Mobile (Dynamic Phone Link) -->
+    <!-- Fixed Bottom Quick Action Bar for Mobile (Dynamic Phone & WhatsApp Link) -->
     <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2.5 px-4 shadow-lg sm:hidden flex justify-around items-center">
         <a id="mobile-bottom-call" href="tel:+916264531630" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-phone"></i> कॉल करें
         </a>
-        <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
+        <a id="mobile-bottom-wa" href="https://wa.me/916264531630" target="_blank" class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
         <button onclick="toggleChat()" class="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold shadow">
@@ -622,6 +921,44 @@
 
     <!-- 8. JavaScript Logic -->
     <script>
+        // मल्टी-पेज नेविगेशन कंट्रोलर (GitHub Pages पर बिना अतिरिक्त फाइल के अलग-अलग पेज दिखाता है)
+        function openPage(pageName, updateHash = true) {
+            const views = document.querySelectorAll('.page-view');
+            views.forEach(view => {
+                if (view.getAttribute('data-view') === pageName) {
+                    view.classList.remove('hidden');
+                } else {
+                    view.classList.add('hidden');
+                }
+            });
+
+            // सभी डेस्कटॉप और मोबाइल नेविगेशन बटन अपडेट करें
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                if (btn.getAttribute('data-page') === pageName) {
+                    btn.classList.add('nav-tab-active');
+                } else {
+                    btn.classList.remove('nav-tab-active');
+                }
+            });
+
+            if (updateHash) {
+                history.replaceState(null, '', '#' + pageName);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // URL हैश (#services, #dob-tool आदि) से सीधे उसी पेज को खोलें
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            const validPages = ['home', 'services', 'lpg-booking', 'pdf-tool', 'passport-tool', 'dob-tool', 'barcode-tool', 'features', 'branches'];
+            if (validPages.includes(hash)) {
+                openPage(hash, false);
+            } else {
+                openPage('home', false);
+            }
+        });
+
         // टोस्ट नोटिफिकेशन फ़ंक्शन (बिना alert() के)
         function showToast(msg) {
             const box = document.getElementById('toast-box');
@@ -642,8 +979,9 @@
                 subtitle: "सक्रिय शाखा: चोंगरीबहार (मुख्य मार्ग)",
                 badge: "चयनित शाखा: चोंगरीबहार",
                 address: "पता: मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)",
-                operator: "संचालक: रूपेश प्रसाद | संपर्क: +91 6264531630 | समय: सुबह 10:00 - शाम 6:00",
+                operator: "संचालक: रूपेश प्रसाद | कॉल/WhatsApp: +91 6264531630 | ईमेल: chongribahar@rupeshcomputers.in",
                 phoneHref: "tel:+916264531630",
+                waHref: "https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%9A%E0%A5%8B%E0%A4%82%E0%A4%97%E0%A4%B0%E0%A5%80%E0%A4%AC%E0%A4%B9%E0%A4%BE%E0%A4%B0)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4",
                 mapHref: "https://maps.google.com/?q=Chongribahar"
             },
             dokda: {
@@ -651,8 +989,9 @@
                 subtitle: "सक्रिय शाखा: दोकड़ा (मुख्य मार्ग)",
                 badge: "चयनित शाखा: दोकड़ा",
                 address: "पता: ग्राम - दोकड़ा (मुख्य मार्ग), जिला - जशपुर (छ.ग.)",
-                operator: "संचालक: रूपेश कंप्यूटर्स टीम | संपर्क: +91 9713926390 | समय: सुबह 10:00 - शाम 6:00",
+                operator: "संचालक: रूपेश कंप्यूटर्स टीम | कॉल/WhatsApp: +91 9713926390 | ईमेल: dokda@rupeshcomputers.in",
                 phoneHref: "tel:+919713926390",
+                waHref: "https://wa.me/919713926390?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS%20(%E0%A4%A6%E0%A5%8B%E0%A4%95%E0%A4%A1%E0%A4%BC%E0%A4%BE)%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4",
                 mapHref: "https://maps.google.com/?q=Dokda"
             }
         };
@@ -685,8 +1024,10 @@
             document.getElementById('branch-address-text').innerText = data.address;
             document.getElementById('branch-operator-text').innerText = data.operator;
             document.getElementById('branch-call-btn').href = data.phoneHref;
+            document.getElementById('branch-wa-btn').href = data.waHref;
             document.getElementById('branch-map-btn').href = data.mapHref;
             document.getElementById('mobile-bottom-call').href = data.phoneHref;
+            document.getElementById('mobile-bottom-wa').href = data.waHref;
 
             showToast(`✅ ${data.name} शाखा चुन ली गई है`);
         }
@@ -1201,7 +1542,9 @@
                 const lower = message.toLowerCase();
                 let reply = "धन्यवाद! रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में सभी ऑनलाइन कार्य किए जाते हैं। अधिक सहायता के लिए ऊपर दिए गए बटन दबाएं या हमारी शाखा पर पधारें।";
                 
-                if (lower.includes('जाति') || lower.includes('caste') || lower.includes('jati')) {
+                if (lower.includes('gas') || lower.includes('lpg') || lower.includes('indane') || lower.includes('गैस') || lower.includes('सिलेंडर') || lower.includes('इंडेन')) {
+                    reply = "Indane गैस WhatsApp बुकिंग के लिए 7588888824 पर पहले 'Hi' लिखें, भाषा चुनें, नाम कन्फर्म करें और 'रिफिल बुक करें' दबाएं। बुक होने पर ऑर्डर नंबर और 24 घंटे में DAC/DCE कोड आएगा। ध्यान रहे: बुकिंग के समय किसी भी पेमेंट लिंक पर पेमेंट न करें, केवल सिलेंडर की डिलीवरी मिलने के बाद ही भुगतान करें!";
+                } else if (lower.includes('जाति') || lower.includes('caste') || lower.includes('jati')) {
                     reply = "जाति प्रमाण पत्र के लिए पटवारी/सरपंच प्रतिवेदन, 1950 (OBC हेतु 1984) से पूर्व का रिकॉर्ड/मिसल, वंशावली, बी-1, अंकसूची और आधार कार्ड आवश्यक है।";
                 } else if (lower.includes('निवास') || lower.includes('domicile') || lower.includes('niwas')) {
                     reply = "निवास प्रमाण पत्र के लिए पटवारी एवं सरपंच प्रतिवेदन, अंकसूची (5वीं/8वीं/10वीं), वर्तमान बी-1 और आधार/राशन कार्ड लगता है।";
