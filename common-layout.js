@@ -8,6 +8,7 @@ const navLinks = [
     { file: 'index.html', icon: 'fa-house', color: '', label: 'होम' },
     { file: 'services.html', icon: 'fa-layer-group', color: 'text-amber-400', label: 'सेवाएँ' },
     { file: 'lpg-booking.html', icon: 'fa-fire-flame-simple', color: 'text-orange-400', label: 'Indane गैस बुकिंग' },
+    { file: 'aadhaar-print.html', icon: 'fa-id-card', color: 'text-sky-400', label: 'आधार प्रिंट' },
     { file: 'pdf-tool.html', icon: 'fa-file-pdf', color: 'text-rose-400', label: 'JPEG to PDF' },
     { file: 'passport-tool.html', icon: 'fa-id-badge', color: 'text-cyan-400', label: 'पासपोर्ट फोटो' },
     { file: 'dob-tool.html', icon: 'fa-cake-candles', color: 'text-purple-400', label: 'DOB Calculator' },
