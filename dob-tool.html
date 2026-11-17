@@ -311,6 +311,10 @@
         // ==========================================
 
         function showToolToast(message) {
+            if (typeof window.showToast === 'function') {
+                window.showToast(message);
+                return;
+            }
             const toast = document.getElementById('custom-toast');
             const msgEl = document.getElementById('custom-toast-msg');
             if (toast && msgEl) {
@@ -884,14 +888,6 @@
                     liveClockEl.textContent = formatHindiTime12H(new Date());
                 }
             }, 1000);
-
-            ['common-layout.js', 'tools.js'].forEach(src => {
-                const s = document.createElement('script');
-                s.src = src;
-                s.async = true;
-                s.onerror = () => {};
-                document.body.appendChild(s);
-            });
         }
 
         if (document.readyState === 'loading') {
@@ -900,5 +896,8 @@
             initDobAndPanchangTool();
         }
     </script>
+
+    <!-- Load Site Common Header & Layout directly so DOMContentLoaded triggers properly on rupeshcomputers.in -->
+    <script src="common-layout.js" onerror="console.log('Preview mode: common-layout.js not local')"></script>
 </body>
 </html>
