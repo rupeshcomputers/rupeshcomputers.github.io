@@ -595,23 +595,23 @@
             fCtx.filter = 'none';
             fCtx.drawImage(fullPageCanvas, pw * (cropFx / 100), srcY, srcW, srcH, 0, 0, cardW, cardH);
 
-            // Face photo bounding box on Front card
+            // Face photo bounding box on Front card (Expanded to cover full photo area without edge gaps)
             const faceBox = {
-                x: Math.round(cardW * 0.052),
-                y: Math.round(cardH * 0.235),
-                w: Math.round(cardW * 0.245),
-                h: Math.round(cardH * 0.525)
+                x: Math.round(cardW * 0.038),
+                y: Math.round(cardH * 0.195),
+                w: Math.round(cardW * 0.275),
+                h: Math.round(cardH * 0.585)
             };
 
             // Darken text & QR code across Front card (excluding face photo box)
             applyTextDarkness(fCtx, cardW, cardH, textDark, faceBox);
 
-            // Brighten ONLY the face photo region on the Front card
+            // Brighten ONLY the full face photo region on the Front card
             if (bright !== 100) {
-                const srcFaceX = (pw * (cropFx / 100)) + srcW * 0.052;
-                const srcFaceY = srcY + srcH * 0.235;
-                const srcFaceW = srcW * 0.245;
-                const srcFaceH = srcH * 0.525;
+                const srcFaceX = (pw * (cropFx / 100)) + srcW * 0.038;
+                const srcFaceY = srcY + srcH * 0.195;
+                const srcFaceW = srcW * 0.275;
+                const srcFaceH = srcH * 0.585;
 
                 fCtx.save();
                 fCtx.filter = `brightness(${bright}%) contrast(106%) saturate(105%)`;
