@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>आधार स्मार्ट प्रिंट स्टूडियो (Aadhaar Print) - RUPESH COMPUTERS</title>
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="manifest" id="pwa-manifest-link">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- PDF.js for client-side password unlocking & high-DPI rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .bot-float { animation: float 3s ease-in-out infinite; }
+        @media print {
+            body * { visibility: hidden !important; }
+            #print-area, #print-area * { visibility: visible !important; }
+            #print-area {
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+            #print-area img {
+                width: 210mm !important;
+                height: 297mm !important;
+                object-fit: contain !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- Common Header & Navigation (Loaded from common-layout.js) -->
+    <div id="site-header"></div>
+
+    <!-- MAIN PAGE CONTENT (aadhaar-print.html) -->
+    <main class="min-h-[65vh]">
+        <section id="aadhaar-print" class="page-section py-10 sm:py-14 bg-gradient-to-b from-blue-50/70 via-slate-50 to-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Title Header -->
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-800 bg-blue-100 px-3.5 py-1.5 rounded-full mb-3">
+                        <i class="fa-solid fa-id-card"></i> बिना Photoshop — CSC स्मार्ट प्रिंट टूल
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">आधार स्मार्ट प्रिंट स्टूडियो (Aadhaar Print)</h2>
+                    <p class="mt-2 text-slate-600 text-xs sm:text-sm">
+                        पासवर्ड-लॉक e-Aadhaar PDF खोलें, नीचे के लेमिनेशन कार्ड हिस्से को ऑटो-कट करें, काले चेहरे की Brightness व लिखावट का कालापन बढ़ाएं और एक ही A4 पेपर पर 1 से 5 आधार एक साथ प्रिंट करें।
+                    </p>
+                    <div class="mt-3 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-900 px-3.5 py-1.5 rounded-xl text-xs font-bold">
+                        <i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% सुरक्षित — आपकी PDF या डेटा किसी सर्वर पर अपलोड नहीं होता
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                    <!-- LEFT COLUMN: Step 1 (Upload & Unlock) + Step 2 (Photo Brightness, Text Darkness & Crop Fine-Tune) -->
+                    <div class="lg:col-span-6 space-y-6">
+
+                        <!-- STEP 1: PDF Upload & Password Unlock -->
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-9 h-9 rounded-xl bg-blue-600 text-white font-black text-sm flex items-center justify-center shrink-0">1</div>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-black text-slate-900">e-Aadhaar PDF अपलोड एवं अनलॉक करें</h3>
+                                    <p class="text-xs text-slate-500">UIDAI वेबसाइट से डाउनलोड की गई पासवर्ड-लॉक PDF चुनें</p>
+                                </div>
+                            </div>
+
+                            <!-- File Dropzone -->
+                            <div onclick="document.getElementById('aadhaar-pdf-input').click()" class="border-2 border-dashed border-blue-300 bg-blue-50/50 hover:bg-blue-50 rounded-2xl p-5 text-center cursor-pointer transition mb-4">
+                                <i class="fa-solid fa-file-pdf text-3xl text-rose-600 mb-2"></i>
+                                <div id="selected-pdf-name" class="text-xs sm:text-sm font-extrabold text-slate-800">यहाँ क्लिक करके आधार PDF फाइल चुनें</div>
+                                <p class="text-[11px] text-slate-500 mt-0.5">केवल आपके कंप्यूटर में ही खुलेगी (Offline Processing)</p>
+                                <input type="file" id="aadhaar-pdf-input" accept="application/pdf" class="hidden" onchange="handleAadhaarFileSelect(event)">
+                            </div>
+
+                            <!-- Single Direct Password Box -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+                                <div>
+                                    <label class="block text-xs font-extrabold text-slate-700 mb-1.5">PDF पासवर्ड डालें (नाम के पहले 4 अक्षर CAPITAL + जन्म वर्ष):</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="aadhaar-password" maxlength="20" placeholder="उदाहरण: AVIN1996" onkeydown="if(event.key==='Enter'){event.preventDefault();unlockAndCropAadhaar(false);}" class="flex-1 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-black tracking-widest uppercase bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                        <button type="button" onclick="unlockAndCropAadhaar(false)" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition flex items-center gap-1.5 shrink-0">
+                                            <i class="fa-solid fa-unlock-keyhole"></i> खोलें एवं काटें
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="aadhaar-unlock-status" class="hidden text-xs font-bold p-2.5 rounded-xl"></div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: Face Photo Brightness, Text Darkness & Fine-Tune Crop -->
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center shrink-0">2</div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-black text-slate-900">फोटो Brightness, लिखावट कालापन व कटिंग</h3>
+                                        <p class="text-xs text-slate-500">काला चेहरा साफ करने और अक्षरों को गहरा काला करने के लिए</p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="resetCardAdjustments()" class="text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg transition">
+                                    रीसेट करें
+                                </button>
+                            </div>
+
+                            <!-- Photo Brightness & Text Darkness Sliders -->
+                            <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 space-y-3 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-black text-amber-950 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-sun text-amber-600"></i> केवल फोटो (चेहरे) की चमक (Brightness):
+                                    </span>
+                                    <span id="face-bright-val" class="text-xs font-black bg-amber-500 text-slate-950 px-2 py-0.5 rounded-md">115%</span>
+                                </div>
+                                <input type="range" id="face-brightness" min="80" max="195" value="115" oninput="renderCurrentAadhaarCards()" class="w-full accent-amber-600 cursor-pointer">
+
+                                <div class="flex items-center justify-between pt-1">
+                                    <span class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-font text-blue-700"></i> लिखावट का कालापन (Text Darkness &amp; Clearness):
+                                    </span>
+                                    <span id="text-dark-val" class="text-xs font-black bg-slate-900 text-white px-2 py-0.5 rounded-md">120%</span>
+                                </div>
+                                <input type="range" id="text-darkness" min="100" max="200" value="120" oninput="renderCurrentAadhaarCards()" class="w-full accent-slate-900 cursor-pointer">
+                                <p class="text-[11px] text-slate-600">
+                                    <i class="fa-solid fa-circle-info text-blue-600"></i> फोटो उजली रहेगी और नाम, पता व QR कोड गहरा काला (Print-Sharp) दिखेगा।
+                                </p>
+                            </div>
+
+                            <!-- Crop Fine-Tune Controls -->
+                            <details class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+                                <summary class="text-xs font-extrabold text-slate-800 cursor-pointer flex items-center justify-between">
+                                    <span><i class="fa-solid fa-crop-simple text-blue-600 mr-1.5"></i> कार्ड कटिंग (Crop) को ऊपर-नीचे या बाएं-दाएं एडजस्ट करें</span>
+                                    <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                                </summary>
+                                <div class="mt-3 pt-3 border-t border-slate-200 grid grid-cols-2 gap-3 text-xs">
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">ऊपर-नीचे (Vertical Y %): <span id="crop-y-val" class="text-blue-700">72%</span></label>
+                                        <input type="range" id="crop-y" min="62" max="76" step="0.2" value="72" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">कार्ड की ऊँचाई (Height %): <span id="crop-h-val" class="text-blue-700">21.4%</span></label>
+                                        <input type="range" id="crop-h" min="19" max="27" step="0.2" value="21.4" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">Front बायां मार्जिन (%): <span id="crop-fx-val" class="text-blue-700">7.2%</span></label>
+                                        <input type="range" id="crop-fx" min="3" max="12" step="0.2" value="7.2" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">Back बायां मार्जिन (%): <span id="crop-bx-val" class="text-blue-700">50.2%</span></label>
+                                        <input type="range" id="crop-bx" min="46" max="55" step="0.2" value="50.2" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Card Preview + A4 Batch Sheet (1 to 5 Cards) -->
+                    <div class="lg:col-span-6 space-y-6">
+
+                        <!-- Current Extracted Front & Back Card Preview -->
+                        <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                                <h3 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-scissors text-emerald-600"></i> तैयार लेमिनेशन कार्ड (Front &amp; Back)
+                                </h3>
+                                <span class="text-[11px] font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg">साइज: 8.5cm × 5.4cm</span>
+                            </div>
+
+                            <div id="single-card-empty" class="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center text-slate-400">
+                                <i class="fa-regular fa-address-card text-4xl mb-2"></i>
+                                <p class="text-xs font-bold">बाईं ओर से आधार PDF अपलोड करके पासवर्ड डालें — निचला कार्ड हिस्सा यहाँ अपने आप कटकर दिखेगा।</p>
+                            </div>
+
+                            <div id="single-card-preview-box" class="hidden space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-100 p-3.5 rounded-2xl border border-slate-200">
+                                    <div class="text-center">
+                                        <span class="inline-block text-[10px] font-black uppercase bg-blue-100 text-blue-800 px-2 py-0.5 rounded mb-1.5">आगे का हिस्सा (Front)</span>
+                                        <canvas id="front-card-canvas" class="w-full rounded-xl border border-slate-300 shadow-sm bg-white"></canvas>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="inline-block text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded mb-1.5">पीछे का हिस्सा (Back)</span>
+                                        <canvas id="back-card-canvas" class="w-full rounded-xl border border-slate-300 shadow-sm bg-white"></canvas>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                    <button type="button" onclick="addCardToA4Batch()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 px-4 rounded-xl text-xs sm:text-sm shadow transition flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-plus-circle"></i> A4 प्रिंट शीट में जोड़ें (<span id="batch-count-badge">0</span>/5)
+                                    </button>
+                                    <button type="button" onclick="downloadSinglePairImage()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm shadow transition flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-download"></i> सिर्फ यह कार्ड डाउनलोड करें
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- A4 Multi-Aadhaar Sheet Builder (1 to 5 Cards on Single A4) -->
+                        <div class="bg-white border-2 border-blue-600 rounded-3xl p-5 sm:p-6 shadow-md">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                                <div>
+                                    <span class="text-[10px] font-black uppercase bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">मल्टी-आधार A4 प्रिंट</span>
+                                    <h3 class="text-base sm:text-lg font-black text-slate-900 mt-1">एक ही A4 पेपर पर 1 से 5 आधार प्रिंट करें</h3>
+                                </div>
+                                <button type="button" onclick="clearA4Batch()" class="text-xs font-bold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200 transition">
+                                    <i class="fa-solid fa-trash-can"></i> शीट खाली करें
+                                </button>
+                            </div>
+
+                            <!-- List of added Aadhaar cards -->
+                            <div id="batch-list-container" class="mb-4 space-y-2">
+                                <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                    अभी A4 शीट में <b>0 आधार कार्ड</b> जुड़े हैं। आप 1 से लेकर <b>5 ग्राहकों</b> तक के आधार कार्ड एक ही A4 पेपर पर जोड़ सकते हैं।
+                                </p>
+                            </div>
+
+                            <!-- Layout Options -->
+                            <div class="flex flex-wrap items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4 text-xs">
+                                <label class="flex items-center gap-1.5 font-bold text-slate-700 cursor-pointer">
+                                    <input type="checkbox" id="show-cut-guides" checked onchange="rebuildA4PrintSheet()" class="w-4 h-4 accent-blue-600">
+                                    कैंची से काटने की लाइन (Cut Border) दिखाएं
+                                </label>
+                                <label class="flex items-center gap-1.5 font-bold text-slate-700 cursor-pointer">
+                                    <input type="checkbox" id="flip-back-side" onchange="rebuildA4PrintSheet()" class="w-4 h-4 accent-blue-600">
+                                    Back हिस्से को 180° घुमाएं (मोड़कर लेमिनेशन के लिए)
+                                </label>
+                            </div>
+
+                            <!-- Live A4 Preview Canvas -->
+                            <div id="a4-preview-wrapper" class="hidden space-y-4">
+                                <div class="bg-slate-200 p-3 rounded-2xl border border-slate-300 flex justify-center">
+                                    <img id="a4-sheet-preview-img" class="max-h-[420px] w-auto rounded-lg shadow-lg border border-slate-400 bg-white" alt="A4 Aadhaar Sheet">
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button type="button" onclick="printA4SheetNow()" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-print text-base"></i> सीधे A4 प्रिंट करें (Print)
+                                    </button>
+                                    <a id="download-a4-jpg-btn" download="Rupesh_Computers_Aadhaar_A4_Sheet.jpg" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2 cursor-pointer">
+                                        <i class="fa-solid fa-download text-base"></i> A4 शीट (300 DPI JPG) डाउनलोड
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Hidden Print Container for Direct A4 Printing -->
+    <div id="print-area" class="hidden">
+        <img id="print-area-img" src="" alt="Print Sheet">
+    </div>
+
+    <!-- Common Footer -->
+    <footer id="contact-footer" class="bg-slate-950 text-slate-300 py-12 border-t-4 border-amber-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-white text-xl font-black mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-laptop-code text-amber-400"></i> RUPESH COMPUTERS
+                </h3>
+                <p class="text-sm mb-3">सभी डिजिटल, बैंकिंग एवं ऑनलाइन सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
+                <p class="text-xs text-slate-300 mb-3">
+                    <i class="fa-solid fa-envelope text-amber-400 mr-1"></i>
+                    <a href="mailto:help@rupeshcomputers.in" class="hover:text-amber-300 underline" target="_blank" rel="noopener noreferrer">help@rupeshcomputers.in</a>
+                </p>
+                <div class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-lg mb-4">
+                    <i class="fa-regular fa-clock"></i> सोम - शनि: 10:00 AM - 06:00 PM (रविवार बंद)
+                </div>
+
+                <!-- Live Visitor Counter Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 max-w-xs flex items-center justify-between shadow-inner">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">कुल विज़िटर्स (Visitors)</div>
+                            <div id="visitor-count" class="text-base font-black text-amber-400 tracking-wider">14</div>
+                        </div>
+                    </div>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-amber-400"></i> चोंगरीबहार शाखा
+                </h4>
+                <p class="text-sm mb-1.5">मुख्य मार्ग, चोंगरीबहार</p>
+                <p class="text-xs text-slate-300 mb-1.5">मोबाइल / WhatsApp: <a href="tel:6264531630" class="text-amber-300 font-bold" target="_blank" rel="noopener noreferrer">6264531630</a></p>
+                <p class="text-xs text-slate-300 mb-2">ईमेल: <a href="mailto:chongribahar@rupeshcomputers.in" class="text-amber-300" target="_blank" rel="noopener noreferrer">chongribahar@rupeshcomputers.in</a></p>
+                <div class="flex flex-wrap gap-3 text-xs font-bold">
+                    <a href="https://wa.me/916264531630" target="_blank" class="text-emerald-400 hover:underline" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                    <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="text-amber-400 hover:underline" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> गूगल मैप</a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-amber-400"></i> दोकड़ा शाखा
+                </h4>
+                <p class="text-sm mb-1.5">ग्राम - दोकड़ा (मुख्य मार्ग)</p>
+                <p class="text-xs text-slate-300 mb-1.5">मोबाइल / WhatsApp: <a href="tel:9713926390" class="text-amber-300 font-bold" target="_blank" rel="noopener noreferrer">9713926390</a></p>
+                <p class="text-xs text-slate-300 mb-2">ईमेल: <a href="mailto:dokda@rupeshcomputers.in" class="text-amber-300" target="_blank" rel="noopener noreferrer">dokda@rupeshcomputers.in</a></p>
+                <div class="flex flex-wrap gap-3 text-xs font-bold">
+                    <a href="https://wa.me/919713926390" target="_blank" class="text-emerald-400 hover:underline" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                    <a href="https://maps.google.com/?q=Dokda" target="_blank" class="text-amber-400 hover:underline" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> गूगल मैप</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer & Credits -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-center text-xs pb-16 sm:pb-4">
+            <p class="text-slate-400 mb-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800 inline-block max-w-2xl">
+                ⚠️ <b>अस्वीकरण (Disclaimer):</b> इस वेबसाइट पर दी गई सभी सरकारी लिंक और जानकारी केवल सुविधा के लिए हैं। किसी भी त्रुटि या अद्यतन जानकारी के लिए संबंधित विभाग की आधिकारिक वेबसाइट या कार्यालय से पुष्टि अवश्य करें।
+            </p>
+            <p class="text-slate-400 mb-1">© 2026 Rupesh Computers (Chongribahar &amp; Dokda). All rights reserved.</p>
+            <p class="text-amber-400 font-bold tracking-wide">Website Created &amp; Designed by: अविनाश प्रसाद &amp; रूपेश प्रसाद</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Bar -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-3 shadow-lg sm:hidden flex justify-around items-center">
+        <a id="mobile-call-btn" href="tel:6264531630" class="flex items-center gap-1.5 bg-blue-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-solid fa-phone"></i> कॉल करें
+        </a>
+        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+        <button onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Gemini AI
+        </button>
+    </div>
+
+    <!-- AI Chatbot -->
+    <div id="chatbot-container" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end">
+        <div id="chat-window" class="hidden w-[92vw] sm:w-[385px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 mb-3 overflow-hidden flex-col transition-all origin-bottom-right backdrop-blur-xl">
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white p-4 flex justify-between items-center shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center shadow-lg font-bold">
+                        <i class="fa-solid fa-robot text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">
+                            रूपेश AI असिस्टेंट
+                            <span class="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full">✨ Gemini AI</span>
+                        </h4>
+                        <p class="text-[10px] text-amber-300 font-medium flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> स्मार्ट दस्तावेज एवं योजना गाइड
+                        </p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            
+            <div id="chat-messages" class="h-[320px] overflow-y-auto p-4 space-y-3 bg-slate-50/70 text-sm">
+                <div class="flex gap-2.5">
+                    <div class="w-7 h-7 rounded-xl bg-slate-900 shrink-0 flex items-center justify-center mt-1 shadow-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles text-xs text-amber-400"></i>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
+                        नमस्ते! 🙏 मैं <b>रूपेश कंप्यूटर्स (Gemini AI)</b> असिस्टेंट हूँ। आप मुझसे किसी भी प्रमाण पत्र के दस्तावेज, सरकारी योजना, Indane गैस बुकिंग या डिजिटल टूल के बारे में कोई भी सवाल पूछ सकते हैं:
+                        <div class="mt-3 flex flex-col gap-1.5">
+                            <button onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग व पेमेंट नियम
+                            </button>
+                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-emerald-600"></i> डेटा सुरक्षा व विज्ञापन-मुक्त (No Ads)
+                            </button>
+                            <button onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> मोबाइल में ऐप इंस्टॉल कैसे करें?
+                            </button>
+                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-t border-slate-200 bg-white shadow-inner">
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required="" autocomplete="off">
+                    <button type="submit" class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
+            <i class="fa-solid fa-robot group-hover:rotate-12 transition-transform text-amber-300"></i>
+        </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="custom-toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-xs sm:text-sm font-bold px-5 py-3 rounded-2xl shadow-2xl border border-amber-400/50 items-center gap-2">
+        <i class="fa-solid fa-circle-info text-amber-400"></i>
+        <span id="custom-toast-msg"></span>
+    </div>
+
+    <script src="common-layout.js"></script>
+    <script src="tools.js"></script>
+
+    <!-- Aadhaar Smart Print Engine (100% Client-Side, No Server Upload) -->
+    <script>
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        let selectedPdfArrayBuffer = null;
+        let selectedPdfFileName = 'Aadhaar_Card';
+        let fullPageCanvas = null;
+        let aadhaarBatchList = [];
+
+        function handleAadhaarFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            selectedPdfFileName = file.name.replace(/\.pdf$/i, '');
+            document.getElementById('selected-pdf-name').innerHTML = `<span class="text-emerald-700"><i class="fa-solid fa-circle-check"></i> ${file.name}</span>`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedPdfArrayBuffer = e.target.result;
+                unlockAndCropAadhaar(true);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function tryOpenPdfWithPassword(pwd) {
+            const loadingTask = pdfjsLib.getDocument({
+                data: selectedPdfArrayBuffer.slice(0),
+                password: pwd
+            });
+            return await loadingTask.promise;
+        }
+
+        async function unlockAndCropAadhaar(isSilentProbe = false) {
+            const statusEl = document.getElementById('aadhaar-unlock-status');
+            if (!selectedPdfArrayBuffer) {
+                if (!isSilentProbe) {
+                    statusEl.className = 'text-xs font-bold p-2.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200';
+                    statusEl.innerText = 'कृपया पहले ग्राहक की e-Aadhaar PDF फाइल चुनें।';
+                    statusEl.classList.remove('hidden');
+                }
+                return;
+            }
+
+            const rawPwd = (document.getElementById('aadhaar-password').value || '').trim();
+            statusEl.className = 'text-xs font-bold p-2.5 rounded-xl bg-blue-50 text-blue-800 border border-blue-200';
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> PDF को हाई-क्वालिटी (300 DPI) में प्रोसेस किया जा रहा है...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                let pdfDoc = null;
+                // Try uppercase first (Aadhaar standard), then exact typed case
+                const candidates = rawPwd ? Array.from(new Set([rawPwd.toUpperCase(), rawPwd])) : [''];
+                let lastErr = null;
+
+                for (const pwdCandidate of candidates) {
+                    try {
+                        pdfDoc = await tryOpenPdfWithPassword(pwdCandidate);
+                        if (pdfDoc) break;
+                    } catch (e) {
+                        lastErr = e;
+                    }
+                }
+
+                if (!pdfDoc) throw lastErr || new Error('Unable to open PDF');
+
+                const page = await pdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 4.0 });
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = viewport.width;
+                tempCanvas.height = viewport.height;
+                const ctx = tempCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                fullPageCanvas = tempCanvas;
+
+                statusEl.className = 'text-xs font-bold p-2.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200';
+                statusEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> PDF सफलतापूर्वक खुल गई! दाईं ओर लेमिनेशन कार्ड तैयार है।';
+
+                document.getElementById('single-card-empty').classList.add('hidden');
+                document.getElementById('single-card-preview-box').classList.remove('hidden');
+
+                renderCurrentAadhaarCards();
+            } catch (err) {
+                if (isSilentProbe && err && err.name === 'PasswordException') {
+                    statusEl.className = 'text-xs font-bold p-2.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200';
+                    statusEl.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> यह PDF पासवर्ड से सुरक्षित है। कृपया 8 अंकों का पासवर्ड (जैसे: <b>AVIN1996</b>) डालकर <b>"खोलें एवं काटें"</b> दबाएं।';
+                    return;
+                }
+                statusEl.className = 'text-xs font-bold p-2.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200';
+                if (err && err.name === 'PasswordException') {
+                    statusEl.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1"></i> पासवर्ड गलत है। कृपया नाम के पहले 4 अक्षर और जन्म वर्ष (जैसे: AVIN1996) जांचें।';
+                } else {
+                    statusEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> PDF खोलने में त्रुटि: ${err && err.message ? err.message : 'कृपया पुनः प्रयास करें'}`;
+                }
+            }
+        }
+
+        function resetCardAdjustments() {
+            document.getElementById('face-brightness').value = 115;
+            document.getElementById('text-darkness').value = 120;
+            document.getElementById('crop-y').value = 72;
+            document.getElementById('crop-h').value = 21.4;
+            document.getElementById('crop-fx').value = 7.2;
+            document.getElementById('crop-bx').value = 50.2;
+            renderCurrentAadhaarCards();
+        }
+
+        function applyTextDarkness(ctx, w, h, darkPercent, excludeFaceBox = null) {
+            if (darkPercent <= 100) return;
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const d = imgData.data;
+            const strength = (darkPercent - 100) / 100;
+            const gamma = 1 + strength * 1.45;
+
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    if (excludeFaceBox &&
+                        x >= excludeFaceBox.x && x <= excludeFaceBox.x + excludeFaceBox.w &&
+                        y >= excludeFaceBox.y && y <= excludeFaceBox.y + excludeFaceBox.h) {
+                        continue;
+                    }
+                    const idx = (y * w + x) * 4;
+                    const r = d[idx], g = d[idx + 1], b = d[idx + 2];
+                    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+                    if (lum < 215) {
+                        const norm = lum / 215;
+                        const darkened = Math.pow(norm, gamma);
+                        const ratio = norm > 0 ? (darkened / norm) : 0;
+                        d[idx] = Math.max(0, Math.min(255, Math.round(r * ratio)));
+                        d[idx + 1] = Math.max(0, Math.min(255, Math.round(g * ratio)));
+                        d[idx + 2] = Math.max(0, Math.min(255, Math.round(b * ratio)));
+                    }
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function renderCurrentAadhaarCards() {
+            const bright = parseInt(document.getElementById('face-brightness').value, 10);
+            const textDark = parseInt(document.getElementById('text-darkness').value, 10);
+
+            const cropY = parseFloat(document.getElementById('crop-y').value);
+            const cropH = parseFloat(document.getElementById('crop-h').value);
+            const cropFx = parseFloat(document.getElementById('crop-fx').value);
+            const cropBx = parseFloat(document.getElementById('crop-bx').value);
+
+            document.getElementById('face-bright-val').innerText = bright + '%';
+            document.getElementById('text-dark-val').innerText = textDark + '%';
+            document.getElementById('crop-y-val').innerText = cropY + '%';
+            document.getElementById('crop-h-val').innerText = cropH + '%';
+            document.getElementById('crop-fx-val').innerText = cropFx + '%';
+            document.getElementById('crop-bx-val').innerText = cropBx + '%';
+
+            if (!fullPageCanvas) return;
+
+            const pw = fullPageCanvas.width;
+            const ph = fullPageCanvas.height;
+
+            const cardW = 1012;
+            const cardH = 638;
+            const srcW = pw * 0.426;
+            const srcH = ph * (cropH / 100);
+            const srcY = ph * (cropY / 100);
+
+            // 1. Render FRONT card
+            const frontCanvas = document.getElementById('front-card-canvas');
+            frontCanvas.width = cardW;
+            frontCanvas.height = cardH;
+            const fCtx = frontCanvas.getContext('2d');
+            fCtx.fillStyle = '#ffffff';
+            fCtx.fillRect(0, 0, cardW, cardH);
+            fCtx.filter = 'none';
+            fCtx.drawImage(fullPageCanvas, pw * (cropFx / 100), srcY, srcW, srcH, 0, 0, cardW, cardH);
+
+            // Face photo bounding box on Front card
+            const faceBox = {
+                x: Math.round(cardW * 0.052),
+                y: Math.round(cardH * 0.235),
+                w: Math.round(cardW * 0.245),
+                h: Math.round(cardH * 0.525)
+            };
+
+            // Darken text & QR code across Front card (excluding face photo box)
+            applyTextDarkness(fCtx, cardW, cardH, textDark, faceBox);
+
+            // Brighten ONLY the face photo region on the Front card
+            if (bright !== 100) {
+                const srcFaceX = (pw * (cropFx / 100)) + srcW * 0.052;
+                const srcFaceY = srcY + srcH * 0.235;
+                const srcFaceW = srcW * 0.245;
+                const srcFaceH = srcH * 0.525;
+
+                fCtx.save();
+                fCtx.filter = `brightness(${bright}%) contrast(106%) saturate(105%)`;
+                fCtx.drawImage(fullPageCanvas, srcFaceX, srcFaceY, srcFaceW, srcFaceH, faceBox.x, faceBox.y, faceBox.w, faceBox.h);
+                fCtx.restore();
+            }
+
+            // 2. Render BACK card & darken text/QR
+            const backCanvas = document.getElementById('back-card-canvas');
+            backCanvas.width = cardW;
+            backCanvas.height = cardH;
+            const bCtx = backCanvas.getContext('2d');
+            bCtx.fillStyle = '#ffffff';
+            bCtx.fillRect(0, 0, cardW, cardH);
+            bCtx.filter = 'none';
+            bCtx.drawImage(fullPageCanvas, pw * (cropBx / 100), srcY, srcW, srcH, 0, 0, cardW, cardH);
+            applyTextDarkness(bCtx, cardW, cardH, textDark, null);
+        }
+
+        function setJpegDpiHeader(base64DataUrl, dpi) {
+            const binStr = atob(base64DataUrl.split(',')[1]);
+            const len = binStr.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+            if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF && bytes[3] === 0xE0) {
+                bytes[13] = 1;
+                bytes[14] = (dpi >> 8) & 0xFF;
+                bytes[15] = dpi & 0xFF;
+                bytes[16] = (dpi >> 8) & 0xFF;
+                bytes[17] = dpi & 0xFF;
+            }
+            let out = '';
+            for (let i = 0; i < bytes.length; i++) out += String.fromCharCode(bytes[i]);
+            return 'data:image/jpeg;base64,' + btoa(out);
+        }
+
+        function downloadSinglePairImage() {
+            const fCanvas = document.getElementById('front-card-canvas');
+            const bCanvas = document.getElementById('back-card-canvas');
+            if (!fCanvas || !bCanvas) return;
+
+            const pairCanvas = document.createElement('canvas');
+            pairCanvas.width = fCanvas.width * 2 + 60;
+            pairCanvas.height = fCanvas.height + 40;
+            const ctx = pairCanvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, pairCanvas.width, pairCanvas.height);
+
+            ctx.drawImage(fCanvas, 20, 20);
+            ctx.drawImage(bCanvas, fCanvas.width + 40, 20);
+
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 20, fCanvas.width, fCanvas.height);
+            ctx.strokeRect(fCanvas.width + 40, 20, bCanvas.width, bCanvas.height);
+
+            const jpgUrl = setJpegDpiHeader(pairCanvas.toDataURL('image/jpeg', 0.96), 300);
+            const a = document.createElement('a');
+            a.href = jpgUrl;
+            a.download = `${selectedPdfFileName}_Card_300DPI.jpg`;
+            a.click();
+        }
+
+        function addCardToA4Batch() {
+            if (aadhaarBatchList.length >= 5) {
+                alert('एक A4 पेपर पर अधिकतम 5 आधार कार्ड ही जुड़ सकते हैं। कृपया पहले वर्तमान शीट प्रिंट/डाउनलोड करें या खाली करें।');
+                return;
+            }
+            const fCanvas = document.getElementById('front-card-canvas');
+            const bCanvas = document.getElementById('back-card-canvas');
+            if (!fCanvas || !bCanvas) return;
+
+            const pwdHint = (document.getElementById('aadhaar-password').value || '').slice(0, 4).toUpperCase();
+            const label = pwdHint ? `ग्राहक #${aadhaarBatchList.length + 1} (${pwdHint})` : `आधार कार्ड #${aadhaarBatchList.length + 1}`;
+
+            aadhaarBatchList.push({
+                label: label,
+                frontUrl: fCanvas.toDataURL('image/png'),
+                backUrl: bCanvas.toDataURL('image/png')
+            });
+
+            updateBatchUI();
+            rebuildA4PrintSheet();
+        }
+
+        function removeBatchItem(index) {
+            aadhaarBatchList.splice(index, 1);
+            updateBatchUI();
+            rebuildA4PrintSheet();
+        }
+
+        function clearA4Batch() {
+            aadhaarBatchList = [];
+            updateBatchUI();
+            document.getElementById('a4-preview-wrapper').classList.add('hidden');
+        }
+
+        function updateBatchUI() {
+            document.getElementById('batch-count-badge').innerText = aadhaarBatchList.length;
+            const container = document.getElementById('batch-list-container');
+
+            if (aadhaarBatchList.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200">अभी A4 शीट में <b>0 आधार कार्ड</b> जुड़े हैं। आप 1 से लेकर <b>5 ग्राहकों</b> तक के आधार कार्ड एक ही A4 पेपर पर जोड़ सकते हैं।</p>`;
+                return;
+            }
+
+            container.innerHTML = aadhaarBatchList.map((item, idx) => `
+                <div class="flex items-center justify-between bg-blue-50/70 border border-blue-200 px-3.5 py-2 rounded-xl text-xs">
+                    <span class="font-extrabold text-slate-800"><i class="fa-solid fa-id-card text-blue-600 mr-1.5"></i> ${item.label}</span>
+                    <button type="button" onclick="removeBatchItem(${idx})" class="text-rose-600 hover:text-rose-800 font-bold px-2 py-0.5 rounded">
+                        <i class="fa-solid fa-xmark"></i> हटाएं
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function loadImagePromise(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = src;
+            });
+        }
+
+        async function rebuildA4PrintSheet() {
+            if (aadhaarBatchList.length === 0) {
+                document.getElementById('a4-preview-wrapper').classList.add('hidden');
+                return;
+            }
+
+            const a4W = 2480;
+            const a4H = 3508;
+            const sheetCanvas = document.createElement('canvas');
+            sheetCanvas.width = a4W;
+            sheetCanvas.height = a4H;
+            const ctx = sheetCanvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, a4W, a4H);
+
+            const cardW = 1011;
+            const cardH = 638;
+            const centerGap = 36;
+            const totalRowW = cardW * 2 + centerGap;
+            const startX = Math.floor((a4W - totalRowW) / 2);
+            const topMargin = 85;
+            const rowGap = 45;
+
+            const showBorders = document.getElementById('show-cut-guides').checked;
+            const flipBack = document.getElementById('flip-back-side').checked;
+
+            for (let i = 0; i < aadhaarBatchList.length; i++) {
+                const item = aadhaarBatchList[i];
+                const y = topMargin + i * (cardH + rowGap);
+
+                const fImg = await loadImagePromise(item.frontUrl);
+                const bImg = await loadImagePromise(item.backUrl);
+
+                ctx.drawImage(fImg, startX, y, cardW, cardH);
+
+                const backX = startX + cardW + centerGap;
+                if (flipBack) {
+                    ctx.save();
+                    ctx.translate(backX + cardW / 2, y + cardH / 2);
+                    ctx.rotate(Math.PI);
+                    ctx.drawImage(bImg, -cardW / 2, -cardH / 2, cardW, cardH);
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(bImg, backX, y, cardW, cardH);
+                }
+
+                if (showBorders) {
+                    ctx.save();
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([12, 8]);
+                    ctx.strokeRect(startX, y, cardW, cardH);
+                    ctx.strokeRect(backX, y, cardW, cardH);
+                    ctx.restore();
+                }
+            }
+
+            const finalJpgUrl = setJpegDpiHeader(sheetCanvas.toDataURL('image/jpeg', 0.96), 300);
+            document.getElementById('a4-sheet-preview-img').src = finalJpgUrl;
+            document.getElementById('print-area-img').src = finalJpgUrl;
+            document.getElementById('download-a4-jpg-btn').href = finalJpgUrl;
+            document.getElementById('a4-preview-wrapper').classList.remove('hidden');
+        }
+
+        function printA4SheetNow() {
+            const imgSrc = document.getElementById('print-area-img').src;
+            if (!imgSrc) return;
+            window.print();
+        }
+    </script>
+</body>
+</html>
