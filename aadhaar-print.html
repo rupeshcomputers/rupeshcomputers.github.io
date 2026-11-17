@@ -25,15 +25,21 @@
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
-                width: 210mm !important;
-                height: 297mm !important;
+                width: 100vw !important;
+                height: 100vh !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                z-index: 999999 !important;
             }
             #print-area img {
-                width: 210mm !important;
-                height: 297mm !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                width: auto !important;
+                height: auto !important;
                 object-fit: contain !important;
             }
         }
@@ -240,19 +246,27 @@
                                 </p>
                             </div>
 
-                            <!-- Crop Fine-Tune Controls -->
-                            <details class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+                            <!-- Customization & Crop Fine-Tune Controls -->
+                            <details class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5" open>
                                 <summary class="text-xs font-extrabold text-slate-800 cursor-pointer flex items-center justify-between">
-                                    <span><i class="fa-solid fa-crop-simple text-blue-600 mr-1.5"></i> कार्ड कटिंग (Crop) को ऊपर-नीचे या बाएं-दाएं एडजस्ट करें</span>
+                                    <span><i class="fa-solid fa-sliders text-blue-600 mr-1.5"></i> कार्ड साइज व कटिंग कस्टमाइज़ेशन (Customization)</span>
                                     <i class="fa-solid fa-chevron-down text-slate-400"></i>
                                 </summary>
                                 <div class="mt-3 pt-3 border-t border-slate-200 grid grid-cols-2 gap-3 text-xs">
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">कार्ड चौड़ाई (Width): <span id="card-w-val" class="text-blue-700">1012 px</span></label>
+                                        <input type="range" id="custom-card-w" min="900" max="1150" step="10" value="1012" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-600 mb-1">कार्ड ऊँचाई (Height): <span id="card-h-val" class="text-blue-700">638 px</span></label>
+                                        <input type="range" id="custom-card-h" min="550" max="750" step="10" value="638" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
+                                    </div>
                                     <div>
                                         <label class="block font-bold text-slate-600 mb-1">ऊपर-नीचे (Vertical Y %): <span id="crop-y-val" class="text-blue-700">72%</span></label>
                                         <input type="range" id="crop-y" min="62" max="76" step="0.2" value="72" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
                                     </div>
                                     <div>
-                                        <label class="block font-bold text-slate-600 mb-1">कार्ड की ऊँचाई (Height %): <span id="crop-h-val" class="text-blue-700">21.4%</span></label>
+                                        <label class="block font-bold text-slate-600 mb-1">क्रॉप ऊँचाई (Height %): <span id="crop-h-val" class="text-blue-700">21.4%</span></label>
                                         <input type="range" id="crop-h" min="19" max="27" step="0.2" value="21.4" oninput="renderCurrentAadhaarCards()" class="w-full accent-blue-600">
                                     </div>
                                     <div>
@@ -337,6 +351,27 @@
                                     <input type="checkbox" id="flip-back-side" onchange="rebuildA4PrintSheet()" class="w-4 h-4 accent-blue-600">
                                     Back हिस्से को 180° घुमाएं (मोड़कर लेमिनेशन के लिए)
                                 </label>
+                            </div>
+
+                            <!-- New: Card Size Customization Sliders for A4 Batch Sheet -->
+                            <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 mb-4 space-y-2 text-xs">
+                                <div class="font-extrabold text-amber-950 flex items-center justify-between">
+                                    <span><i class="fa-solid fa-ruler-combined text-amber-600 mr-1.5"></i> लेमिनेशन पाउच के अनुसार कार्ड साइज कस्टमाइज़ करें:</span>
+                                    <span id="sheet-size-label" class="text-amber-700 font-black">1012px × 638px</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 pt-1">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">कार्ड चौड़ाई (Width):</label>
+                                        <input type="range" id="sheet-card-w" min="900" max="1150" step="5" value="1012" oninput="onSheetCardDimensionChange()" class="w-full accent-amber-600 cursor-pointer">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">कार्ड ऊँचाई (Height):</label>
+                                        <input type="range" id="sheet-card-h" min="550" max="750" step="5" value="638" oninput="onSheetCardDimensionChange()" class="w-full accent-amber-600 cursor-pointer">
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-slate-600">
+                                    <i class="fa-solid fa-circle-info text-amber-600"></i> यदि लेमिनेशन पाउच छोटा या बड़ा हो, तो यहाँ से साइज एडजस्ट करके तुरंत नया A4 लेआउट देख सकते हैं।
+                                </p>
                             </div>
 
                             <!-- Live A4 Preview Canvas -->
@@ -686,6 +721,8 @@
         function resetCardAdjustments() {
             document.getElementById('face-brightness').value = 115;
             document.getElementById('text-darkness').value = 120;
+            document.getElementById('custom-card-w').value = 1012;
+            document.getElementById('custom-card-h').value = 638;
             document.getElementById('crop-y').value = 72;
             document.getElementById('crop-h').value = 21.4;
             document.getElementById('crop-fx').value = 7.2;
@@ -728,6 +765,9 @@
             const bright = parseInt(document.getElementById('face-brightness').value, 10);
             const textDark = parseInt(document.getElementById('text-darkness').value, 10);
 
+            const cardW = parseInt(document.getElementById('custom-card-w').value, 10);
+            const cardH = parseInt(document.getElementById('custom-card-h').value, 10);
+
             const cropY = parseFloat(document.getElementById('crop-y').value);
             const cropH = parseFloat(document.getElementById('crop-h').value);
             const cropFx = parseFloat(document.getElementById('crop-fx').value);
@@ -735,6 +775,8 @@
 
             document.getElementById('face-bright-val').innerText = bright + '%';
             document.getElementById('text-dark-val').innerText = textDark + '%';
+            document.getElementById('card-w-val').innerText = cardW + ' px';
+            document.getElementById('card-h-val').innerText = cardH + ' px';
             document.getElementById('crop-y-val').innerText = cropY + '%';
             document.getElementById('crop-h-val').innerText = cropH + '%';
             document.getElementById('crop-fx-val').innerText = cropFx + '%';
@@ -745,9 +787,6 @@
             const pw = fullPageCanvas.width;
             const ph = fullPageCanvas.height;
 
-            // Updated to exact 300 DPI standard Lamination Card dimensions (1012 x 638 pixels = 8.5cm x 5.4cm)
-            const cardW = 1012;
-            const cardH = 638;
             const srcW = pw * 0.435;
             const srcH = ph * (cropH / 100);
             const srcY = ph * (cropY / 100);
@@ -896,6 +935,21 @@
             `).join('');
         }
 
+        function onSheetCardDimensionChange() {
+            const w = document.getElementById('sheet-card-w').value;
+            const h = document.getElementById('sheet-card-h').value;
+            const lbl = document.getElementById('sheet-size-label');
+            if (lbl) lbl.innerText = `${w}px × ${h}px`;
+            
+            // Sync with main card w/h if needed
+            const mainW = document.getElementById('custom-card-w');
+            const mainH = document.getElementById('custom-card-h');
+            if (mainW) mainW.value = w;
+            if (mainH) mainH.value = h;
+
+            rebuildA4PrintSheet();
+        }
+
         function loadImagePromise(src) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -920,9 +974,8 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, a4W, a4H);
 
-            // Standard card size on A4 sheet at 300 DPI
-            const cardW = 1012;
-            const cardH = 638;
+            const cardW = parseInt(document.getElementById('sheet-card-w').value, 10);
+            const cardH = parseInt(document.getElementById('sheet-card-h').value, 10);
             const centerGap = 36;
             const totalRowW = cardW * 2 + centerGap;
             const startX = Math.floor((a4W - totalRowW) / 2);
@@ -972,7 +1025,10 @@
 
         function printA4SheetNow() {
             const imgSrc = document.getElementById('print-area-img').src;
-            if (!imgSrc) return;
+            if (!imgSrc) {
+                showToolToast('कृपया पहले A4 प्रिंट शीट तैयार करें।');
+                return;
+            }
             window.print();
         }
     </script>
