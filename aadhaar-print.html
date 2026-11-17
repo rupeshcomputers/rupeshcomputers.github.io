@@ -16,6 +16,8 @@
         body { font-family: 'Inter', sans-serif; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .bot-float { animation: float 3s ease-in-out infinite; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @media print {
             body * { visibility: hidden !important; }
             #print-area, #print-area * { visibility: visible !important; }
@@ -39,8 +41,109 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- Common Header & Navigation (Loaded from common-layout.js) -->
-    <div id="site-header"></div>
+    <!-- Common Header & Navigation (Matches Live rupeshcomputers.in) -->
+    <div id="site-header">
+        <!-- 1. Top Notice Ticker Bar -->
+        <div class="bg-[#172554] text-white text-xs py-2 border-b border-blue-900/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-3">
+                <span class="bg-amber-500 text-slate-950 font-black text-[11px] px-2.5 py-0.5 rounded-md shrink-0 shadow-sm">सुचना</span>
+                <div class="overflow-hidden whitespace-nowrap flex-1 font-medium text-blue-100">
+                    <marquee behavior="scroll" direction="left" scrollamount="5">
+                        🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क बैंकिंग, आय-जाति-निवास प्रमाण पत्र, आयुष्मान कार्ड, पैन कार्ड एवं सभी ऑनलाइन फॉर्म के लिए संपर्क करें।
+                    </marquee>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Main Brand & Branch Switcher Bar -->
+        <div class="bg-white border-b border-slate-200 py-3.5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-none">RUPESH COMPUTERS</div>
+                        <div class="text-xs font-bold text-blue-600 mt-1">चोंगरीबहार &amp; दोकड़ा शाखा</div>
+                    </div>
+                </a>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="index.html#pwa-app" class="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-full shadow-sm transition">
+                        <i class="fa-solid fa-download"></i> ऐप इंस्टॉल करें
+                    </a>
+                    <button type="button" id="branch-btn-chongribahar" onclick="selectHeaderBranch('chongribahar')" class="bg-blue-600 text-white font-extrabold text-xs px-4 py-2.5 rounded-full shadow-sm transition cursor-pointer">
+                        चोंगरीबहार
+                    </button>
+                    <button type="button" id="branch-btn-dokda" onclick="selectHeaderBranch('dokda')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold text-xs px-4 py-2.5 rounded-full transition cursor-pointer">
+                        दोकड़ा
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Dark Navigation & All Tools Pill Bar -->
+        <nav class="bg-[#0f172a] text-slate-200 py-2.5 border-b border-slate-800 sticky top-0 z-30 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                <a href="index.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-house text-slate-300"></i> होम
+                </a>
+                <a href="services.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-layer-group text-amber-400"></i> सेवाएँ
+                </a>
+                <a href="aadhaar-print.html" class="shrink-0 inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 text-xs font-black px-4 py-2 rounded-full shadow-sm transition">
+                    <i class="fa-solid fa-id-card text-slate-900"></i> Aadhaar Print
+                </a>
+                <a href="lpg-booking.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-fire-flame-simple text-orange-400"></i> Indane गैस बुकिंग
+                </a>
+                <a href="pdf-tool.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-file-pdf text-rose-400"></i> JPEG to PDF
+                </a>
+                <a href="passport-tool.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-id-badge text-indigo-400"></i> पासपोर्ट फोटो
+                </a>
+                <a href="dob-tool.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-cake-candles text-purple-400"></i> DOB Calculator
+                </a>
+                <a href="scanner-tool.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-barcode text-emerald-400"></i> Barcode Reader
+                </a>
+                <a href="hindi-tool.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-language text-pink-400"></i> Hindi Typing &amp; Kruti Dev
+                </a>
+                <a href="pwa-app.html" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-mobile-screen-button text-amber-300"></i> मोबाइल ऐप
+                </a>
+                <a href="#contact-footer" class="shrink-0 inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition">
+                    <i class="fa-solid fa-location-dot text-emerald-400"></i> शाखाएँ
+                </a>
+            </div>
+        </nav>
+
+        <!-- 4. Selected Branch Info & Quick Contact Strip -->
+        <div class="bg-[#0b1739] text-white text-xs py-2 border-b border-blue-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="bg-amber-400 text-slate-950 font-black text-[11px] px-2.5 py-0.5 rounded-md">चयनित शाखा</span>
+                    <span id="selected-branch-name" class="font-extrabold text-amber-300">चोंगरीबहार शाखा</span>
+                    <span class="text-slate-500 hidden sm:inline">|</span>
+                    <span id="selected-branch-address" class="text-slate-200">मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="header-call-link" href="tel:6264531630" class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded-full transition">
+                        <i class="fa-solid fa-phone"></i> <span id="header-phone-text">6264531630</span>
+                    </a>
+                    <a id="header-wa-link" href="https://wa.me/916264531630" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1 rounded-full transition">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a id="header-map-link" href="https://maps.google.com/?q=Chongribahar" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-3 py-1 rounded-full border border-slate-700 transition">
+                        <i class="fa-solid fa-location-dot"></i> लोकेशन
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN PAGE CONTENT (aadhaar-print.html) -->
     <main class="min-h-[65vh]">
@@ -337,10 +440,10 @@
         <a id="mobile-call-btn" href="tel:6264531630" class="flex items-center gap-1.5 bg-blue-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-phone"></i> कॉल करें
         </a>
-        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
-        <button onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+        <button type="button" onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Gemini AI
         </button>
     </div>
@@ -363,7 +466,7 @@
                         </p>
                     </div>
                 </div>
-                <button onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                <button type="button" onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
                     <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
@@ -376,16 +479,16 @@
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
                         नमस्ते! 🙏 मैं <b>रूपेश कंप्यूटर्स (Gemini AI)</b> असिस्टेंट हूँ। आप मुझसे किसी भी प्रमाण पत्र के दस्तावेज, सरकारी योजना, Indane गैस बुकिंग या डिजिटल टूल के बारे में कोई भी सवाल पूछ सकते हैं:
                         <div class="mt-3 flex flex-col gap-1.5">
-                            <button onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग व पेमेंट नियम
                             </button>
-                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-shield-halved text-emerald-600"></i> डेटा सुरक्षा व विज्ञापन-मुक्त (No Ads)
                             </button>
-                            <button onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> मोबाइल में ऐप इंस्टॉल कैसे करें?
                             </button>
-                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
                             </button>
                         </div>
@@ -395,7 +498,7 @@
 
             <div class="p-3 border-t border-slate-200 bg-white shadow-inner">
                 <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
-                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required="" autocomplete="off">
+                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required autocomplete="off">
                     <button type="submit" class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
@@ -403,7 +506,7 @@
             </div>
         </div>
 
-        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
+        <button type="button" onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
             <i class="fa-solid fa-robot group-hover:rotate-12 transition-transform text-amber-300"></i>
         </button>
     </div>
@@ -413,6 +516,70 @@
         <i class="fa-solid fa-circle-info text-amber-400"></i>
         <span id="custom-toast-msg"></span>
     </div>
+
+    <script>
+        function showToolToast(message) {
+            if (typeof window.showToast === 'function') {
+                window.showToast(message);
+                return;
+            }
+            const toast = document.getElementById('custom-toast');
+            const msgEl = document.getElementById('custom-toast-msg');
+            if (toast && msgEl) {
+                msgEl.textContent = message;
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                clearTimeout(window.__toolToastTimer);
+                window.__toolToastTimer = setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3200);
+            }
+        }
+
+        window.selectHeaderBranch = function(branch) {
+            const isChongri = branch === 'chongribahar';
+            const btnC = document.getElementById('branch-btn-chongribahar');
+            const btnD = document.getElementById('branch-btn-dokda');
+            const nameEl = document.getElementById('selected-branch-name');
+            const addrEl = document.getElementById('selected-branch-address');
+            const callLink = document.getElementById('header-call-link');
+            const phoneText = document.getElementById('header-phone-text');
+            const waLink = document.getElementById('header-wa-link');
+            const mapLink = document.getElementById('header-map-link');
+            const mobCall = document.getElementById('mobile-call-btn');
+            const mobWa = document.getElementById('mobile-wa-btn');
+
+            if (btnC && btnD) {
+                btnC.className = isChongri
+                    ? 'bg-blue-600 text-white font-extrabold text-xs px-4 py-2.5 rounded-full shadow-sm transition cursor-pointer'
+                    : 'bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold text-xs px-4 py-2.5 rounded-full transition cursor-pointer';
+                btnD.className = !isChongri
+                    ? 'bg-blue-600 text-white font-extrabold text-xs px-4 py-2.5 rounded-full shadow-sm transition cursor-pointer'
+                    : 'bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold text-xs px-4 py-2.5 rounded-full transition cursor-pointer';
+            }
+
+            if (isChongri) {
+                if (nameEl) nameEl.textContent = 'चोंगरीबहार शाखा';
+                if (addrEl) addrEl.textContent = 'मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)';
+                if (callLink) callLink.href = 'tel:6264531630';
+                if (phoneText) phoneText.textContent = '6264531630';
+                if (waLink) waLink.href = 'https://wa.me/916264531630';
+                if (mapLink) mapLink.href = 'https://maps.google.com/?q=Chongribahar';
+                if (mobCall) mobCall.href = 'tel:6264531630';
+                if (mobWa) mobWa.href = 'https://wa.me/916264531630';
+            } else {
+                if (nameEl) nameEl.textContent = 'दोकड़ा शाखा';
+                if (addrEl) addrEl.textContent = 'ग्राम - दोकड़ा, मुख्य मार्ग (जशपुर, छ.ग.)';
+                if (callLink) callLink.href = 'tel:9713926390';
+                if (phoneText) phoneText.textContent = '9713926390';
+                if (waLink) waLink.href = 'https://wa.me/919713926390';
+                if (mapLink) mapLink.href = 'https://maps.google.com/?q=Dokda';
+                if (mobCall) mobCall.href = 'tel:9713926390';
+                if (mobWa) mobWa.href = 'https://wa.me/919713926390';
+            }
+        };
+    </script>
 
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
@@ -468,7 +635,6 @@
 
             try {
                 let pdfDoc = null;
-                // Try uppercase first (Aadhaar standard), then exact typed case
                 const candidates = rawPwd ? Array.from(new Set([rawPwd.toUpperCase(), rawPwd])) : [''];
                 let lastErr = null;
 
@@ -579,9 +745,10 @@
             const pw = fullPageCanvas.width;
             const ph = fullPageCanvas.height;
 
+            // Updated to exact 300 DPI standard Lamination Card dimensions (1012 x 638 pixels = 8.5cm x 5.4cm)
             const cardW = 1012;
             const cardH = 638;
-            const srcW = pw * 0.426;
+            const srcW = pw * 0.435;
             const srcH = ph * (cropH / 100);
             const srcY = ph * (cropY / 100);
 
@@ -595,7 +762,7 @@
             fCtx.filter = 'none';
             fCtx.drawImage(fullPageCanvas, pw * (cropFx / 100), srcY, srcW, srcH, 0, 0, cardW, cardH);
 
-            // Face photo bounding box on Front card (Expanded to cover full photo area without edge gaps)
+            // Face photo bounding box on Front card
             const faceBox = {
                 x: Math.round(cardW * 0.038),
                 y: Math.round(cardH * 0.195),
@@ -677,7 +844,7 @@
 
         function addCardToA4Batch() {
             if (aadhaarBatchList.length >= 5) {
-                alert('एक A4 पेपर पर अधिकतम 5 आधार कार्ड ही जुड़ सकते हैं। कृपया पहले वर्तमान शीट प्रिंट/डाउनलोड करें या खाली करें।');
+                showToolToast('एक A4 पेपर पर अधिकतम 5 आधार कार्ड ही जुड़ सकते हैं। कृपया पहले वर्तमान शीट प्रिंट/डाउनलोड करें या खाली करें।');
                 return;
             }
             const fCanvas = document.getElementById('front-card-canvas');
@@ -695,6 +862,7 @@
 
             updateBatchUI();
             rebuildA4PrintSheet();
+            showToolToast(`${label} A4 प्रिंट शीट में जुड़ गया है (${aadhaarBatchList.length}/5)!`);
         }
 
         function removeBatchItem(index) {
@@ -752,13 +920,14 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, a4W, a4H);
 
-            const cardW = 1011;
+            // Standard card size on A4 sheet at 300 DPI
+            const cardW = 1012;
             const cardH = 638;
             const centerGap = 36;
             const totalRowW = cardW * 2 + centerGap;
             const startX = Math.floor((a4W - totalRowW) / 2);
-            const topMargin = 85;
-            const rowGap = 45;
+            const topMargin = 95;
+            const rowGap = 50;
 
             const showBorders = document.getElementById('show-cut-guides').checked;
             const flipBack = document.getElementById('flip-back-side').checked;
