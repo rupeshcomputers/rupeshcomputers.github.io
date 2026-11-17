@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JPEG to PDF & Photo KB Resizer - RUPESH COMPUTERS</title>
+    <title>ऑल-इन-वन PDF एवं फोटो स्टूडियो - RUPESH COMPUTERS</title>
     <meta name="theme-color" content="#1e3a8a">
     <link rel="manifest" id="pwa-manifest-link">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- PDF-Lib & PDF.js for 100% Client-Side Offline PDF Processing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-card { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); }
@@ -24,76 +26,442 @@
 
     <!-- MAIN PAGE CONTENT (pdf-tool.html) -->
     <main class="min-h-[65vh]">
-        <section id="pdf-tool" class="page-section page-fade py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-10">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-rose-700 bg-rose-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-file-pdf"></i> PDF एवं फोटो साइज टूल
+        <section id="pdf-tool" class="page-section page-fade py-10 sm:py-14 bg-gradient-to-b from-rose-50/60 via-slate-100 to-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-rose-700 bg-rose-100 border border-rose-200 px-3.5 py-1.5 rounded-full mb-3">
+                        <i class="fa-solid fa-file-pdf"></i> CSC ऑल-इन-वन PDF एवं डॉक्यूमेंट स्टूडियो
                     </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF &amp; Photo KB Resizer</h2>
-                    <p class="mt-2 text-slate-600 text-sm">बिना किसी ऐप के सीधे अपने फोन में दस्तावेजों की PDF बनाएं और फोटो/सिग्नेचर का KB कम करें।</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">JPEG to PDF, PDF Merge, Compress &amp; KB Resizer</h2>
+                    <p class="mt-2 text-slate-600 text-xs sm:text-sm">
+                        सेवा सेतु (e-District), छात्रवृत्ति, राशन कार्ड व सरकारी फॉर्म के लिए फोटो से PDF बनाएं, कई PDF जोड़ें, PDF का साइज (KB) कम करें और फोटो/सिग्नेचर रिसाइज़ करें।
+                    </p>
+                    <div class="mt-3 inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-900 px-3.5 py-1.5 rounded-xl text-xs font-bold">
+                        <i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% सुरक्षित — कोई भी फाइल किसी सर्वर पर अपलोड नहीं होती
+                    </div>
                 </div>
 
-                <!-- Image to PDF Card -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm mb-8">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                            <i class="fa-regular fa-images"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-black text-slate-900">Photo(s) से PDF बनाएं</h3>
-                            <p class="text-xs sm:text-sm text-slate-500">आय, जाति, निवास के दस्तावेजों को एक PDF में जोड़ें</p>
-                        </div>
-                    </div>
+                <!-- 5-Tool Quick Navigation Pills -->
+                <div class="flex flex-wrap justify-center gap-2 mb-8">
+                    <button type="button" onclick="switchPdfTab('img2pdf')" id="ptab-img2pdf" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black bg-blue-600 text-white shadow-md transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> 1. Docs Scanner &amp; PDF
+                    </button>
+                    <button type="button" onclick="switchPdfTab('idcard')" id="ptab-idcard" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-id-card-clip text-sky-600"></i> 2. ID कार्ड (Front+Back)
+                    </button>
+                    <button type="button" onclick="switchPdfTab('merge')" id="ptab-merge" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-object-group text-indigo-600"></i> 3. PDF जोड़ें (Merge)
+                    </button>
+                    <button type="button" onclick="switchPdfTab('compress')" id="ptab-compress" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-zipper text-amber-600"></i> 4. PDF साइज (KB) कम करें
+                    </button>
+                    <button type="button" onclick="switchPdfTab('pdf2jpg')" id="ptab-pdf2jpg" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-export text-purple-600"></i> 5. PDF से JPG निकालें
+                    </button>
+                    <button type="button" onclick="switchPdfTab('resizer')" id="ptab-resizer" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-compress text-emerald-600"></i> 6. फोटो / Sign KB कम करें
+                    </button>
+                </div>
 
-                    <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-8 text-center hover:bg-blue-50 transition cursor-pointer mb-4" onclick="document.getElementById('img2pdf-input').click()">
-                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 mb-3"></i>
-                        <h4 class="font-bold text-slate-800">यहाँ क्लिक करके फोटो (JPG/PNG) चुनें</h4>
-                        <p class="text-xs text-slate-500 mt-1">एक साथ कई फोटो चुन सकते हैं</p>
-                        <input type="file" id="img2pdf-input" accept="image/*" multiple="" class="hidden" onchange="handleImgSelection(event)">
-                    </div>
-
-                    <div id="pdf-preview-container" class="hidden flex-col gap-4">
-                        <h4 class="font-bold text-sm text-slate-700">चुनी गई फोटो (रिव्यू करें):</h4>
-                        <div id="pdf-image-list" class="flex flex-wrap gap-3"></div>
-                        <button type="button" onclick="generatePdf()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-md">
-                            PDF बनाएं और डाउनलोड करें
+                <!-- ========================================================= -->
+                <!-- TOOL 1: DOCS TO PDF SCANNER (MAGIC SCAN FILTER + REORDER) -->
+                <!-- ========================================================= -->
+                <div id="panel-img2pdf" class="pdf-panel bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900">Docs Scanner &amp; Photo to PDF (असली स्कैन जैसा लुक)</h3>
+                                <p class="text-xs sm:text-sm text-slate-500">मोबाइल से खींची गई फोटो की परछाई व पीलापन हटाकर एकदम स्कैनर जैसी साफ PDF बनाएं</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="clearImg2PdfList()" id="btn-clear-img2pdf" class="hidden text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition">
+                            <i class="fa-solid fa-trash-can"></i> सभी पेज हटाएं
                         </button>
                     </div>
-                    <div id="img2pdf-status" class="mt-4 hidden text-sm font-semibold text-center text-green-700 bg-green-50 py-3 rounded-xl border border-green-200"></div>
+
+                    <div class="border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-2xl p-7 text-center hover:bg-blue-50 transition cursor-pointer mb-5" onclick="document.getElementById('img2pdf-input').click()">
+                        <i class="fa-solid fa-camera text-4xl text-blue-500 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 text-sm sm:text-base">यहाँ क्लिक करके दस्तावेज की फोटो (JPG / PNG) चुनें या कैमरे से खींचें</h4>
+                        <p class="text-xs text-slate-500 mt-1">एक साथ कई पेज चुन सकते हैं — Magic Scan अपने आप कागज को सफेद और अक्षर को गहरा कर देगा</p>
+                        <input type="file" id="img2pdf-input" accept="image/*" multiple class="hidden" onchange="handleAdvancedImgSelection(event)">
+                    </div>
+
+                    <div id="pdf-preview-container" class="hidden space-y-5">
+                        <!-- Magic Document Scanner Mode Bar -->
+                        <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-sky-50 border border-blue-200 rounded-2xl p-4 space-y-3">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs font-black text-blue-950 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i> स्कैनर फिल्टर मोड (Docs Scan Effect):
+                                </span>
+                                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">लाइव प्रीव्यू सक्रिय</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" onclick="setDocScanMode('magic-color', this)" class="scan-mode-btn ring-2 ring-blue-600 bg-blue-600 text-white font-black py-2 px-3 rounded-xl text-xs shadow-sm transition">
+                                    <i class="fa-solid fa-sparkles"></i> Magic Color Scan
+                                </button>
+                                <button type="button" onclick="setDocScanMode('bw-doc', this)" class="scan-mode-btn bg-white border border-slate-300 text-slate-800 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-100 transition">
+                                    <i class="fa-solid fa-file-lines"></i> B&amp;W (काला-सफेद)
+                                </button>
+                                <button type="button" onclick="setDocScanMode('grayscale', this)" class="scan-mode-btn bg-white border border-slate-300 text-slate-800 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-100 transition">
+                                    <i class="fa-solid fa-circle-half-stroke"></i> Grayscale साफ
+                                </button>
+                                <button type="button" onclick="setDocScanMode('original', this)" class="scan-mode-btn bg-white border border-slate-300 text-slate-800 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-100 transition">
+                                    <i class="fa-regular fa-image"></i> Original (मूल फोटो)
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+                                        <span>कागज की सफेदी (Paper Whiteness):</span>
+                                        <span id="scan-white-val" class="text-blue-700 font-black">135%</span>
+                                    </div>
+                                    <input type="range" id="scan-whiteness" min="100" max="185" value="135" oninput="applyScanEffectToAllPreviews()" class="w-full accent-blue-600 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+                                        <span>लिखावट का कालापन (Text Contrast):</span>
+                                        <span id="scan-contrast-val" class="text-blue-700 font-black">140%</span>
+                                    </div>
+                                    <input type="range" id="scan-contrast" min="100" max="210" value="140" oninput="applyScanEffectToAllPreviews()" class="w-full accent-indigo-600 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 class="font-extrabold text-sm text-slate-800">तैयार स्कैन पेज (<span id="img2pdf-count">0</span> पेज) — क्रम या दिशा बदलें:</h4>
+                            <button type="button" onclick="document.getElementById('img2pdf-input').click()" class="text-xs font-bold bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1.5 rounded-xl transition">
+                                <i class="fa-solid fa-plus"></i> और फोटो जोड़ें
+                            </button>
+                        </div>
+
+                        <!-- Reorderable & Rotatable Page Cards -->
+                        <div id="pdf-image-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+
+                        <!-- PDF Output Settings -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">पेज साइज (Page Format):</label>
+                                <select id="img2pdf-page-size" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="a4" selected>A4 पोर्ट्रेट (सरकारी फॉर्म के लिए Best)</option>
+                                    <option value="fit">फोटो के मूल साइज के अनुसार (Auto Fit)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">PDF क्वालिटी व साइज (Target Size):</label>
+                                <select id="img2pdf-quality" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="0.88">हाई क्वालिटी (प्रिंट के लिए स्पष्ट)</option>
+                                    <option value="0.65" selected>मीडियम (पोर्टल अपलोड - कम KB)</option>
+                                    <option value="0.40">लो साइज (200 KB - 500 KB के अंदर)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">फाइल का नाम (PDF Name):</label>
+                                <input type="text" id="img2pdf-filename" value="Rupesh_Scanned_Document" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="generateAdvancedPdf()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-2xl text-sm transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-base"></i> स्कैन की हुई PDF बनाएं और डाउनलोड करें
+                        </button>
+                    </div>
+                    <div id="img2pdf-status" class="mt-4 hidden text-xs sm:text-sm font-bold text-center text-emerald-800 bg-emerald-50 py-3 px-4 rounded-xl border border-emerald-200"></div>
                 </div>
 
-                <!-- Photo / Signature KB Resizer Card -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                <!-- ========================================================= -->
+                <!-- TOOL 2: SMART ID CARD MAKER (FRONT + BACK SIDE-BY-SIDE)   -->
+                <!-- ========================================================= -->
+                <div id="panel-idcard" class="pdf-panel hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-id-card-clip"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900">ID कार्ड मेकर (Front + Back एक ही पेज पर)</h3>
+                                <p class="text-xs sm:text-sm text-slate-500">वोटर कार्ड, ड्राइविंग लाइसेंस, आयुष्मान, श्रम कार्ड या पैन कार्ड की आगे-पीछे की फोटो खींचें और अगल-बगल सेट करें</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="resetIdCardMaker()" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-rotate-left"></i> नया कार्ड शुरू करें
+                        </button>
+                    </div>
+
+                    <!-- Front & Back Upload Boxes -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                        <!-- Front Side Upload -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black uppercase bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-md">1. आगे का हिस्सा (Front Side)</span>
+                                <div class="flex gap-1">
+                                    <button type="button" onclick="rotateIdSide('front')" class="text-xs font-bold bg-white border border-slate-300 hover:bg-slate-100 px-2.5 py-1 rounded-lg" title="90° घुमाएं">
+                                        <i class="fa-solid fa-rotate-right"></i> घुमाएं
+                                    </button>
+                                </div>
+                            </div>
+                            <div onclick="document.getElementById('id-front-input').click()" class="border-2 border-dashed border-sky-300 bg-white hover:bg-sky-50/60 rounded-xl p-5 text-center cursor-pointer transition min-h-[160px] flex flex-col items-center justify-center">
+                                <div id="id-front-placeholder">
+                                    <i class="fa-solid fa-camera text-3xl text-sky-600 mb-2"></i>
+                                    <div class="text-xs font-extrabold text-slate-800">Front फोटो चुनें या कैमरे से खींचें</div>
+                                    <p class="text-[11px] text-slate-500 mt-0.5">कार्ड का सामने वाला हिस्सा</p>
+                                </div>
+                                <img id="id-front-thumb" class="hidden max-h-36 rounded-lg border border-slate-300 shadow-sm object-contain" alt="Front Preview">
+                                <input type="file" id="id-front-input" accept="image/*" class="hidden" onchange="handleIdCardUpload('front', event)">
+                            </div>
+                        </div>
+
+                        <!-- Back Side Upload -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-md">2. पीछे का हिस्सा (Back Side)</span>
+                                <div class="flex gap-1">
+                                    <button type="button" onclick="rotateIdSide('back')" class="text-xs font-bold bg-white border border-slate-300 hover:bg-slate-100 px-2.5 py-1 rounded-lg" title="90° घुमाएं">
+                                        <i class="fa-solid fa-rotate-right"></i> घुमाएं
+                                    </button>
+                                </div>
+                            </div>
+                            <div onclick="document.getElementById('id-back-input').click()" class="border-2 border-dashed border-emerald-300 bg-white hover:bg-emerald-50/60 rounded-xl p-5 text-center cursor-pointer transition min-h-[160px] flex flex-col items-center justify-center">
+                                <div id="id-back-placeholder">
+                                    <i class="fa-solid fa-camera text-3xl text-emerald-600 mb-2"></i>
+                                    <div class="text-xs font-extrabold text-slate-800">Back फोटो चुनें या कैमरे से खींचें</div>
+                                    <p class="text-[11px] text-slate-500 mt-0.5">कार्ड का पीछे वाला हिस्सा</p>
+                                </div>
+                                <img id="id-back-thumb" class="hidden max-h-36 rounded-lg border border-slate-300 shadow-sm object-contain" alt="Back Preview">
+                                <input type="file" id="id-back-input" accept="image/*" class="hidden" onchange="handleIdCardUpload('back', event)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Option Layout, Scan Filter & Size Settings -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-700 mb-1">A4 पेज पर सेटिंग (Layout):</label>
+                                <select id="id-layout-mode" onchange="renderIdCardSheet()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-sky-500">
+                                    <option value="side-by-side" selected>अगल-बगल (Side by Side - Top)</option>
+                                    <option value="top-bottom">ऊपर-नीचे (Top &amp; Bottom)</option>
+                                    <option value="center-side">पेज के बीचों-बीच (Center Side-by-Side)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-700 mb-1">स्कैन क्लैरिटी (Scan Filter):</label>
+                                <select id="id-scan-filter" onchange="renderIdCardSheet()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-sky-500">
+                                    <option value="magic" selected>Magic Scan (सफेद कागज + साफ रंग)</option>
+                                    <option value="bright">केवल Brightness बढ़ाएं (+20%)</option>
+                                    <option value="bw">काला-सफेद (B&amp;W Copy लुक)</option>
+                                    <option value="none">Original (बिना बदलाव)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-700 mb-1">कार्ड का साइज (Card Size):</label>
+                                <select id="id-card-size" onchange="renderIdCardSheet()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-sky-500">
+                                    <option value="standard" selected>असली PVC कार्ड साइज (8.6 × 5.4 cm)</option>
+                                    <option value="large">बड़ा साइज (स्पष्ट पढ़ने के लिए - 10 × 6.4 cm)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-700 mb-1">बॉर्डर लाइन (Cut Guide):</label>
+                                <select id="id-border-mode" onchange="renderIdCardSheet()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-sky-500">
+                                    <option value="solid" selected>पतला काला बॉर्डर (Solid Border)</option>
+                                    <option value="dashed">कैंची कटिंग लाइन (Dashed Border)</option>
+                                    <option value="none">बिना बॉर्डर (No Border)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="renderIdCardSheet(true)" class="w-full bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-black py-3 rounded-xl text-xs sm:text-sm shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-id-card"></i> ID कार्ड A4 शीट तैयार करें
+                        </button>
+                    </div>
+
+                    <!-- Live A4 Preview & Download/Print Buttons -->
+                    <div id="id-sheet-result" class="hidden space-y-4">
+                        <div class="bg-slate-200 p-4 rounded-2xl border border-slate-300 flex justify-center">
+                            <img id="id-sheet-preview-img" class="max-h-[430px] w-auto rounded-lg shadow-lg border border-slate-400 bg-white" alt="ID Card A4 Preview">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button type="button" onclick="downloadIdCardAsPdf()" class="bg-rose-600 hover:bg-rose-700 text-white font-black py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-lg shadow-rose-500/20 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-pdf text-base"></i> A4 PDF डाउनलोड करें
+                            </button>
+                            <a id="id-sheet-download-jpg" download="Rupesh_ID_Card_A4.jpg" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-image text-base"></i> A4 JPG (300 DPI) डाउनलोड
+                            </a>
+                            <button type="button" onclick="printIdCardSheetNow()" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 px-4 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-500/20 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-print text-base"></i> सीधे प्रिंट करें (Print)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TOOL 3: MERGE MULTIPLE PDF FILES INTO ONE                 -->
+                <!-- ========================================================= -->
+                <div id="panel-merge" class="pdf-panel hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                     <div class="flex items-center gap-3 mb-5">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-object-group"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">कई PDF फाइलों को एक में जोड़ें (Merge PDF)</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">आय, जाति, निवास, शपथ पत्र व अन्य PDF फाइलों को मिलाकर एक सिंगल PDF बनाएं</p>
+                        </div>
+                    </div>
+
+                    <div class="border-2 border-dashed border-indigo-300 bg-indigo-50/50 rounded-2xl p-7 text-center hover:bg-indigo-50 transition cursor-pointer mb-5" onclick="document.getElementById('merge-pdf-input').click()">
+                        <i class="fa-solid fa-file-circle-plus text-4xl text-indigo-600 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 text-sm sm:text-base">यहाँ क्लिक करके 2 या अधिक PDF फाइलें चुनें</h4>
+                        <p class="text-xs text-slate-500 mt-1">आप क्रम बदलकर सभी PDF को एक साथ जोड़ सकते हैं</p>
+                        <input type="file" id="merge-pdf-input" accept="application/pdf" multiple class="hidden" onchange="handleMergePdfSelect(event)">
+                    </div>
+
+                    <div id="merge-pdf-list" class="space-y-2 mb-5"></div>
+
+                    <div id="merge-pdf-actions" class="hidden space-y-3">
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                            <div>
+                                <label class="block text-xs font-extrabold text-slate-700 mb-1">मर्ज PDF का DPI एवं साइज (DPI / Quality):</label>
+                                <select id="merge-pdf-dpi" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="original" selected>मूल क्वालिटी (Original DPI - बिना बदलाव)</option>
+                                    <option value="300">300 DPI (High Quality Print)</option>
+                                    <option value="200">200 DPI (Standard Portal - संतुलित KB)</option>
+                                    <option value="150">150 DPI (Medium - कम KB साइज)</option>
+                                    <option value="100">100 DPI (Compact - सबसे कम KB)</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-wrap gap-2 sm:justify-end pt-1 sm:pt-4">
+                                <button type="button" onclick="document.getElementById('merge-pdf-input').click()" class="bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold px-3.5 py-2 rounded-xl text-xs transition">
+                                    <i class="fa-solid fa-plus"></i> और PDF जोड़ें
+                                </button>
+                                <button type="button" onclick="clearMergePdfList()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3.5 py-2 rounded-xl text-xs transition">
+                                    <i class="fa-solid fa-trash"></i> सूची साफ करें
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="executeMergePdfs()" class="w-full bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-2xl text-sm shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-object-group"></i> सभी PDF को जोड़कर डाउनलोड करें
+                        </button>
+                    </div>
+                    <div id="merge-pdf-status" class="mt-4 hidden text-xs sm:text-sm font-bold text-center p-3 rounded-xl"></div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TOOL 3: COMPRESS PDF TO TARGET KB                         -->
+                <!-- ========================================================= -->
+                <div id="panel-compress" class="pdf-panel hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-file-zipper"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">PDF का साइज (KB / MB) कम करें (Compress PDF)</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">सरकारी पोर्टल पर अपलोड करने के लिए बड़ी PDF फाइल को 200 KB, 300 KB या 500 KB के अंदर लाएं</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-2xl p-7 text-center hover:bg-amber-50 transition cursor-pointer" onclick="document.getElementById('compress-pdf-input').click()">
+                            <i class="fa-solid fa-file-pdf text-4xl text-amber-600 mb-2"></i>
+                            <h4 id="compress-pdf-name" class="font-bold text-slate-800 text-sm">यहाँ क्लिक करके PDF फाइल चुनें</h4>
+                            <p id="compress-pdf-orig-size" class="text-xs text-slate-500 mt-1">किसी भी स्कैन की हुई PDF का साइज कम करें</p>
+                            <input type="file" id="compress-pdf-input" accept="application/pdf" class="hidden" onchange="handleCompressPdfSelect(event)">
+                        </div>
+
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+                            <div>
+                                <label class="block text-xs font-extrabold text-slate-700 mb-1.5">कम्प्रेशन लेवल चुनें (Compression Level):</label>
+                                <select id="compress-level" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs sm:text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-amber-500">
+                                    <option value="medium" selected>संतुलित (अच्छी लिखावट + कम साइज - Recommended)</option>
+                                    <option value="high">अधिकतम कम्प्रेशन (सबसे कम KB साइज के लिए)</option>
+                                    <option value="light">हल्का कम्प्रेशन (हाई क्लैरिटी के साथ साइज घटाएं)</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="executeCompressPdf()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black py-3 rounded-xl text-sm shadow transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-compress"></i> PDF साइज कम करें और डाउनलोड करें
+                            </button>
+                        </div>
+                    </div>
+                    <div id="compress-pdf-status" class="mt-4 hidden text-xs sm:text-sm font-bold text-center p-3 rounded-xl"></div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TOOL 4: PDF TO JPG IMAGES EXTRACTOR                       -->
+                <!-- ========================================================= -->
+                <div id="panel-pdf2jpg" class="pdf-panel hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-file-export"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-slate-900">PDF के पेजों को फोटो (JPG) में बदलें</h3>
+                            <p class="text-xs sm:text-sm text-slate-500">किसी भी PDF दस्तावेज या रसीद के हर पेज को साफ JPG फोटो बनाकर डाउनलोड करें</p>
+                        </div>
+                    </div>
+
+                    <div class="border-2 border-dashed border-purple-300 bg-purple-50/50 rounded-2xl p-7 text-center hover:bg-purple-50 transition cursor-pointer mb-5" onclick="document.getElementById('pdf2jpg-input').click()">
+                        <i class="fa-solid fa-images text-4xl text-purple-600 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 text-sm sm:text-base">यहाँ क्लिक करके PDF फाइल चुनें</h4>
+                        <p class="text-xs text-slate-500 mt-1">सभी पेज नीचे JPG फोटो के रूप में खुल जाएंगे</p>
+                        <input type="file" id="pdf2jpg-input" accept="application/pdf" class="hidden" onchange="executePdfToJpg(event)">
+                    </div>
+
+                    <div id="pdf2jpg-status" class="hidden text-xs font-bold text-center p-3 rounded-xl mb-4"></div>
+                    <div id="pdf2jpg-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TOOL 5: PHOTO / SIGNATURE KB & DIMENSION RESIZER          -->
+                <!-- ========================================================= -->
+                <div id="panel-resizer" class="pdf-panel hidden bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-compress"></i>
                         </div>
                         <div>
                             <h3 class="text-xl font-black text-slate-900">फोटो / सिग्नेचर का Size (KB) कम करें</h3>
-                            <p class="text-xs sm:text-sm text-slate-500">ऑनलाइन फॉर्म के लिए फोटो को 20KB, 40KB या 50KB के अंदर करें</p>
+                            <p class="text-xs sm:text-sm text-slate-500">ऑनलाइन फॉर्म के लिए फोटो को 20KB, 40KB, 50KB या 100KB के अंदर करें</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-8 text-center hover:bg-emerald-50 transition cursor-pointer" onclick="document.getElementById('resizer-input').click()">
+                        <div class="border-2 border-dashed border-emerald-300 bg-emerald-50/50 rounded-2xl p-8 text-center hover:bg-emerald-50 transition cursor-pointer flex flex-col items-center justify-center" onclick="document.getElementById('resizer-input').click()">
                             <i class="fa-regular fa-image text-4xl text-emerald-500 mb-3"></i>
-                            <h4 class="font-bold text-slate-800">फोटो चुनें</h4>
-                            <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="previewImageToResize(event)">
+                            <h4 id="resizer-file-label" class="font-bold text-slate-800">फोटो या सिग्नेचर चुनें</h4>
+                            <p class="text-xs text-slate-500 mt-1">JPG, PNG या WebP इमेज चुनें</p>
+                            <input type="file" id="resizer-input" accept="image/*" class="hidden" onchange="handleSmartResizePreview(event)">
                         </div>
 
-                        <div id="resize-controls" class="hidden flex-col justify-center gap-4 p-5 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए? (लगभग)</label>
-                                <input type="number" id="target-kb" value="40" min="5" max="2000" class="w-full border border-slate-300 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                        <div id="resize-controls" class="flex flex-col justify-center gap-4 p-5 border border-slate-200 rounded-2xl bg-slate-50 shadow-sm">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">कितना Size (KB) चाहिए?</label>
+                                    <input type="number" id="target-kb" value="40" min="5" max="2000" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">त्वरित प्रीसेट (Quick KB):</label>
+                                    <select onchange="if(this.value) document.getElementById('target-kb').value=this.value" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                                        <option value="20">20 KB (Sign / PAN)</option>
+                                        <option value="40" selected>40 KB (Photo / Form)</option>
+                                        <option value="50">50 KB (SSC / Govt)</option>
+                                        <option value="100">100 KB (Document)</option>
+                                        <option value="200">200 KB (Certificate)</option>
+                                    </select>
+                                </div>
                             </div>
-                            <button type="button" onclick="resizeImage()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow">
-                                Size कम करें (Compress)
+                            <button type="button" onclick="executeSmartImageResize()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-sm transition shadow">
+                                Size कम करें और डाउनलोड तैयार करें
                             </button>
                         </div>
                     </div>
-                    <div id="resize-result" class="mt-4"></div>
+                    <div id="resize-result" class="mt-5"></div>
                 </div>
+
             </div>
         </section>
     </main>
@@ -250,5 +618,882 @@
 
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
+
+    <!-- All-in-One Client-Side PDF & Document Studio Engine -->
+    <script>
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        // Tab Switcher
+        function switchPdfTab(tabKey) {
+            document.querySelectorAll('.pdf-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('panel-' + tabKey).classList.remove('hidden');
+
+            const tabs = ['img2pdf', 'idcard', 'merge', 'compress', 'pdf2jpg', 'resizer'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('ptab-' + t);
+                if (!btn) return;
+                if (t === tabKey) {
+                    btn.className = 'px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black bg-blue-600 text-white shadow-md transition flex items-center gap-1.5';
+                } else {
+                    btn.className = 'px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 transition flex items-center gap-1.5';
+                }
+            });
+        }
+
+        // =========================================================================
+        // 1. DOCS SCANNER & PHOTO(S) TO PDF (MAGIC SCAN FILTER + REORDER + ROTATE)
+        // =========================================================================
+        let img2pdfPages = []; // { id, name, origDataUrl, scannedDataUrl, rotation }
+        let currentDocScanMode = 'magic-color';
+
+        function setDocScanMode(mode, btnEl) {
+            currentDocScanMode = mode;
+            document.querySelectorAll('.scan-mode-btn').forEach(b => {
+                b.className = 'scan-mode-btn bg-white border border-slate-300 text-slate-800 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-100 transition';
+            });
+            btnEl.className = 'scan-mode-btn ring-2 ring-blue-600 bg-blue-600 text-white font-black py-2 px-3 rounded-xl text-xs shadow-sm transition';
+            applyScanEffectToAllPreviews();
+        }
+
+        function processDocumentScanFilter(dataUrl, mode, whitenessPercent, contrastPercent) {
+            return new Promise((resolve) => {
+                if (mode === 'original' && whitenessPercent === 100 && contrastPercent === 100) {
+                    resolve(dataUrl);
+                    return;
+                }
+                const img = new Image();
+                img.onload = function() {
+                    const maxDim = 1800;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        const s = maxDim / Math.max(w, h);
+                        w = Math.round(w * s);
+                        h = Math.round(h * s);
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+
+                    if (mode === 'original') {
+                        resolve(canvas.toDataURL('image/jpeg', 0.92));
+                        return;
+                    }
+
+                    const imgData = ctx.getImageData(0, 0, w, h);
+                    const d = imgData.data;
+
+                    // Estimate paper background brightness from top/outer edges
+                    let bgSum = 0, bgCount = 0;
+                    for (let x = 0; x < w; x += 4) {
+                        const iTop = x * 4;
+                        bgSum += (d[iTop] + d[iTop + 1] + d[iTop + 2]) / 3;
+                        bgCount++;
+                    }
+                    const estPaperLum = Math.max(130, Math.min(245, bgSum / Math.max(1, bgCount)));
+                    const whiteGain = (255 / estPaperLum) * (whitenessPercent / 125);
+                    const contrastFactor = contrastPercent / 100;
+
+                    for (let i = 0; i < d.length; i += 4) {
+                        let r = d[i] * whiteGain;
+                        let g = d[i + 1] * whiteGain;
+                        let b = d[i + 2] * whiteGain;
+
+                        // Apply S-curve contrast around mid-tones so ink pops & paper turns pure white
+                        r = ((r / 255 - 0.5) * contrastFactor + 0.5) * 255;
+                        g = ((g / 255 - 0.5) * contrastFactor + 0.5) * 255;
+                        b = ((b / 255 - 0.5) * contrastFactor + 0.5) * 255;
+
+                        r = Math.max(0, Math.min(255, r));
+                        g = Math.max(0, Math.min(255, g));
+                        b = Math.max(0, Math.min(255, b));
+
+                        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+                        if (mode === 'bw-doc') {
+                            // Crisp Black & White Document Scan (like Xerox / Flatbed Scanner)
+                            if (lum > 182) {
+                                d[i] = 255; d[i + 1] = 255; d[i + 2] = 255;
+                            } else {
+                                const dark = Math.max(0, Math.round(lum * 0.45));
+                                d[i] = dark; d[i + 1] = dark; d[i + 2] = dark;
+                            }
+                        } else if (mode === 'grayscale') {
+                            const gray = lum > 215 ? 255 : Math.round(lum);
+                            d[i] = gray; d[i + 1] = gray; d[i + 2] = gray;
+                        } else {
+                            // Magic Color Scan: Pure white paper + rich colored stamps & ink
+                            if (lum > 212 && Math.max(r, g, b) - Math.min(r, g, b) < 28) {
+                                d[i] = 255; d[i + 1] = 255; d[i + 2] = 255;
+                            } else {
+                                // Boost color saturation slightly for stamps & blue ink
+                                const avg = (r + g + b) / 3;
+                                d[i] = Math.max(0, Math.min(255, Math.round(avg + (r - avg) * 1.25)));
+                                d[i + 1] = Math.max(0, Math.min(255, Math.round(avg + (g - avg) * 1.25)));
+                                d[i + 2] = Math.max(0, Math.min(255, Math.round(avg + (b - avg) * 1.25)));
+                            }
+                        }
+                    }
+
+                    ctx.putImageData(imgData, 0, 0);
+                    resolve(canvas.toDataURL('image/jpeg', 0.92));
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        async function applyScanEffectToAllPreviews() {
+            const wVal = parseInt(document.getElementById('scan-whiteness').value, 10);
+            const cVal = parseInt(document.getElementById('scan-contrast').value, 10);
+            document.getElementById('scan-white-val').innerText = wVal + '%';
+            document.getElementById('scan-contrast-val').innerText = cVal + '%';
+
+            for (let i = 0; i < img2pdfPages.length; i++) {
+                img2pdfPages[i].scannedDataUrl = await processDocumentScanFilter(
+                    img2pdfPages[i].origDataUrl,
+                    currentDocScanMode,
+                    wVal,
+                    cVal
+                );
+            }
+            renderImg2PdfGallery();
+        }
+
+        function handleAdvancedImgSelection(event) {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) return;
+
+            let loaded = 0;
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const orig = e.target.result;
+                    const wVal = parseInt(document.getElementById('scan-whiteness').value, 10);
+                    const cVal = parseInt(document.getElementById('scan-contrast').value, 10);
+                    const scanned = await processDocumentScanFilter(orig, currentDocScanMode, wVal, cVal);
+
+                    img2pdfPages.push({
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        origDataUrl: orig,
+                        scannedDataUrl: scanned,
+                        rotation: 0
+                    });
+                    loaded++;
+                    if (loaded === files.length) {
+                        renderImg2PdfGallery();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = '';
+        }
+
+        function renderImg2PdfGallery() {
+            const container = document.getElementById('pdf-preview-container');
+            const listEl = document.getElementById('pdf-image-list');
+            const countEl = document.getElementById('img2pdf-count');
+            const clearBtn = document.getElementById('btn-clear-img2pdf');
+
+            countEl.innerText = img2pdfPages.length;
+            if (img2pdfPages.length === 0) {
+                container.classList.add('hidden');
+                clearBtn.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            clearBtn.classList.remove('hidden');
+
+            listEl.innerHTML = img2pdfPages.map((item, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 flex flex-col justify-between shadow-sm">
+                    <div class="flex items-center justify-between text-[11px] font-black text-slate-700 mb-1.5">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">पेज ${idx + 1}</span>
+                        <button type="button" onclick="removeImg2PdfPage(${idx})" class="text-rose-600 hover:text-rose-800 px-1" title="हटाएं">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="h-36 bg-white rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden p-1 mb-2">
+                        <img src="${item.scannedDataUrl || item.origDataUrl}" style="transform: rotate(${item.rotation}deg);" class="max-h-full max-w-full object-contain transition-transform">
+                    </div>
+                    <div class="flex items-center justify-between gap-1">
+                        <button type="button" onclick="moveImg2PdfPage(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="flex-1 bg-white hover:bg-slate-200 disabled:opacity-40 border border-slate-300 rounded-lg py-1 text-xs font-bold" title="बाएं / ऊपर">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <button type="button" onclick="rotateImg2PdfPage(${idx})" class="flex-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 rounded-lg py-1 text-xs font-bold" title="90° घुमाएं">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                        <button type="button" onclick="moveImg2PdfPage(${idx}, 1)" ${idx === img2pdfPages.length - 1 ? 'disabled' : ''} class="flex-1 bg-white hover:bg-slate-200 disabled:opacity-40 border border-slate-300 rounded-lg py-1 text-xs font-bold" title="दाएं / नीचे">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function moveImg2PdfPage(idx, dir) {
+            const newIdx = idx + dir;
+            if (newIdx < 0 || newIdx >= img2pdfPages.length) return;
+            const temp = img2pdfPages[idx];
+            img2pdfPages[idx] = img2pdfPages[newIdx];
+            img2pdfPages[newIdx] = temp;
+            renderImg2PdfGallery();
+        }
+
+        function rotateImg2PdfPage(idx) {
+            img2pdfPages[idx].rotation = (img2pdfPages[idx].rotation + 90) % 360;
+            renderImg2PdfGallery();
+        }
+
+        function removeImg2PdfPage(idx) {
+            img2pdfPages.splice(idx, 1);
+            renderImg2PdfGallery();
+        }
+
+        function clearImg2PdfList() {
+            img2pdfPages = [];
+            renderImg2PdfGallery();
+            document.getElementById('img2pdf-status').classList.add('hidden');
+        }
+
+        function renderRotatedJpegBytes(dataUrl, rotation, quality) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    const isSwapped = rotation === 90 || rotation === 270;
+                    const maxDim = quality <= 0.4 ? 1240 : (quality <= 0.65 ? 1650 : 2200);
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        const scale = maxDim / Math.max(w, h);
+                        w = Math.round(w * scale);
+                        h = Math.round(h * scale);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = isSwapped ? h : w;
+                    canvas.height = isSwapped ? w : h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate((rotation * Math.PI) / 180);
+                    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+
+                    const jpegDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const bin = atob(jpegDataUrl.split(',')[1]);
+                    const bytes = new Uint8Array(bin.length);
+                    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+                    resolve({ bytes, width: canvas.width, height: canvas.height });
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        async function generateAdvancedPdf() {
+            if (img2pdfPages.length === 0) return;
+            const statusEl = document.getElementById('img2pdf-status');
+            statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center text-blue-800 bg-blue-50 py-3 px-4 rounded-xl border border-blue-200';
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> PDF तैयार की जा रही है, कृपया प्रतीक्षा करें...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+                const pageSizeMode = document.getElementById('img2pdf-page-size').value;
+                const quality = parseFloat(document.getElementById('img2pdf-quality').value);
+                const rawName = (document.getElementById('img2pdf-filename').value || 'Rupesh_Computers_Document').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
+
+                for (const item of img2pdfPages) {
+                    const processed = await renderRotatedJpegBytes(item.scannedDataUrl || item.origDataUrl, item.rotation, quality);
+                    const jpgImage = await pdfDoc.embedJpg(processed.bytes);
+
+                    if (pageSizeMode === 'a4') {
+                        // A4 size in PDF points: 595.28 x 841.89
+                        const page = pdfDoc.addPage([595.28, 841.89]);
+                        const margin = 24;
+                        const maxW = 595.28 - margin * 2;
+                        const maxH = 841.89 - margin * 2;
+                        const scale = Math.min(maxW / processed.width, maxH / processed.height);
+                        const drawW = processed.width * scale;
+                        const drawH = processed.height * scale;
+                        page.drawImage(jpgImage, {
+                            x: (595.28 - drawW) / 2,
+                            y: (841.89 - drawH) / 2,
+                            width: drawW,
+                            height: drawH
+                        });
+                    } else {
+                        const page = pdfDoc.addPage([processed.width, processed.height]);
+                        page.drawImage(jpgImage, { x: 0, y: 0, width: processed.width, height: processed.height });
+                    }
+                }
+
+                const pdfBytes = await pdfDoc.save();
+                const finalKb = Math.round(pdfBytes.byteLength / 1024);
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${rawName}_${finalKb}KB.pdf`;
+                a.click();
+
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center text-emerald-800 bg-emerald-50 py-3 px-4 rounded-xl border border-emerald-200';
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> सफलता! ${img2pdfPages.length} पेज की PDF (${finalKb} KB) डाउनलोड हो गई है।`;
+            } catch (err) {
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center text-rose-700 bg-rose-50 py-3 px-4 rounded-xl border border-rose-200';
+                statusEl.innerText = 'PDF बनाने में त्रुटि आई, कृपया पुनः प्रयास करें।';
+            }
+        }
+
+        // =========================================================================
+        // 2. SMART ID CARD MAKER (FRONT + BACK SIDE-BY-SIDE ON A4)
+        // =========================================================================
+        let idCardState = {
+            frontUrl: null,
+            backUrl: null,
+            frontRot: 0,
+            backRot: 0,
+            sheetJpgUrl: null
+        };
+
+        function handleIdCardUpload(side, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (side === 'front') {
+                    idCardState.frontUrl = e.target.result;
+                    idCardState.frontRot = 0;
+                    document.getElementById('id-front-placeholder').classList.add('hidden');
+                    const thumb = document.getElementById('id-front-thumb');
+                    thumb.src = e.target.result;
+                    thumb.style.transform = 'rotate(0deg)';
+                    thumb.classList.remove('hidden');
+                } else {
+                    idCardState.backUrl = e.target.result;
+                    idCardState.backRot = 0;
+                    document.getElementById('id-back-placeholder').classList.add('hidden');
+                    const thumb = document.getElementById('id-back-thumb');
+                    thumb.src = e.target.result;
+                    thumb.style.transform = 'rotate(0deg)';
+                    thumb.classList.remove('hidden');
+                }
+                if (idCardState.frontUrl || idCardState.backUrl) {
+                    renderIdCardSheet(false);
+                }
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function rotateIdSide(side) {
+            if (side === 'front' && idCardState.frontUrl) {
+                idCardState.frontRot = (idCardState.frontRot + 90) % 360;
+                document.getElementById('id-front-thumb').style.transform = `rotate(${idCardState.frontRot}deg)`;
+                renderIdCardSheet(false);
+            } else if (side === 'back' && idCardState.backUrl) {
+                idCardState.backRot = (idCardState.backRot + 90) % 360;
+                document.getElementById('id-back-thumb').style.transform = `rotate(${idCardState.backRot}deg)`;
+                renderIdCardSheet(false);
+            }
+        }
+
+        function resetIdCardMaker() {
+            idCardState = { frontUrl: null, backUrl: null, frontRot: 0, backRot: 0, sheetJpgUrl: null };
+            document.getElementById('id-front-placeholder').classList.remove('hidden');
+            document.getElementById('id-front-thumb').classList.add('hidden');
+            document.getElementById('id-back-placeholder').classList.remove('hidden');
+            document.getElementById('id-back-thumb').classList.add('hidden');
+            document.getElementById('id-sheet-result').classList.add('hidden');
+        }
+
+        function prepareRotatedFilteredCardCanvas(dataUrl, rotation, filterMode) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = async function() {
+                    const isSwapped = rotation === 90 || rotation === 270;
+                    const temp = document.createElement('canvas');
+                    temp.width = isSwapped ? img.height : img.width;
+                    temp.height = isSwapped ? img.width : img.height;
+                    const tCtx = temp.getContext('2d');
+                    tCtx.fillStyle = '#ffffff';
+                    tCtx.fillRect(0, 0, temp.width, temp.height);
+                    tCtx.translate(temp.width / 2, temp.height / 2);
+                    tCtx.rotate((rotation * Math.PI) / 180);
+                    tCtx.drawImage(img, -img.width / 2, -img.height / 2);
+
+                    const rotUrl = temp.toDataURL('image/jpeg', 0.95);
+                    if (filterMode === 'magic') {
+                        const scanned = await processDocumentScanFilter(rotUrl, 'magic-color', 130, 128);
+                        const outImg = new Image();
+                        outImg.onload = () => resolve(outImg);
+                        outImg.src = scanned;
+                    } else if (filterMode === 'bw') {
+                        const scanned = await processDocumentScanFilter(rotUrl, 'bw-doc', 135, 145);
+                        const outImg = new Image();
+                        outImg.onload = () => resolve(outImg);
+                        outImg.src = scanned;
+                    } else if (filterMode === 'bright') {
+                        const bCanvas = document.createElement('canvas');
+                        bCanvas.width = temp.width;
+                        bCanvas.height = temp.height;
+                        const bCtx = bCanvas.getContext('2d');
+                        bCtx.filter = 'brightness(120%) contrast(112%)';
+                        bCtx.drawImage(temp, 0, 0);
+                        const outImg = new Image();
+                        outImg.onload = () => resolve(outImg);
+                        outImg.src = bCanvas.toDataURL('image/jpeg', 0.95);
+                    } else {
+                        resolve(temp);
+                    }
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        async function renderIdCardSheet(showAlertIfEmpty = false) {
+            if (!idCardState.frontUrl && !idCardState.backUrl) {
+                if (showAlertIfEmpty) alert('कृपया पहले ID कार्ड का कम से कम एक हिस्सा (Front या Back) अपलोड करें।');
+                return;
+            }
+
+            const layout = document.getElementById('id-layout-mode').value;
+            const filterMode = document.getElementById('id-scan-filter').value;
+            const sizeMode = document.getElementById('id-card-size').value;
+            const borderMode = document.getElementById('id-border-mode').value;
+
+            // A4 at 300 DPI = 2480 x 3508 px
+            const a4W = 2480;
+            const a4H = 3508;
+            const canvas = document.createElement('canvas');
+            canvas.width = a4W;
+            canvas.height = a4H;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, a4W, a4H);
+
+            // Standard CR80 PVC ID Card at 300 DPI: 1015 x 640 px (or Large: 1180 x 745 px)
+            const cardW = sizeMode === 'large' ? 1140 : 1015;
+            const cardH = sizeMode === 'large' ? 720 : 640;
+
+            const frontSource = idCardState.frontUrl ? await prepareRotatedFilteredCardCanvas(idCardState.frontUrl, idCardState.frontRot, filterMode) : null;
+            const backSource = idCardState.backUrl ? await prepareRotatedFilteredCardCanvas(idCardState.backUrl, idCardState.backRot, filterMode) : null;
+
+            let fX, fY, bX, bY;
+            if (layout === 'top-bottom') {
+                fX = Math.floor((a4W - cardW) / 2);
+                fY = 140;
+                bX = fX;
+                bY = fY + cardH + 70;
+            } else if (layout === 'center-side') {
+                const gap = 50;
+                fX = Math.floor((a4W - (cardW * 2 + gap)) / 2);
+                fY = Math.floor((a4H - cardH) / 2);
+                bX = fX + cardW + gap;
+                bY = fY;
+            } else {
+                // side-by-side at top (Best for A4 printing & saving paper)
+                const gap = 50;
+                fX = Math.floor((a4W - (cardW * 2 + gap)) / 2);
+                fY = 140;
+                bX = fX + cardW + gap;
+                bY = 140;
+            }
+
+            const drawCardBox = (source, x, y) => {
+                if (!source) return;
+                ctx.drawImage(source, x, y, cardW, cardH);
+                if (borderMode !== 'none') {
+                    ctx.save();
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 3;
+                    if (borderMode === 'dashed') ctx.setLineDash([14, 10]);
+                    ctx.strokeRect(x, y, cardW, cardH);
+                    ctx.restore();
+                }
+            };
+
+            drawCardBox(frontSource, fX, fY);
+            drawCardBox(backSource, bX, bY);
+
+            const jpgUrl = canvas.toDataURL('image/jpeg', 0.96);
+            idCardState.sheetJpgUrl = jpgUrl;
+            document.getElementById('id-sheet-preview-img').src = jpgUrl;
+            document.getElementById('id-sheet-download-jpg').href = jpgUrl;
+            document.getElementById('id-sheet-result').classList.remove('hidden');
+        }
+
+        async function downloadIdCardAsPdf() {
+            if (!idCardState.sheetJpgUrl) return;
+            const { PDFDocument } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
+            const page = pdfDoc.addPage([595.28, 841.89]); // A4 points
+
+            const bin = atob(idCardState.sheetJpgUrl.split(',')[1]);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+
+            const jpgImg = await pdfDoc.embedJpg(bytes);
+            page.drawImage(jpgImg, { x: 0, y: 0, width: 595.28, height: 841.89 });
+
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Rupesh_ID_Card_A4_Print.pdf';
+            a.click();
+        }
+
+        function printIdCardSheetNow() {
+            if (!idCardState.sheetJpgUrl) return;
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html><head><title>Print ID Card - RUPESH COMPUTERS</title>
+                <style>@page{size:A4;margin:0;} body{margin:0;background:#fff;} img{width:210mm;height:297mm;object-fit:contain;display:block;}</style>
+                </head><body><img src="${idCardState.sheetJpgUrl}" onload="window.print();window.close();"></body></html>
+            `);
+            win.document.close();
+        }
+
+        // =========================================================================
+        // 3. MERGE MULTIPLE PDF FILES
+        // =========================================================================
+        let mergePdfFiles = [];
+
+        function handleMergePdfSelect(event) {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) return;
+            files.forEach(f => mergePdfFiles.push(f));
+            renderMergePdfList();
+            event.target.value = '';
+        }
+
+        function renderMergePdfList() {
+            const listEl = document.getElementById('merge-pdf-list');
+            const actionsEl = document.getElementById('merge-pdf-actions');
+
+            if (mergePdfFiles.length === 0) {
+                listEl.innerHTML = '';
+                actionsEl.classList.add('hidden');
+                return;
+            }
+
+            actionsEl.classList.remove('hidden');
+            listEl.innerHTML = mergePdfFiles.map((f, idx) => `
+                <div class="flex items-center justify-between bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-xs">
+                    <div class="flex items-center gap-2 truncate">
+                        <span class="bg-indigo-600 text-white font-black px-2 py-0.5 rounded">${idx + 1}</span>
+                        <i class="fa-solid fa-file-pdf text-rose-600 text-base"></i>
+                        <span class="font-bold text-slate-800 truncate">${f.name}</span>
+                        <span class="text-slate-400">(${Math.round(f.size / 1024)} KB)</span>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button type="button" onclick="moveMergePdf(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="px-2 py-1 bg-white border border-slate-300 rounded-lg disabled:opacity-40"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button type="button" onclick="moveMergePdf(${idx}, 1)" ${idx === mergePdfFiles.length - 1 ? 'disabled' : ''} class="px-2 py-1 bg-white border border-slate-300 rounded-lg disabled:opacity-40"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button type="button" onclick="removeMergePdf(${idx})" class="px-2 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-lg"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function moveMergePdf(idx, dir) {
+            const n = idx + dir;
+            if (n < 0 || n >= mergePdfFiles.length) return;
+            const tmp = mergePdfFiles[idx];
+            mergePdfFiles[idx] = mergePdfFiles[n];
+            mergePdfFiles[n] = tmp;
+            renderMergePdfList();
+        }
+
+        function removeMergePdf(idx) {
+            mergePdfFiles.splice(idx, 1);
+            renderMergePdfList();
+        }
+
+        function clearMergePdfList() {
+            mergePdfFiles = [];
+            renderMergePdfList();
+            document.getElementById('merge-pdf-status').classList.add('hidden');
+        }
+
+        async function executeMergePdfs() {
+            if (mergePdfFiles.length < 2) {
+                alert('कृपया जोड़ने के लिए कम से कम 2 PDF फाइलें चुनें।');
+                return;
+            }
+            const dpiSetting = document.getElementById('merge-pdf-dpi').value;
+            const statusEl = document.getElementById('merge-pdf-status');
+            statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-blue-50 text-blue-800 border border-blue-200';
+            statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> सभी PDF फाइलें (${dpiSetting === 'original' ? 'Original DPI' : dpiSetting + ' DPI'}) में जोड़ी जा रही हैं...`;
+            statusEl.classList.remove('hidden');
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+
+                if (dpiSetting === 'original') {
+                    for (const file of mergePdfFiles) {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdf = await PDFDocument.load(arrayBuffer);
+                        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                        copiedPages.forEach((page) => mergedPdf.addPage(page));
+                    }
+                } else {
+                    const targetDpi = parseInt(dpiSetting, 10) || 200;
+                    const renderScale = targetDpi / 72;
+                    const jpegQuality = targetDpi >= 300 ? 0.90 : (targetDpi >= 200 ? 0.78 : (targetDpi >= 150 ? 0.64 : 0.48));
+
+                    for (const file of mergePdfFiles) {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const srcPdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                        for (let p = 1; p <= srcPdf.numPages; p++) {
+                            const page = await srcPdf.getPage(p);
+                            const baseViewport = page.getViewport({ scale: 1.0 });
+                            const renderViewport = page.getViewport({ scale: renderScale });
+
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.round(renderViewport.width);
+                            canvas.height = Math.round(renderViewport.height);
+                            const ctx = canvas.getContext('2d');
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+
+                            const jpgUrl = canvas.toDataURL('image/jpeg', jpegQuality);
+                            const bin = atob(jpgUrl.split(',')[1]);
+                            const bytes = new Uint8Array(bin.length);
+                            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+
+                            const embeddedImg = await mergedPdf.embedJpg(bytes);
+                            const newPage = mergedPdf.addPage([baseViewport.width, baseViewport.height]);
+                            newPage.drawImage(embeddedImg, {
+                                x: 0,
+                                y: 0,
+                                width: baseViewport.width,
+                                height: baseViewport.height
+                            });
+                        }
+                    }
+                }
+
+                const mergedBytes = await mergedPdf.save();
+                const finalKb = Math.round(mergedBytes.byteLength / 1024);
+                const dpiTag = dpiSetting === 'original' ? 'Original' : `${dpiSetting}DPI`;
+                const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Rupesh_Computers_Merged_${dpiTag}_${finalKb}KB.pdf`;
+                a.click();
+
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200';
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> ${mergePdfFiles.length} PDF फाइलें (${dpiTag}) जुड़कर <b>${finalKb} KB</b> में डाउनलोड हो गईं!`;
+            } catch (err) {
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200';
+                statusEl.innerText = 'PDF जोड़ने में त्रुटि आई (ध्यान दें: पासवर्ड-लॉक PDF को पहले अनलॉक करें)।';
+            }
+        }
+
+        // =========================================================================
+        // 3. COMPRESS PDF TO REDUCE KB SIZE
+        // =========================================================================
+        let compressPdfFile = null;
+
+        function handleCompressPdfSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            compressPdfFile = file;
+            document.getElementById('compress-pdf-name').innerHTML = `<span class="text-emerald-700"><i class="fa-solid fa-circle-check"></i> ${file.name}</span>`;
+            document.getElementById('compress-pdf-orig-size').innerText = `वर्तमान साइज: ${Math.round(file.size / 1024)} KB`;
+        }
+
+        async function executeCompressPdf() {
+            if (!compressPdfFile) {
+                alert('कृपया पहले कोई PDF फाइल चुनें।');
+                return;
+            }
+            const statusEl = document.getElementById('compress-pdf-status');
+            statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-blue-50 text-blue-800 border border-blue-200';
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> PDF का साइज कम किया जा रहा है...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const level = document.getElementById('compress-level').value;
+                const scale = level === 'high' ? 1.15 : (level === 'medium' ? 1.5 : 1.9);
+                const jpegQ = level === 'high' ? 0.42 : (level === 'medium' ? 0.62 : 0.78);
+
+                const arrayBuffer = await compressPdfFile.arrayBuffer();
+                const srcPdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                const outPdf = await PDFLib.PDFDocument.create();
+
+                for (let p = 1; p <= srcPdf.numPages; p++) {
+                    const page = await srcPdf.getPage(p);
+                    const viewport = page.getViewport({ scale });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await page.render({ canvasContext: ctx, viewport }).promise;
+
+                    const jpgUrl = canvas.toDataURL('image/jpeg', jpegQ);
+                    const bin = atob(jpgUrl.split(',')[1]);
+                    const bytes = new Uint8Array(bin.length);
+                    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+
+                    const embedded = await outPdf.embedJpg(bytes);
+                    const newPage = outPdf.addPage([viewport.width, viewport.height]);
+                    newPage.drawImage(embedded, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+                }
+
+                const outBytes = await outPdf.save();
+                const origKb = Math.round(compressPdfFile.size / 1024);
+                const newKb = Math.round(outBytes.byteLength / 1024);
+
+                const blob = new Blob([outBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Compressed_${newKb}KB_${compressPdfFile.name}`;
+                a.click();
+
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200';
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> PDF साइज <b>${origKb} KB</b> से घटकर <b>${newKb} KB</b> हो गया और डाउनलोड शुरू हो गया!`;
+            } catch (err) {
+                statusEl.className = 'mt-4 text-xs sm:text-sm font-bold text-center p-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200';
+                statusEl.innerText = 'PDF कम्प्रेस करने में त्रुटि आई।';
+            }
+        }
+
+        // =========================================================================
+        // 4. PDF TO JPG IMAGES
+        // =========================================================================
+        async function executePdfToJpg(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const statusEl = document.getElementById('pdf2jpg-status');
+            const galleryEl = document.getElementById('pdf2jpg-gallery');
+            galleryEl.innerHTML = '';
+
+            statusEl.className = 'text-xs font-bold text-center p-3 rounded-xl mb-4 bg-blue-50 text-blue-800 border border-blue-200';
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> PDF पेजों को JPG फोटो में बदला जा रहा है...';
+            statusEl.classList.remove('hidden');
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                for (let p = 1; p <= pdf.numPages; p++) {
+                    const page = await pdf.getPage(p);
+                    const viewport = page.getViewport({ scale: 2.2 });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await page.render({ canvasContext: ctx, viewport }).promise;
+
+                    const jpgUrl = canvas.toDataURL('image/jpeg', 0.92);
+                    const card = document.createElement('div');
+                    card.className = 'bg-slate-50 border border-slate-200 rounded-2xl p-3 text-center shadow-sm';
+                    card.innerHTML = `
+                        <div class="text-xs font-black text-slate-700 mb-2">पेज ${p} / ${pdf.numPages}</div>
+                        <img src="${jpgUrl}" class="max-h-52 mx-auto rounded-xl border border-slate-300 mb-3 bg-white">
+                        <a href="${jpgUrl}" download="Page_${p}_${file.name.replace(/\.pdf$/i, '')}.jpg" class="w-full inline-flex items-center justify-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-3 rounded-xl text-xs transition">
+                            <i class="fa-solid fa-download"></i> पेज ${p} (JPG) डाउनलोड
+                        </a>
+                    `;
+                    galleryEl.appendChild(card);
+                }
+
+                statusEl.className = 'text-xs font-bold text-center p-3 rounded-xl mb-4 bg-emerald-50 text-emerald-800 border border-emerald-200';
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> कुल ${pdf.numPages} पेज JPG फोटो में तैयार हो गए हैं!`;
+            } catch (err) {
+                statusEl.className = 'text-xs font-bold text-center p-3 rounded-xl mb-4 bg-rose-50 text-rose-700 border border-rose-200';
+                statusEl.innerText = 'PDF से फोटो निकालने में त्रुटि आई।';
+            }
+        }
+
+        // =========================================================================
+        // 5. SMART PHOTO / SIGNATURE KB RESIZER
+        // =========================================================================
+        let resizerSourceDataUrl = null;
+        let resizerSourceName = 'Resized_Image';
+
+        function handleSmartResizePreview(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            resizerSourceName = file.name.replace(/\.[^/.]+$/, '');
+            document.getElementById('resizer-file-label').innerHTML = `<span class="text-emerald-700"><i class="fa-solid fa-circle-check"></i> ${file.name} (${Math.round(file.size / 1024)} KB)</span>`;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                resizerSourceDataUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function executeSmartImageResize() {
+            if (!resizerSourceDataUrl) {
+                alert('कृपया पहले फोटो या सिग्नेचर चुनें।');
+                return;
+            }
+            const targetKb = parseInt(document.getElementById('target-kb').value, 10) || 40;
+            const img = new Image();
+            img.onload = function() {
+                let scale = 1.0;
+                let quality = 0.92;
+                let finalUrl = '';
+                let finalKb = 0;
+
+                for (let attempt = 0; attempt < 25; attempt++) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(50, Math.round(img.width * scale));
+                    canvas.height = Math.max(50, Math.round(img.height * scale));
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    finalUrl = canvas.toDataURL('image/jpeg', quality);
+                    finalKb = Math.round((finalUrl.length * 0.75) / 1024);
+
+                    if (finalKb <= targetKb) break;
+                    if (quality > 0.35) {
+                        quality -= 0.12;
+                    } else {
+                        scale *= 0.82;
+                    }
+                }
+
+                document.getElementById('resize-result').innerHTML = `
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${finalUrl}" class="w-16 h-16 object-contain rounded-xl border border-slate-300 bg-white">
+                            <div>
+                                <div class="text-sm font-black text-emerald-900">तैयार नया साइज: ${finalKb} KB (लक्ष्य: ≤ ${targetKb} KB)</div>
+                                <div class="text-xs text-emerald-700">पोर्टल अपलोड के लिए पूरी तरह तैयार</div>
+                            </div>
+                        </div>
+                        <a href="${finalUrl}" download="${resizerSourceName}_${finalKb}KB.jpg" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2.5 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> डाउनलोड करें (${finalKb} KB)
+                        </a>
+                    </div>
+                `;
+            };
+            img.src = resizerSourceDataUrl;
+        }
+    </script>
 </body>
 </html>
