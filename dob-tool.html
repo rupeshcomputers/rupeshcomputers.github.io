@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOB & Age Calculator - RUPESH COMPUTERS</title>
+    <title>DOB, Age &amp; Panchang Calculator - RUPESH COMPUTERS</title>
     <meta name="theme-color" content="#1e3a8a">
-    <link rel="manifest" id="pwa-manifest-link">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-card { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); }
@@ -19,38 +17,140 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- Common Header & Navigation (Loaded from common-layout.js) -->
+    <!-- Common Header & Navigation (Loaded dynamically from common-layout.js on live site) -->
     <div id="site-header"></div>
 
     <!-- MAIN PAGE CONTENT (dob-tool.html) -->
     <main class="min-h-[65vh]">
-        <section id="dob-tool" class="page-section page-fade py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-purple-700 bg-purple-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-cake-candles"></i> सटीक आयु गणना
-                    </span>
-                    <h2 class="text-3xl font-black text-slate-900">DOB &amp; Age Calculator</h2>
-                    <p class="mt-2 text-slate-600 text-sm">सरकारी भर्ती व ऑनलाइन फॉर्म के लिए अपनी सही उम्र (वर्ष, महीने, दिन) जानें।</p>
+        <section id="dob-tool" class="page-section page-fade py-10 sm:py-14 bg-slate-100">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                
+                <!-- Tool Header & Breadcrumb -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center gap-2 text-[11px] font-bold text-slate-500 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 mb-3 shadow-sm">
+                        <a href="index.html" class="hover:text-blue-700 transition"><i class="fa-solid fa-house"></i> होम</a>
+                        <span>/</span>
+                        <span class="text-purple-700">डिजिटल टूल्स</span>
+                        <span>/</span>
+                        <span class="text-slate-800">DOB एवं पंचांग टूल</span>
+                    </div>
+                    <div class="block">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-purple-700 bg-purple-100 px-3.5 py-1 rounded-full mb-2">
+                            <i class="fa-solid fa-cake-candles"></i> सटीक आयु एवं हिंदू पंचांग
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">DOB, Age &amp; Panchang Calculator</h1>
+                    <p class="mt-2 text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">सरकारी भर्ती (CGPSC, व्यापम, SSC, रेलवे, पुलिस) के लिए सटीक आयु गणना, पात्रता जाँच और जन्म पंचांग विवरण।</p>
                 </div>
 
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="space-y-4 mb-5">
+                <!-- Main Calculator Card -->
+                <div class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 shadow-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">अपनी जन्मतिथि (Date of Birth):</label>
-                            <input type="date" id="dob-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
+                            <label for="dob-input" class="block text-xs font-bold text-slate-700 mb-1.5">
+                                <i class="fa-regular fa-calendar text-purple-600 mr-1"></i> अपनी जन्मतिथि व समय (DOB &amp; Time):
+                            </label>
+                            <div class="grid grid-cols-5 gap-2">
+                                <input type="date" id="dob-input" class="col-span-3 w-full border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-slate-50 transition">
+                                <input type="time" id="dob-time-input" value="00:00" title="जन्म समय (वैकल्पिक)" class="col-span-2 w-full border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-slate-50 transition">
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">किस तारीख तक उम्र देखनी है? (वैकल्पिक - खाली छोड़ने पर आज की तारीख):</label>
-                            <input type="date" id="target-date-input" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50">
+                            <label for="target-date-input" class="block text-xs font-bold text-slate-700 mb-1.5">
+                                <i class="fa-regular fa-calendar-check text-indigo-600 mr-1"></i> किस तारीख व समय तक? (Cutoff Date &amp; Time):
+                            </label>
+                            <div class="grid grid-cols-5 gap-2">
+                                <input type="date" id="target-date-input" class="col-span-3 w-full border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-slate-50 transition">
+                                <input type="time" id="target-time-input" title="लक्षित समय (वैकल्पिक)" class="col-span-2 w-full border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-slate-50 transition">
+                            </div>
                         </div>
                     </div>
 
-                    <button type="button" onclick="calculateAge()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3 rounded-xl text-sm transition shadow-md">
-                        सटीक आयु गणना करें
-                    </button>
-                    <div id="age-result" class="mt-4 text-sm font-bold text-purple-900 text-center hidden bg-purple-50 p-4 rounded-2xl border border-purple-200"></div>
+                    <!-- Quick Cutoff Presets for Govt Exams -->
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 mb-5">
+                        <div class="text-[11px] font-bold text-slate-500 mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> भर्ती परीक्षा हेतु त्वरित कट-ऑफ तारीख चुनें:
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="setCutoffDate('today')" class="text-xs font-bold bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 hover:border-purple-300 px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">आज / अभी</button>
+                            <button type="button" onclick="setCutoffDate('2026-01-01')" class="text-xs font-bold bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 hover:border-purple-300 px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">01 जन 2026</button>
+                            <button type="button" onclick="setCutoffDate('2026-07-01')" class="text-xs font-bold bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 hover:border-purple-300 px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">01 जुला 2026</button>
+                            <button type="button" onclick="setCutoffDate('2027-01-01')" class="text-xs font-bold bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-300 hover:border-purple-300 px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">01 जन 2027</button>
+                        </div>
+                    </div>
+
+                    <!-- Optional Govt Job Age Eligibility Checker Toggle -->
+                    <div class="mb-5 border border-indigo-100 bg-indigo-50/40 rounded-2xl p-3.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-indigo-950 flex items-center gap-2">
+                                <i class="fa-solid fa-user-check text-indigo-600"></i> सरकारी भर्ती आयु पात्रता जाँच (वैकल्पिक)
+                            </span>
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="eligibility-toggle" onchange="toggleEligibilityBox()" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all relative peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                        <div id="eligibility-inputs" class="hidden mt-3 pt-3 border-t border-indigo-100 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">न्यूनतम आयु (Min Age):</label>
+                                <input type="number" id="min-age-input" value="18" min="0" max="100" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold bg-white outline-none focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">अधिकतम आयु (Max Age):</label>
+                                <input type="number" id="max-age-input" value="40" min="0" max="100" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold bg-white outline-none focus:border-indigo-500">
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">श्रेणी छूट (छ.ग. नियम):</label>
+                                <select id="category-relaxation" onchange="applyCategoryPreset()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold bg-white outline-none focus:border-indigo-500">
+                                    <option value="40">सामान्य (40 वर्ष)</option>
+                                    <option value="45">ST / SC / OBC (45 वर्ष)</option>
+                                    <option value="45">महिला अभ्यर्थी (45 वर्ष)</option>
+                                    <option value="28">पुलिस आरक्षक / सेना (28 वर्ष)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-2.5">
+                        <button type="button" onclick="calculateAge()" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3.5 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-calculator"></i> सटीक आयु व जन्म पंचांग देखें
+                        </button>
+                        <button type="button" onclick="resetAgeForm()" title="रीसेट करें" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 rounded-xl text-sm transition border border-slate-200 cursor-pointer">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Age & Birth Panchang Result Box -->
+                    <div id="age-result" class="mt-6 hidden space-y-4"></div>
                 </div>
+
+                <!-- Standalone Daily & Custom Date Hindu Panchang Card -->
+                <div class="bg-white border border-amber-200/80 rounded-3xl p-5 sm:p-8 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-36 h-36 bg-amber-400/10 rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-amber-100">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full mb-1.5">
+                                <i class="fa-solid fa-om"></i> दैनिक एवं जन्म पंचांग
+                            </span>
+                            <h2 class="text-xl sm:text-2xl font-black text-slate-900">हिंदू पंचांग (Hindu Panchang)</h2>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <input type="date" id="panchang-date-input" onchange="renderStandalonePanchang()" class="border border-amber-300 bg-amber-50/50 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="time" id="panchang-time-input" onchange="renderStandalonePanchang()" class="border border-amber-300 bg-amber-50/50 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 outline-none focus:ring-2 focus:ring-amber-400">
+                            <button type="button" onclick="setPanchangMode('today')" id="btn-panchang-today" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 shadow-sm transition cursor-pointer">
+                                आज / अभी
+                            </button>
+                            <button type="button" onclick="setPanchangMode('dob')" id="btn-panchang-dob" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition cursor-pointer">
+                                जन्मतिथि
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="panchang-display"></div>
+                </div>
+
             </div>
         </section>
     </main>
@@ -128,10 +228,10 @@
         <a id="mobile-call-btn" href="tel:6264531630" class="flex items-center gap-1.5 bg-blue-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-phone"></i> कॉल करें
         </a>
-        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
-        <button onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+        <button type="button" onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
             <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Gemini AI
         </button>
     </div>
@@ -154,7 +254,7 @@
                         </p>
                     </div>
                 </div>
-                <button onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                <button type="button" onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
                     <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
@@ -167,16 +267,16 @@
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
                         नमस्ते! 🙏 मैं <b>रूपेश कंप्यूटर्स (Gemini AI)</b> असिस्टेंट हूँ। आप मुझसे किसी भी प्रमाण पत्र के दस्तावेज, सरकारी योजना, Indane गैस बुकिंग या डिजिटल टूल के बारे में कोई भी सवाल पूछ सकते हैं:
                         <div class="mt-3 flex flex-col gap-1.5">
-                            <button onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग व पेमेंट नियम
                             </button>
-                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-shield-halved text-emerald-600"></i> डेटा सुरक्षा व विज्ञापन-मुक्त (No Ads)
                             </button>
-                            <button onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> मोबाइल में ऐप इंस्टॉल कैसे करें?
                             </button>
-                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                            <button type="button" onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
                             </button>
                         </div>
@@ -186,7 +286,7 @@
 
             <div class="p-3 border-t border-slate-200 bg-white shadow-inner">
                 <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
-                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required="" autocomplete="off">
+                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required autocomplete="off">
                     <button type="submit" class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
@@ -194,7 +294,7 @@
             </div>
         </div>
 
-        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
+        <button type="button" onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
             <i class="fa-solid fa-robot group-hover:rotate-12 transition-transform text-amber-300"></i>
         </button>
     </div>
@@ -205,7 +305,600 @@
         <span id="custom-toast-msg"></span>
     </div>
 
-    <script src="common-layout.js"></script>
-    <script src="tools.js"></script>
+    <script>
+        // ==========================================
+        // RUPESH COMPUTERS - DOB, AGE & PANCHANG TOOL
+        // ==========================================
+
+        function showToolToast(message) {
+            const toast = document.getElementById('custom-toast');
+            const msgEl = document.getElementById('custom-toast-msg');
+            if (toast && msgEl) {
+                msgEl.textContent = message;
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                clearTimeout(window.__toolToastTimer);
+                window.__toolToastTimer = setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3200);
+            }
+        }
+
+        function formatLocalYYYYMMDD(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function formatLocalHHMM(dateObj) {
+            const hh = String(dateObj.getHours()).padStart(2, '0');
+            const mm = String(dateObj.getMinutes()).padStart(2, '0');
+            return `${hh}:${mm}`;
+        }
+
+        function formatHindiTime12H(dateObj) {
+            let hours = dateObj.getHours();
+            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+            const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        function formatHindiDate(dateObj) {
+            const monthsHi = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+            return `${dateObj.getDate()} ${monthsHi[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+        }
+
+        function toggleEligibilityBox() {
+            const toggle = document.getElementById('eligibility-toggle');
+            const box = document.getElementById('eligibility-inputs');
+            if (toggle && box) {
+                box.classList.toggle('hidden', !toggle.checked);
+                if (toggle.checked && document.getElementById('dob-input').value) {
+                    calculateAge();
+                }
+            }
+        }
+
+        function applyCategoryPreset() {
+            const select = document.getElementById('category-relaxation');
+            const maxInput = document.getElementById('max-age-input');
+            if (select && maxInput) {
+                maxInput.value = select.value;
+                if (document.getElementById('dob-input').value) {
+                    calculateAge();
+                }
+            }
+        }
+
+        function setCutoffDate(type) {
+            const targetInput = document.getElementById('target-date-input');
+            const targetTimeInput = document.getElementById('target-time-input');
+            if (type === 'today') {
+                const now = new Date();
+                targetInput.value = formatLocalYYYYMMDD(now);
+                targetTimeInput.value = formatLocalHHMM(now);
+            } else {
+                targetInput.value = type;
+                targetTimeInput.value = '00:00';
+            }
+            if (document.getElementById('dob-input').value) {
+                calculateAge();
+            } else {
+                showToolToast('कट-ऑफ तारीख व समय सेट हो गया है। अब अपनी जन्मतिथि चुनें।');
+            }
+        }
+
+        function resetAgeForm() {
+            const now = new Date();
+            document.getElementById('dob-input').value = '';
+            document.getElementById('dob-time-input').value = '00:00';
+            document.getElementById('target-date-input').value = formatLocalYYYYMMDD(now);
+            document.getElementById('target-time-input').value = formatLocalHHMM(now);
+            const resultBox = document.getElementById('age-result');
+            resultBox.innerHTML = '';
+            resultBox.classList.add('hidden');
+            showToolToast('कैलकुलेटर रीसेट कर दिया गया है।');
+        }
+
+        // ==========================================
+        // HINDU PANCHANG ENGINE
+        // ==========================================
+        function getHinduPanchang(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = dateObj.getMonth() + 1;
+            const d = dateObj.getDate();
+            const dayFraction = (dateObj.getHours() + dateObj.getMinutes() / 60 + dateObj.getSeconds() / 3600 - 5.5) / 24;
+
+            const jd = Math.floor((1461 * (y + 4800 + Math.floor((m - 14) / 12))) / 4) +
+                       Math.floor((367 * (m - 2 - 12 * Math.floor((m - 14) / 12))) / 12) -
+                       Math.floor((3 * Math.floor((y + 4900 + Math.floor((m - 14) / 12)) / 100)) / 4) +
+                       d - 32075 + dayFraction;
+
+            const daysSinceEpoch = jd - 2451545.0;
+            const norm360 = (deg) => ((deg % 360) + 360) % 360;
+
+            const sunMeanLong = norm360(280.460 + 0.9856474 * daysSinceEpoch);
+            const sunAnomaly = norm360(357.528 + 0.9856003 * daysSinceEpoch) * Math.PI / 180;
+            const sunTropical = norm360(sunMeanLong + 1.915 * Math.sin(sunAnomaly) + 0.020 * Math.sin(2 * sunAnomaly));
+
+            const moonMeanLong = norm360(218.316 + 13.176396 * daysSinceEpoch);
+            const moonAnomaly = norm360(134.963 + 13.064993 * daysSinceEpoch) * Math.PI / 180;
+            const moonTropical = norm360(moonMeanLong + 6.289 * Math.sin(moonAnomaly));
+
+            const ayanamsa = 23.853 + (y - 2000) * 0.01397;
+            const sunNirayana = norm360(sunTropical - ayanamsa);
+            const moonNirayana = norm360(moonTropical - ayanamsa);
+
+            const elongation = norm360(moonTropical - sunTropical);
+            const tithiIdx = Math.floor(elongation / 12);
+            const isKrishna = tithiIdx >= 15;
+            const paksha = isKrishna ? 'कृष्ण पक्ष' : 'शुक्ल पक्ष';
+
+            const tithiNames = [
+                'प्रतिपदा', 'द्वितीया', 'तृतीया', 'चतुर्थी', 'पंचमी',
+                'षष्ठी', 'सप्तमी', 'अष्टमी', 'नवमी', 'दशमी',
+                'एकादशी', 'द्वादशी', 'त्रयोदशी', 'चतुर्दशी', 'पूर्णिमा',
+                'प्रतिपदा', 'द्वितीया', 'तृतीया', 'चतुर्थी', 'पंचमी',
+                'षष्ठी', 'सप्तमी', 'अष्टमी', 'नवमी', 'दशमी',
+                'एकादशी', 'द्वादशी', 'त्रयोदशी', 'चतुर्दशी', 'अमावस्या'
+            ];
+
+            const nakshatraNames = [
+                'अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा', 'पुनर्वसु', 'पुष्य', 'आश्लेषा',
+                'मघा', 'पूर्वाफाल्गुनी', 'उत्तराफाल्गुनी', 'हस्त', 'चित्रा', 'स्वाति', 'विशाखा', 'अनुराधा', 'ज्येष्ठा',
+                'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा', 'पूर्वभाद्रपद', 'उत्तरभाद्रपद', 'रेवती'
+            ];
+            const nakshatraIdx = Math.floor(moonNirayana / (360 / 27)) % 27;
+
+            const rashiNames = [
+                'मेष (Aries)', 'वृषभ (Taurus)', 'मिथुन (Gemini)', 'कर्क (Cancer)',
+                'सिंह (Leo)', 'कन्या (Virgo)', 'तुला (Libra)', 'वृश्चिक (Scorpio)',
+                'धनु (Sagittarius)', 'मकर (Capricorn)', 'कुंभ (Aquarius)', 'मीन (Pisces)'
+            ];
+            const rashiIdx = Math.floor(moonNirayana / 30) % 12;
+
+            const yogaNames = [
+                'विष्कम्भ', 'प्रीति', 'आयुष्मान', 'सौभाग्य', 'शोभन', 'अतिगण्ड', 'सुकर्मा', 'धृति', 'शूल',
+                'गण्ड', 'वृद्धि', 'ध्रुव', 'व्याघात', 'हर्षण', 'वज्र', 'सिद्धि', 'व्यतीपात', 'वरीयान',
+                'परिघ', 'शिव', 'सिद्ध', 'साध्य', 'शुभ', 'शुक्ल', 'ब्रह्म', 'ऐन्द्र', 'वैधृति'
+            ];
+            const yogaIdx = Math.floor(norm360(sunNirayana + moonNirayana) / (360 / 27)) % 27;
+
+            const karanList = ['बव', 'बालव', 'कौलव', 'तैतिल', 'गर', 'वणिज', 'विष्टि (भद्रा)'];
+            const halfTithi = Math.floor(elongation / 6);
+            let karanName = '';
+            if (halfTithi === 0) karanName = 'किंस्तुघ्न';
+            else if (halfTithi === 57) karanName = 'शकुनि';
+            else if (halfTithi === 58) karanName = 'चतुष्पाद';
+            else if (halfTithi === 59) karanName = 'नाग';
+            else karanName = karanList[(halfTithi - 1) % 7];
+
+            const hinduMonths = ['चैत्र', 'वैशाख', 'ज्येष्ठ', 'आषाढ़', 'श्रावण', 'भाद्रपद', 'आश्विन', 'कार्तिक', 'मार्गशीर्ष', 'पौष', 'माघ', 'फाल्गुन'];
+            let solarMonthIdx = Math.floor(sunNirayana / 30);
+            let hinduMonthIdx = isKrishna ? (solarMonthIdx + 1) % 12 : solarMonthIdx;
+
+            const vikramSamvat = (m > 3 || (m === 3 && d >= 22)) ? y + 57 : y + 56;
+            const shakaSamvat = (m > 3 || (m === 3 && d >= 22)) ? y - 78 : y - 79;
+
+            const daysHi = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+            const rahuKaals = [
+                '04:30 PM - 06:00 PM',
+                '07:30 AM - 09:00 AM',
+                '03:00 PM - 04:30 PM',
+                '12:00 PM - 01:30 PM',
+                '01:30 PM - 03:00 PM',
+                '10:30 AM - 12:00 PM',
+                '09:00 AM - 10:30 AM'
+            ];
+            const dow = dateObj.getDay();
+
+            return {
+                vaara: daysHi[dow],
+                tithi: tithiNames[tithiIdx],
+                paksha,
+                nakshatra: nakshatraNames[nakshatraIdx],
+                chandraRashi: rashiNames[rashiIdx],
+                yoga: yogaNames[yogaIdx],
+                karan: karanName,
+                hinduMonth: hinduMonths[hinduMonthIdx],
+                vikramSamvat,
+                shakaSamvat,
+                rahuKaal: rahuKaals[dow]
+            };
+        }
+
+        // ==========================================
+        // AGE & ELIGIBILITY CALCULATION
+        // ==========================================
+        function calculateAge() {
+            const dobVal = document.getElementById('dob-input').value;
+            const dobTimeVal = document.getElementById('dob-time-input').value || '00:00';
+            const targetVal = document.getElementById('target-date-input').value;
+            const targetTimeVal = document.getElementById('target-time-input').value || '00:00';
+            const resultBox = document.getElementById('age-result');
+
+            if (!dobVal) {
+                showToolToast('कृपया पहले अपनी जन्मतिथि (DOB) चुनें।');
+                document.getElementById('dob-input').focus();
+                return;
+            }
+
+            const dob = new Date(`${dobVal}T${dobTimeVal}:00`);
+            const target = targetVal ? new Date(`${targetVal}T${targetTimeVal}:00`) : new Date();
+
+            if (dob > target) {
+                showToolToast('जन्मतिथि व समय, लक्षित तारीख व समय से आगे का नहीं हो सकता!');
+                return;
+            }
+
+            let years = target.getFullYear() - dob.getFullYear();
+            let months = target.getMonth() - dob.getMonth();
+            let days = target.getDate() - dob.getDate();
+            let hours = target.getHours() - dob.getHours();
+            let minutes = target.getMinutes() - dob.getMinutes();
+
+            if (minutes < 0) {
+                hours--;
+                minutes += 60;
+            }
+            if (hours < 0) {
+                days--;
+                hours += 24;
+            }
+            if (days < 0) {
+                months--;
+                const prevMonthDays = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
+                days += prevMonthDays;
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const diffTime = Math.abs(target - dob);
+            const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const totalHours = Math.floor(diffTime / (1000 * 60 * 60));
+            const totalMinutes = Math.floor(diffTime / (1000 * 60));
+            const totalWeeks = Math.floor(totalDays / 7);
+            const remDays = totalDays % 7;
+            const totalMonths = years * 12 + months;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let nextBday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+            if (nextBday < today) {
+                nextBday.setFullYear(today.getFullYear() + 1);
+            }
+            const daysToBday = Math.ceil((nextBday - today) / (1000 * 60 * 60 * 24));
+
+            const birthPanchang = getHinduPanchang(dob);
+
+            let eligibilityHTML = '';
+            const eligToggle = document.getElementById('eligibility-toggle');
+            if (eligToggle && eligToggle.checked) {
+                const minAge = parseInt(document.getElementById('min-age-input').value || '18', 10);
+                const maxAge = parseInt(document.getElementById('max-age-input').value || '40', 10);
+                const isUnderMin = years < minAge;
+                const isOverMax = (years > maxAge) || (years === maxAge && (months > 0 || days > 0 || hours > 0 || minutes > 0));
+
+                if (!isUnderMin && !isOverMax) {
+                    eligibilityHTML = `
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3 text-left">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 text-lg">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-emerald-900">भर्ती आवेदन के लिए पात्र (ELIGIBLE)</div>
+                                <p class="text-[11px] text-emerald-800 mt-0.5">आपकी आयु (${years} वर्ष, ${months} माह, ${days} दिन) निर्धारित सीमा (${minAge} से ${maxAge} वर्ष) के भीतर है।</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const reason = isUnderMin
+                        ? `आपकी आयु न्यूनतम सीमा (${minAge} वर्ष) से कम है।`
+                        : `आपकी आयु अधिकतम सीमा (${maxAge} वर्ष) से अधिक हो गई है।`;
+                    eligibilityHTML = `
+                        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-center gap-3 text-left">
+                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 text-lg">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-rose-900">आयु सीमा से बाहर (NOT ELIGIBLE)</div>
+                                <p class="text-[11px] text-rose-800 mt-0.5">${reason}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            const summaryText = `जन्मतिथि व समय: ${formatHindiDate(dob)} (${dobTimeVal}) [${birthPanchang.vaara}] | कट-ऑफ: ${formatHindiDate(target)} (${targetTimeVal}) | सटीक आयु: ${years} वर्ष, ${months} महीने, ${days} दिन, ${hours} घंटे, ${minutes} मिनट | जन्म पंचांग: ${birthPanchang.hinduMonth} ${birthPanchang.paksha} ${birthPanchang.tithi}, नक्षत्र: ${birthPanchang.nakshatra}, राशि: ${birthPanchang.chandraRashi} - RUPESH COMPUTERS`;
+
+            resultBox.innerHTML = `
+                <div class="bg-gradient-to-br from-purple-50 via-indigo-50/70 to-white border border-purple-200 rounded-2xl p-5 text-center shadow-sm">
+                    <div class="text-[11px] uppercase tracking-wider text-purple-600 font-extrabold mb-2">
+                        ${formatHindiDate(target)} (${targetTimeVal}) की स्थिति में आपकी सटीक आयु
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 max-w-xl mx-auto my-3">
+                        <div class="bg-white rounded-2xl p-3 border border-purple-200/80 shadow-sm">
+                            <div class="text-2xl sm:text-3xl font-black text-purple-700">${years}</div>
+                            <div class="text-[11px] font-bold text-slate-600 mt-0.5">वर्ष (Years)</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-3 border border-indigo-200/80 shadow-sm">
+                            <div class="text-2xl sm:text-3xl font-black text-indigo-700">${months}</div>
+                            <div class="text-[11px] font-bold text-slate-600 mt-0.5">महीने (Months)</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-3 border border-blue-200/80 shadow-sm">
+                            <div class="text-2xl sm:text-3xl font-black text-blue-700">${days}</div>
+                            <div class="text-[11px] font-bold text-slate-600 mt-0.5">दिन (Days)</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-3 border border-emerald-200/80 shadow-sm">
+                            <div class="text-2xl sm:text-3xl font-black text-emerald-700">${hours}</div>
+                            <div class="text-[11px] font-bold text-slate-600 mt-0.5">घंटे (Hours)</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-3 border border-amber-200/80 shadow-sm col-span-2 sm:col-span-1">
+                            <div class="text-2xl sm:text-3xl font-black text-amber-600">${minutes}</div>
+                            <div class="text-[11px] font-bold text-slate-600 mt-0.5">मिनट (Mins)</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-left mt-4 text-xs">
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">कुल महीने</span>
+                            <span class="font-extrabold text-slate-800">${totalMonths.toLocaleString('en-IN')} महीने</span>
+                        </div>
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">कुल सप्ताह</span>
+                            <span class="font-extrabold text-slate-800">${totalWeeks.toLocaleString('en-IN')} स., ${remDays} दि.</span>
+                        </div>
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">कुल दिन</span>
+                            <span class="font-extrabold text-slate-800">${totalDays.toLocaleString('en-IN')} दिन</span>
+                        </div>
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">कुल घंटे (Total Hours)</span>
+                            <span class="font-extrabold text-slate-800">${totalHours.toLocaleString('en-IN')} घंटे</span>
+                        </div>
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">कुल मिनट (Total Mins)</span>
+                            <span class="font-extrabold text-slate-800">${totalMinutes.toLocaleString('en-IN')} मिनट</span>
+                        </div>
+                        <div class="bg-white/90 p-2.5 rounded-xl border border-slate-200/80">
+                            <span class="text-[10px] text-slate-500 block font-semibold">अगला जन्मदिन</span>
+                            <span class="font-extrabold text-emerald-700">${daysToBday === 0 ? 'आज है! 🎂' : daysToBday + ' दिन शेष'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                ${eligibilityHTML}
+
+                <div class="bg-amber-50/90 border border-amber-200 rounded-2xl p-4 text-left">
+                    <div class="text-xs font-extrabold text-amber-900 mb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-dharmachakra text-amber-600 mr-1.5"></i> आपकी जन्मतिथि (${formatHindiDate(dob)}, ${dobTimeVal}) का पंचांग:</span>
+                        <span class="bg-amber-200/70 text-amber-950 text-[10px] px-2 py-0.5 rounded-full">वि.सं. ${birthPanchang.vikramSamvat}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div class="bg-white p-2.5 rounded-xl border border-amber-200/70">
+                            <span class="text-[10px] text-slate-500 block">जन्म वार एवं माह</span>
+                            <span class="font-extrabold text-slate-800">${birthPanchang.vaara}, ${birthPanchang.hinduMonth}</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-amber-200/70">
+                            <span class="text-[10px] text-slate-500 block">जन्म तिथि व पक्ष</span>
+                            <span class="font-extrabold text-amber-900">${birthPanchang.paksha} ${birthPanchang.tithi}</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-amber-200/70">
+                            <span class="text-[10px] text-slate-500 block">जन्म नक्षत्र</span>
+                            <span class="font-extrabold text-slate-800">${birthPanchang.nakshatra}</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-amber-200/70">
+                            <span class="text-[10px] text-slate-500 block">चंद्र राशि</span>
+                            <span class="font-extrabold text-indigo-800">${birthPanchang.chandraRashi}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                    <button type="button" onclick="copyAgeSummary('${summaryText.replace(/'/g, "\\'")}')" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl transition cursor-pointer">
+                        <i class="fa-regular fa-copy text-amber-400"></i> परिणाम कॉपी करें
+                    </button>
+                    <a href="https://wa.me/?text=${encodeURIComponent(summaryText)}" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl transition">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp पर भेजें
+                    </a>
+                </div>
+            `;
+
+            resultBox.classList.remove('hidden');
+
+            document.getElementById('panchang-date-input').value = dobVal;
+            document.getElementById('panchang-time-input').value = dobTimeVal;
+            setPanchangMode('dob', false);
+            renderStandalonePanchang();
+        }
+
+        function copyAgeSummary(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToolToast('आयु एवं पंचांग परिणाम कॉपी हो गया है!');
+            } catch (err) {
+                showToolToast('कॉपी करने में समस्या हुई।');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // ==========================================
+        // STANDALONE PANCHANG CARD CONTROLS
+        // ==========================================
+        function setPanchangMode(mode, triggerRender = true) {
+            const btnToday = document.getElementById('btn-panchang-today');
+            const btnDob = document.getElementById('btn-panchang-dob');
+            const dateInput = document.getElementById('panchang-date-input');
+            const timeInput = document.getElementById('panchang-time-input');
+
+            if (mode === 'today') {
+                const now = new Date();
+                btnToday.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 shadow-sm transition cursor-pointer';
+                btnDob.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition cursor-pointer';
+                dateInput.value = formatLocalYYYYMMDD(now);
+                timeInput.value = formatLocalHHMM(now);
+            } else {
+                const dobVal = document.getElementById('dob-input').value;
+                const dobTimeVal = document.getElementById('dob-time-input').value || '00:00';
+                if (!dobVal) {
+                    showToolToast('कृपया ऊपर अपनी जन्मतिथि (DOB) चुनें।');
+                    document.getElementById('dob-input').focus();
+                    return;
+                }
+                btnDob.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 shadow-sm transition cursor-pointer';
+                btnToday.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition cursor-pointer';
+                dateInput.value = dobVal;
+                timeInput.value = dobTimeVal;
+            }
+
+            if (triggerRender) {
+                renderStandalonePanchang();
+            }
+        }
+
+        function renderStandalonePanchang() {
+            const dateVal = document.getElementById('panchang-date-input').value;
+            const timeVal = document.getElementById('panchang-time-input').value || formatLocalHHMM(new Date());
+            const dateObj = dateVal ? new Date(`${dateVal}T${timeVal}:00`) : new Date();
+            const p = getHinduPanchang(dateObj);
+            const container = document.getElementById('panchang-display');
+
+            container.innerHTML = `
+                <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white rounded-2xl p-4 mb-4 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+                    <div>
+                        <div class="text-[11px] font-bold text-amber-100 flex items-center gap-2">
+                            <span>${formatHindiDate(dateObj)} (${p.vaara})</span>
+                            <span class="bg-white/20 px-2 py-0.5 rounded-md"><i class="fa-regular fa-clock mr-1"></i>${timeVal}</span>
+                        </div>
+                        <div class="text-base sm:text-lg font-black mt-0.5">${p.hinduMonth} माह, ${p.paksha} - ${p.tithi}</div>
+                    </div>
+                    <div class="text-right text-xs font-extrabold bg-black/20 px-3 py-1.5 rounded-xl">
+                        <div>विक्रम संवत ${p.vikramSamvat} | शक संवत ${p.shakaSamvat}</div>
+                        <div class="text-[10px] text-amber-100 mt-0.5">अभी का लाइव समय: <span id="live-panchang-clock">${formatHindiTime12H(new Date())}</span></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-amber-50/60 border border-amber-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-amber-800 block mb-0.5"><i class="fa-solid fa-moon mr-1"></i> तिथि एवं पक्ष</span>
+                        <span class="font-black text-slate-900 text-sm">${p.tithi} (${p.paksha})</span>
+                    </div>
+                    <div class="bg-amber-50/60 border border-amber-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-amber-800 block mb-0.5"><i class="fa-solid fa-star mr-1"></i> नक्षत्र</span>
+                        <span class="font-black text-slate-900 text-sm">${p.nakshatra}</span>
+                    </div>
+                    <div class="bg-amber-50/60 border border-amber-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-amber-800 block mb-0.5"><i class="fa-solid fa-circle-nodes mr-1"></i> चंद्र राशि</span>
+                        <span class="font-black text-indigo-900 text-sm">${p.chandraRashi}</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-500 block mb-0.5"><i class="fa-solid fa-sun mr-1 text-amber-500"></i> योग</span>
+                        <span class="font-extrabold text-slate-800 text-sm">${p.yoga}</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-500 block mb-0.5"><i class="fa-solid fa-compass mr-1 text-amber-500"></i> करण</span>
+                        <span class="font-extrabold text-slate-800 text-sm">${p.karan}</span>
+                    </div>
+                    <div class="bg-rose-50/70 border border-rose-200/80 p-3 rounded-2xl">
+                        <span class="text-[11px] font-bold text-rose-700 block mb-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i> राहुकाल</span>
+                        <span class="font-extrabold text-rose-900 text-xs sm:text-sm">${p.rahuKaal}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Safe Fallback Chatbot Controls
+        window.toggleChat = window.toggleChat || function() {
+            const win = document.getElementById('chat-window');
+            if (!win) return;
+            win.classList.toggle('hidden');
+            win.classList.toggle('flex');
+        };
+        window.openChatWindow = window.openChatWindow || function() {
+            const win = document.getElementById('chat-window');
+            if (!win) return;
+            win.classList.remove('hidden');
+            win.classList.add('flex');
+        };
+        window.handleQuickAction = window.handleQuickAction || function(type) {
+            const replies = {
+                lpg: 'Indane गैस बुकिंग के लिए रजिस्टर्ड मोबाइल नंबर से 7718955555 पर कॉल करें या WhatsApp पर REFILL लिखकर भेजें।',
+                privacy: 'यह टूल 100% सुरक्षित और विज्ञापन-मुक्त है। आपकी जन्मतिथि या कोई भी जानकारी हमारे सर्वर पर सेव नहीं होती।',
+                pwa: 'ब्राउज़र के ऊपर दाईं ओर 3 डॉट्स (⋮) पर क्लिक करें और "Add to Home Screen" या "Install App" चुनें।',
+                aadhaar: 'आधार, पैन और छत्तीसगढ़ ई-डिस्ट्रिक्ट सेवा सेतु की सभी सेवाओं के लिए चोंगरीबहार या दोकड़ा शाखा पर संपर्क करें।'
+            };
+            appendFallbackChat(replies[type] || 'कृपया अपना सवाल पूछें।', 'bot');
+        };
+        window.handleChatSubmit = window.handleChatSubmit || function(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            appendFallbackChat(text, 'user');
+            input.value = '';
+            setTimeout(() => {
+                appendFallbackChat('धन्यवाद! अधिक जानकारी या ऑनलाइन फॉर्म भरने के लिए हमारी चोंगरीबहार (6264531630) या दोकड़ा (9713926390) शाखा से संपर्क करें।', 'bot');
+            }, 400);
+        };
+        function appendFallbackChat(msg, sender) {
+            const box = document.getElementById('chat-messages');
+            if (!box) return;
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'flex justify-end' : 'flex gap-2.5';
+            div.innerHTML = sender === 'user'
+                ? `<div class="bg-blue-900 text-white p-3 rounded-2xl rounded-tr-none text-xs max-w-[80%]">${msg}</div>`
+                : `<div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs max-w-[85%]">${msg}</div>`;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function initDobAndPanchangTool() {
+            const now = new Date();
+            const todayStr = formatLocalYYYYMMDD(now);
+            const nowTimeStr = formatLocalHHMM(now);
+            const targetInput = document.getElementById('target-date-input');
+            const targetTimeInput = document.getElementById('target-time-input');
+            const panchangInput = document.getElementById('panchang-date-input');
+            const panchangTimeInput = document.getElementById('panchang-time-input');
+
+            if (targetInput && !targetInput.value) targetInput.value = todayStr;
+            if (targetTimeInput && !targetTimeInput.value) targetTimeInput.value = nowTimeStr;
+            if (panchangInput && !panchangInput.value) panchangInput.value = todayStr;
+            if (panchangTimeInput && !panchangTimeInput.value) panchangTimeInput.value = nowTimeStr;
+
+            renderStandalonePanchang();
+
+            setInterval(() => {
+                const liveClockEl = document.getElementById('live-panchang-clock');
+                if (liveClockEl) {
+                    liveClockEl.textContent = formatHindiTime12H(new Date());
+                }
+            }, 1000);
+
+            ['common-layout.js', 'tools.js'].forEach(src => {
+                const s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                s.onerror = () => {};
+                document.body.appendChild(s);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initDobAndPanchangTool);
+        } else {
+            initDobAndPanchangTool();
+        }
+    </script>
 </body>
 </html>
