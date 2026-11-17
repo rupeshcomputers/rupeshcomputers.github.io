@@ -213,7 +213,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex gap-2.5">
-                        <button type="button" onclick="calculateAge()" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3.5 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                        <button type="button" onclick="calculateDetailedAgeAndPanchang()" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black py-3.5 px-4 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
                             <i class="fa-solid fa-calculator"></i> सटीक आयु व जन्म पंचांग देखें
                         </button>
                         <button type="button" onclick="resetAgeForm()" title="रीसेट करें" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 rounded-xl text-sm transition border border-slate-200 cursor-pointer">
@@ -462,7 +462,7 @@
             if (toggle && box) {
                 box.classList.toggle('hidden', !toggle.checked);
                 if (toggle.checked && document.getElementById('dob-input').value) {
-                    calculateAge();
+                    calculateDetailedAgeAndPanchang();
                 }
             }
         }
@@ -473,7 +473,7 @@
             if (select && maxInput) {
                 maxInput.value = select.value;
                 if (document.getElementById('dob-input').value) {
-                    calculateAge();
+                    calculateDetailedAgeAndPanchang();
                 }
             }
         }
@@ -490,7 +490,7 @@
                 targetTimeInput.value = '00:00';
             }
             if (document.getElementById('dob-input').value) {
-                calculateAge();
+                calculateDetailedAgeAndPanchang();
             } else {
                 showToolToast('कट-ऑफ तारीख व समय सेट हो गया है। अब अपनी जन्मतिथि चुनें।');
             }
@@ -618,7 +618,7 @@
         // ==========================================
         // AGE & ELIGIBILITY CALCULATION
         // ==========================================
-        function calculateAge() {
+        function calculateDetailedAgeAndPanchang() {
             const dobVal = document.getElementById('dob-input').value;
             const dobTimeVal = document.getElementById('dob-time-input').value || '00:00';
             const targetVal = document.getElementById('target-date-input').value;
@@ -1033,7 +1033,7 @@
                 if (mobWa) mobWa.href = 'https://wa.me/919713926390';
             }
         };
-        window.calculateAge = calculateAge;
+        window.calculateDetailedAgeAndPanchang = calculateDetailedAgeAndPanchang;
         window.setCutoffDate = setCutoffDate;
         window.resetAgeForm = resetAgeForm;
         window.toggleEligibilityBox = toggleEligibilityBox;
@@ -1046,8 +1046,6 @@
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
     <script>
-        // Re-assert upgraded functions after tools.js loads and initialize
-        window.calculateAge = calculateAge;
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initDobAndPanchangTool);
         } else {
