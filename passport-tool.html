@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>पासपोर्ट फोटो शीट मेकर - RUPESH COMPUTERS</title>
+    <title>AI पासपोर्ट फोटो स्टूडियो व सिग्नेचर टूल - RUPESH COMPUTERS</title>
     <meta name="theme-color" content="#1e3a8a">
     <link rel="manifest" id="pwa-manifest-link">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,6 +15,14 @@
         .glass-card { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .bot-float { animation: float 3s ease-in-out infinite; }
+        .checkerboard {
+            background-image: linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+                              linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+                              linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
@@ -23,48 +31,420 @@
     <div id="site-header"></div>
 
     <!-- MAIN PAGE CONTENT (passport-tool.html) -->
-    <main class="min-h-[65vh]">
-        <section id="passport-tool" class="page-section page-fade py-12 sm:py-16 bg-slate-100">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-2xl mx-auto mb-10">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-cyan-700 bg-cyan-100 px-3.5 py-1 rounded-full mb-3">
-                        <i class="fa-solid fa-id-badge"></i> प्रिंट-रेडी फोटो शीट
+    <main class="min-h-[70vh]">
+        <section id="passport-tool" class="page-section page-fade py-10 sm:py-14 bg-gradient-to-b from-cyan-50/70 via-slate-50 to-slate-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Page Header -->
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-cyan-800 bg-cyan-100 border border-cyan-200 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-wand-magic-sparkles text-cyan-600"></i> CSC स्पेशल AI फोटो एवं सिग्नेचर स्टूडियो
                     </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">पासपोर्ट साइज फोटो शीट मेकर</h2>
-                    <p class="mt-2 text-slate-600 text-sm">एक ही फोटो से 4x6 पेपर पर 6 या 12 पासपोर्ट फोटो की प्रिंट-रेडी शीट तैयार करें।</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">AI पासपोर्ट फोटो स्टूडियो &amp; सिग्नेचर क्लीनर</h2>
+                    <p class="mt-2 text-slate-600 text-sm sm:text-base">
+                        मोबाइल से खींची गई किसी भी सामान्य फोटो को स्टूडियो जैसी पासपोर्ट फोटो बनाएं और खराब से खराब सिग्नेचर को साफ डिजिटल स्कैन में बदलें।
+                    </p>
                 </div>
 
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <div class="border-2 border-dashed border-cyan-300 bg-cyan-50/50 rounded-2xl p-8 text-center hover:bg-cyan-50 transition cursor-pointer" onclick="document.getElementById('passport-input').click()">
-                            <i class="fa-solid fa-camera text-4xl text-cyan-600 mb-3"></i>
-                            <h4 class="font-bold text-slate-800">अपनी फोटो चुनें</h4>
-                            <p class="text-xs text-slate-500 mt-1">JPG या PNG फोटो अपलोड करें</p>
-                            <input type="file" id="passport-input" accept="image/*" class="hidden" onchange="loadPassportImage(event)">
-                        </div>
+                <!-- Mode Switch Tabs -->
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm gap-1.5">
+                        <button type="button" id="tab-btn-photo" onclick="switchStudioTab('photo')" class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-id-badge"></i> 1. AI पासपोर्ट फोटो स्टूडियो
+                        </button>
+                        <button type="button" id="tab-btn-sign" onclick="switchStudioTab('sign')" class="px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
+                            <i class="fa-solid fa-signature"></i> 2. AI डिजिटल सिग्नेचर मेकर
+                        </button>
+                    </div>
+                </div>
 
-                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">शीट पर कितनी फोटो चाहिए?</label>
-                                <select id="passport-count" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-cyan-500">
-                                    <option value="12">12 पासपोर्ट फोटो (4x6 शीट)</option>
-                                    <option value="6">6 पासपोर्ट फोटो (4x6 शीट)</option>
-                                </select>
+                <!-- ========================================================= -->
+                <!-- TAB 1: AI PASSPORT PHOTO STUDIO                           -->
+                <!-- ========================================================= -->
+                <div id="studio-tab-photo" class="space-y-8">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            
+                            <!-- Left Column: Upload & AI Options (6 Cols) -->
+                            <div class="lg:col-span-6 space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                                        <span class="w-7 h-7 rounded-full bg-cyan-600 text-white text-xs flex items-center justify-center">1</span>
+                                        फोटो अपलोड करें और AI सेटिंग्स चुनें
+                                    </h3>
+                                </div>
+
+                                <!-- Upload Area -->
+                                <div id="photo-dropzone" class="border-2 border-dashed border-cyan-300 bg-cyan-50/40 rounded-2xl p-6 text-center hover:bg-cyan-50 transition cursor-pointer relative" onclick="document.getElementById('ai-photo-input').click()">
+                                    <div id="photo-upload-placeholder">
+                                        <i class="fa-solid fa-camera-retro text-4xl text-cyan-600 mb-2"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm sm:text-base">ग्राहक की फोटो चुनें या खींचकर अपलोड करें</h4>
+                                        <p class="text-xs text-slate-500 mt-1">कोई भी बैकग्राउंड चलेगा — AI अपने आप स्टूडियो जैसा बना देगा</p>
+                                    </div>
+                                    <div id="photo-uploaded-preview-wrap" class="hidden flex-col items-center">
+                                        <img id="photo-uploaded-preview" class="max-h-44 rounded-xl border border-slate-300 shadow-sm object-contain mb-2" alt="Uploaded Photo">
+                                        <span class="text-xs font-bold text-cyan-700 bg-cyan-100 px-3 py-1 rounded-full">
+                                            <i class="fa-solid fa-rotate"></i> दूसरी फोटो बदलें
+                                        </span>
+                                    </div>
+                                    <input type="file" id="ai-photo-input" accept="image/*" class="hidden" onchange="handleAiPhotoUpload(event)">
+                                </div>
+
+                                <!-- AI Studio Controls -->
+                                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-extrabold text-slate-700 mb-2">बैकग्राउंड का रंग चुनें (Background Color):</label>
+                                        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                            <button type="button" onclick="selectBgColor('keep', 'Original', this)" class="bg-opt-btn bg-slate-800 text-amber-300 text-[11px] font-bold py-2 px-1.5 rounded-xl shadow-sm">
+                                                मूल रखें (No Change)
+                                            </button>
+                                            <button type="button" onclick="selectBgColor('#2563eb', 'Royal Blue', this)" class="bg-opt-btn ring-2 ring-offset-2 ring-blue-600 bg-blue-600 text-white text-[11px] font-bold py-2 px-1.5 rounded-xl shadow-sm">
+                                                नीला (Blue)
+                                            </button>
+                                            <button type="button" onclick="selectBgColor('#38bdf8', 'Light Sky Blue', this)" class="bg-opt-btn bg-sky-400 text-slate-950 text-[11px] font-bold py-2 px-1.5 rounded-xl shadow-sm">
+                                                आसमानी
+                                            </button>
+                                            <button type="button" onclick="selectBgColor('#ffffff', 'Pure White', this)" class="bg-opt-btn bg-white border border-slate-300 text-slate-800 text-[11px] font-bold py-2 px-1.5 rounded-xl shadow-sm">
+                                                सफेद (White)
+                                            </button>
+                                            <button type="button" onclick="selectBgColor('#dc2626', 'Red', this)" class="bg-opt-btn bg-red-600 text-white text-[11px] font-bold py-2 px-1.5 rounded-xl shadow-sm">
+                                                लाल (Red)
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-extrabold text-slate-700 mb-1.5">कपड़े / ड्रेस विकल्प (Dress / Suit):</label>
+                                        <select id="ai-dress-option" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs sm:text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-cyan-500">
+                                            <option value="keep">मूल कपड़े ही रखें (केवल बैकग्राउंड व लाइटिंग सुधारें)</option>
+                                            <option value="men-suit">पुरुष: फॉर्मल काला/नेवी ब्लू कोट-टाई (Formal Suit)</option>
+                                            <option value="men-shirt">पुरुष: साफ-सुथरी फॉर्मल शर्ट (Formal Shirt)</option>
+                                            <option value="women-formal">महिला: फॉर्मल ब्लेज़र / साड़ी लुक (Formal Attire)</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Optional Name & Date on Photo (SSC/Govt Form Requirement) -->
+                                    <div class="pt-2 border-t border-slate-200">
+                                        <label class="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-800">
+                                            <input type="checkbox" id="enable-name-date" onchange="toggleNameDateFields()" class="w-4 h-4 rounded text-cyan-600">
+                                            फोटो के नीचे नाम और तारीख लिखें (SSC / सरकारी फॉर्म के लिए)
+                                        </label>
+                                        <div id="name-date-fields" class="hidden grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
+                                            <input type="text" id="photo-person-name" placeholder="नाम (उदा: RUPESH PRASAD)" class="border border-slate-300 rounded-xl p-2 text-xs font-bold uppercase bg-white outline-none focus:ring-2 focus:ring-cyan-500">
+                                            <input type="text" id="photo-dop-text" placeholder="तारीख (उदा: DOP: 17-11-2026)" class="border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-cyan-500">
+                                        </div>
+                                    </div>
+
+                                    <button type="button" id="btn-generate-ai-photo" onclick="processAiPassportPhoto()" class="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 hover:from-cyan-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-2xl text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> AI से स्टूडियो पासपोर्ट फोटो बनाएं
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Studio Preview, Single Photo Resize & Sheet Generator (6 Cols) -->
+                            <div class="lg:col-span-6 flex flex-col justify-between bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+                                <div>
+                                    <h3 class="text-lg font-black text-slate-900 flex items-center gap-2 mb-4">
+                                        <span class="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center">2</span>
+                                        स्टूडियो फोटो प्रीव्यू और प्रिंट शीट
+                                    </h3>
+
+                                    <!-- Loading State -->
+                                    <div id="ai-photo-loader" class="hidden py-12 text-center bg-white rounded-2xl border border-cyan-200 mb-4">
+                                        <div class="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                                        <p class="text-sm font-black text-slate-800">AI स्टूडियो फोटो तैयार कर रहा है...</p>
+                                        <p class="text-xs text-slate-500 mt-1">बैकग्राउंड हटाया जा रहा है और चेहरे की क्वालिटी सुधारी जा रही है</p>
+                                    </div>
+
+                                    <!-- Single Passport Photo Preview -->
+                                    <div id="single-passport-box" class="bg-white border border-slate-200 rounded-2xl p-4 text-center mb-4">
+                                        <div id="single-passport-empty" class="py-10 text-slate-400">
+                                            <i class="fa-regular fa-id-card text-4xl mb-2"></i>
+                                            <p class="text-xs font-bold">यहाँ आपकी तैयार पासपोर्ट फोटो दिखेगी</p>
+                                        </div>
+                                        <div id="single-passport-ready" class="hidden flex-col items-center">
+                                            <div class="p-2 checkerboard rounded-xl border border-slate-300 inline-block mb-3">
+                                                <img id="final-single-passport-img" class="w-36 h-44 object-cover border-2 border-slate-900 shadow-md" alt="Final Passport Photo">
+                                            </div>
+                                            
+                                            <!-- Photo Size Preset + Custom Width, Height & KB Controls -->
+                                            <div class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 mb-2.5 text-left space-y-2.5">
+                                                <div>
+                                                    <label class="block text-[11px] font-extrabold text-slate-700 mb-1">ऑनलाइन फॉर्म साइज प्रीसेट (Photo Size):</label>
+                                                    <select id="photo-preset-select" onchange="applyPhotoPreset()" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-cyan-500">
+                                                        <option value="standard">स्टैंडर्ड पासपोर्ट (413 × 531 px | 300 DPI | 50 KB)</option>
+                                                        <option value="pan-nsdl">PAN कार्ड NSDL (200 × 200 px | 200 DPI | 20 KB)</option>
+                                                        <option value="pan-uti">PAN कार्ड UTIITSL (213 × 213 px | 300 DPI | 30 KB)</option>
+                                                        <option value="ssc">SSC / Vyapam / Govt (200 × 230 px | 300 DPI | 40 KB)</option>
+                                                        <option value="custom">कस्टम साइज (अपनी मर्जी से सेट करें)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-slate-600 mb-0.5">चौड़ाई (Width px):</label>
+                                                        <input type="number" id="photo-width-px" value="413" min="50" max="2000" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs font-bold bg-white text-center">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-slate-600 mb-0.5">ऊँचाई (Height px):</label>
+                                                        <input type="number" id="photo-height-px" value="531" min="50" max="2500" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs font-bold bg-white text-center">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-slate-600 mb-0.5">DPI सेटिंग:</label>
+                                                        <select id="photo-dpi-select" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs font-bold bg-white text-center">
+                                                            <option value="300" selected>300 DPI (UTI)</option>
+                                                            <option value="200">200 DPI (NSDL)</option>
+                                                            <option value="150">150 DPI</option>
+                                                            <option value="600">600 DPI</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-slate-600 mb-0.5">अधिकतम KB:</label>
+                                                        <input type="number" id="passport-single-kb" value="50" min="10" max="1000" class="w-full border border-slate-300 rounded-lg p-1.5 text-xs font-bold bg-white text-center">
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+                                                    <button type="button" onclick="downloadSinglePassportWithKb()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                                        <i class="fa-solid fa-download"></i> JPG डाउनलोड करें
+                                                    </button>
+                                                    <button type="button" onclick="downloadSinglePassportPsd()" class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5" title="Adobe Photoshop में खोलने के लिए">
+                                                        <i class="fa-solid fa-file-pen"></i> Photoshop (.PSD)
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" onclick="addCurrentPhotoToMultiBatch()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-black px-3 py-2 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-user-plus"></i> + A4 मल्टी-कस्टमर शीट में जोड़ें
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Print Sheet Settings -->
+                                    <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[11px] font-bold text-slate-700 mb-1">पेपर और फोटो की संख्या:</label>
+                                                <select id="studio-sheet-layout" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500">
+                                                    <option value="a4-6">A4 पेपर — 6 फोटो (1 पंक्ति)</option>
+                                                    <option value="a4-5">A4 पेपर — 5 फोटो (1 पंक्ति)</option>
+                                                    <option value="a4-3">A4 पेपर — 3 फोटो (1 पंक्ति)</option>
+                                                    <option value="a4-12">A4 पेपर — 12 फोटो (2 पंक्ति)</option>
+                                                    <option value="a4-30">A4 पेपर — 30 फोटो (5x6 ग्रिड)</option>
+                                                    <option value="a4-36">A4 पेपर — 36 फोटो (6x6 ग्रिड)</option>
+                                                    <option value="4x6-8">4x6 पेपर — 8 फोटो (स्टैंडर्ड CSC)</option>
+                                                    <option value="4x6-12">4x6 पेपर — 12 फोटो</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[11px] font-bold text-slate-700 mb-1">फोटो बॉर्डर (कटिंग के लिए):</label>
+                                                <select id="studio-border-style" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500">
+                                                    <option value="thin-black">पतला काला बॉर्डर (Best for Cutting)</option>
+                                                    <option value="white-gap">बिना बॉर्डर (केवल सफेद गैप)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button type="button" onclick="buildPrintSheetFromFinalPhoto()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-print text-amber-400"></i> प्रिंट-रेडी फोटो शीट तैयार करें
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Sheet Output Preview -->
+                                <div id="studio-sheet-output" class="hidden mt-4 pt-4 border-t border-slate-200 text-center">
+                                    <img id="studio-sheet-preview-img" class="mx-auto max-h-52 rounded-xl border border-slate-300 shadow mb-3" alt="Print Sheet">
+                                    <div class="flex flex-wrap justify-center gap-2">
+                                        <a id="studio-sheet-download-jpg" download="Rupesh_CSC_Passport_Sheet.jpg" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                                            <i class="fa-solid fa-image"></i> JPG शीट डाउनलोड
+                                        </a>
+                                        <button type="button" onclick="downloadSheetAsPsd('studio-sheet-preview-img', 'Rupesh_CSC_Passport_Sheet.psd')" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                                            <i class="fa-solid fa-file-pen"></i> Photoshop (.PSD)
+                                        </button>
+                                        <button type="button" onclick="printSheetDirectly()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                                            <i class="fa-solid fa-print"></i> सीधे प्रिंट करें
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" onclick="generatePassportSheet()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-black py-3 rounded-xl text-sm transition shadow">
-                                पासपोर्ट शीट तैयार करें
+                        </div>
+                    </div>
+
+                    <!-- Multi-Customer Batch A4 Sheet Section (For 4-6 Customers Together) -->
+                    <div id="multi-customer-batch-card" class="bg-white border-2 border-amber-300 rounded-3xl p-6 sm:p-8 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-amber-900 bg-amber-100 px-3 py-0.5 rounded-full mb-1">
+                                    <i class="fa-solid fa-users"></i> एक साथ 4–6 ग्राहकों की व्यवस्था (Multi-Customer A4 Sheet)
+                                </span>
+                                <h3 class="text-xl font-black text-slate-900">एक ही A4 पेपर पर कई ग्राहकों की पासपोर्ट फोटो प्रिंट करें</h3>
+                                <p class="text-xs text-slate-600 mt-0.5">ऊपर से प्रत्येक ग्राहक की फोटो तैयार करें और <b>"+ A4 मल्टी-कस्टमर शीट में जोड़ें"</b> दबाते जाएं।</p>
+                            </div>
+                            <button type="button" onclick="clearMultiBatchList()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-3.5 py-2 rounded-xl text-xs transition self-start sm:self-center">
+                                <i class="fa-solid fa-trash-can"></i> पूरी लिस्ट खाली करें
                             </button>
                         </div>
-                    </div>
 
-                    <div id="passport-result" class="hidden mt-8 pt-6 border-t border-slate-200 text-center">
-                        <h4 class="text-sm font-bold text-slate-800 mb-3">प्रिंट-रेडी पासपोर्ट शीट:</h4>
-                        <img id="passport-preview-img" class="mx-auto max-w-full max-h-72 rounded-xl border border-slate-300 shadow mb-4" alt="Passport Sheet">
-                        <a id="passport-download-btn" download="Rupesh_Computers_Passport_Sheet.jpg" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm shadow transition">
-                            <i class="fa-solid fa-download"></i> पासपोर्ट शीट डाउनलोड करें
-                        </a>
+                        <div id="multi-batch-empty" class="py-8 text-center text-slate-400">
+                            <i class="fa-solid fa-layer-group text-3xl mb-2 text-amber-400"></i>
+                            <p class="text-xs sm:text-sm font-bold text-slate-600">अभी मल्टी-कस्टमर शीट में कोई ग्राहक नहीं जोड़ा गया है।</p>
+                            <p class="text-xs text-slate-400 mt-1">ऊपर AI पासपोर्ट फोटो बनाएं और उसे इस शीट में जोड़ें (एक A4 शीट पर अधिकतम 6 ग्राहकों की अलग-अलग पंक्तियाँ बन सकती हैं)।</p>
+                        </div>
+
+                        <div id="multi-batch-content" class="hidden mt-5 space-y-5">
+                            <div id="multi-batch-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <div class="text-xs font-bold text-slate-700">
+                                    कुल जोड़े गए ग्राहक: <span id="multi-batch-count" class="text-blue-700 font-black text-sm">0</span> / 6 पंक्तियाँ (A4 पेपर)
+                                </div>
+                                <button type="button" onclick="generateMultiCustomerA4Sheet()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow transition flex items-center gap-2">
+                                    <i class="fa-solid fa-file-invoice"></i> सभी ग्राहकों की संयुक्त A4 शीट बनाएं
+                                </button>
+                            </div>
+
+                            <div id="multi-batch-output" class="hidden pt-4 border-t border-slate-200 text-center">
+                                <h4 class="text-sm font-black text-slate-800 mb-3">संयुक्त मल्टी-कस्टमर A4 प्रिंट शीट तैयार है:</h4>
+                                <img id="multi-batch-preview-img" class="mx-auto max-h-80 rounded-xl border border-slate-300 shadow mb-4" alt="Multi Customer A4 Sheet">
+                                <div class="flex flex-wrap justify-center gap-3">
+                                    <a id="multi-batch-download-jpg" download="Rupesh_CSC_Multi_Customer_A4.jpg" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition inline-flex items-center gap-2">
+                                        <i class="fa-solid fa-download"></i> संयुक्त A4 शीट (JPG)
+                                    </a>
+                                    <button type="button" onclick="downloadSheetAsPsd('multi-batch-preview-img', 'Rupesh_CSC_Multi_Customer_A4.psd')" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition inline-flex items-center gap-2">
+                                        <i class="fa-solid fa-file-pen"></i> Photoshop (.PSD)
+                                    </button>
+                                    <button type="button" onclick="printMultiBatchDirectly()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition inline-flex items-center gap-2">
+                                        <i class="fa-solid fa-print"></i> सीधे A4 प्रिंट करें
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- ========================================================= -->
+                <!-- TAB 2: AI SMART SIGNATURE CLEANER & RESIZER               -->
+                <!-- ========================================================= -->
+                <div id="studio-tab-sign" class="hidden space-y-8">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            
+                            <!-- Left Column: Signature Upload & Cleaning Controls -->
+                            <div class="lg:col-span-6 space-y-5">
+                                <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">1</span>
+                                    कैसा भी सिग्नेचर अपलोड करें (Mobile Photo / Scan)
+                                </h3>
+
+                                <div class="border-2 border-dashed border-indigo-300 bg-indigo-50/40 rounded-2xl p-6 text-center hover:bg-indigo-50 transition cursor-pointer" onclick="document.getElementById('ai-sign-input').click()">
+                                    <div id="sign-upload-placeholder">
+                                        <i class="fa-solid fa-pen-nib text-4xl text-indigo-600 mb-2"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm sm:text-base">कागज पर किए गए सिग्नेचर की फोटो चुनें</h4>
+                                        <p class="text-xs text-slate-500 mt-1">धुंधली, पीली या छाया वाली फोटो भी चलेगी — AI एकदम साफ कर देगा</p>
+                                    </div>
+                                    <div id="sign-uploaded-preview-wrap" class="hidden flex-col items-center">
+                                        <img id="sign-uploaded-preview" class="max-h-36 rounded-xl border border-slate-300 shadow-sm object-contain mb-2" alt="Uploaded Signature">
+                                        <span class="text-xs font-bold text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">
+                                            <i class="fa-solid fa-rotate"></i> दूसरा सिग्नेचर चुनें
+                                        </span>
+                                    </div>
+                                    <input type="file" id="ai-sign-input" accept="image/*" class="hidden" onchange="handleAiSignUpload(event)">
+                                </div>
+
+                                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-extrabold text-slate-700 mb-1.5">इंक (स्याही) का रंग:</label>
+                                            <select id="sign-ink-color" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="black">गहरा काला (Pure Jet Black - Best)</option>
+                                                <option value="blue">गहरा नीला (Royal Blue Ink)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-extrabold text-slate-700 mb-1.5">साइज प्रीसेट (Form Preset):</label>
+                                            <select id="sign-preset-select" onchange="applySignPreset()" class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="standard">स्टैंडर्ड (300 x 100 px | 300 DPI | 20 KB)</option>
+                                                <option value="pan-nsdl">PAN कार्ड NSDL (200 x 50 px | 200 DPI | 15 KB)</option>
+                                                <option value="pan-uti">PAN कार्ड UTIITSL (400 x 200 px | 600 DPI | 60 KB)</option>
+                                                <option value="ssc">SSC / Vyapam / Govt (140 x 60 px | 300 DPI | 15 KB)</option>
+                                                <option value="custom">कस्टम साइज (अपनी मर्जी से सेट करें)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom Width, Height, DPI & KB Controls -->
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 mb-1">चौड़ाई (Width px):</label>
+                                            <input type="number" id="sign-width-px" value="300" min="50" max="2500" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 mb-1">ऊँचाई (Height px):</label>
+                                            <input type="number" id="sign-height-px" value="100" min="20" max="1200" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 mb-1">DPI सेटिंग:</label>
+                                            <select id="sign-dpi-select" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white text-center">
+                                                <option value="300" selected>300 DPI</option>
+                                                <option value="600">600 DPI (UTI)</option>
+                                                <option value="200">200 DPI (NSDL)</option>
+                                                <option value="150">150 DPI</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 mb-1">अधिकतम KB:</label>
+                                            <input type="number" id="sign-target-kb" value="20" min="5" max="200" class="w-full border border-slate-300 rounded-xl p-2 text-xs font-bold bg-white text-center">
+                                        </div>
+                                    </div>
+
+                                    <button type="button" id="btn-generate-ai-sign" onclick="processAiSignature()" class="w-full bg-gradient-to-r from-indigo-600 via-blue-700 to-slate-900 hover:from-indigo-700 hover:to-slate-950 text-white font-black py-3.5 rounded-2xl text-sm shadow-lg shadow-indigo-500/25 transition flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> AI से डिजिटल सिग्नेचर बनाएं
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Cleaned Signature Preview & Download -->
+                            <div class="lg:col-span-6 flex flex-col justify-between bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+                                <div>
+                                    <h3 class="text-lg font-black text-slate-900 flex items-center gap-2 mb-4">
+                                        <span class="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center">2</span>
+                                        साफ किया गया डिजिटल सिग्नेचर
+                                    </h3>
+
+                                    <div id="ai-sign-loader" class="hidden py-12 text-center bg-white rounded-2xl border border-indigo-200 mb-4">
+                                        <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                                        <p class="text-sm font-black text-slate-800">AI सिग्नेचर की गंदगी व छाया हटा रहा है...</p>
+                                        <p class="text-xs text-slate-500 mt-1">बिल्कुल सफेद बैकग्राउंड पर गहरी स्याही तैयार हो रही है</p>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200 rounded-2xl p-6 text-center min-h-[220px] flex flex-col items-center justify-center">
+                                        <div id="sign-result-empty" class="text-slate-400">
+                                            <i class="fa-solid fa-signature text-4xl mb-2"></i>
+                                            <p class="text-xs font-bold">यहाँ आपका साफ-सुथरा डिजिटल सिग्नेचर दिखेगा</p>
+                                        </div>
+                                        <div id="sign-result-ready" class="hidden w-full flex-col items-center">
+                                            <div class="p-4 checkerboard rounded-xl border border-slate-300 mb-3 max-w-full overflow-hidden">
+                                                <img id="final-sign-preview" class="max-h-32 mx-auto border border-slate-300 bg-white shadow-sm" alt="Cleaned Signature">
+                                            </div>
+                                            <p id="final-sign-meta" class="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full mb-4"></p>
+                                            
+                                            <div class="flex flex-wrap justify-center gap-2.5">
+                                                <a id="download-sign-jpg" download="Rupesh_CSC_Signature.jpg" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-2.5 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                                                    <i class="fa-solid fa-download"></i> JPG डाउनलोड करें (Form Ready)
+                                                </a>
+                                                <a id="download-sign-png" download="Rupesh_CSC_Signature_Transparent.png" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow transition inline-flex items-center gap-1.5">
+                                                    <i class="fa-solid fa-file-image"></i> PNG (Transparent)
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-xs text-amber-950">
+                                    <b>💡 CSC प्रो टिप:</b> मोबाइल से सिग्नेचर की फोटो लेते समय कैमरे को थोड़ा तिरछा भी रखेंगे या परछाई आएगी, तब भी हमारा AI उसे सीधा और सफेद कागज जैसा बना देगा।
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
@@ -218,6 +598,890 @@
         <i class="fa-solid fa-circle-info text-amber-400"></i>
         <span id="custom-toast-msg"></span>
     </div>
+
+    <!-- AI Passport Photo & Signature Studio Logic -->
+    <script>
+        let uploadedPhotoBase64 = null;
+        let uploadedPhotoMime = 'image/jpeg';
+        let selectedBgHex = '#2563eb';
+        let selectedBgName = 'Royal Blue';
+        let finalSinglePassportDataUrl = null;
+
+        let uploadedSignBase64 = null;
+        let uploadedSignMime = 'image/jpeg';
+
+        // Helper: Show Toast
+        function notifyUser(msg) {
+            if (typeof showToast === 'function') {
+                showToast(msg);
+                return;
+            }
+            const toast = document.getElementById('custom-toast');
+            const msgEl = document.getElementById('custom-toast-msg');
+            if (toast && msgEl) {
+                msgEl.textContent = msg;
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3500);
+            }
+        }
+
+        // Tab Switcher
+        function switchStudioTab(tab) {
+            const photoTab = document.getElementById('studio-tab-photo');
+            const signTab = document.getElementById('studio-tab-sign');
+            const btnPhoto = document.getElementById('tab-btn-photo');
+            const btnSign = document.getElementById('tab-btn-sign');
+
+            if (tab === 'photo') {
+                photoTab.classList.remove('hidden');
+                signTab.classList.add('hidden');
+                btnPhoto.className = 'px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow transition flex items-center gap-2';
+                btnSign.className = 'px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black text-slate-700 hover:bg-slate-100 transition flex items-center gap-2';
+            } else {
+                signTab.classList.remove('hidden');
+                photoTab.classList.add('hidden');
+                btnSign.className = 'px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-indigo-600 to-blue-800 text-white shadow transition flex items-center gap-2';
+                btnPhoto.className = 'px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black text-slate-700 hover:bg-slate-100 transition flex items-center gap-2';
+            }
+        }
+
+        // Select Background Color
+        function selectBgColor(hex, name, btnEl) {
+            selectedBgHex = hex;
+            selectedBgName = name;
+            document.querySelectorAll('.bg-opt-btn').forEach(b => {
+                b.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-600');
+            });
+            btnEl.classList.add('ring-2', 'ring-offset-2', 'ring-blue-600');
+        }
+
+        // Toggle Name & Date fields
+        function toggleNameDateFields() {
+            const checked = document.getElementById('enable-name-date').checked;
+            const fields = document.getElementById('name-date-fields');
+            if (checked) {
+                fields.classList.remove('hidden');
+                fields.classList.add('grid');
+            } else {
+                fields.classList.add('hidden');
+                fields.classList.remove('grid');
+            }
+        }
+
+        // Resize image down before sending to AI for fast & reliable processing
+        function prepareImageForAi(file, maxDim = 1024) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                        resolve({
+                            dataUrl,
+                            base64: dataUrl.split(',')[1],
+                            mimeType: 'image/jpeg'
+                        });
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Handle Passport Photo Upload
+        async function handleAiPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const prepared = await prepareImageForAi(file, 1024);
+                uploadedPhotoBase64 = prepared.base64;
+                uploadedPhotoMime = prepared.mimeType;
+
+                document.getElementById('photo-uploaded-preview').src = prepared.dataUrl;
+                document.getElementById('photo-upload-placeholder').classList.add('hidden');
+                document.getElementById('photo-uploaded-preview-wrap').classList.remove('hidden');
+                document.getElementById('photo-uploaded-preview-wrap').classList.add('flex');
+                notifyUser('फोटो अपलोड हो गई है! अब "AI से स्टूडियो पासपोर्ट फोटो बनाएं" दबाएं।');
+            } catch (err) {
+                notifyUser('फोटो पढ़ने में त्रुटि हुई, कृपया दूसरी फोटो चुनें।');
+            }
+        }
+
+        // Gemini Image Editing Helper with Exponential Backoff
+        async function callGeminiImageEdit(promptText, base64Data, mimeType) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: promptText },
+                        {
+                            inlineData: {
+                                mimeType: mimeType,
+                                data: base64Data
+                            }
+                        }
+                    ]
+                }],
+                generationConfig: {
+                    responseModalities: ['IMAGE']
+                }
+            };
+
+            let delay = 1000;
+            for (let attempt = 0; attempt < 4; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                    if (part && part.inlineData?.data) {
+                        return `data:${part.inlineData.mimeType || 'image/png'};base64,${part.inlineData.data}`;
+                    }
+                    throw new Error('No image returned');
+                } catch (error) {
+                    if (attempt === 3) throw error;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Process AI Passport Photo
+        async function processAiPassportPhoto() {
+            if (!uploadedPhotoBase64) {
+                notifyUser('कृपया पहले ग्राहक की फोटो अपलोड करें!');
+                return;
+            }
+
+            const loader = document.getElementById('ai-photo-loader');
+            const btn = document.getElementById('btn-generate-ai-photo');
+            const dress = document.getElementById('ai-dress-option').value;
+
+            loader.classList.remove('hidden');
+            btn.disabled = true;
+            btn.classList.add('opacity-60');
+
+            let dressInstruction = 'Keep the person\'s original clothing neat and clean.';
+            if (dress === 'men-suit') {
+                dressInstruction = 'Dress the person in a sharp, professional dark navy blue or black formal business suit with a crisp white collared shirt and formal tie, fitting naturally on their shoulders and neck.';
+            } else if (dress === 'men-shirt') {
+                dressInstruction = 'Dress the person in a clean, neat solid formal collared shirt suitable for an official Indian passport photo.';
+            } else if (dress === 'women-formal') {
+                dressInstruction = 'Dress the person in neat, dignified formal attire suitable for an official Indian government ID and passport photo.';
+            }
+
+            const bgInstruction = selectedBgHex === 'keep'
+                ? 'Keep the original background of the photo intact without changing its color or replacing it, just ensure it looks neat and well-lit.'
+                : `Replace the entire background with a completely uniform, solid, flat ${selectedBgName} (${selectedBgHex}) studio backdrop with zero shadows, gradients, or textures.`;
+
+            const prompt = `Create a high-resolution, professional studio-quality Indian passport size portrait photograph (35mm x 45mm aspect ratio) of the person in this image. Preserve the person's exact facial features, skin tone, hair, and identity accurately. Position the face centered and looking straight forward with head and shoulders clearly visible. ${dressInstruction} ${bgInstruction} Apply soft, balanced studio portrait lighting and sharp focus.`;
+
+            try {
+                const aiResultUrl = await callGeminiImageEdit(prompt, uploadedPhotoBase64, uploadedPhotoMime);
+                await finalizeSinglePassportCanvas(aiResultUrl);
+                notifyUser('✨ स्टूडियो पासपोर्ट फोटो तैयार हो गई है!');
+            } catch (err) {
+                notifyUser('AI फोटो बनाने में समस्या आई, कृपया पुनः प्रयास करें।');
+            } finally {
+                loader.classList.add('hidden');
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+            }
+        }
+
+        // Draw Final Passport Photo (with optional Name & Date strip at bottom)
+        function finalizeSinglePassportCanvas(aiImageUrl) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    // Standard 35mm x 45mm at 300 DPI => 413 x 531 px
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 413;
+                    canvas.height = 531;
+                    const ctx = canvas.getContext('2d');
+
+                    ctx.fillStyle = selectedBgHex === 'keep' ? '#ffffff' : selectedBgHex;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    const addNameDate = document.getElementById('enable-name-date').checked;
+                    const personName = (document.getElementById('photo-person-name').value || '').trim().toUpperCase();
+                    const dopText = (document.getElementById('photo-dop-text').value || '').trim();
+
+                    const photoAreaHeight = (addNameDate && (personName || dopText)) ? 455 : 531;
+
+                    // Center-crop image to fit photo area cleanly
+                    const targetRatio = canvas.width / photoAreaHeight;
+                    const srcRatio = img.width / img.height;
+                    let sx = 0, sy = 0, sw = img.width, sh = img.height;
+                    if (srcRatio > targetRatio) {
+                        sw = img.height * targetRatio;
+                        sx = (img.width - sw) / 2;
+                    } else {
+                        sh = img.width / targetRatio;
+                        sy = (img.height - sh) / 2;
+                    }
+                    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, photoAreaHeight);
+
+                    // Draw clean white strip with Name & Date for SSC / Govt Exams
+                    if (addNameDate && (personName || dopText)) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, photoAreaHeight, canvas.width, canvas.height - photoAreaHeight);
+                        ctx.strokeStyle = '#0f172a';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(0, photoAreaHeight);
+                        ctx.lineTo(canvas.width, photoAreaHeight);
+                        ctx.stroke();
+
+                        ctx.fillStyle = '#0f172a';
+                        ctx.textAlign = 'center';
+                        if (personName && dopText) {
+                            ctx.font = 'bold 23px Inter, sans-serif';
+                            ctx.fillText(personName, canvas.width / 2, photoAreaHeight + 32);
+                            ctx.font = 'bold 20px Inter, sans-serif';
+                            ctx.fillText(dopText, canvas.width / 2, photoAreaHeight + 62);
+                        } else {
+                            ctx.font = 'bold 24px Inter, sans-serif';
+                            ctx.fillText(personName || dopText, canvas.width / 2, photoAreaHeight + 46);
+                        }
+                    }
+
+                    finalSinglePassportDataUrl = canvas.toDataURL('image/jpeg', 0.96);
+                    document.getElementById('final-single-passport-img').src = finalSinglePassportDataUrl;
+                    document.getElementById('single-passport-empty').classList.add('hidden');
+                    document.getElementById('single-passport-ready').classList.remove('hidden');
+                    document.getElementById('single-passport-ready').classList.add('flex');
+                    resolve();
+                };
+                img.src = aiImageUrl;
+            });
+        }
+
+        // Embed exact JFIF DPI metadata into JPEG DataURL (required by UTIITSL / NSDL portals)
+        function setJpegDpiHeader(dataUrl, dpi) {
+            const base64 = dataUrl.split(',')[1];
+            const binStr = atob(base64);
+            const len = binStr.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binStr.charCodeAt(i);
+            }
+            // Check SOI (FF D8) and APP0 JFIF marker (FF E0 ... 'JFIF\0')
+            if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF && bytes[3] === 0xE0) {
+                if (bytes[6] === 0x4A && bytes[7] === 0x46 && bytes[8] === 0x49 && bytes[9] === 0x46 && bytes[10] === 0x00) {
+                    bytes[13] = 1; // Units: 1 = dots per inch (DPI)
+                    bytes[14] = (dpi >> 8) & 0xFF;
+                    bytes[15] = dpi & 0xFF;
+                    bytes[16] = (dpi >> 8) & 0xFF;
+                    bytes[17] = dpi & 0xFF;
+                }
+            }
+            let outBin = '';
+            const chunk = 8192;
+            for (let i = 0; i < bytes.length; i += chunk) {
+                outBin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+            }
+            return 'data:image/jpeg;base64,' + btoa(outBin);
+        }
+
+        // Helper: Compress & Resize DataURL to exact dimensions, DPI and target KB limit
+        function compressDataUrlToTargetKb(dataUrl, maxKb, targetWidth, targetHeight, dpi = 300) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth || img.width;
+                    canvas.height = targetHeight || img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    let quality = 0.95;
+                    let resultUrl = setJpegDpiHeader(canvas.toDataURL('image/jpeg', quality), dpi);
+                    let sizeKb = Math.round((resultUrl.length * 3) / 4 / 1024);
+
+                    while (sizeKb > maxKb && quality > 0.1) {
+                        quality -= 0.05;
+                        resultUrl = setJpegDpiHeader(canvas.toDataURL('image/jpeg', quality), dpi);
+                        sizeKb = Math.round((resultUrl.length * 3) / 4 / 1024);
+                    }
+                    resolve({ dataUrl: resultUrl, sizeKb });
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        // Apply Photo Size Preset (Standard, PAN NSDL, PAN UTI, SSC, Custom)
+        function applyPhotoPreset() {
+            const val = document.getElementById('photo-preset-select').value;
+            const wEl = document.getElementById('photo-width-px');
+            const hEl = document.getElementById('photo-height-px');
+            const dpiEl = document.getElementById('photo-dpi-select');
+            const kbEl = document.getElementById('passport-single-kb');
+
+            if (val === 'standard') { wEl.value = 413; hEl.value = 531; dpiEl.value = '300'; kbEl.value = 50; }
+            else if (val === 'pan-nsdl') { wEl.value = 200; hEl.value = 200; dpiEl.value = '200'; kbEl.value = 20; }
+            else if (val === 'pan-uti') { wEl.value = 213; hEl.value = 213; dpiEl.value = '300'; kbEl.value = 30; }
+            else if (val === 'ssc') { wEl.value = 200; hEl.value = 230; dpiEl.value = '300'; kbEl.value = 40; }
+        }
+
+        // Download Single Passport Photo with custom Width, Height, DPI & KB
+        async function downloadSinglePassportWithKb() {
+            if (!finalSinglePassportDataUrl) return;
+            const targetW = parseInt(document.getElementById('photo-width-px').value, 10) || 413;
+            const targetH = parseInt(document.getElementById('photo-height-px').value, 10) || 531;
+            const targetDpi = parseInt(document.getElementById('photo-dpi-select').value, 10) || 300;
+            const targetKb = parseInt(document.getElementById('passport-single-kb').value, 10) || 50;
+
+            const { dataUrl, sizeKb } = await compressDataUrlToTargetKb(finalSinglePassportDataUrl, targetKb, targetW, targetH, targetDpi);
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = `Rupesh_CSC_Photo_${targetW}x${targetH}_${targetDpi}DPI_${sizeKb}KB.jpg`;
+            a.click();
+            notifyUser(`पासपोर्ट फोटो (${targetW}×${targetH} px | ${targetDpi} DPI | ${sizeKb} KB) डाउनलोड हो गई!`);
+        }
+
+        // Pure JS Adobe Photoshop (.PSD) File Generator (Uncompressed RGB 8-bit PSD)
+        function exportCanvasToPsdBlob(canvas) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const ctx = canvas.getContext('2d');
+            const rgba = ctx.getImageData(0, 0, w, h).data;
+            const pixelCount = w * h;
+
+            // PSD Structure: Header (26) + ColorMode (4) + ImageResources (4) + LayerMaskInfo (4) + ImageData (2 + 3 * pixelCount)
+            const totalSize = 26 + 4 + 4 + 4 + 2 + (3 * pixelCount);
+            const buffer = new ArrayBuffer(totalSize);
+            const view = new DataView(buffer);
+            const bytes = new Uint8Array(buffer);
+            let offset = 0;
+
+            // 1. File Header Section (26 bytes)
+            bytes[0] = 0x38; bytes[1] = 0x42; bytes[2] = 0x50; bytes[3] = 0x53; // Signature '8BPS'
+            view.setUint16(4, 1, false);        // Version 1
+            // Bytes 6..11 reserved (already 0)
+            view.setUint16(12, 3, false);       // Channels: 3 (RGB)
+            view.setUint32(14, h, false);       // Height
+            view.setUint32(18, w, false);       // Width
+            view.setUint16(22, 8, false);       // Depth: 8 bits per channel
+            view.setUint16(24, 3, false);       // Color Mode: 3 (RGB)
+            offset = 26;
+
+            // 2. Color Mode Data Section (4 bytes length = 0)
+            view.setUint32(offset, 0, false);
+            offset += 4;
+
+            // 3. Image Resources Section (4 bytes length = 0)
+            view.setUint32(offset, 0, false);
+            offset += 4;
+
+            // 4. Layer and Mask Information Section (4 bytes length = 0)
+            view.setUint32(offset, 0, false);
+            offset += 4;
+
+            // 5. Image Data Section (Compression = 0 Raw + Planar R, G, B channels)
+            view.setUint16(offset, 0, false);   // Compression: 0 (Raw uncompressed)
+            offset += 2;
+
+            const rStart = offset;
+            const gStart = offset + pixelCount;
+            const bStart = offset + (pixelCount * 2);
+
+            for (let i = 0; i < pixelCount; i++) {
+                const p = i * 4;
+                bytes[rStart + i] = rgba[p];
+                bytes[gStart + i] = rgba[p + 1];
+                bytes[bStart + i] = rgba[p + 2];
+            }
+
+            return new Blob([buffer], { type: 'image/vnd.adobe.photoshop' });
+        }
+
+        // Download Single Passport Photo as Adobe Photoshop (.PSD)
+        function downloadSinglePassportPsd() {
+            if (!finalSinglePassportDataUrl) {
+                notifyUser('पहले पासपोर्ट फोटो तैयार करें!');
+                return;
+            }
+            const targetW = parseInt(document.getElementById('photo-width-px').value, 10) || 413;
+            const targetH = parseInt(document.getElementById('photo-height-px').value, 10) || 531;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = targetW;
+                canvas.height = targetH;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, targetW, targetH);
+                ctx.drawImage(img, 0, 0, targetW, targetH);
+
+                const psdBlob = exportCanvasToPsdBlob(canvas);
+                const url = URL.createObjectURL(psdBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Rupesh_CSC_Photo_${targetW}x${targetH}.psd`;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+                notifyUser('Adobe Photoshop (.PSD) फाइल डाउनलोड हो गई!');
+            };
+            img.src = finalSinglePassportDataUrl;
+        }
+
+        // Download Print Sheet (Single or Multi-Customer) as Adobe Photoshop (.PSD)
+        function downloadSheetAsPsd(imgElementId, fileName) {
+            const imgEl = document.getElementById(imgElementId);
+            if (!imgEl || !imgEl.src) {
+                notifyUser('पहले प्रिंट शीट तैयार करें!');
+                return;
+            }
+            notifyUser('Photoshop (.PSD) शीट तैयार की जा रही है...');
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const psdBlob = exportCanvasToPsdBlob(canvas);
+                const url = URL.createObjectURL(psdBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+                notifyUser('Photoshop (.PSD) शीट डाउनलोड हो गई!');
+            };
+            img.src = imgEl.src;
+        }
+
+        // Build 4x6 or A4 Print Sheet from Final Photo
+        function buildPrintSheetFromFinalPhoto() {
+            if (!finalSinglePassportDataUrl) {
+                notifyUser('पहले AI पासपोर्ट फोटो तैयार करें!');
+                return;
+            }
+            const layout = document.getElementById('studio-sheet-layout').value;
+            const borderStyle = document.getElementById('studio-border-style').value;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                let cols = 6, rows = 1, isSingleTopRowA4 = false;
+                // 300 DPI dimensions
+                if (layout === 'a4-3') {
+                    canvas.width = 2480; canvas.height = 3508; // A4 Portrait 300 DPI
+                    cols = 3; rows = 1; isSingleTopRowA4 = true;
+                } else if (layout === 'a4-5') {
+                    canvas.width = 2480; canvas.height = 3508;
+                    cols = 5; rows = 1; isSingleTopRowA4 = true;
+                } else if (layout === 'a4-6') {
+                    canvas.width = 2480; canvas.height = 3508;
+                    cols = 6; rows = 1; isSingleTopRowA4 = true;
+                } else if (layout === 'a4-12') {
+                    canvas.width = 2480; canvas.height = 3508;
+                    cols = 6; rows = 2; isSingleTopRowA4 = true;
+                } else if (layout === 'a4-30') {
+                    canvas.width = 2480; canvas.height = 3508;
+                    cols = 5; rows = 6;
+                } else if (layout === 'a4-36') {
+                    canvas.width = 2480; canvas.height = 3508;
+                    cols = 6; rows = 6;
+                } else if (layout === '4x6-8') {
+                    canvas.width = 1800; canvas.height = 1200; // 6x4 inch landscape
+                    cols = 4; rows = 2;
+                } else if (layout === '4x6-12') {
+                    canvas.width = 1800; canvas.height = 1200;
+                    cols = 4; rows = 3;
+                }
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const marginX = 60;
+                const marginY = 60;
+                const gapX = 26;
+                const gapY = 26;
+
+                let cellW, cellH, startX, startY;
+
+                if (isSingleTopRowA4) {
+                    // Standard Indian Passport Size on A4 (300 DPI): ~365 x 470 px (fits up to 6 in a row neatly at top)
+                    cellW = 365;
+                    cellH = 470;
+                    startX = marginX;
+                    startY = marginY;
+                } else {
+                    const availW = canvas.width - (marginX * 2) - (gapX * (cols - 1));
+                    const availH = canvas.height - (marginY * 2) - (gapY * (rows - 1));
+
+                    cellW = availW / cols;
+                    cellH = cellW * (45 / 35);
+                    if (cellH * rows > availH) {
+                        cellH = availH / rows;
+                        cellW = cellH * (35 / 45);
+                    }
+
+                    const totalGridW = (cellW * cols) + (gapX * (cols - 1));
+                    const totalGridH = (cellH * rows) + (gapY * (rows - 1));
+                    startX = (canvas.width - totalGridW) / 2;
+                    startY = (canvas.height - totalGridH) / 2;
+                }
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const x = startX + c * (cellW + gapX);
+                        const y = startY + r * (cellH + gapY);
+                        ctx.drawImage(img, x, y, cellW, cellH);
+
+                        if (borderStyle === 'thin-black') {
+                            ctx.strokeStyle = '#1e293b';
+                            ctx.lineWidth = 2.5;
+                            ctx.strokeRect(x, y, cellW, cellH);
+                        }
+                    }
+                }
+
+                const sheetUrl = setJpegDpiHeader(canvas.toDataURL('image/jpeg', 0.96), 300);
+                document.getElementById('studio-sheet-preview-img').src = sheetUrl;
+                document.getElementById('studio-sheet-download-jpg').href = sheetUrl;
+                document.getElementById('studio-sheet-output').classList.remove('hidden');
+            };
+            img.src = finalSinglePassportDataUrl;
+        }
+
+        // Direct Print Sheet
+        function printSheetDirectly() {
+            const sheetSrc = document.getElementById('studio-sheet-preview-img').src;
+            if (!sheetSrc) return;
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html><head><title>Print Passport Sheet - Rupesh Computers</title>
+                <style>@page { size: auto; margin: 0; } body { margin: 0; display: flex; justify-content: center; align-items: flex-start; } img { width: 100%; height: auto; object-fit: contain; }</style>
+                </head><body><img src="${sheetSrc}" onload="window.print(); window.close();"></body></html>
+            `);
+            win.document.close();
+        }
+
+        // ====================================================================
+        // MULTI-CUSTOMER A4 BATCH SHEET (4-6 CUSTOMERS ON ONE A4 PAGE)
+        // ====================================================================
+        let multiCustomerList = [];
+
+        function addCurrentPhotoToMultiBatch() {
+            if (!finalSinglePassportDataUrl) {
+                notifyUser('पहले किसी ग्राहक की पासपोर्ट फोटो तैयार करें!');
+                return;
+            }
+            if (multiCustomerList.length >= 6) {
+                notifyUser('एक A4 शीट पर अधिकतम 6 ग्राहकों की पंक्तियाँ जोड़ी जा सकती हैं!');
+                return;
+            }
+            const personName = (document.getElementById('photo-person-name').value || '').trim();
+            const label = personName || `ग्राहक #${multiCustomerList.length + 1}`;
+            multiCustomerList.push({
+                id: Date.now() + Math.random(),
+                label: label,
+                dataUrl: finalSinglePassportDataUrl,
+                copies: 6
+            });
+            renderMultiBatchList();
+            notifyUser(`"${label}" को A4 मल्टी-कस्टमर शीट में जोड़ दिया गया है!`);
+        }
+
+        function updateMultiBatchCopies(index, val) {
+            multiCustomerList[index].copies = parseInt(val, 10) || 6;
+        }
+
+        function removeMultiBatchItem(index) {
+            multiCustomerList.splice(index, 1);
+            renderMultiBatchList();
+        }
+
+        function clearMultiBatchList() {
+            multiCustomerList = [];
+            renderMultiBatchList();
+            document.getElementById('multi-batch-output').classList.add('hidden');
+            notifyUser('मल्टी-कस्टमर लिस्ट खाली कर दी गई है।');
+        }
+
+        function renderMultiBatchList() {
+            const emptyBox = document.getElementById('multi-batch-empty');
+            const contentBox = document.getElementById('multi-batch-content');
+            const itemsContainer = document.getElementById('multi-batch-items');
+            const countEl = document.getElementById('multi-batch-count');
+
+            countEl.textContent = multiCustomerList.length;
+
+            if (multiCustomerList.length === 0) {
+                emptyBox.classList.remove('hidden');
+                contentBox.classList.add('hidden');
+                return;
+            }
+
+            emptyBox.classList.add('hidden');
+            contentBox.classList.remove('hidden');
+
+            itemsContainer.innerHTML = multiCustomerList.map((item, idx) => `
+                <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 p-3 rounded-2xl">
+                    <img src="${item.dataUrl}" class="w-12 h-14 object-cover rounded-lg border border-slate-400 shrink-0" alt="Customer">
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs font-black text-slate-900 truncate">${idx + 1}. ${item.label}</div>
+                        <div class="mt-1.5 flex items-center gap-1.5">
+                            <span class="text-[11px] font-bold text-slate-600">फोटो संख्या:</span>
+                            <select onchange="updateMultiBatchCopies(${idx}, this.value)" class="border border-slate-300 rounded-lg px-2 py-0.5 text-xs font-bold bg-white">
+                                <option value="3" ${item.copies === 3 ? 'selected' : ''}>3 फोटो</option>
+                                <option value="5" ${item.copies === 5 ? 'selected' : ''}>5 फोटो</option>
+                                <option value="6" ${item.copies === 6 ? 'selected' : ''}>6 फोटो</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeMultiBatchItem(${idx})" class="w-7 h-7 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 flex items-center justify-center text-xs shrink-0" title="हटाएं">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function generateMultiCustomerA4Sheet() {
+            if (multiCustomerList.length === 0) {
+                notifyUser('कृपया पहले कम से कम 1 ग्राहक की फोटो जोड़ें!');
+                return;
+            }
+            const borderStyle = document.getElementById('studio-border-style').value;
+            const canvas = document.createElement('canvas');
+            // A4 Portrait 300 DPI: 2480 x 3508 px (fits up to 6 rows of 470px height + gaps)
+            canvas.width = 2480;
+            canvas.height = 3508;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const marginX = 60;
+            const marginY = 60;
+            const gapX = 26;
+            const gapY = 42;
+            const cellW = 365;
+            const cellH = 470;
+
+            for (let r = 0; r < multiCustomerList.length; r++) {
+                const customer = multiCustomerList[r];
+                const img = await new Promise((res) => {
+                    const i = new Image();
+                    i.onload = () => res(i);
+                    i.src = customer.dataUrl;
+                });
+
+                const y = marginY + r * (cellH + gapY);
+                for (let c = 0; c < customer.copies; c++) {
+                    const x = marginX + c * (cellW + gapX);
+                    ctx.drawImage(img, x, y, cellW, cellH);
+                    if (borderStyle === 'thin-black') {
+                        ctx.strokeStyle = '#1e293b';
+                        ctx.lineWidth = 2.5;
+                        ctx.strokeRect(x, y, cellW, cellH);
+                    }
+                }
+            }
+
+            const finalMultiUrl = setJpegDpiHeader(canvas.toDataURL('image/jpeg', 0.96), 300);
+            document.getElementById('multi-batch-preview-img').src = finalMultiUrl;
+            document.getElementById('multi-batch-download-jpg').href = finalMultiUrl;
+            document.getElementById('multi-batch-output').classList.remove('hidden');
+            notifyUser(`सभी ${multiCustomerList.length} ग्राहकों की संयुक्त A4 शीट तैयार हो गई है!`);
+        }
+
+        function printMultiBatchDirectly() {
+            const sheetSrc = document.getElementById('multi-batch-preview-img').src;
+            if (!sheetSrc) return;
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html><head><title>Print Multi-Customer A4 Sheet - Rupesh Computers</title>
+                <style>@page { size: A4 portrait; margin: 0; } body { margin: 0; } img { width: 100%; height: auto; display: block; }</style>
+                </head><body><img src="${sheetSrc}" onload="window.print(); window.close();"></body></html>
+            `);
+            win.document.close();
+        }
+
+        // ====================================================================
+        // TAB 2: AI SIGNATURE CLEANER & RESIZER LOGIC
+        // ====================================================================
+        async function handleAiSignUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const prepared = await prepareImageForAi(file, 1024);
+                uploadedSignBase64 = prepared.base64;
+                uploadedSignMime = prepared.mimeType;
+
+                document.getElementById('sign-uploaded-preview').src = prepared.dataUrl;
+                document.getElementById('sign-upload-placeholder').classList.add('hidden');
+                document.getElementById('sign-uploaded-preview-wrap').classList.remove('hidden');
+                document.getElementById('sign-uploaded-preview-wrap').classList.add('flex');
+                notifyUser('सिग्नेचर फोटो अपलोड हो गई! अब "AI से सिग्नेचर को झकास बनाएं" दबाएं।');
+            } catch (e) {
+                notifyUser('सिग्नेचर फोटो लोड करने में समस्या आई।');
+            }
+        }
+
+        function applySignPreset() {
+            const val = document.getElementById('sign-preset-select').value;
+            const wEl = document.getElementById('sign-width-px');
+            const hEl = document.getElementById('sign-height-px');
+            const dpiEl = document.getElementById('sign-dpi-select');
+            const kbEl = document.getElementById('sign-target-kb');
+
+            if (val === 'standard') { wEl.value = 300; hEl.value = 100; dpiEl.value = '300'; kbEl.value = 20; }
+            else if (val === 'pan-nsdl') { wEl.value = 200; hEl.value = 50; dpiEl.value = '200'; kbEl.value = 15; }
+            else if (val === 'pan-uti') { wEl.value = 400; hEl.value = 200; dpiEl.value = '600'; kbEl.value = 60; }
+            else if (val === 'ssc') { wEl.value = 140; hEl.value = 60; dpiEl.value = '300'; kbEl.value = 15; }
+        }
+
+        async function processAiSignature() {
+            if (!uploadedSignBase64) {
+                notifyUser('कृपया पहले सिग्नेचर की फोटो अपलोड करें!');
+                return;
+            }
+
+            const loader = document.getElementById('ai-sign-loader');
+            const btn = document.getElementById('btn-generate-ai-sign');
+            const inkColor = document.getElementById('sign-ink-color').value;
+            const inkDesc = inkColor === 'blue' ? 'crisp deep royal blue pen ink' : 'crisp pure jet black pen ink';
+
+            loader.classList.remove('hidden');
+            btn.disabled = true;
+            btn.classList.add('opacity-60');
+
+            const prompt = `Extract and restore the handwritten signature from this image onto a completely pure solid white (#FFFFFF) background. Remove all paper texture, shadows, camera glare, ruled lines, stains, and background noise completely. Straighten the signature horizontally, center it neatly with clean margins, and make the signature strokes sharp, high-contrast, smooth ${inkDesc} exactly preserving the original handwriting style and strokes.`;
+
+            try {
+                const cleanedAiUrl = await callGeminiImageEdit(prompt, uploadedSignBase64, uploadedSignMime);
+                await finalizeSignatureOutput(cleanedAiUrl, inkColor);
+                notifyUser('✨ डिजिटल सिग्नेचर तैयार हो गया है!');
+            } catch (err) {
+                // Fallback: Apply local high-contrast threshold cleaner if API key is unavailable on live static hosting
+                await finalizeSignatureOutput(`data:${uploadedSignMime};base64,${uploadedSignBase64}`, inkColor);
+                notifyUser('डिजिटल सिग्नेचर तैयार हो गया है!');
+            } finally {
+                loader.classList.add('hidden');
+                btn.disabled = false;
+                btn.classList.remove('opacity-60');
+            }
+        }
+
+        // Apply pure white threshold cleanup + exact pixel resize + DPI + target KB
+        function finalizeSignatureOutput(aiUrl, inkColor) {
+            return new Promise((resolve) => {
+                const targetW = parseInt(document.getElementById('sign-width-px').value, 10) || 300;
+                const targetH = parseInt(document.getElementById('sign-height-px').value, 10) || 100;
+                const targetDpi = parseInt(document.getElementById('sign-dpi-select').value, 10) || 300;
+                const targetKb = parseInt(document.getElementById('sign-target-kb').value, 10) || 20;
+
+                const img = new Image();
+                img.onload = async function() {
+                    // Step 1: High-res canvas to whiten near-white pixels & make transparent PNG
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = img.width;
+                    tempCanvas.height = img.height;
+                    const tCtx = tempCanvas.getContext('2d');
+                    tCtx.drawImage(img, 0, 0);
+
+                    const imgData = tCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                    const d = imgData.data;
+                    for (let i = 0; i < d.length; i += 4) {
+                        const brightness = (d[i] + d[i + 1] + d[i + 2]) / 3;
+                        if (brightness > 205) {
+                            // Pure transparent for PNG, pure white for JPG
+                            d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; d[i + 3] = 0;
+                        } else {
+                            // Enhance ink crispness
+                            if (inkColor === 'black') {
+                                d[i] = Math.max(0, d[i] * 0.4);
+                                d[i + 1] = Math.max(0, d[i + 1] * 0.4);
+                                d[i + 2] = Math.max(0, d[i + 2] * 0.4);
+                            }
+                            d[i + 3] = 255;
+                        }
+                    }
+                    tCtx.putImageData(imgData, 0, 0);
+
+                    // Step 2: Fit nicely into exact requested Width x Height
+                    const outCanvas = document.createElement('canvas');
+                    outCanvas.width = targetW;
+                    outCanvas.height = targetH;
+                    const oCtx = outCanvas.getContext('2d');
+
+                    // Transparent PNG version
+                    const scale = Math.min((targetW * 0.9) / tempCanvas.width, (targetH * 0.85) / tempCanvas.height);
+                    const drawW = tempCanvas.width * scale;
+                    const drawH = tempCanvas.height * scale;
+                    const dx = (targetW - drawW) / 2;
+                    const dy = (targetH - drawH) / 2;
+
+                    oCtx.clearRect(0, 0, targetW, targetH);
+                    oCtx.drawImage(tempCanvas, dx, dy, drawW, drawH);
+                    const pngTransparentUrl = outCanvas.toDataURL('image/png');
+
+                    // White background JPG version compressed to target KB
+                    const jpgCanvas = document.createElement('canvas');
+                    jpgCanvas.width = targetW;
+                    jpgCanvas.height = targetH;
+                    const jCtx = jpgCanvas.getContext('2d');
+                    jCtx.fillStyle = '#ffffff';
+                    jCtx.fillRect(0, 0, targetW, targetH);
+                    jCtx.drawImage(tempCanvas, dx, dy, drawW, drawH);
+
+                    const rawJpgUrl = jpgCanvas.toDataURL('image/jpeg', 0.95);
+                    const { dataUrl: finalJpgUrl, sizeKb } = await compressDataUrlToTargetKb(rawJpgUrl, targetKb, targetW, targetH, targetDpi);
+
+                    document.getElementById('final-sign-preview').src = finalJpgUrl;
+                    document.getElementById('final-sign-meta').textContent = `तैयार साइज: ${targetW} × ${targetH} px | ${targetDpi} DPI | फाइल साइज: ${sizeKb} KB`;
+                    document.getElementById('download-sign-jpg').href = finalJpgUrl;
+                    document.getElementById('download-sign-jpg').download = `Rupesh_CSC_Sign_${targetW}x${targetH}_${targetDpi}DPI_${sizeKb}KB.jpg`;
+                    document.getElementById('download-sign-png').href = pngTransparentUrl;
+
+                    document.getElementById('sign-result-empty').classList.add('hidden');
+                    document.getElementById('sign-result-ready').classList.remove('hidden');
+                    document.getElementById('sign-result-ready').classList.add('flex');
+                    resolve();
+                };
+                img.src = aiUrl;
+            });
+        }
+    </script>
 
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
