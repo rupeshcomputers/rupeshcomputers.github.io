@@ -136,6 +136,22 @@
                                         </select>
                                     </div>
 
+                                    <!-- Face Brightness / Darkness Fix Slider -->
+                                    <div class="bg-white border border-slate-200 rounded-xl p-3">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <label for="ai-brightness-slider" class="text-xs font-extrabold text-slate-700 flex items-center gap-1.5">
+                                                <i class="fa-solid fa-sun text-amber-500"></i> चेहरे की चमक (Brightness / कालापन हटाएं):
+                                            </label>
+                                            <span id="brightness-val-label" class="text-xs font-black text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-md">115%</span>
+                                        </div>
+                                        <input type="range" id="ai-brightness-slider" min="80" max="175" value="115" oninput="document.getElementById('brightness-val-label').textContent = this.value + '%'" class="w-full accent-cyan-600 cursor-pointer">
+                                        <div class="flex justify-between text-[10px] font-bold text-slate-400 mt-0.5">
+                                            <span>कम (80%)</span>
+                                            <button type="button" onclick="document.getElementById('ai-brightness-slider').value=115; document.getElementById('brightness-val-label').textContent='115%';" class="text-cyan-600 hover:underline">रीसेट (115%)</button>
+                                            <span>ज़्यादा उजला (175%)</span>
+                                        </div>
+                                    </div>
+
                                     <!-- Optional Name & Date on Photo (SSC/Govt Form Requirement) -->
                                     <div class="pt-2 border-t border-slate-200">
                                         <label class="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-800">
@@ -761,39 +777,47 @@
                     fgCanvas.width = w;
                     fgCanvas.height = h;
                     const fgCtx = fgCanvas.getContext('2d');
+                    const brightnessPercent = parseInt(document.getElementById('ai-brightness-slider')?.value, 10) || 115;
+                    const bFactor = brightnessPercent / 100;
 
                     if (enhanceMode === 'studio-glow') {
                         // Base enhanced studio brightness & color balance
-                        fgCtx.filter = 'brightness(1.09) contrast(1.08) saturate(1.06)';
+                        fgCtx.filter = `brightness(${(bFactor * 1.04).toFixed(2)}) contrast(1.06) saturate(1.05)`;
                         fgCtx.drawImage(img, 0, 0, w, h);
                         fgCtx.filter = 'none';
+
+                        // Lift dark shadows on face (Gamma curve boost for dark mobile photos)
+                        liftDarkShadowsGamma(fgCtx, w, h, bFactor);
 
                         // Soft beauty glow pass (reduces noise & harsh shadows on face)
                         const softCanvas = document.createElement('canvas');
                         softCanvas.width = w;
                         softCanvas.height = h;
                         const softCtx = softCanvas.getContext('2d');
-                        softCtx.filter = 'blur(2.5px) brightness(1.08)';
+                        softCtx.filter = 'blur(2.5px) brightness(1.10)';
                         softCtx.drawImage(fgCanvas, 0, 0);
                         fgCtx.save();
-                        fgCtx.globalAlpha = 0.24;
+                        fgCtx.globalAlpha = 0.25;
                         fgCtx.globalCompositeOperation = 'screen';
                         fgCtx.drawImage(softCanvas, 0, 0);
                         fgCtx.restore();
 
                         // Subtle studio key-light vignette on center face area
                         const grad = fgCtx.createRadialGradient(w * 0.5, h * 0.38, w * 0.08, w * 0.5, h * 0.45, w * 0.65);
-                        grad.addColorStop(0, 'rgba(255, 255, 255, 0.14)');
+                        grad.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
                         grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
                         fgCtx.fillStyle = grad;
                         fgCtx.fillRect(0, 0, w, h);
                     } else if (enhanceMode === 'hd-sharp') {
-                        fgCtx.filter = 'brightness(1.05) contrast(1.15) saturate(1.04)';
+                        fgCtx.filter = `brightness(${bFactor.toFixed(2)}) contrast(1.14) saturate(1.04)`;
                         fgCtx.drawImage(img, 0, 0, w, h);
                         fgCtx.filter = 'none';
+                        liftDarkShadowsGamma(fgCtx, w, h, bFactor);
                         applyUnsharpMask(fgCtx, w, h, 0.45);
                     } else {
+                        fgCtx.filter = `brightness(${bFactor.toFixed(2)})`;
                         fgCtx.drawImage(img, 0, 0, w, h);
+                        fgCtx.filter = 'none';
                     }
 
                     // Optional Formal Coat/Shirt Overlay near bottom shoulders
@@ -895,6 +919,23 @@
                 };
                 img.src = `data:${mimeType};base64,${base64Data}`;
             });
+        }
+
+        // Lift dark shadows without washing out bright highlights (Fixes dark/black faces)
+        function liftDarkShadowsGamma(ctx, w, h, bFactor = 1.15) {
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const d = imgData.data;
+            const gamma = bFactor > 1 ? Math.max(0.62, 1 / (1 + (bFactor - 1) * 0.65)) : 1.0;
+            const lut = new Uint8ClampedArray(256);
+            for (let i = 0; i < 256; i++) {
+                lut[i] = Math.min(255, Math.round(255 * Math.pow(i / 255, gamma)));
+            }
+            for (let i = 0; i < d.length; i += 4) {
+                d[i] = lut[d[i]];
+                d[i + 1] = lut[d[i + 1]];
+                d[i + 2] = lut[d[i + 2]];
+            }
+            ctx.putImageData(imgData, 0, 0);
         }
 
         // Subtle Convolution Sharpening Filter for HD Clarity
