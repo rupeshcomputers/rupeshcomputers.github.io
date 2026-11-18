@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अकाउंट फाइन्डर - Account Finder</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse CDN for Fast Large CSV Parsing (~78,000+ rows) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- SheetJS (XLSX) CDN for Direct Excel File Support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Google Fonts (Inter & Noto Sans Devanagari) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            background-image: radial-gradient(circle at top right, rgba(30, 64, 175, 0.05), transparent 45%),
+                              radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.04), transparent 45%);
+        }
+        .banking-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 52%, #1d4ed8 100%);
+        }
+        .card-hover {
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -10px rgba(15, 23, 42, 0.14);
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.4); }
+            50% { border-color: rgba(59, 130, 246, 0.9); }
+        }
+        .loading-box {
+            animation: pulse-border 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Banking Header -->
+    <header class="banking-gradient text-white shadow-xl sticky top-0 z-40 border-b border-blue-800/60">
+        <div class="max-w-6xl mx-auto px-4 py-4 sm:py-5 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3.5 text-center md:text-left">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/20 to-white/10 backdrop-blur-md border border-amber-300/30 flex items-center justify-center text-2xl text-amber-300 shadow-inner shrink-0">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <div>
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">अकाउंट फाइन्डर</h1>
+                        <span class="bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                            सोसायटी कर्मचारी सहायता पोर्टल
+                        </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-blue-100 font-medium mt-0.5">
+                        <span class="text-amber-300 font-bold">सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु</span> • <span id="active-file-subtitle" class="underline decoration-amber-300/60">मासिक बैंक खाता खोज पोर्टल</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- File Status Indicator -->
+            <div class="flex items-center justify-center">
+                <div id="status-badge" class="bg-slate-950/75 border border-blue-700/70 px-4 py-2 rounded-2xl text-xs font-semibold flex items-center gap-2.5 shadow-md backdrop-blur-sm">
+                    <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    <span id="status-text" class="text-blue-100">फाइल अपलोड की प्रतीक्षा है...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application Area -->
+    <main class="max-w-6xl mx-auto px-4 py-6 sm:py-8 w-full flex-grow space-y-6">
+
+        <!-- Mandatory Warning / Passbook Verification Notice Box -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50/60 border border-amber-200/90 border-l-4 border-l-amber-500 rounded-2xl p-4 sm:p-5 shadow-xs flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-700 flex items-center justify-center text-lg shrink-0 mt-0.5">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="text-xs sm:text-sm text-amber-950 leading-relaxed">
+                <span class="font-extrabold text-amber-900 block mb-0.5">महत्वपूर्ण सूचना (सोसायटी कर्मचारी मिलान निर्देश):</span>
+                <p class="font-medium">
+                    नोट: अकाउंट फाइन्डर से मिला खाता नंबर किसान की पासबुक से ज़रूर मिलान करें। जिसका खाता नंबर नहीं मिलेगा उसके लिए संबंधित बैंक शाखा से संपर्क करना पड़ेगा।
+                </p>
+            </div>
+        </div>
+
+        <!-- Account Type Legend Bar -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-4 sm:px-5 shadow-xs flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-bold">
+                <span class="text-slate-500 uppercase tracking-wider text-[11px] mr-1">कुल खाते:</span>
+                <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> बचत (SB): <strong id="count-sb" class="font-extrabold">0</strong>
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-800 border border-blue-200 px-3 py-1.5 rounded-xl">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> कैश (CASH): <strong id="count-cash" class="font-extrabold">0</strong>
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-pink-50 text-pink-800 border border-pink-200 px-3 py-1.5 rounded-xl">
+                    <span class="w-2.5 h-2.5 rounded-full bg-pink-600"></span> काइंड (KIND): <strong id="count-kind" class="font-extrabold">0</strong>
+                </span>
+                <span id="count-other-badge" class="hidden inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> अन्य: <strong id="count-other" class="font-extrabold">0</strong>
+                </span>
+            </div>
+            <div class="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+                <span>कुल किसान: <span id="total-records-count" class="text-blue-700 font-extrabold">0</span></span>
+                <button type="button" id="change-file-inline-btn" onclick="resetToUploadPanel()" class="hidden text-blue-700 hover:text-blue-900 underline ml-1 cursor-pointer">
+                    (फाइल बदलें)
+                </button>
+            </div>
+        </div>
+
+        <!-- Smart Search & Multi-Filter Control Card -->
+        <div class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-7 shadow-md space-y-4">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-600">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </div>
+                    <input type="text" id="search-input" disabled
+                        placeholder="पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल अपलोड करें..."
+                        onkeydown="if(event.key==='Enter'){ event.preventDefault(); executeSearch(); }"
+                        class="w-full pl-12 pr-24 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-sm sm:text-base font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition shadow-inner disabled:opacity-60">
+                    <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-2 right-2 px-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold items-center gap-1 transition">
+                        <i class="fa-solid fa-xmark"></i> साफ़ करें
+                    </button>
+                </div>
+
+                <!-- Search Action Button -->
+                <button type="button" id="search-btn" onclick="executeSearch()" disabled
+                    class="bg-blue-700 hover:bg-blue-800 disabled:bg-slate-400 text-white font-extrabold px-7 py-4 rounded-2xl text-sm sm:text-base shadow-lg shadow-blue-700/20 transition flex items-center justify-center gap-2 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-search"></i> <span>खोजें</span>
+                </button>
+            </div>
+
+            <!-- Filter Dropdowns (Account Type & Branch) + Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+                <div>
+                    <label for="filter-type" class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">खाता प्रकार फ़िल्टर (Account Type):</label>
+                    <select id="filter-type" onchange="executeSearch()" disabled class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                        <option value="ALL">सभी खाता प्रकार (SB + CASH + KIND)</option>
+                        <option value="SB">बचत खाता (SB - हरा)</option>
+                        <option value="CASH">कैश खाता (CASH - नीला)</option>
+                        <option value="KIND">काइंड खाता (KIND - गुलाबी)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filter-branch" class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">शाखा कोड फ़िल्टर (Branch Code):</label>
+                    <select id="filter-branch" onchange="executeSearch()" disabled class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                        <option value="ALL">सभी शाखा कोड (All Branches)</option>
+                    </select>
+                </div>
+
+                <div class="bg-blue-50/70 border border-blue-100 rounded-xl px-4 py-2.5 flex items-center justify-between sm:col-span-2 lg:col-span-1">
+                    <span class="text-xs font-bold text-slate-600">मिले हुए परिणाम:</span>
+                    <span id="match-count-display" class="text-sm font-extrabold text-blue-800 bg-white px-3 py-0.5 rounded-lg border border-blue-200 shadow-xs">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Unified Excel / CSV File Upload Box -->
+        <div id="upload-panel" onclick="document.getElementById('local-file-input').click()"
+            ondragover="event.preventDefault(); this.classList.add('border-blue-600', 'bg-blue-50/70');"
+            ondragleave="this.classList.remove('border-blue-600', 'bg-blue-50/70');"
+            ondrop="handleFileDrop(event)"
+            class="cursor-pointer bg-white border-2 border-dashed border-blue-300 hover:border-blue-600 hover:bg-blue-50/40 rounded-3xl p-8 sm:p-12 text-center shadow-sm transition group">
+            <input type="file" id="local-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleLocalFileUpload(event)">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 group-hover:scale-105 transition flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <i class="fa-solid fa-file-excel"></i>
+            </div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">मासिक अकाउंट फाइन्डर फाइल अपलोड करें (Excel या CSV)</h2>
+            <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-5">
+                सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु मासिक <strong>.xlsx, .xls या .csv</strong> फाइल यहाँ चुनें — सभी खातों के बचत, कैश व काइंड नंबर तुरंत खोजने के लिए तैयार हो जाएंगे।
+            </p>
+            <span class="inline-flex items-center gap-2 bg-blue-700 group-hover:bg-blue-800 text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-700/20 transition">
+                <i class="fa-solid fa-folder-open"></i> फाइल चुनें (Select File)
+            </span>
+        </div>
+
+        <!-- Processing / Loading State Card -->
+        <div id="loading-panel" class="hidden bg-white border-2 border-blue-200 loading-box rounded-3xl p-10 text-center shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <h2 class="text-lg font-extrabold text-slate-800 mb-1">फाइल पढ़ी जा रही है, कृपया प्रतीक्षा करें...</h2>
+            <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+                सभी बैंक खाता रिकॉर्ड्स आपके ब्राउज़र में सुरक्षित रूप से तैयार किए जा रहे हैं।
+            </p>
+        </div>
+
+        <!-- Ready / Empty Search Prompt -->
+        <div id="ready-panel" class="hidden bg-white border border-slate-200 rounded-3xl p-10 text-center shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-address-card"></i>
+            </div>
+            <h2 class="text-base sm:text-lg font-extrabold text-slate-800 mb-1">खाता नंबर या किसान का नाम लिखकर खोजें</h2>
+            <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+                ऊपर दिए गए सर्च बॉक्स में नाम या खाता नंबर लिखकर <strong>"खोजें" बटन दबाएं या Enter</strong> प्रेस करें। एक ही किसान के <strong>बचत (SB), कैश (CASH) और काइंड (KIND)</strong> तीनों खाते एक साथ दिखेंगे।
+            </p>
+        </div>
+
+        <!-- Results Container (Consolidated Farmer Profiles with SB + CASH + KIND Side-by-Side) -->
+        <div id="results-grid" class="space-y-5"></div>
+
+    </main>
+
+    <!-- Toast Notification for Copy Confirmation -->
+    <div id="toast-box" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-blue-400/40 text-xs sm:text-sm font-bold">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-message">खाता नंबर कॉपी हो गया!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500 space-y-1">
+        <p class="font-semibold text-slate-700">अकाउंट फाइन्डर • सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु</p>
+        <p>डेवलपर: <span class="text-blue-700 font-bold">अविनाश प्रसाद</span> • सभी अधिकार सुरक्षित</p>
+    </footer>
+
+    <script>
+        const MAX_RESULTS_DISPLAY = 50;
+
+        let allRecords = [];
+        let groupedCustomers = [];
+        let activeFileName = "";
+
+        // Safely escape HTML & highlight matched query tokens
+        function highlightMatch(text, query) {
+            const safeStr = String(text ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            const q = String(query ?? "").trim();
+            if (!q || q.length < 2) return safeStr;
+            const tokens = q.split(/\s+/).filter(t => t.length >= 2);
+            if (tokens.length === 0) return safeStr;
+            const escapedPattern = tokens
+                .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                .join('|');
+            const regex = new RegExp(`(${escapedPattern})`, 'gi');
+            return safeStr.replace(regex, '<mark class="bg-amber-200 text-slate-900 px-1 rounded font-extrabold">$1</mark>');
+        }
+
+        // Display file load error gracefully
+        function handleLoadError(message) {
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            statusText.textContent = "फाइल लोड करने में त्रुटि";
+            statusDot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+            document.getElementById('loading-panel').classList.add('hidden');
+            document.getElementById('upload-panel').classList.remove('hidden');
+            showToast(message);
+        }
+
+        // Parse 5-column bank row:
+        // Col A (0): Account No | Col B (1): Customer/FKP ID | Col C (2): Name | Col D (3): Type (SB/CASH/KIND) | Col E (4): Branch
+        function parseBankRow(arr, rowIndex) {
+            const cells = arr.map(c => String(c ?? "").trim());
+            const accNo = cells[0] || "";
+            const custId = cells[1] || "";
+            const name = cells[2] || "";
+            const rawType = (cells[3] || "").toUpperCase();
+            const branch = cells[4] || "";
+
+            let typeCode = "OTHER";
+            let typeLabel = rawType || "अन्य खाता";
+            if (rawType === "SB" || rawType.includes("SAVING") || rawType.includes("बचत")) {
+                typeCode = "SB";
+                typeLabel = "बचत खाता (SB)";
+            } else if (rawType === "CASH" || rawType === "CAS" || rawType.includes("कैश")) {
+                typeCode = "CASH";
+                typeLabel = "कैश खाता (CASH)";
+            } else if (rawType === "KIND" || rawType.includes("काइंड")) {
+                typeCode = "KIND";
+                typeLabel = "काइंड खाता (KIND)";
+            }
+
+            return {
+                rowIndex,
+                accNo,
+                custId,
+                name,
+                rawType,
+                typeCode,
+                typeLabel,
+                branch,
+                cells
+            };
+        }
+
+        // Populate Branch Dropdown dynamically
+        function populateBranchFilter(customers) {
+            const branchSelect = document.getElementById('filter-branch');
+            const branches = new Set();
+
+            for (let i = 0; i < customers.length; i++) {
+                const b = customers[i].branch;
+                if (b) branches.add(b);
+            }
+
+            branchSelect.innerHTML = `<option value="ALL">सभी शाखा कोड (All Branches)</option>`;
+            Array.from(branches).sort().forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.toLowerCase();
+                opt.textContent = `शाखा कोड: ${b}`;
+                branchSelect.appendChild(opt);
+            });
+        }
+
+        // Group SB, CASH, and KIND rows of the same customer into ONE single customer record
+        function processParsedRows(rawRows2D, fileName = "") {
+            const validRows = (rawRows2D || []).filter(r => Array.isArray(r) && r.some(cell => String(cell ?? "").trim() !== ""));
+
+            if (validRows.length === 0) {
+                handleLoadError("अपलोड की गई फाइल में कोई डेटा नहीं मिला।");
+                return;
+            }
+
+            activeFileName = fileName;
+
+            let sbCount = 0;
+            let cashCount = 0;
+            let kindCount = 0;
+            let otherCount = 0;
+
+            allRecords = [];
+            const customerMap = new Map();
+
+            for (let idx = 0; idx < validRows.length; idx++) {
+                const rowObj = parseBankRow(validRows[idx], idx);
+                // Skip header row if user uploaded a file with column titles
+                if (idx === 0 && /account|acc|खाता/i.test(rowObj.accNo) && /name|नाम/i.test(rowObj.name)) {
+                    continue;
+                }
+
+                allRecords.push(rowObj);
+                if (rowObj.typeCode === "SB") sbCount++;
+                else if (rowObj.typeCode === "CASH") cashCount++;
+                else if (rowObj.typeCode === "KIND") kindCount++;
+                else otherCount++;
+
+                // Primary grouping key: Customer ID (Col B) + Branch (Col E), fallback to Normalized Name + Branch
+                const normName = rowObj.name.toUpperCase().replace(/\s+/g, " ").trim();
+                const normBranch = rowObj.branch.toUpperCase().trim();
+                const normCustId = rowObj.custId.toUpperCase().trim();
+                const groupKey = normCustId
+                    ? `CID:${normCustId}|BR:${normBranch}`
+                    : `NM:${normName}|BR:${normBranch}`;
+
+                if (!customerMap.has(groupKey)) {
+                    customerMap.set(groupKey, {
+                        custId: rowObj.custId,
+                        name: rowObj.name,
+                        branch: rowObj.branch,
+                        sb: null,
+                        cash: null,
+                        kind: null,
+                        others: [],
+                        allRows: [],
+                        searchTokens: new Set()
+                    });
+                }
+
+                const profile = customerMap.get(groupKey);
+                if (!profile.name && rowObj.name) profile.name = rowObj.name;
+                if (!profile.custId && rowObj.custId) profile.custId = rowObj.custId;
+                if (!profile.branch && rowObj.branch) profile.branch = rowObj.branch;
+
+                profile.allRows.push(rowObj);
+                if (rowObj.typeCode === "SB" && !profile.sb) profile.sb = rowObj;
+                else if (rowObj.typeCode === "CASH" && !profile.cash) profile.cash = rowObj;
+                else if (rowObj.typeCode === "KIND" && !profile.kind) profile.kind = rowObj;
+                else profile.others.push(rowObj);
+
+                if (rowObj.accNo) profile.searchTokens.add(rowObj.accNo.toLowerCase());
+                if (rowObj.custId) profile.searchTokens.add(rowObj.custId.toLowerCase());
+                if (rowObj.name) profile.searchTokens.add(rowObj.name.toLowerCase());
+                if (rowObj.branch) profile.searchTokens.add(rowObj.branch.toLowerCase());
+            }
+
+            groupedCustomers = Array.from(customerMap.values()).map(p => ({
+                ...p,
+                searchBlob: Array.from(p.searchTokens).join(" ")
+            }));
+
+            document.getElementById('count-sb').textContent = sbCount.toLocaleString('en-IN');
+            document.getElementById('count-cash').textContent = cashCount.toLocaleString('en-IN');
+            document.getElementById('count-kind').textContent = kindCount.toLocaleString('en-IN');
+            const otherBadge = document.getElementById('count-other-badge');
+            if (otherCount > 0) {
+                document.getElementById('count-other').textContent = otherCount.toLocaleString('en-IN');
+                otherBadge.classList.remove('hidden');
+            } else {
+                otherBadge.classList.add('hidden');
+            }
+
+            populateBranchFilter(groupedCustomers);
+
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            document.getElementById('total-records-count').textContent = groupedCustomers.length.toLocaleString('en-IN');
+            statusText.textContent = `${groupedCustomers.length.toLocaleString('en-IN')} किसान (${allRecords.length.toLocaleString('en-IN')} कुल खाते) लोड`;
+            statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
+
+            if (fileName) {
+                document.getElementById('active-file-subtitle').textContent = `सक्रिय फाइल: ${fileName}`;
+            }
+
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const filterType = document.getElementById('filter-type');
+            const filterBranch = document.getElementById('filter-branch');
+
+            searchInput.disabled = false;
+            searchBtn.disabled = false;
+            filterType.disabled = false;
+            filterBranch.disabled = false;
+            searchInput.placeholder = "कोई भी खाता नंबर (SB/CASH/KIND), कस्टमर ID या किसान का नाम लिखें...";
+
+            document.getElementById('upload-panel').classList.add('hidden');
+            document.getElementById('loading-panel').classList.add('hidden');
+            document.getElementById('change-file-inline-btn').classList.remove('hidden');
+            document.getElementById('results-grid').innerHTML = "";
+            document.getElementById('match-count-display').textContent = "0";
+            document.getElementById('ready-panel').classList.remove('hidden');
+            searchInput.focus();
+        }
+
+        function resetToUploadPanel() {
+            document.getElementById('ready-panel').classList.add('hidden');
+            document.getElementById('results-grid').innerHTML = "";
+            document.getElementById('upload-panel').classList.remove('hidden');
+            document.getElementById('local-file-input').click();
+        }
+
+        // Support Drag & Drop on Upload Panel
+        function handleFileDrop(event) {
+            event.preventDefault();
+            const panel = document.getElementById('upload-panel');
+            panel.classList.remove('border-blue-600', 'bg-blue-50/70');
+            if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+                processUploadedFile(event.dataTransfer.files[0]);
+            }
+        }
+
+        // Handle direct Excel (.xlsx/.xls) or CSV file selection
+        function handleLocalFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            processUploadedFile(file);
+            event.target.value = "";
+        }
+
+        function processUploadedFile(file) {
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const loadingPanel = document.getElementById('loading-panel');
+
+            statusText.textContent = `"${file.name}" पढ़ी जा रही है...`;
+            statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping";
+            document.getElementById('upload-panel').classList.add('hidden');
+            document.getElementById('ready-panel').classList.add('hidden');
+            loadingPanel.classList.remove('hidden');
+
+            const isCsv = file.name.toLowerCase().endsWith('.csv');
+
+            if (isCsv && typeof Papa !== 'undefined') {
+                Papa.parse(file, {
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        processParsedRows(results.data, file.name);
+                        showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स (Row 1 से) सफलतापूर्वक लोड हो गए!`);
+                    },
+                    error: function() {
+                        handleLoadError("CSV फाइल पढ़ने में त्रुटि हुई। कृपया सही फाइल चुनें।");
+                    }
+                });
+            } else if (typeof XLSX !== 'undefined') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    setTimeout(() => {
+                        try {
+                            const data = new Uint8Array(e.target.result);
+                            const workbook = XLSX.read(data, { type: 'array' });
+                            let bestRows = [];
+
+                            for (let s = 0; s < workbook.SheetNames.length; s++) {
+                                const sheetName = workbook.SheetNames[s];
+                                const sheet = workbook.Sheets[sheetName];
+                                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+                                if (rows.length > bestRows.length) {
+                                    bestRows = rows;
+                                }
+                            }
+
+                            processParsedRows(bestRows, file.name);
+                            showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स सफलतापूर्वक लोड हो गए!`);
+                        } catch (err) {
+                            console.error("Excel parse error:", err);
+                            handleLoadError("Excel फाइल पढ़ने में त्रुटि हुई। कृपया सही .xlsx या .csv फाइल चुनें।");
+                        }
+                    }, 40);
+                };
+                reader.onerror = function() {
+                    handleLoadError("फाइल पढ़ने में समस्या आई। कृपया पुनः प्रयास करें।");
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                handleLoadError("Excel लाइब्रेरी लोड नहीं हो पाई। कृपया इंटरनेट कनेक्शन जांचें।");
+            }
+        }
+
+        // Execute Search: Searching ANY account number (SB/CASH/KIND), Customer ID, or Name returns 1 unified box with ALL 3 accounts
+        function executeSearch() {
+            if (groupedCustomers.length === 0) return;
+
+            const rawQuery = document.getElementById('search-input').value.trim();
+            const typeFilter = document.getElementById('filter-type').value;
+            const branchFilter = document.getElementById('filter-branch').value;
+            const readyPanel = document.getElementById('ready-panel');
+            const resultsGrid = document.getElementById('results-grid');
+            const matchDisplay = document.getElementById('match-count-display');
+
+            if (rawQuery.length === 0 && typeFilter === "ALL" && branchFilter === "ALL") {
+                resultsGrid.innerHTML = "";
+                readyPanel.classList.remove('hidden');
+                matchDisplay.textContent = "0";
+                return;
+            }
+
+            readyPanel.classList.add('hidden');
+            const queryTokens = rawQuery.toLowerCase().split(/\s+/).filter(Boolean);
+            const matchedProfiles = [];
+
+            for (let i = 0; i < groupedCustomers.length; i++) {
+                const profile = groupedCustomers[i];
+
+                if (typeFilter === "SB" && !profile.sb) continue;
+                if (typeFilter === "CASH" && !profile.cash) continue;
+                if (typeFilter === "KIND" && !profile.kind) continue;
+                if (branchFilter !== "ALL" && profile.branch.toLowerCase() !== branchFilter) continue;
+
+                if (queryTokens.length > 0) {
+                    let isMatch = true;
+                    for (let t = 0; t < queryTokens.length; t++) {
+                        if (!profile.searchBlob.includes(queryTokens[t])) {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+                    if (!isMatch) continue;
+                }
+
+                matchedProfiles.push(profile);
+            }
+
+            const totalMatched = matchedProfiles.length;
+            matchDisplay.textContent = totalMatched.toLocaleString('en-IN');
+            renderConsolidatedCustomerCards(matchedProfiles.slice(0, MAX_RESULTS_DISPLAY), totalMatched, rawQuery);
+        }
+
+        // Render 1 Unified Card per Farmer containing SB, CASH, and KIND accounts together
+        function renderConsolidatedCustomerCards(profilesList, totalMatched, rawQuery) {
+            const resultsGrid = document.getElementById('results-grid');
+
+            if (profilesList.length === 0) {
+                resultsGrid.innerHTML = `
+                    <div class="bg-white border border-slate-200 rounded-3xl p-10 text-center shadow-sm">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 text-2xl">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3 class="text-base font-extrabold text-slate-800 mb-1">कोई खाता रिकॉर्ड नहीं मिला</h3>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">
+                            कृपया नाम की स्पेलिंग या खाता नंबर जांचें। यदि खाता नंबर नहीं मिल रहा है, तो कृपया संबंधित बैंक शाखा से संपर्क करें।
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            if (totalMatched > MAX_RESULTS_DISPLAY) {
+                html += `
+                    <div class="bg-blue-50 border border-blue-200 text-blue-900 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center justify-between">
+                        <span><i class="fa-solid fa-circle-info text-blue-600 mr-1.5"></i> कुल ${totalMatched.toLocaleString('en-IN')} किसान मिले हैं (शीर्ष ${MAX_RESULTS_DISPLAY} दिखाए जा रहे हैं)।</span>
+                        <span class="hidden sm:inline text-blue-700">सटीक परिणाम के लिए पूरा नाम या खाता नंबर लिखें</span>
+                    </div>
+                `;
+            }
+
+            const renderAccountSlot = (title, badgeText, rowObj, theme) => {
+                const styles = {
+                    emerald: {
+                        box: "bg-emerald-50/70 border-emerald-300",
+                        badge: "bg-emerald-600 text-white",
+                        accText: "text-emerald-950",
+                        btn: "bg-emerald-700 hover:bg-emerald-800 text-white"
+                    },
+                    blue: {
+                        box: "bg-blue-50/70 border-blue-300",
+                        badge: "bg-blue-600 text-white",
+                        accText: "text-blue-950",
+                        btn: "bg-blue-700 hover:bg-blue-800 text-white"
+                    },
+                    pink: {
+                        box: "bg-pink-50/70 border-pink-300",
+                        badge: "bg-pink-600 text-white",
+                        accText: "text-pink-950",
+                        btn: "bg-pink-700 hover:bg-pink-800 text-white"
+                    }
+                }[theme];
+
+                if (!rowObj || !rowObj.accNo) {
+                    return `
+                        <div class="border border-dashed border-slate-300 bg-slate-50/70 rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-extrabold text-slate-500">${title}</span>
+                                <span class="text-[10px] font-bold bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">${badgeText}</span>
+                            </div>
+                            <div class="text-xs font-bold text-slate-400 py-2">खाता उपलब्ध नहीं है</div>
+                        </div>
+                    `;
+                }
+
+                const safeAcc = rowObj.accNo.replace(/'/g, "\\'");
+                return `
+                    <div class="border-2 ${styles.box} rounded-2xl p-3.5 flex flex-col justify-between gap-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-extrabold text-slate-800">${title}</span>
+                            <span class="${styles.badge} text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">${badgeText}</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-2 bg-white border border-slate-200/80 rounded-xl px-3 py-2">
+                            <div class="font-mono font-extrabold text-sm sm:text-base ${styles.accText} tracking-wide">
+                                ${highlightMatch(rowObj.accNo, rawQuery)}
+                            </div>
+                            <button type="button" onclick="copyAccountNumber('${safeAcc}')" class="${styles.btn} text-[11px] font-bold px-2.5 py-1.5 rounded-lg cursor-pointer shrink-0 inline-flex items-center gap-1 transition">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-600 font-semibold">
+                            <span>रो #${rowObj.rowIndex + 1}</span>
+                            <span>शाखा: ${rowObj.branch || "—"}</span>
+                        </div>
+                    </div>
+                `;
+            };
+
+            profilesList.forEach((profile, idx) => {
+                const safeCustId = (profile.custId || "").replace(/'/g, "\\'");
+                html += `
+                    <div class="bg-white rounded-3xl border-2 border-slate-200 hover:border-blue-500 shadow-md overflow-hidden transition">
+                        <!-- Top Farmer Identity Strip -->
+                        <div class="bg-gradient-to-r from-amber-50 via-blue-50/80 to-slate-50 border-b border-slate-200 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+                            <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                                <span class="bg-blue-700 text-white font-extrabold px-3 py-1 rounded-xl text-xs">
+                                    #${idx + 1}
+                                </span>
+                                <span class="font-extrabold text-slate-900 text-sm sm:text-base">${highlightMatch(profile.name, rawQuery)}</span>
+                                ${profile.custId ? `
+                                <span class="bg-amber-100 border border-amber-300 text-amber-950 font-mono font-bold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5">
+                                    ID: ${highlightMatch(profile.custId, rawQuery)}
+                                    <button type="button" onclick="copyAccountNumber('${safeCustId}')" title="कस्टमर ID कॉपी करें" class="text-amber-800 hover:text-amber-950 cursor-pointer">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </span>` : ""}
+                                ${profile.branch ? `<span class="bg-slate-200/80 text-slate-800 font-bold px-2.5 py-1 rounded-lg">शाखा: ${highlightMatch(profile.branch, rawQuery)}</span>` : ""}
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2 shrink-0">
+                                <button type="button" onclick="copyFullRowTogether(${idx})" class="py-2 px-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                                    <i class="fa-solid fa-copy"></i>
+                                    <span>तीनों खाता एक साथ Copy करें</span>
+                                </button>
+                                <button type="button" onclick="shareRowOnWhatsApp(${idx})" class="py-2 px-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-base"></i>
+                                    <span>WhatsApp भेजें</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Unified 3-Account Grid (SB + CASH + KIND together in 1 single box) -->
+                        <div class="p-4 sm:p-5 bg-white grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                            ${renderAccountSlot("बचत खाता", "SB", profile.sb, "emerald")}
+                            ${renderAccountSlot("कैश खाता", "CASH", profile.cash, "blue")}
+                            ${renderAccountSlot("काइंड खाता", "KIND", profile.kind, "pink")}
+                        </div>
+                    </div>
+                `;
+            });
+
+            window.__currentDisplayedProfiles = profilesList;
+            resultsGrid.innerHTML = html;
+        }
+
+        // Copy ALL 3 accounts (SB + CASH + KIND) of the farmer together in one click
+        function copyFullRowTogether(displayIndex) {
+            const list = window.__currentDisplayedProfiles || [];
+            const profile = list[displayIndex];
+            if (!profile) return;
+
+            const lines = [
+                `एकाउंट होल्डर नेम: ${profile.name}`,
+                `कस्टमर ID: ${profile.custId || "—"} | शाखा: ${profile.branch || "—"}`,
+                `बचत खाता (SB): ${profile.sb ? profile.sb.accNo : "उपलब्ध नहीं"}`,
+                `कैश खाता (CASH): ${profile.cash ? profile.cash.accNo : "उपलब्ध नहीं"}`,
+                `काइंड खाता (KIND): ${profile.kind ? profile.kind.accNo : "उपलब्ध नहीं"}`
+            ];
+
+            const tempInput = document.createElement("textarea");
+            tempInput.value = lines.join("\n");
+            tempInput.style.position = "fixed";
+            tempInput.style.left = "-9999px";
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+            } catch (e) {
+                console.error("Copy failed", e);
+            }
+            document.body.removeChild(tempInput);
+
+            showToast(`${profile.name} के तीनों खाता नंबर एक साथ कॉपी हो गए!`);
+        }
+
+        // Share all 3 accounts (SB + CASH + KIND) together on WhatsApp
+        function shareRowOnWhatsApp(displayIndex) {
+            const list = window.__currentDisplayedProfiles || [];
+            const profile = list[displayIndex];
+            if (!profile) return;
+
+            const lines = [
+                "🏦 *अकाउंट फाइन्डर विवरण* 🏦",
+                "----------------------------------",
+                `*एकाउंट होल्डर नेम:* ${profile.name}`,
+                `*कस्टमर ID:* ${profile.custId || "—"} | *शाखा:* ${profile.branch || "—"}`,
+                "----------------------------------",
+                `🟢 *बचत खाता (SB):* ${profile.sb ? profile.sb.accNo : "उपलब्ध नहीं"}`,
+                `🔵 *कैश खाता (CASH):* ${profile.cash ? profile.cash.accNo : "उपलब्ध नहीं"}`,
+                `🟣 *काइंड खाता (KIND):* ${profile.kind ? profile.kind.accNo : "उपलब्ध नहीं"}`,
+                "----------------------------------",
+                "⚠️ _नोट: प्राप्त खाता नंबर का किसान के पासबुक से एक बार मिलान अवश्य करें।_"
+            ];
+
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(lines.join("\n"))}`;
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // Show/Hide Clear button only on typing; search executes strictly on "खोजें" button or Enter key
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (e.target.value.trim().length > 0) {
+                clearBtn.classList.remove('hidden');
+                clearBtn.classList.add('flex');
+            } else {
+                clearBtn.classList.add('hidden');
+                clearBtn.classList.remove('flex');
+            }
+        });
+
+        function clearSearch() {
+            document.getElementById('search-input').value = "";
+            document.getElementById('filter-type').value = "ALL";
+            document.getElementById('filter-branch').value = "ALL";
+            executeSearch();
+            document.getElementById('search-input').focus();
+        }
+
+        // Reliable iFrame-safe Clipboard Copy
+        function copyAccountNumber(accNo) {
+            if (!accNo) return;
+            const tempInput = document.createElement("textarea");
+            tempInput.value = accNo;
+            tempInput.style.position = "fixed";
+            tempInput.style.left = "-9999px";
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+            } catch (e) {
+                console.error("Copy failed", e);
+            }
+            document.body.removeChild(tempInput);
+
+            showToast(`खाता नंबर (${accNo}) कॉपी हो गया है!`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 2600);
+        }
+    </script>
+</body>
+</html>
