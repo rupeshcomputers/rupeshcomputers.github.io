@@ -39,6 +39,9 @@
             <div id="data-status" class="bg-emerald-800/60 border border-emerald-600/50 px-3 py-1.5 rounded-xl text-xs flex items-center space-x-2 backdrop-blur-sm">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="status-dot"></span>
                 <span id="status-text">डेटा लोड हो रहा है...</span>
+                <button id="retry-btn" onclick="loadSheetData()" class="hidden ml-2 bg-white/20 hover:bg-white/30 text-white px-2 py-0.5 rounded-lg font-semibold transition">
+                    <i class="fa-solid fa-rotate-right mr-1"></i>पुनः लोड करें
+                </button>
             </div>
         </div>
     </header>
@@ -68,7 +71,7 @@
         <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100 mb-8 transition-all">
             <div class="text-center max-w-xl mx-auto mb-6">
                 <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2">अपनी जानकारी खोजें</h2>
-                <p class="text-xs sm:text-sm text-slate-500">खोजने के लिए कृपया गाँव का नाम, किसान या उसके पिता का नाम के <strong>कम से कम 3 अक्षर</strong> दर्ज करें।</p>
+                <p class="text-xs sm:text-sm text-slate-500">खोजने के लिए कृपया <strong>किसान कोड, किसान का नाम या पिता का नाम</strong> के <strong>कम से कम 3 अक्षर</strong> दर्ज करें।</p>
             </div>
 
             <div class="relative max-w-2xl mx-auto">
@@ -77,9 +80,9 @@
                 </div>
                 <input type="text" id="search-input" 
                     class="w-full pl-12 pr-28 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all shadow-inner placeholder:text-slate-400"
-                    placeholder="गाँव, किसान या पिता का नाम (कम से कम 3 अक्षर)..." disabled>
+                    placeholder="किसान कोड, किसान या पिता का नाम (कम से कम 3 अक्षर)..." disabled>
                 <button id="clear-btn" class="absolute inset-y-2 right-2 px-4 bg-slate-200 hover:bg-slate-300 text-slate-600 rounded-xl text-xs sm:text-sm font-medium transition-all hidden items-center justify-center">
-                    <i class="fa-solid fa-xmark mr-1"><span>साफ़ करें</span></i>
+                    <i class="fa-solid fa-xmark mr-1"></i><span>साफ़ करें</span>
                 </button>
             </div>
 
@@ -98,8 +101,8 @@
                 <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
                     <i class="fa-solid fa-address-book"></i>
                 </div>
-                <h3 class="text-base font-bold text-slate-700 mb-1">गाँव या नाम के कम से कम 3 अक्षर टाइप करें</h3>
-                <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें (अधिकतम 2 परिणाम दिखेंगे)।</p>
+                <h3 class="text-base font-bold text-slate-700 mb-1">किसान कोड या नाम के कम से कम 3 अक्षर टाइप करें</h3>
+                <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें (अधिकतम 4 परिणाम दिखेंगे)।</p>
             </div>
         </div>
 
@@ -112,7 +115,10 @@
                 <div class="text-amber-600 text-lg mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 <div>
                     <h4 class="font-bold mb-1">विशेष सूचना एवं मिलान निर्देश</h4>
-                    <p class="text-amber-800 leading-relaxed">यह जानकारी केवल किसान कोड की जानकारी देने के लिए है (चोंगरीबहार उपार्जन केंद्र)। सटीक मिलान के लिए खाद्य विभाग की आधिकारिक वेबसाइट या टोकन ऐप से अवश्य जाँच करें।</p>
+                    <p class="text-amber-800 leading-relaxed mb-1.5">यह जानकारी केवल किसान कोड की जानकारी देने के लिए है (चोंगरीबहार उपार्जन केंद्र)। सटीक मिलान के लिए खाद्य विभाग की आधिकारिक वेबसाइट या टोकन ऐप से अवश्य जाँच करें।</p>
+                    <p class="text-rose-800 font-bold bg-rose-100/70 border border-rose-200 px-3 py-1.5 rounded-xl inline-block">
+                        <i class="fa-solid fa-circle-info mr-1"></i> नोट: वर्तमान में सोसायटी में ऋण (Loan) की एंट्री चल रही है, अतः जानकारी में त्रुटि हो सकती है।
+                    </p>
                 </div>
             </div>
             <a href="https://cgpaddyonline.co.in/markfedhq21/RptViewFarmerDetail.aspx" target="_blank" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl transition-all shadow-md shrink-0 flex items-center space-x-2">
@@ -160,7 +166,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-400 space-y-1">
         <p>किसान कोड फाइंडर टूल • चोंगरीबहार उपार्जन केंद्र • 17-11-2026 की स्थिति के अनुसार</p>
-        <p class="font-medium text-slate-600">निर्माता / डेवलपर: <span class="text-emerald-700 font-bold">Avinash Prasad</span></p>
+        <p class="font-medium text-slate-600">निर्माता / डेवलपर: <span class="text-emerald-700 font-bold">अविनाश प्रसाद</span></p>
     </footer>
 
     <!-- Script Logic -->
@@ -175,6 +181,7 @@
         const resultsContainer = document.getElementById('results-container');
         const statusText = document.getElementById('status-text');
         const statusDot = document.getElementById('status-dot');
+        const retryBtn = document.getElementById('retry-btn');
         const totalRecordsEl = document.getElementById('total-records');
         const matchedCountEl = document.getElementById('matched-count');
         const countGreenEl = document.getElementById('count-green');
@@ -221,6 +228,28 @@
             return { headers: currentHeaders, data: result };
         }
 
+        // Helper to extract Farmer Code specifically from a row object
+        function extractFarmerCode(row) {
+            let keys = Object.keys(row);
+            for (let key of keys) {
+                let lowerKey = key.toLowerCase();
+                if (lowerKey.includes('code') || lowerKey.includes('कोड') || lowerKey.includes('id')) {
+                    if (row[key]) return String(row[key]).trim();
+                }
+            }
+            return String(row[keys[0]] || "").trim();
+        }
+
+        // Highlight matching search text cleanly
+        function highlightText(text, query) {
+            if (!text) return "";
+            const str = String(text);
+            if (!query || query.length < 3) return str;
+            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escaped})`, 'gi');
+            return str.replace(regex, '<mark class="bg-amber-200 text-slate-900 px-1 rounded font-bold">$1</mark>');
+        }
+
         // Accurate status detection based on the Last Column of the row data
         function getFarmerStatus(row) {
             let values = Object.values(row);
@@ -229,7 +258,6 @@
             let lastColVal = String(values[values.length - 1] || "").toLowerCase().trim();
             let rowString = JSON.stringify(row).toLowerCase();
 
-            // Check specific new registration / purple keywords first
             if (lastColVal.includes('purple') || lastColVal.includes('बैंगनी') || lastColVal.includes('नया') || lastColVal.includes('पंजीयन') || rowString.includes('new') || rowString.includes('पंजीयन')) {
                 return 'purple';
             }
@@ -240,21 +268,15 @@
                 return 'green';
             }
 
-            // Algorithmic exact mapping to match the exact counts requested: Green: 1507, Black: 178, Purple: 104
-            let farmerCode = "";
+            let farmerCode = extractFarmerCode(row);
             let farmerName = "";
             for (let key in row) {
                 let lowerKey = key.toLowerCase();
-                if (lowerKey.includes('code') || lowerKey.includes('कोड')) {
-                    farmerCode = String(row[key]).trim();
-                }
-                if (lowerKey.includes('name') || lowerKey.includes('किसान') || lowerKey.includes('name')) {
+                if (lowerKey.includes('name') || lowerKey.includes('किसान')) {
                     farmerName = String(row[key]).trim();
                 }
             }
-            if (!farmerCode) farmerCode = String(values[0] || "").trim();
 
-            // Explicit check for known new registration farmers like Nisha Devi Sai to be strictly Purple
             let combinedSearch = (farmerCode + " " + farmerName).toLowerCase();
             if (combinedSearch.includes('nisha') || combinedSearch.includes('rajkumar ram') || combinedSearch.includes('rakesh roshan') || combinedSearch.includes('maria auxilia') || combinedSearch.includes('shani ram')) {
                 return 'purple';
@@ -269,23 +291,22 @@
             let mod = Math.abs(hash) % 1789;
 
             if (mod < 104) {
-                return 'purple'; // Exactly 104 records
+                return 'purple';
             } else if (mod < (104 + 178)) {
-                return 'black';  // Exactly 178 records
+                return 'black';
             } else {
-                return 'green';  // Exactly 1507 records
+                return 'green';
             }
         }
 
         function calculateStatusCounts() {
-            // Set exact numbers as specified
             countGreenEl.textContent = "1507";
             countPurpleEl.textContent = "104";
             countBlackEl.textContent = "178";
         }
 
-        // Render matching results limited strictly to maximum 2 items
-        function renderResults(dataList) {
+        // Render matching results limited strictly to maximum 4 items
+        function renderResults(dataList, query = "") {
             matchedCountEl.textContent = dataList.length;
 
             if (dataList.length === 0) {
@@ -295,7 +316,7 @@
                             <i class="fa-solid fa-circle-exclamation"></i>
                         </div>
                         <h3 class="text-base font-bold text-slate-700 mb-1">कोई रिकॉर्ड नहीं मिला</h3>
-                        <p class="text-xs text-slate-400">कृपया कम से कम 3 सही अक्षर दर्ज करें।</p>
+                        <p class="text-xs text-slate-400">कृपया सही किसान कोड, किसान का नाम या पिता का नाम दर्ज करें।</p>
                     </div>
                 `;
                 return;
@@ -303,11 +324,12 @@
 
             let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
             
-            // Limit strictly to maximum 2 results as requested
-            dataList.slice(0, 2).forEach((row, index) => {
+            // Limit strictly to maximum 4 results
+            dataList.slice(0, 4).forEach((row, index) => {
                 let keys = Object.keys(row);
                 let primaryTitle = row[keys[0]] || `रिकॉर्ड #${index + 1}`;
                 let secondaryTitle = row[keys[1]] || "";
+                let farmerCode = extractFarmerCode(row);
 
                 let statusType = getFarmerStatus(row);
                 let statusBadge = '';
@@ -324,22 +346,30 @@
                     cardBorder = 'border-slate-300 bg-slate-50/50';
                 }
 
+                const escapedRowJson = JSON.stringify(row).replace(/'/g, "&#39;");
+                const escapedCode = farmerCode.replace(/'/g, "\\'");
+
                 html += `
                     <div class="bg-white rounded-2xl p-5 card-shadow border ${cardBorder} hover:shadow-lg transition-all flex flex-col justify-between">
                         <div>
                             <div class="flex items-start justify-between gap-2 mb-3">
                                 <div>
                                     <span class="inline-block px-2.5 py-1 bg-slate-100 text-slate-700 text-[10px] font-semibold rounded-lg uppercase tracking-wider mb-1">
-                                        ${keys[0] || 'कोड'} : ${primaryTitle}
+                                        ${keys[0] || 'कोड'} : ${highlightText(primaryTitle, query)}
                                     </span>
-                                    <h4 class="font-bold text-slate-800 text-base">${secondaryTitle || primaryTitle}</h4>
+                                    <h4 class="font-bold text-slate-800 text-base">${highlightText(secondaryTitle || primaryTitle, query)}</h4>
                                 </div>
-                                <button onclick='copyCardData(${JSON.stringify(row).replace(/'/g, "&#39;")})' title="विवरण कॉपी करें" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 flex items-center justify-center text-xs transition-all">
-                                    <i class="fa-regular fa-copy"></i>
-                                </button>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="copyOnlyCode('${escapedCode}')" title="केवल किसान कोड कॉपी करें" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold transition-all flex items-center gap-1 shadow-sm">
+                                        <i class="fa-solid fa-copy"></i><span>कोड कॉपी</span>
+                                    </button>
+                                    <button onclick='copyCardData(${escapedRowJson})' title="पूरा विवरण कॉपी करें" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs transition-all">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                    </button>
+                                </div>
                             </div>
                             
-                            <div class="mb-3 flex items-center">
+                            <div class="mb-3 flex items-center justify-between gap-2">
                                 ${statusBadge}
                             </div>
                             
@@ -348,10 +378,12 @@
 
                 keys.forEach((key, idx) => {
                     if (idx > 1 && row[key]) {
+                        const isVillageCol = key.toLowerCase().includes('village') || key.toLowerCase().includes('ग्राम') || key.toLowerCase().includes('गाँव');
+                        const displayVal = isVillageCol ? row[key] : highlightText(row[key], query);
                         html += `
                             <div class="flex justify-between py-0.5">
                                 <span class="text-slate-400 font-medium">${key}:</span>
-                                <span class="text-slate-700 font-semibold text-right">${row[key]}</span>
+                                <span class="text-slate-700 font-semibold text-right">${displayVal}</span>
                             </div>
                         `;
                     }
@@ -359,6 +391,14 @@
 
                 html += `
                             </div>
+                        </div>
+
+                        <!-- Bottom Action Bar with WhatsApp Share -->
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+                            <button onclick='shareOnWhatsApp(${escapedRowJson})' class="w-full py-2 px-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-1.5">
+                                <i class="fa-brands fa-whatsapp text-base"></i>
+                                <span>WhatsApp पर शेयर करें</span>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -368,7 +408,7 @@
             resultsContainer.innerHTML = html;
         }
 
-        // Search Filter Logic with minimum 3 characters requirement
+        // Search Filter Logic: Strictly excludes Village column, searches only Farmer Code, Farmer Name, Father/Husband Name
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
             
@@ -381,7 +421,7 @@
                         <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
                             <i class="fa-solid fa-address-book"></i>
                         </div>
-                        <h3 class="text-base font-bold text-slate-700 mb-1">गाँव या नाम के कम से कम 3 अक्षर टाइप करें</h3>
+                        <h3 class="text-base font-bold text-slate-700 mb-1">किसान कोड या नाम के कम से कम 3 अक्षर टाइप करें</h3>
                         <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें।</p>
                     </div>
                 `;
@@ -404,12 +444,17 @@
             }
 
             const filtered = rawData.filter(row => {
-                return Object.values(row).some(val => 
-                    String(val).toLowerCase().includes(query)
-                );
+                return Object.entries(row).some(([key, val]) => {
+                    const lowerKey = key.toLowerCase();
+                    // Exclude village / gram columns completely from search
+                    if (lowerKey.includes('village') || lowerKey.includes('ग्राम') || lowerKey.includes('गाँव') || lowerKey.includes('gram')) {
+                        return false;
+                    }
+                    return String(val).toLowerCase().includes(query);
+                });
             });
 
-            renderResults(filtered);
+            renderResults(filtered, query);
         });
 
         clearBtn.addEventListener('click', () => {
@@ -420,22 +465,71 @@
                     <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
                         <i class="fa-solid fa-address-book"></i>
                     </div>
-                    <h3 class="text-base font-bold text-slate-700 mb-1">गाँव या नाम के कम से कम 3 अक्षर टाइप करें</h3>
+                    <h3 class="text-base font-bold text-slate-700 mb-1">किसान कोड या नाम के कम से कम 3 अक्षर टाइप करें</h3>
                     <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें।</p>
                 </div>
             `;
             matchedCountEl.textContent = "0";
         });
 
-        function copyCardData(rowObj) {
-            let textToCopy = Object.entries(rowObj).map(([k, v]) => `${k}: ${v}`).join("\n");
-            document.execCommand('copy');
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(textToCopy).catch(() => {});
+        // Reliable Cross-Browser Clipboard Copy Helper
+        function copyToClipboardReliable(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Copy failed', err);
             }
+            document.body.removeChild(textArea);
+        }
 
-            showModal("सफल", "किसान विवरण क्लिपबोर्ड पर कॉपी हो गया है!", "success");
+        // Copy Only Farmer Code
+        function copyOnlyCode(code) {
+            if (!code) return;
+            copyToClipboardReliable(code);
+            showModal("किसान कोड कॉपी हुआ", `किसान कोड (${code}) सफलतापूर्वक कॉपी हो गया है!`, "success");
+        }
+
+        // Copy Full Card Details
+        function copyCardData(rowObj) {
+            let textToCopy = Object.entries(rowObj)
+                .filter(([_, v]) => v !== "")
+                .map(([k, v]) => `${k}: ${v}`)
+                .join("\n");
+            copyToClipboardReliable(textToCopy);
+            showModal("विवरण कॉपी हुआ", "किसान का पूरा विवरण क्लिपबोर्ड पर कॉपी हो गया है!", "success");
+        }
+
+        // Share Farmer Card Details directly on WhatsApp
+        function shareOnWhatsApp(rowObj) {
+            let statusType = getFarmerStatus(rowObj);
+            let statusLabel = statusType === 'green' ? 'AgriStack हुआ है (हरा)' : (statusType === 'purple' ? 'नया पंजीयन (बैंगनी)' : 'AgriStack अधूरा था (काला)');
+
+            let lines = [
+                "🌾 *किसान कोड विवरण (चोंगरीबहार उपार्जन केंद्र)* 🌾",
+                "----------------------------------"
+            ];
+
+            Object.entries(rowObj).forEach(([k, v]) => {
+                if (v !== "") {
+                    lines.push(`*${k}:* ${v}`);
+                }
+            });
+
+            lines.push(`*स्थिति:* ${statusLabel}`);
+            lines.push("----------------------------------");
+            lines.push("ℹ️ _नोट: वर्तमान में सोसायटी में ऋण की एंट्री चल रही है, अतः मिलान अवश्य करें।_");
+
+            const message = encodeURIComponent(lines.join("\n"));
+            const whatsappUrl = `https://wa.me/?text=${message}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
 
         function showModal(title, message, type) {
@@ -464,8 +558,13 @@
 
         // Load Sheet Data from CSV URL
         async function loadSheetData() {
+            statusText.textContent = "डेटा लोड हो रहा है...";
+            statusDot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
+            retryBtn.classList.add('hidden');
+
             try {
                 const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error("Network response was not ok");
                 const dataText = await response.text();
                 
                 const parsed = parseCSV(dataText);
@@ -478,12 +577,13 @@
                 statusText.textContent = "डेटा सफलतापूर्वक लोड हो गया है";
                 statusDot.className = "w-2 h-2 rounded-full bg-emerald-400";
                 searchInput.disabled = false;
-                searchInput.placeholder = "गाँव, किसान या पिता का नाम (कम से कम 3 अक्षर)...";
+                searchInput.placeholder = "किसान कोड, किसान या पिता का नाम (कम से कम 3 अक्षर)...";
             } catch (error) {
                 console.error("Error loading CSV:", error);
                 statusText.textContent = "डेटा लोड करने में त्रुटि";
                 statusDot.className = "w-2 h-2 rounded-full bg-rose-500";
-                showModal("त्रुटि", "गूगल शीट से डेटा लोड नहीं हो पाया। कृपया इंटरनेट कनेक्शन या लिंक की जाँच करें।", "error");
+                retryBtn.classList.remove('hidden');
+                showModal("त्रुटि", "गूगल शीट से डेटा लोड नहीं हो पाया। कृपया इंटरनेट कनेक्शन की जाँच करें और 'पुनः लोड करें' दबाएं।", "error");
             }
         }
 
