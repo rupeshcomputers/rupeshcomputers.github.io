@@ -104,6 +104,31 @@
         .text-xl { font-size: 1.25rem; }
         .text-center { text-align: center; }
         .cursor-pointer { cursor: pointer; }
+        /* Mobile-First Responsive & Touch-Friendly Enhancements */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        button, select, input {
+            touch-action: manipulation;
+        }
+        @media (max-width: 640px) {
+            input, select {
+                font-size: 16px !important; /* Prevents iOS/Android auto-zoom on focus */
+            }
+            .mobile-action-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .mobile-action-grid > button {
+                justify-content: center;
+                padding-top: 0.65rem;
+                padding-bottom: 0.65rem;
+            }
+        }
         @media (min-width: 768px) {
             .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
             .md\:flex-row { flex-direction: row; }
@@ -294,15 +319,15 @@
                         placeholder="पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल चुनें..."
                         oninput="handleLiveSearchDebounced()"
                         onkeydown="if(event.key==='Enter'){ event.preventDefault(); executeSearch(); }"
-                        class="w-full pl-12 pr-24 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-sm sm:text-base font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition shadow-inner disabled:opacity-60">
-                    <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-2 right-2 px-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold items-center gap-1 transition">
+                        class="w-full pl-11 sm:pl-12 pr-20 sm:pr-24 py-3.5 sm:py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition shadow-inner disabled:opacity-60">
+                    <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-2 right-2 px-3 sm:px-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold items-center gap-1 transition">
                         <i class="fa-solid fa-xmark"></i> साफ़ करें
                     </button>
                 </div>
 
                 <!-- Search Action Button -->
                 <button type="button" id="search-btn" onclick="executeSearch()" disabled
-                    class="bg-blue-700 hover:bg-blue-800 disabled:bg-slate-400 text-white font-extrabold px-7 py-4 rounded-2xl text-sm sm:text-base shadow-lg shadow-blue-700/20 transition flex items-center justify-center gap-2 shrink-0 cursor-pointer">
+                    class="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 disabled:bg-slate-400 text-white font-extrabold px-7 py-3.5 sm:py-4 rounded-2xl text-base shadow-lg shadow-blue-700/20 transition flex items-center justify-center gap-2 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-search"></i> <span>खोजें</span>
                 </button>
             </div>
@@ -1425,11 +1450,11 @@
                             <span class="text-xs font-extrabold text-slate-800">${title}</span>
                             <span class="${styles.badge} text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">${badgeText}</span>
                         </div>
-                        <div class="flex items-center justify-between gap-2 bg-white border border-slate-200/80 rounded-xl px-3 py-2">
-                            <div class="font-mono font-extrabold text-sm sm:text-base ${styles.accText} tracking-wide">
+                        <div class="flex items-center justify-between gap-2 bg-white border border-slate-200/80 rounded-xl px-3 py-2.5">
+                            <div class="font-mono font-extrabold text-base sm:text-base ${styles.accText} tracking-wide break-all">
                                 ${highlightMatch(rowObj.accNo, rawQuery)}
                             </div>
-                            <button type="button" onclick="copyAccountNumber('${safeAcc}')" class="${styles.btn} text-[11px] font-bold px-2.5 py-1.5 rounded-lg cursor-pointer shrink-0 inline-flex items-center gap-1 transition">
+                            <button type="button" onclick="copyAccountNumber('${safeAcc}')" class="${styles.btn} text-xs font-bold px-3 py-2 rounded-lg cursor-pointer shrink-0 inline-flex items-center gap-1.5 transition">
                                 <i class="fa-regular fa-copy"></i> Copy
                             </button>
                         </div>
@@ -1469,20 +1494,20 @@
                                 ${profile.branch ? `<span class="bg-slate-200/80 text-slate-800 font-bold px-2.5 py-1 rounded-lg">शाखा: ${highlightMatch(profile.branch, rawQuery)}</span>` : ""}
                             </div>
 
-                            <div class="flex flex-wrap items-center gap-2 shrink-0">
-                                <button type="button" onclick="copyFullRowTogether(${idx})" class="py-2 px-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <div class="mobile-action-grid flex flex-wrap items-center gap-2 shrink-0">
+                                <button type="button" onclick="copyFullRowTogether(${idx})" class="py-2.5 px-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-solid fa-copy"></i>
-                                    <span>सभी खाता एक साथ Copy करें</span>
+                                    <span>सभी Copy</span>
                                 </button>
-                                <button type="button" onclick="shareRowOnWhatsApp(${idx})" class="py-2 px-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                                <button type="button" onclick="shareRowOnWhatsApp(${idx})" class="py-2.5 px-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-brands fa-whatsapp text-base"></i>
-                                    <span>WhatsApp भेजें</span>
+                                    <span>WhatsApp</span>
                                 </button>
-                                <button type="button" onclick="printFarmerSlip(${idx})" class="py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer" title="किसान पर्ची प्रिंट करें">
+                                <button type="button" onclick="printFarmerSlip(${idx})" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer" title="किसान पर्ची प्रिंट करें">
                                     <i class="fa-solid fa-print"></i>
                                     <span>पर्ची</span>
                                 </button>
-                                <button type="button" onclick="toggleRawRowDetails(${idx})" class="py-2 px-3 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 rounded-xl text-xs font-extrabold transition flex items-center gap-1 cursor-pointer" title="Excel की मूल पंक्तियां देखें">
+                                <button type="button" onclick="toggleRawRowDetails(${idx})" class="py-2.5 px-3 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 rounded-xl text-xs font-extrabold transition flex items-center gap-1 cursor-pointer" title="Excel की मूल पंक्तियां देखें">
                                     <i class="fa-solid fa-table-list"></i>
                                     <span>मूल डेटा</span>
                                 </button>
