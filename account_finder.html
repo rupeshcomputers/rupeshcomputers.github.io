@@ -150,6 +150,40 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
+    <!-- Password Lock Screen Overlay (Session-only RAM unlock, Zero Storage) -->
+    <div id="password-lock-screen" class="fixed inset-0 z-50 banking-gradient flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 text-center space-y-5 border border-blue-200">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center mx-auto text-3xl shadow-inner border border-blue-200">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">अकाउंट फाइन्डर पोर्टल लॉक है</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    केवल अधिकृत सहकारी समिति कर्मचारियों के लिए • आगे बढ़ने हेतु पासवर्ड दर्ज करें
+                </p>
+            </div>
+            <div class="space-y-3 text-left">
+                <div class="relative">
+                    <input type="password" id="portal-password-input" placeholder="पासवर्ड / PIN दर्ज करें..."
+                        onkeydown="if(event.key==='Enter'){ event.preventDefault(); verifyPortalPassword(); }"
+                        class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-2xl text-base font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition">
+                    <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-3 px-2 text-slate-500 hover:text-slate-800 cursor-pointer" title="पासवर्ड देखें/छिपाएं">
+                        <i id="pwd-eye-icon" class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+                <p id="password-error-msg" class="hidden text-xs font-extrabold text-rose-600 px-1">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।
+                </p>
+                <button type="button" onclick="verifyPortalPassword()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-extrabold py-3.5 rounded-2xl text-base shadow-lg shadow-blue-700/25 transition flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-unlock-keyhole"></i> <span>अनलॉक करें (Unlock)</span>
+                </button>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-[11px] text-slate-500">
+                सुरक्षा नोट: यह लॉक केवल वर्तमान टैब के लिए है। पेज रिफ्रेश या बंद करने पर पोर्टल स्वतः फिर से लॉक हो जाएगा।
+            </div>
+        </div>
+    </div>
+
     <!-- Top Banking Header -->
     <header class="banking-gradient text-white shadow-xl sticky top-0 z-40 border-b border-blue-800/60">
         <div class="max-w-6xl mx-auto px-4 py-4 sm:py-5 flex flex-col md:flex-row items-center justify-between gap-3">
@@ -172,6 +206,10 @@
 
             <!-- File Status Indicator -->
             <div class="flex flex-wrap items-center justify-center gap-2">
+                <button type="button" onclick="lockPortalNow()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-400/50 px-3 py-2 rounded-2xl text-[11px] font-bold text-rose-200 flex items-center gap-1.5 shadow-md cursor-pointer transition" title="पोर्टल तुरंत लॉक करें">
+                    <i class="fa-solid fa-lock text-rose-300"></i>
+                    <span>लॉक करें</span>
+                </button>
                 <div class="bg-emerald-950/80 border border-emerald-400/50 px-3 py-2 rounded-2xl text-[11px] font-bold text-emerald-200 flex items-center gap-1.5 shadow-md">
                     <i class="fa-solid fa-shield-halved text-emerald-400"></i>
                     <span>100% सुरक्षित • कोई डेटा सेव नहीं होता</span>
@@ -365,22 +403,60 @@
         </div>
 
         <!-- Single Unified Excel / CSV File Upload Box -->
-        <div id="upload-panel" onclick="document.getElementById('local-file-input').click()"
-            ondragover="event.preventDefault(); this.classList.add('border-blue-600', 'bg-blue-50/70');"
-            ondragleave="this.classList.remove('border-blue-600', 'bg-blue-50/70');"
-            ondrop="handleFileDrop(event)"
-            class="cursor-pointer bg-white border-2 border-dashed border-blue-300 hover:border-blue-600 hover:bg-blue-50/40 rounded-3xl p-8 sm:p-12 text-center shadow-sm transition group">
-            <input type="file" id="local-file-input" accept=".xlsx,.xls,.csv,.txt" class="hidden" onchange="handleLocalFileUpload(event)">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 group-hover:scale-105 transition flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
-                <i class="fa-solid fa-file-excel"></i>
+        <div id="upload-panel" class="bg-white border-2 border-dashed border-blue-300 rounded-3xl p-6 sm:p-10 text-center shadow-sm space-y-6">
+            <div onclick="document.getElementById('local-file-input').click()"
+                ondragover="event.preventDefault(); this.classList.add('border-blue-600', 'bg-blue-50/70');"
+                ondragleave="this.classList.remove('border-blue-600', 'bg-blue-50/70');"
+                ondrop="handleFileDrop(event)"
+                class="cursor-pointer hover:bg-blue-50/40 rounded-2xl p-4 transition group">
+                <input type="file" id="local-file-input" accept=".xlsx,.xls,.csv,.txt" class="hidden" onchange="handleLocalFileUpload(event)">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 group-hover:scale-105 transition flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                    <i class="fa-solid fa-file-excel"></i>
+                </div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">किसी भी ब्रांच की फाइन्डर फाइल चुनें (Excel या CSV)</h2>
+                <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-4">
+                    आपकी फाइल पूरी तरह आपके डिवाइस की अस्थायी RAM में ही पढ़ी जाती है — कहीं भी अपलोड या सेव नहीं होती।
+                </p>
+                <span class="inline-flex items-center gap-2 bg-blue-700 group-hover:bg-blue-800 text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-700/20 transition">
+                    <i class="fa-solid fa-folder-open"></i> कंप्यूटर/मोबाइल से फाइल चुनें
+                </span>
             </div>
-            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">किसी भी ब्रांच की फाइन्डर फाइल चुनें (Excel या CSV)</h2>
-            <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-5">
-                आपकी फाइल पूरी तरह आपके डिवाइस की अस्थायी RAM में ही पढ़ी जाती है — कहीं भी अपलोड या सेव नहीं होती।
-            </p>
-            <span class="inline-flex items-center gap-2 bg-blue-700 group-hover:bg-blue-800 text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-700/20 transition">
-                <i class="fa-solid fa-folder-open"></i> फाइल चुनें (Select File)
-            </span>
+
+            <!-- Google Drive 2-Link Direct 1-Click Loader -->
+            <div class="border-t border-slate-200 pt-5 text-left max-w-2xl mx-auto space-y-3">
+                <div class="text-xs sm:text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                    <i class="fa-brands fa-google-drive text-emerald-600 text-base"></i>
+                    <span>या ब्रांच के लिंक से सीधे 1-क्लिक में डेटा लोड करें:</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 space-y-2.5 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block bg-emerald-700 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full mb-1">शाखा 1 • लिंक जुड़ा हुआ</span>
+                            <div class="text-sm font-extrabold text-emerald-950">जशपुर ब्रांच (Jashpur Branch)</div>
+                            <p class="text-[11px] text-emerald-800 mt-0.5">सीधे जशपुर ब्रांच की शीट लोड करने के लिए नीचे बटन दबाएं।</p>
+                        </div>
+                        <button type="button" onclick="fetchGoogleDriveFile('https://docs.google.com/spreadsheets/d/1deJQWWtO7p0RtDbp_g10H0cH86DkyAIb/edit?usp=drive_link&ouid=102148369473438211037&rtpof=true&sd=true', 'जशपुर ब्रांच')"
+                            class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold py-3 px-4 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-bolt"></i> जशपुर ब्रांच लोड करें (1-Click)
+                        </button>
+                    </div>
+
+                    <div class="bg-indigo-50/70 border border-indigo-200 rounded-2xl p-3.5 space-y-2.5 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block bg-indigo-700 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full mb-1">शाखा 2 • लिंक जुड़ा हुआ</span>
+                            <div class="text-sm font-extrabold text-indigo-950">FKB ब्रांच (FKB Branch)</div>
+                            <p class="text-[11px] text-indigo-800 mt-0.5">सीधे FKB ब्रांच की शीट लोड करने के लिए नीचे बटन दबाएं।</p>
+                        </div>
+                        <button type="button" onclick="fetchGoogleDriveFile('https://docs.google.com/spreadsheets/d/1wJfHapUs2EIWwB4YkbO6xemZLB7Xq-Sl/edit?usp=drive_link&ouid=102148369473438211037&rtpof=true&sd=true', 'FKB ब्रांच')"
+                            class="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-extrabold py-3 px-4 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-bolt"></i> FKB ब्रांच लोड करें (1-Click)
+                        </button>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-500">
+                    नोट: Google Drive में फाइल की शेयरिंग <strong>"Anyone with the link"</strong> पर होना आवश्यक है।
+                </p>
+            </div>
         </div>
 
         <!-- Processing / Loading State Card -->
@@ -437,6 +513,48 @@
     </footer>
 
     <script>
+        // यहाँ अपना मनचाहा पासवर्ड बदल सकते हैं
+        const APP_ACCESS_PIN = "99999";
+
+        function verifyPortalPassword() {
+            const input = document.getElementById('portal-password-input');
+            const errMsg = document.getElementById('password-error-msg');
+            if (input.value === APP_ACCESS_PIN) {
+                errMsg.classList.add('hidden');
+                input.value = "";
+                document.getElementById('password-lock-screen').classList.add('hidden');
+                showToast("पोर्टल अनलॉक हो गया है!");
+            } else {
+                errMsg.classList.remove('hidden');
+                input.focus();
+                input.select();
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('portal-password-input');
+            const icon = document.getElementById('pwd-eye-icon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        function lockPortalNow() {
+            document.getElementById('password-lock-screen').classList.remove('hidden');
+            document.getElementById('portal-password-input').value = "";
+            document.getElementById('password-error-msg').classList.add('hidden');
+            setTimeout(() => document.getElementById('portal-password-input').focus(), 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const pwdInput = document.getElementById('portal-password-input');
+            if (pwdInput) pwdInput.focus();
+        });
+
         const MAX_RESULTS_DISPLAY = 50;
 
         // Strictly in-memory session variables only (Zero LocalStorage / Zero IndexedDB / Zero Server)
@@ -1019,7 +1137,87 @@
             event.target.value = "";
         }
 
-        // Built-in 100% Offline .xlsx (ZIP + XML) Parser using browser DecompressionStream (works with zero internet!)
+        // Extract Google Drive File ID from any Drive / Sheets URL and fetch directly into RAM
+        function extractGoogleDriveFileId(url) {
+            const str = String(url || "").trim();
+            if (!str) return null;
+            const patterns = [
+                /\/d\/([a-zA-Z0-9_-]{20,})/,
+                /[?&]id=([a-zA-Z0-9_-]{20,})/,
+                /^([a-zA-Z0-9_-]{20,})$/
+            ];
+            for (const p of patterns) {
+                const m = str.match(p);
+                if (m && m[1]) return m[1];
+            }
+            return null;
+        }
+
+        async function loadFromGoogleDriveInput(inputId, labelName) {
+            const rawUrl = document.getElementById(inputId).value.trim();
+            if (!rawUrl) {
+                showToast("कृपया पहले Google Drive का लिंक पेस्ट करें।");
+                return;
+            }
+            await fetchGoogleDriveFile(rawUrl, labelName);
+        }
+
+        async function fetchGoogleDriveFile(driveUrl, labelName = "Google Drive फाइल") {
+            const fileId = extractGoogleDriveFileId(driveUrl);
+            if (!fileId) {
+                showToast("सही Google Drive लिंक नहीं मिला। कृपया पूरा लिंक पेस्ट करें।");
+                return;
+            }
+
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const loadingPanel = document.getElementById('loading-panel');
+
+            statusText.textContent = `${labelName} Google Drive से लाई जा रही है...`;
+            statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping";
+            document.getElementById('upload-panel').classList.add('hidden');
+            document.getElementById('ready-panel').classList.add('hidden');
+            loadingPanel.classList.remove('hidden');
+
+            const isGoogleSheet = /docs\.google\.com\/spreadsheets/i.test(driveUrl);
+            const candidateUrls = isGoogleSheet
+                ? [
+                    `https://docs.google.com/spreadsheets/d/${fileId}/export?format=xlsx`,
+                    `https://docs.google.com/spreadsheets/d/${fileId}/gviz/tq?tqx=out:csv`
+                  ]
+                : [
+                    `https://drive.google.com/uc?export=download&id=${fileId}`,
+                    `https://docs.google.com/spreadsheets/d/${fileId}/export?format=xlsx`
+                  ];
+
+            for (const url of candidateUrls) {
+                try {
+                    const resp = await fetch(url);
+                    if (!resp.ok) continue;
+                    const buf = await resp.arrayBuffer();
+                    const bytes = new Uint8Array(buf);
+                    if (bytes.length < 32) continue;
+
+                    // Check if Google returned an HTML login/permission page instead of file data
+                    const headSnippet = new TextDecoder("utf-8").decode(bytes.subarray(0, 200)).trim();
+                    if (/^<!doctype html|^<html/i.test(headSnippet) && !/<tr[\s>]/i.test(headSnippet)) {
+                        continue;
+                    }
+
+                    const fakeFile = new File([buf], `${labelName}.xlsx`, {
+                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    });
+                    processUploadedFile(fakeFile);
+                    return;
+                } catch (err) {
+                    console.warn("Google Drive direct fetch attempt failed:", err);
+                }
+            }
+
+            handleLoadError("Google Drive से फाइल लोड नहीं हो सकी। सुनिश्चित करें कि फाइल 'Anyone with the link' पर शेयर है या फाइल को डाउनलोड करके ऊपर से चुनें।");
+        }
+
+        // Built-in Pure-JS Offline XLSX (ZIP + XML) Parser (works 100% offline without SheetJS CDN)
         async function parseXlsxOfflinePureJS(arrayBuffer) {
             const bytes = new Uint8Array(arrayBuffer);
             const view = new DataView(arrayBuffer);
@@ -1527,12 +1725,85 @@
                             ` : ""}
                             ${extraSlotsHtml}
                         </div>
+
+                        ${renderCrossBranchSuggestionHtml(profile)}
                     </div>
                 `;
             });
 
             window.__currentDisplayedProfiles = profilesList;
             resultsGrid.innerHTML = html;
+        }
+
+        // Find missing SB/CASH/KIND accounts for the exact same farmer name & account prefix across other branches
+        function renderCrossBranchSuggestionHtml(profile) {
+            if (!profile || !profile.name || profile.name === "नाम उपलब्ध नहीं") return "";
+            const missingSb = !profile.sb;
+            const missingCash = !profile.cash;
+            const missingKind = !profile.kind;
+            if (!missingSb && !missingCash && !missingKind) return "";
+
+            const normName = profile.name.toUpperCase().replace(/\s+/g, " ").trim();
+            const myPrefixes = new Set(
+                (profile.accList || []).map(a => a.replace(/\D/g, "").slice(0, 3)).filter(Boolean)
+            );
+
+            const relatedAccounts = [];
+            for (let i = 0; i < groupedCustomers.length; i++) {
+                const other = groupedCustomers[i];
+                if (other === profile) continue;
+                const otherNormName = (other.name || "").toUpperCase().replace(/\s+/g, " ").trim();
+                if (otherNormName !== normName) continue;
+
+                const otherPrefixes = (other.accList || []).map(a => a.replace(/\D/g, "").slice(0, 3));
+                const sameSeries = myPrefixes.size === 0 || otherPrefixes.some(p => myPrefixes.has(p));
+                if (!sameSeries) continue;
+
+                if (missingSb && other.sb) relatedAccounts.push({ label: "बचत खाता (SB)", row: other.sb, branch: other.branch, color: "emerald" });
+                if (missingCash && other.cash) relatedAccounts.push({ label: "कैश खाता (CASH)", row: other.cash, branch: other.branch, color: "blue" });
+                if (missingKind && other.kind) relatedAccounts.push({ label: "काइंड खाता (KIND)", row: other.kind, branch: other.branch, color: "pink" });
+            }
+
+            if (relatedAccounts.length === 0) return "";
+
+            const safeNameForSearch = profile.name.replace(/'/g, "\\'");
+            const itemsHtml = relatedAccounts.map(item => {
+                const safeAcc = item.row.accNo.replace(/'/g, "\\'");
+                return `
+                    <div class="inline-flex flex-wrap items-center gap-2 bg-white border border-indigo-200 rounded-xl px-3 py-1.5 shadow-xs">
+                        <span class="text-[11px] font-extrabold text-indigo-900">${item.label}:</span>
+                        <span class="font-mono font-extrabold text-xs sm:text-sm text-slate-900">${item.row.accNo}</span>
+                        <span class="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-md">शाखा: ${item.branch || "—"}</span>
+                        <button type="button" onclick="copyAccountNumber('${safeAcc}')" class="bg-indigo-700 hover:bg-indigo-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg cursor-pointer">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                `;
+            }).join("");
+
+            return `
+                <div class="bg-indigo-50/90 border-t border-indigo-200 px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-extrabold text-indigo-950 flex items-center gap-1.5">
+                            <i class="fa-solid fa-code-branch text-indigo-600"></i>
+                            अन्य शाखा में इसी किसान के छूटे हुए खाते मिले:
+                        </span>
+                        ${itemsHtml}
+                    </div>
+                    <button type="button" onclick="searchByExactFarmerName('${safeNameForSearch}')" class="text-[11px] font-extrabold text-indigo-700 hover:text-indigo-900 underline shrink-0 self-start sm:self-center cursor-pointer">
+                        इस नाम के सभी कार्ड देखें →
+                    </button>
+                </div>
+            `;
+        }
+
+        function searchByExactFarmerName(farmerName) {
+            const input = document.getElementById('search-input');
+            input.value = farmerName;
+            const clearBtn = document.getElementById('clear-search-btn');
+            clearBtn.classList.remove('hidden');
+            clearBtn.classList.add('flex');
+            executeSearch();
         }
 
         function toggleRawRowDetails(displayIndex) {
