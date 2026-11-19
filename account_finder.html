@@ -3,22 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>अकाउंट फाइन्डर - Account Finder</title>
-    <!-- Tailwind CSS CDN -->
+    <title>अकाउंट फाइन्डर - Account Finder (100% Offline & Zero Data Storage)</title>
+    <!-- Tailwind CSS CDN (Optional online enhancement; full offline fallback CSS included below) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse CDN for Fast Large CSV Parsing (~78,000+ rows) -->
+    <!-- PapaParse CDN (Optional; built-in offline parser included) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- SheetJS (XLSX) CDN for Direct Excel File Support -->
+    <!-- SheetJS (XLSX) CDN (Optional; built-in offline XLSX ZIP/XML reader included) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Google Fonts (Inter & Noto Sans Devanagari) -->
+    <!-- Google Fonts & FontAwesome (Optional online enhancement) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Complete Offline Fallback CSS so the app works 100% without Internet */
+        *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            margin: 0;
+            font-family: 'Noto Sans Devanagari', 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
             background-image: radial-gradient(circle at top right, rgba(30, 64, 175, 0.05), transparent 45%),
                               radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.04), transparent 45%);
+        }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .inline-flex { display: inline-flex; }
+        .grid { display: grid; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .justify-end { justify-content: flex-end; }
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-2\.5 { gap: 0.625rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-3\.5 { gap: 0.875rem; }
+        .gap-4 { gap: 1rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-5 > * + * { margin-top: 1.25rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .max-w-6xl { max-width: 72rem; margin-left: auto; margin-right: auto; }
+        .w-full { width: 100%; }
+        .min-h-screen { min-height: 100vh; }
+        .p-3\.5 { padding: 0.875rem; }
+        .p-4 { padding: 1rem; }
+        .p-5 { padding: 1.25rem; }
+        .p-8 { padding: 2rem; }
+        .p-10 { padding: 2.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-7 { padding-left: 1.75rem; padding-right: 1.75rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-3xl { border-radius: 1.5rem; }
+        .rounded-full { border-radius: 9999px; }
+        .bg-white { background-color: #ffffff; }
+        .bg-slate-50 { background-color: #f8fafc; }
+        .bg-slate-100 { background-color: #f1f5f9; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-blue-700 { background-color: #1d4ed8; }
+        .bg-emerald-50 { background-color: #ecfdf5; }
+        .bg-emerald-600 { background-color: #059669; }
+        .bg-emerald-700 { background-color: #047857; }
+        .bg-pink-50 { background-color: #fdf2f8; }
+        .bg-pink-600 { background-color: #db2777; }
+        .bg-amber-50 { background-color: #fffbeb; }
+        .text-white { color: #ffffff; }
+        .text-slate-500 { color: #64748b; }
+        .text-slate-700 { color: #334155; }
+        .text-slate-800 { color: #1e293b; }
+        .text-slate-900 { color: #0f172a; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-blue-800 { color: #1e40af; }
+        .text-emerald-800 { color: #065f46; }
+        .text-pink-800 { color: #9d174d; }
+        .text-amber-900 { color: #78350f; }
+        .text-amber-950 { color: #451a03; }
+        .border { border: 1px solid #e2e8f0; }
+        .border-2 { border: 2px solid #cbd5e1; }
+        .border-dashed { border-style: dashed; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-center { text-align: center; }
+        .cursor-pointer { cursor: pointer; }
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:flex-row { flex-direction: row; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
         .banking-gradient {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 52%, #1d4ed8 100%);
@@ -55,7 +146,11 @@
             </div>
 
             <!-- File Status Indicator -->
-            <div class="flex items-center justify-center">
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <div class="bg-emerald-950/80 border border-emerald-400/50 px-3 py-2 rounded-2xl text-[11px] font-bold text-emerald-200 flex items-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                    <span>100% सुरक्षित • कोई डेटा सेव नहीं होता</span>
+                </div>
                 <div id="status-badge" class="bg-slate-950/75 border border-blue-700/70 px-4 py-2 rounded-2xl text-xs font-semibold flex items-center gap-2.5 shadow-md backdrop-blur-sm">
                     <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
                     <span id="status-text" class="text-blue-100">फाइल अपलोड की प्रतीक्षा है...</span>
@@ -67,16 +162,30 @@
     <!-- Main Application Area -->
     <main class="max-w-6xl mx-auto px-4 py-6 sm:py-8 w-full flex-grow space-y-6">
 
-        <!-- Mandatory Warning / Passbook Verification Notice Box -->
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50/60 border border-amber-200/90 border-l-4 border-l-amber-500 rounded-2xl p-4 sm:p-5 shadow-xs flex items-start gap-3.5">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-700 flex items-center justify-center text-lg shrink-0 mt-0.5">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+        <!-- Mandatory Warning & Zero-Data-Storage Security Notice Box -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50/60 border border-amber-200/90 border-l-4 border-l-amber-500 rounded-2xl p-4 shadow-xs flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-700 flex items-center justify-center text-base shrink-0 mt-0.5">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="text-xs text-amber-950 leading-relaxed">
+                    <span class="font-extrabold text-amber-900 block mb-0.5">महत्वपूर्ण सूचना (पासबुक मिलान निर्देश):</span>
+                    <p class="font-medium">
+                        अकाउंट फाइन्डर से मिला खाता नंबर किसान की पासबुक से ज़रूर मिलान करें। जिसका खाता नंबर नहीं मिलेगा उसके लिए संबंधित बैंक शाखा से संपर्क करना पड़ेगा।
+                    </p>
+                </div>
             </div>
-            <div class="text-xs sm:text-sm text-amber-950 leading-relaxed">
-                <span class="font-extrabold text-amber-900 block mb-0.5">महत्वपूर्ण सूचना (सोसायटी कर्मचारी मिलान निर्देश):</span>
-                <p class="font-medium">
-                    नोट: अकाउंट फाइन्डर से मिला खाता नंबर किसान की पासबुक से ज़रूर मिलान करें। जिसका खाता नंबर नहीं मिलेगा उसके लिए संबंधित बैंक शाखा से संपर्क करना पड़ेगा।
-                </p>
+
+            <div class="bg-gradient-to-r from-emerald-50 to-teal-50/60 border border-emerald-200/90 border-l-4 border-l-emerald-600 rounded-2xl p-4 shadow-xs flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600/15 text-emerald-700 flex items-center justify-center text-base shrink-0 mt-0.5">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="text-xs text-emerald-950 leading-relaxed">
+                    <span class="font-extrabold text-emerald-900 block mb-0.5">गोपनीयता एवं तकनीकी सुरक्षा घोषणा (Zero Data Storage):</span>
+                    <p class="font-medium">
+                        यह टूल केवल <strong>HTML5 व Client-Side JavaScript (FileReader API)</strong> पर आधारित एक ऑफलाइन व्यूअर है। इसमें <strong>कोई भी डेटा किसी सर्वर, क्लाउड या ब्राउज़र मेमोरी में सेव नहीं होता</strong>—पेज बंद या रिफ्रेश करते ही सारा डेटा स्वतः नष्ट हो जाता है।
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -140,7 +249,7 @@
             </div>
 
             <div class="flex justify-end">
-                <button type="button" onclick="applyManualMapping()" class="bg-blue-700 hover:bg-blue-800 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs shadow-sm cursor-pointer">
+                <button type="button" onclick="applyManualMapping()" class="bg-blue-700 hover:bg-blue-800 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs shadow-sm transition cursor-pointer">
                     <i class="fa-solid fa-check mr-1"></i> इस कॉलम सेटिंग से डेटा लोड करें
                 </button>
             </div>
@@ -163,10 +272,13 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> अन्य: <strong id="count-other" class="font-extrabold">0</strong>
                 </span>
             </div>
-            <div class="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+            <div class="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200/80 px-3.5 py-1.5 rounded-xl flex flex-wrap items-center gap-2">
                 <span>कुल किसान: <span id="total-records-count" class="text-blue-700 font-extrabold">0</span></span>
                 <button type="button" id="change-file-inline-btn" onclick="resetToUploadPanel()" class="hidden text-blue-700 hover:text-blue-900 underline ml-1 cursor-pointer">
                     (फाइल बदलें)
+                </button>
+                <button type="button" id="clear-memory-btn" onclick="clearSessionMemory()" class="hidden text-rose-700 hover:text-rose-900 underline ml-1 cursor-pointer" title="स्क्रीन से डेटा तुरंत साफ़ करें">
+                    (डेटा साफ़ करें)
                 </button>
             </div>
         </div>
@@ -179,7 +291,7 @@
                         <i class="fa-solid fa-magnifying-glass text-lg"></i>
                     </div>
                     <input type="text" id="search-input" disabled
-                        placeholder="पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल अपलोड करें..."
+                        placeholder="पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल चुनें..."
                         oninput="handleLiveSearchDebounced()"
                         onkeydown="if(event.key==='Enter'){ event.preventDefault(); executeSearch(); }"
                         class="w-full pl-12 pr-24 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-sm sm:text-base font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition shadow-inner disabled:opacity-60">
@@ -237,9 +349,9 @@
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 group-hover:scale-105 transition flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
                 <i class="fa-solid fa-file-excel"></i>
             </div>
-            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">किसी भी ब्रांच की फाइन्डर फाइल अपलोड करें (Excel या CSV)</h2>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">किसी भी ब्रांच की फाइन्डर फाइल चुनें (Excel या CSV)</h2>
             <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-5">
-                सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु किसी भी ब्रांच की <strong>.xlsx, .xls या .csv</strong> फाइल यहाँ चुनें — सभी कॉलम अपने आप पहचान लिए जाएंगे।
+                आपकी फाइल पूरी तरह आपके डिवाइस की अस्थायी RAM में ही पढ़ी जाती है — कहीं भी अपलोड या सेव नहीं होती।
             </p>
             <span class="inline-flex items-center gap-2 bg-blue-700 group-hover:bg-blue-800 text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-700/20 transition">
                 <i class="fa-solid fa-folder-open"></i> फाइल चुनें (Select File)
@@ -271,6 +383,19 @@
         <!-- Results Container -->
         <div id="results-grid" class="space-y-5"></div>
 
+        <!-- Technical Transparency & Legal Disclaimer Card -->
+        <div class="bg-slate-100/90 border border-slate-200 rounded-2xl p-4 sm:p-5 text-xs text-slate-700 space-y-2">
+            <div class="font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-code text-blue-700"></i>
+                <span>तकनीकी पारदर्शिता एवं उपयोग की शर्तें (Technical Disclosure & Disclaimer):</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-1 text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                <li><strong>प्रयुक्त तकनीक (Code Stack):</strong> यह एप्लिकेशन केवल मानक <strong>HTML5, CSS3 एवं Client-Side JavaScript (Browser FileReader API, DOMParser, DecompressionStream)</strong> का उपयोग करके बनाया गया है।</li>
+                <li><strong>शून्य डेटा संग्रहण (No Data Storage / No Server):</strong> इसमें किसी भी प्रकार का बैकएंड सर्वर, डेटाबेस (SQL/NoSQL), क्लाउड स्टोरेज, कुकीज़ (Cookies), LocalStorage या IndexedDB का उपयोग नहीं किया गया है। उपयोगकर्ता द्वारा चुनी गई फाइल केवल ब्राउज़र की अस्थायी RAM में पढ़ी जाती है और टैब बंद/रिफ्रेश करते ही पूरी तरह मिट जाती है।</li>
+                <li><strong>केवल सहायक टूल:</strong> यह केवल समिति कर्मचारियों द्वारा स्वयं की अधिकृत फाइल में से नाम/खाता खोजने की सुविधा (Search Utility) हेतु निर्मित है। डेवलपर किसी भी प्रकार का डेटा एकत्र, संग्रहीत या साझा नहीं करता।</li>
+            </ul>
+        </div>
+
     </main>
 
     <!-- Toast Notification for Copy Confirmation -->
@@ -280,14 +405,16 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500 space-y-1">
-        <p class="font-semibold text-slate-700">अकाउंट फाइन्डर • सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु</p>
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 px-4 text-center text-xs text-slate-500 space-y-1.5">
+        <p class="font-semibold text-slate-700">अकाउंट फाइन्डर • सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु (100% Client-Side Offline Utility)</p>
+        <p class="text-[11px] text-slate-500">तकनीक: HTML5 + JavaScript (FileReader API) • कोई डेटा सर्वर या डिवाइस में सेव नहीं होता</p>
         <p>डेवलपर: <span class="text-blue-700 font-bold">अविनाश प्रसाद</span> • सभी अधिकार सुरक्षित</p>
     </footer>
 
     <script>
         const MAX_RESULTS_DISPLAY = 50;
 
+        // Strictly in-memory session variables only (Zero LocalStorage / Zero IndexedDB / Zero Server)
         let allRecords = [];
         let groupedCustomers = [];
         let activeFileName = "";
@@ -295,6 +422,46 @@
         let currentWorkbook = null;
         let currentSheetName = "";
         let detectedMapping = { acc: 0, custId: 1, name: 2, type: 3, branch: 4, headerRowIdx: -1 };
+
+        function clearSessionMemory() {
+            allRecords = [];
+            groupedCustomers = [];
+            activeFileName = "";
+            lastRawRows = [];
+            currentWorkbook = null;
+            currentSheetName = "";
+            __lastAllMatchedProfiles = [];
+            window.__currentDisplayedProfiles = [];
+
+            document.getElementById('count-sb').textContent = "0";
+            document.getElementById('count-cash').textContent = "0";
+            document.getElementById('count-kind').textContent = "0";
+            document.getElementById('count-other-badge').classList.add('hidden');
+            document.getElementById('total-records-count').textContent = "0";
+            document.getElementById('match-count-display').textContent = "0";
+            document.getElementById('results-grid').innerHTML = "";
+            document.getElementById('ready-panel').classList.add('hidden');
+            document.getElementById('mapping-info-bar').classList.add('hidden');
+            document.getElementById('column-mapper-panel').classList.add('hidden');
+            document.getElementById('change-file-inline-btn').classList.add('hidden');
+            document.getElementById('clear-memory-btn').classList.add('hidden');
+            document.getElementById('export-csv-btn').classList.add('hidden');
+            document.getElementById('upload-panel').classList.remove('hidden');
+
+            const searchInput = document.getElementById('search-input');
+            searchInput.value = "";
+            searchInput.disabled = true;
+            searchInput.placeholder = "पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल चुनें...";
+            document.getElementById('search-btn').disabled = true;
+            document.getElementById('filter-type').disabled = true;
+            document.getElementById('filter-branch').disabled = true;
+
+            document.getElementById('status-text').textContent = "फाइल अपलोड की प्रतीक्षा है...";
+            document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+            document.getElementById('active-file-subtitle').textContent = "मासिक बैंक खाता खोज पोर्टल";
+
+            showToast("स्क्रीन की अस्थायी मेमोरी से सारा डेटा साफ़ कर दिया गया है!");
+        }
 
         // Safely escape HTML & highlight matched query tokens
         function highlightMatch(text, query) {
@@ -333,12 +500,57 @@
             return str;
         }
 
+        // Score sheets to prioritize the sheet containing SB/CASH/KIND accounts rather than summary/report sheets
+        function scoreSheetForAccounts(rows, sheetName) {
+            if (!Array.isArray(rows) || rows.length === 0) return -1;
+            let score = 0;
+            const upperName = String(sheetName || "").toUpperCase();
+            if (upperName.includes("REPORT") || upperName.includes("SUMMARY")) {
+                score -= 500;
+            }
+            const sampleLimit = Math.min(rows.length, 300);
+            let sbHits = 0, cashHits = 0, kindHits = 0;
+            for (let r = 0; r < sampleLimit; r++) {
+                const row = rows[r] || [];
+                for (let c = 0; c < row.length; c++) {
+                    const val = cleanCellText(row[c]).toUpperCase();
+                    if (val === "SB" || val === "SBA" || val === "SAVING") sbHits++;
+                    else if (val === "CASH" || val === "CAS") cashHits++;
+                    else if (val === "KIND" || val === "KCC") kindHits++;
+                }
+            }
+            score += (sbHits + cashHits + kindHits) * 10;
+            if (sbHits > 0 && cashHits > 0 && kindHits > 0) score += 2000;
+            score += Math.min(rows.length, 50000) * 0.01;
+            return score;
+        }
+
+        // Offline Text / Tab / CSV / HTML table fallback parser
+        function parseTextOrHtmlFallback(rawText) {
+            if (!rawText) return [];
+            const trimmed = rawText.trim();
+            if (trimmed.startsWith("<") && /<tr[\s>]/i.test(trimmed)) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(trimmed, "text/html");
+                const trs = doc.querySelectorAll("tr");
+                const result = [];
+                trs.forEach(tr => {
+                    const cells = Array.from(tr.querySelectorAll("th, td")).map(td => td.textContent.trim());
+                    if (cells.some(Boolean)) result.push(cells);
+                });
+                return result;
+            }
+            const lines = trimmed.split(/\r?\n/).filter(l => l.trim() !== "");
+            if (lines.length === 0) return [];
+            const delimiter = lines[0].includes("\t") ? "\t" : ",";
+            return lines.map(line => line.split(delimiter).map(cell => cell.replace(/^"|"$/g, "").trim()));
+        }
+
         // Smart Auto-Detection of Columns for ANY Branch Excel/CSV Format
         function detectColumnMapping(rows) {
             let headerRowIdx = -1;
             let map = { acc: -1, custId: -1, name: -1, type: -1, branch: -1 };
 
-            // Step 1: Check first 15 rows for explicit Header Names
             const scanLimit = Math.min(rows.length, 15);
             for (let r = 0; r < scanLimit; r++) {
                 const row = rows[r].map(c => cleanCellText(c).toLowerCase());
@@ -370,7 +582,6 @@
                 }
             }
 
-            // Step 2: Content-based heuristic detection if headers were missing or unnamed
             const startDataRow = headerRowIdx + 1;
             const sampleRows = rows.slice(startDataRow, startDataRow + 500).filter(r => r.filter(c => cleanCellText(c) !== "").length >= 2);
 
@@ -410,7 +621,6 @@
                     }
                 });
 
-                // Fill missing mappings from content statistics
                 if (map.type === -1) {
                     const bestType = [...colStats].sort((a, b) => b.typeKeywords - a.typeKeywords)[0];
                     if (bestType && bestType.typeKeywords >= 2) {
@@ -492,7 +702,6 @@
                 }
             });
 
-            // Render first 5 rows in sample preview table
             const previewTable = document.getElementById('sample-preview-table');
             const previewSlice = rows.slice(0, 5);
             let thead = `<thead class="bg-slate-100 text-slate-700 font-extrabold border-b border-slate-200"><tr><th class="px-2.5 py-1.5 border-r border-slate-200">Row</th>`;
@@ -541,7 +750,6 @@
             const rawType = mapping.type >= 0 ? (cells[mapping.type] || "").toUpperCase() : "";
             const branch = mapping.branch >= 0 ? (cells[mapping.branch] || "") : "";
 
-            // Search both mapped type column and fallback row cells for SB / CASH / KIND keywords
             const rowJoinedUpper = cells.join(" | ").toUpperCase();
             const typeSource = rawType || rowJoinedUpper;
 
@@ -571,7 +779,6 @@
             };
         }
 
-        // Populate Branch Dropdown dynamically
         function populateBranchFilter(customers) {
             const branchSelect = document.getElementById('filter-branch');
             const branches = new Set();
@@ -605,7 +812,6 @@
             buildRecordsFromMapping(validRows, detectedMapping, fileName);
         }
 
-        // Group SB, CASH, and KIND rows of the same customer into ONE single customer record
         function buildRecordsFromMapping(validRows, mapping, fileName = "") {
             let sbCount = 0;
             let cashCount = 0;
@@ -620,7 +826,6 @@
 
                 const rowObj = parseBankRowWithMapping(validRows[idx], idx, mapping);
 
-                // Skip accidental header rows
                 if (/^(account|acc|a\/c|खाता)/i.test(rowObj.accNo) && /^(name|farmer|नाम)/i.test(rowObj.name)) {
                     continue;
                 }
@@ -686,14 +891,12 @@
                 otherBadge.classList.add('hidden');
             }
 
-            // If SB, CASH, and KIND are all 0, automatically open the Column Mapper table so user can pick the right column
             if (sbCount === 0 && cashCount === 0 && kindCount === 0 && otherCount > 0) {
                 document.getElementById('column-mapper-panel').classList.remove('hidden');
             }
 
             populateBranchFilter(groupedCustomers);
 
-            // Update mapping info bar
             const infoBar = document.getElementById('mapping-info-bar');
             const summaryText = document.getElementById('mapping-summary-text');
             summaryText.textContent = `कॉलम मिलान: खाता नंबर (${colLetter(mapping.acc)}), नाम (${colLetter(mapping.name)}), ID (${colLetter(mapping.custId)}), प्रकार (${colLetter(mapping.type)}), शाखा (${colLetter(mapping.branch)})`;
@@ -702,7 +905,7 @@
             const statusText = document.getElementById('status-text');
             const statusDot = document.getElementById('status-dot');
             document.getElementById('total-records-count').textContent = groupedCustomers.length.toLocaleString('en-IN');
-            statusText.textContent = `${groupedCustomers.length.toLocaleString('en-IN')} किसान (${allRecords.length.toLocaleString('en-IN')} कुल खाते) लोड`;
+            statusText.textContent = `${groupedCustomers.length.toLocaleString('en-IN')} किसान (${allRecords.length.toLocaleString('en-IN')} कुल खाते) अस्थायी रूप से लोड`;
             statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
 
             if (fileName) {
@@ -724,6 +927,7 @@
             document.getElementById('upload-panel').classList.add('hidden');
             document.getElementById('loading-panel').classList.add('hidden');
             document.getElementById('change-file-inline-btn').classList.remove('hidden');
+            document.getElementById('clear-memory-btn').classList.remove('hidden');
             document.getElementById('results-grid').innerHTML = "";
             document.getElementById('match-count-display').textContent = "0";
             document.getElementById('ready-panel').classList.remove('hidden');
@@ -753,50 +957,139 @@
             event.target.value = "";
         }
 
-        // Fallback text/HTML table parser for bank .xls exports that are actually HTML or TSV
-        function parseTextOrHtmlFallback(textContent) {
-            const trimmed = textContent.trim();
-            if (/<table|<tr|<td/i.test(trimmed)) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(trimmed, 'text/html');
-                const trs = Array.from(doc.querySelectorAll('tr'));
-                return trs.map(tr => Array.from(tr.querySelectorAll('td, th')).map(td => td.textContent.trim()));
+        // Built-in 100% Offline .xlsx (ZIP + XML) Parser using browser DecompressionStream (works with zero internet!)
+        async function parseXlsxOfflinePureJS(arrayBuffer) {
+            const bytes = new Uint8Array(arrayBuffer);
+            const view = new DataView(arrayBuffer);
+            const decoder = new TextDecoder("utf-8");
+
+            let eocdOffset = -1;
+            for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--) {
+                if (view.getUint32(i, true) === 0x06054b50) {
+                    eocdOffset = i;
+                    break;
+                }
             }
-            const lines = trimmed.split(/\r?\n/).filter(l => l.trim() !== "");
-            const delimiter = (lines[0] && lines[0].includes('\t')) ? '\t' : ',';
-            return lines.map(line => line.split(delimiter).map(c => c.replace(/^"|"$/g, '').trim()));
-        }
+            if (eocdOffset === -1) throw new Error("Not a valid XLSX ZIP archive");
 
-        // Score each sheet to prioritize the sheet containing SB / CASH / KIND accounts over REPORT sheets
-        function scoreSheetForAccounts(rows, sheetName) {
-            if (!rows || rows.length === 0) return -1;
-            const upperSheetName = String(sheetName || "").toUpperCase();
-            let sbCashKindHits = 0;
-            const sampleLimit = Math.min(rows.length, 400);
+            const cdOffset = view.getUint32(eocdOffset + 16, true);
+            const totalEntries = view.getUint16(eocdOffset + 10, true);
+            const filesMap = {};
+            let ptr = cdOffset;
 
-            for (let r = 0; r < sampleLimit; r++) {
-                const row = rows[r];
-                if (!Array.isArray(row)) continue;
-                for (let c = 0; c < row.length; c++) {
-                    const val = cleanCellText(row[c]).toUpperCase();
-                    if (val === "SB" || val === "CASH" || val === "KIND" || val === "SBA" || val === "KCC") {
-                        sbCashKindHits++;
-                    }
+            for (let e = 0; e < totalEntries; e++) {
+                if (view.getUint32(ptr, true) !== 0x02014b50) break;
+                const method = view.getUint16(ptr + 10, true);
+                const compSize = view.getUint32(ptr + 20, true);
+                const nameLen = view.getUint16(ptr + 28, true);
+                const extraLen = view.getUint16(ptr + 30, true);
+                const commentLen = view.getUint16(ptr + 32, true);
+                const localHeaderOffset = view.getUint32(ptr + 42, true);
+                const fileName = decoder.decode(bytes.subarray(ptr + 46, ptr + 46 + nameLen));
+
+                const lNameLen = view.getUint16(localHeaderOffset + 26, true);
+                const lExtraLen = view.getUint16(localHeaderOffset + 28, true);
+                const dataStart = localHeaderOffset + 30 + lNameLen + lExtraLen;
+                const compData = bytes.subarray(dataStart, dataStart + compSize);
+
+                if (method === 0) {
+                    filesMap[fileName] = decoder.decode(compData);
+                } else if (method === 8 && typeof DecompressionStream !== "undefined") {
+                    const ds = new DecompressionStream("deflate-raw");
+                    const writer = ds.writable.getWriter();
+                    writer.write(compData);
+                    writer.close();
+                    const decompressedBuf = await new Response(ds.readable).arrayBuffer();
+                    filesMap[fileName] = decoder.decode(decompressedBuf);
+                }
+                ptr += 46 + nameLen + extraLen + commentLen;
+            }
+
+            const xmlParser = new DOMParser();
+            const sharedStrings = [];
+            if (filesMap["xl/sharedStrings.xml"]) {
+                const ssDoc = xmlParser.parseFromString(filesMap["xl/sharedStrings.xml"], "application/xml");
+                const siNodes = ssDoc.getElementsByTagName("si");
+                for (let i = 0; i < siNodes.length; i++) {
+                    const tNodes = siNodes[i].getElementsByTagName("t");
+                    let str = "";
+                    for (let j = 0; j < tNodes.length; j++) str += tNodes[j].textContent || "";
+                    sharedStrings.push(str);
                 }
             }
 
-            let score = sbCashKindHits * 100 + Math.min(rows.length, 50000);
-            if (upperSheetName.includes("REPORT")) {
-                score -= 50000;
+            const sheetNames = [];
+            if (filesMap["xl/workbook.xml"]) {
+                const wbDoc = xmlParser.parseFromString(filesMap["xl/workbook.xml"], "application/xml");
+                const sNodes = wbDoc.getElementsByTagName("sheet");
+                for (let i = 0; i < sNodes.length; i++) {
+                    sheetNames.push(sNodes[i].getAttribute("name") || `Sheet${i + 1}`);
+                }
             }
-            return score;
+
+            const colRefToIndex = (ref) => {
+                const letters = ref.replace(/[0-9]/g, "");
+                let idx = 0;
+                for (let i = 0; i < letters.length; i++) {
+                    idx = idx * 26 + (letters.charCodeAt(i) - 64);
+                }
+                return Math.max(0, idx - 1);
+            };
+
+            const sheetsDict = {};
+            const sheetKeys = Object.keys(filesMap)
+                .filter(k => /^xl\/worksheets\/sheet\d+\.xml$/i.test(k))
+                .sort((a, b) => parseInt(a.match(/\d+/)[0], 10) - parseInt(b.match(/\d+/)[0], 10));
+
+            sheetKeys.forEach((sKey, idx) => {
+                const sName = sheetNames[idx] || `Sheet${idx + 1}`;
+                const sDoc = xmlParser.parseFromString(filesMap[sKey], "application/xml");
+                const rowNodes = sDoc.getElementsByTagName("row");
+                const rows = [];
+
+                for (let r = 0; r < rowNodes.length; r++) {
+                    const cNodes = rowNodes[r].getElementsByTagName("c");
+                    const rowArr = [];
+                    for (let c = 0; c < cNodes.length; c++) {
+                        const cell = cNodes[c];
+                        const ref = cell.getAttribute("r") || "";
+                        const cIdx = ref ? colRefToIndex(ref) : c;
+                        const tAttr = cell.getAttribute("t");
+                        let val = "";
+
+                        if (tAttr === "s") {
+                            const vNode = cell.getElementsByTagName("v")[0];
+                            const ssIdx = vNode ? parseInt(vNode.textContent, 10) : -1;
+                            val = ssIdx >= 0 ? (sharedStrings[ssIdx] || "") : "";
+                        } else if (tAttr === "inlineStr") {
+                            const tNode = cell.getElementsByTagName("t")[0];
+                            val = tNode ? tNode.textContent : "";
+                        } else {
+                            const vNode = cell.getElementsByTagName("v")[0];
+                            val = vNode ? vNode.textContent : "";
+                        }
+                        rowArr[cIdx] = val;
+                    }
+                    rows.push(rowArr);
+                }
+                sheetsDict[sName] = rows;
+            });
+
+            return { SheetNames: Object.keys(sheetsDict), SheetsData: sheetsDict };
         }
 
         function switchWorkbookSheet(sheetName) {
-            if (!currentWorkbook || !currentWorkbook.Sheets[sheetName]) return;
+            if (!currentWorkbook) return;
             currentSheetName = sheetName;
-            const sheet = currentWorkbook.Sheets[sheetName];
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            let rows = [];
+            if (currentWorkbook.__isOfflinePure && currentWorkbook.SheetsData[sheetName]) {
+                rows = currentWorkbook.SheetsData[sheetName];
+            } else if (currentWorkbook.Sheets && currentWorkbook.Sheets[sheetName]) {
+                const sheet = currentWorkbook.Sheets[sheetName];
+                rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            } else {
+                return;
+            }
             processParsedRows(rows, activeFileName);
             showToast(`शीट "${sheetName}" लोड हो गई (${allRecords.length.toLocaleString('en-IN')} खाते)`);
         }
@@ -815,31 +1108,50 @@
             const lowerName = file.name.toLowerCase();
             const isCsvOrTxt = lowerName.endsWith('.csv') || lowerName.endsWith('.txt');
 
-            if (isCsvOrTxt && typeof Papa !== 'undefined') {
+            if (isCsvOrTxt) {
                 currentWorkbook = null;
                 currentSheetName = "";
                 document.getElementById('sheet-selector-wrapper').classList.add('hidden');
-                Papa.parse(file, {
-                    header: false,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        processParsedRows(results.data, file.name);
-                        showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स सफलतापूर्वक लोड हो गए!`);
-                    },
-                    error: function() {
-                        handleLoadError("CSV फाइल पढ़ने में त्रुटि हुई। कृपया सही फाइल चुनें।");
-                    }
-                });
-            } else if (typeof XLSX !== 'undefined') {
+                if (typeof Papa !== 'undefined') {
+                    Papa.parse(file, {
+                        header: false,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            processParsedRows(results.data, file.name);
+                            showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स लोड हो गए (डेटा कहीं सेव नहीं किया गया है)`);
+                        },
+                        error: function() {
+                            handleLoadError("CSV फाइल पढ़ने में त्रुटि हुई। कृपया सही फाइल चुनें।");
+                        }
+                    });
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const rows = parseTextOrHtmlFallback(e.target.result);
+                        processParsedRows(rows, file.name);
+                        showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स ऑफलाइन लोड हो गए!`);
+                    };
+                    reader.readAsText(file);
+                }
+            } else {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    setTimeout(() => {
+                reader.onload = async function(e) {
+                    setTimeout(async () => {
                         try {
                             const arrayBuffer = e.target.result;
                             const data = new Uint8Array(arrayBuffer);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            currentWorkbook = workbook;
+                            let workbook = null;
+                            let isOfflinePure = false;
 
+                            if (typeof XLSX !== 'undefined') {
+                                workbook = XLSX.read(data, { type: 'array' });
+                            } else {
+                                workbook = await parseXlsxOfflinePureJS(arrayBuffer);
+                                workbook.__isOfflinePure = true;
+                                isOfflinePure = true;
+                            }
+
+                            currentWorkbook = workbook;
                             let bestRows = [];
                             let bestSheet = workbook.SheetNames[0] || "";
                             let bestScore = -Infinity;
@@ -850,8 +1162,9 @@
 
                             for (let s = 0; s < workbook.SheetNames.length; s++) {
                                 const sheetName = workbook.SheetNames[s];
-                                const sheet = workbook.Sheets[sheetName];
-                                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+                                const rows = isOfflinePure
+                                    ? workbook.SheetsData[sheetName]
+                                    : XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: "" });
                                 const score = scoreSheetForAccounts(rows, sheetName);
 
                                 const opt = document.createElement('option');
@@ -881,7 +1194,7 @@
                             }
 
                             processParsedRows(bestRows, file.name);
-                            showToast(`शीट "${bestSheet}" से ${allRecords.length.toLocaleString('en-IN')} खाते सफलतापूर्वक लोड हो गए!`);
+                            showToast(`शीट "${bestSheet}" से ${allRecords.length.toLocaleString('en-IN')} खाते लोड हो गए!`);
                         } catch (err) {
                             console.warn("Primary Excel parse failed, trying fallback parser:", err);
                             try {
@@ -895,7 +1208,7 @@
                             } catch (fallbackErr) {
                                 console.error("Fallback parse failed:", fallbackErr);
                             }
-                            handleLoadError("फाइल पढ़ने में त्रुटि हुई। कृपया Excel में खोलकर इसे .xlsx या .csv में Save As करके अपलोड करें।");
+                            handleLoadError("फाइल पढ़ने में त्रुटि हुई। कृपया फाइल को .xlsx या .csv फॉर्मेट में चुनें।");
                         }
                     }, 40);
                 };
@@ -903,8 +1216,6 @@
                     handleLoadError("फाइल पढ़ने में समस्या आई। कृपया पुनः प्रयास करें।");
                 };
                 reader.readAsArrayBuffer(file);
-            } else {
-                handleLoadError("Excel लाइब्रेरी लोड नहीं हो पाई। कृपया इंटरनेट कनेक्शन जांचें।");
             }
         }
 
@@ -1244,7 +1555,6 @@
             }, 2600);
         }
 
-        // Export currently matched farmer accounts to CSV/Excel file
         function exportMatchedToCSV() {
             if (!__lastAllMatchedProfiles || __lastAllMatchedProfiles.length === 0) {
                 showToast("डाउनलोड करने के लिए कोई परिणाम उपलब्ध नहीं है।");
@@ -1284,7 +1594,6 @@
             showToast(`${__lastAllMatchedProfiles.length.toLocaleString('en-IN')} किसानों की सूची Excel (CSV) में डाउनलोड हो गई!`);
         }
 
-        // Print clean A5/thermal slip for a single farmer
         function printFarmerSlip(displayIndex) {
             const list = window.__currentDisplayedProfiles || [];
             const p = list[displayIndex];
