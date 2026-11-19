@@ -23,13 +23,6 @@
         .banking-gradient {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 52%, #1d4ed8 100%);
         }
-        .card-hover {
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 28px -10px rgba(15, 23, 42, 0.14);
-        }
         @keyframes pulse-border {
             0%, 100% { border-color: rgba(59, 130, 246, 0.4); }
             50% { border-color: rgba(59, 130, 246, 0.9); }
@@ -52,7 +45,7 @@
                     <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
                         <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">अकाउंट फाइन्डर</h1>
                         <span class="bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                            सोसायटी कर्मचारी सहायता पोर्टल
+                            सभी शाखाओं हेतु स्मार्ट पोर्टल
                         </span>
                     </div>
                     <p class="text-xs sm:text-sm text-blue-100 font-medium mt-0.5">
@@ -84,6 +77,72 @@
                 <p class="font-medium">
                     नोट: अकाउंट फाइन्डर से मिला खाता नंबर किसान की पासबुक से ज़रूर मिलान करें। जिसका खाता नंबर नहीं मिलेगा उसके लिए संबंधित बैंक शाखा से संपर्क करना पड़ेगा।
                 </p>
+            </div>
+        </div>
+
+        <!-- Detected Column Mapping Info Banner (Shows automatically after file load) -->
+        <div id="mapping-info-bar" class="hidden bg-blue-50/90 border border-blue-200 rounded-2xl px-4 py-3 text-xs text-blue-950 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2 font-bold">
+                <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i>
+                <span id="mapping-summary-text">कॉलम ऑटो-डिटेक्ट हो गए हैं</span>
+                <div id="sheet-selector-wrapper" class="hidden items-center gap-1.5 ml-2 bg-white px-2.5 py-1 rounded-xl border border-blue-300">
+                    <span class="text-[11px] text-slate-600">शीट (Sheet):</span>
+                    <select id="sheet-selector" onchange="switchWorkbookSheet(this.value)" class="text-xs font-extrabold text-blue-800 bg-transparent focus:outline-none cursor-pointer"></select>
+                </div>
+            </div>
+            <button type="button" onclick="toggleColumnMapper()" class="bg-white hover:bg-blue-100 text-blue-800 border border-blue-300 font-extrabold px-3 py-1 rounded-xl text-[11px] transition cursor-pointer">
+                <i class="fa-solid fa-sliders mr-1"></i> कॉलम सेटिंग बदलें (यदि आवश्यक हो)
+            </button>
+        </div>
+
+        <!-- Manual Column Mapper Panel (Optional Override for unusual branch formats) -->
+        <div id="column-mapper-panel" class="hidden bg-white border-2 border-blue-300 rounded-2xl p-5 shadow-md space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h3 class="text-sm font-extrabold text-slate-800">
+                    <i class="fa-solid fa-table-columns text-blue-600 mr-1.5"></i> दूसरे ब्रांच के कॉलम का मिलान (Column Mapping)
+                </h3>
+                <button type="button" onclick="toggleColumnMapper()" class="text-slate-400 hover:text-slate-700 text-sm font-bold cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i> बंद करें
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-600 mb-1">खाता नंबर (Account No):</label>
+                    <select id="map-acc" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-bold"></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-1">किसान का नाम (Name):</label>
+                    <select id="map-name" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-bold"></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-1">कस्टमर/FKP ID (वैकल्पिक):</label>
+                    <select id="map-custid" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-bold"></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-1">खाता प्रकार (SB/CASH/KIND):</label>
+                    <select id="map-type" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-bold"></select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-1">शाखा कोड / नाम (Branch):</label>
+                    <select id="map-branch" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-bold"></select>
+                </div>
+            </div>
+
+            <!-- Live Sample Preview Table of Uploaded File so user can see exact columns -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                <div class="text-[11px] font-extrabold text-slate-700 flex items-center justify-between">
+                    <span><i class="fa-solid fa-eye text-blue-600 mr-1"></i> आपकी फाइल की पहली 5 लाइनों का नमूना (देखकर सही कॉलम चुनें):</span>
+                    <span class="text-slate-500 font-semibold">दाएं-बाएं स्क्रॉल करें →</span>
+                </div>
+                <div class="overflow-x-auto border border-slate-200 rounded-lg bg-white">
+                    <table id="sample-preview-table" class="min-w-full text-[11px] text-left border-collapse"></table>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="applyManualMapping()" class="bg-blue-700 hover:bg-blue-800 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs shadow-sm cursor-pointer">
+                    <i class="fa-solid fa-check mr-1"></i> इस कॉलम सेटिंग से डेटा लोड करें
+                </button>
             </div>
         </div>
 
@@ -121,6 +180,7 @@
                     </div>
                     <input type="text" id="search-input" disabled
                         placeholder="पहले नीचे दी गई जगह से मासिक Excel / CSV फाइल अपलोड करें..."
+                        oninput="handleLiveSearchDebounced()"
                         onkeydown="if(event.key==='Enter'){ event.preventDefault(); executeSearch(); }"
                         class="w-full pl-12 pr-24 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-sm sm:text-base font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition shadow-inner disabled:opacity-60">
                     <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-2 right-2 px-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold items-center gap-1 transition">
@@ -135,12 +195,13 @@
                 </button>
             </div>
 
-            <!-- Filter Dropdowns (Account Type & Branch) + Stats -->
+            <!-- Filter Dropdowns (Account Type & Branch) + Stats + Export -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                 <div>
                     <label for="filter-type" class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">खाता प्रकार फ़िल्टर (Account Type):</label>
                     <select id="filter-type" onchange="executeSearch()" disabled class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600">
                         <option value="ALL">सभी खाता प्रकार (SB + CASH + KIND)</option>
+                        <option value="COMPLETE3">तीनों खाते उपलब्ध (SB + CASH + KIND)</option>
                         <option value="SB">बचत खाता (SB - हरा)</option>
                         <option value="CASH">कैश खाता (CASH - नीला)</option>
                         <option value="KIND">काइंड खाता (KIND - गुलाबी)</option>
@@ -148,15 +209,20 @@
                 </div>
 
                 <div>
-                    <label for="filter-branch" class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">शाखा कोड फ़िल्टर (Branch Code):</label>
+                    <label for="filter-branch" class="block text-[11px] font-bold text-slate-500 mb-1 ml-1">शाखा फ़िल्टर (Branch):</label>
                     <select id="filter-branch" onchange="executeSearch()" disabled class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600">
-                        <option value="ALL">सभी शाखा कोड (All Branches)</option>
+                        <option value="ALL">सभी शाखाएं (All Branches)</option>
                     </select>
                 </div>
 
-                <div class="bg-blue-50/70 border border-blue-100 rounded-xl px-4 py-2.5 flex items-center justify-between sm:col-span-2 lg:col-span-1">
-                    <span class="text-xs font-bold text-slate-600">मिले हुए परिणाम:</span>
-                    <span id="match-count-display" class="text-sm font-extrabold text-blue-800 bg-white px-3 py-0.5 rounded-lg border border-blue-200 shadow-xs">0</span>
+                <div class="bg-blue-50/70 border border-blue-100 rounded-xl px-4 py-2.5 flex items-center justify-between gap-2 sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-600">मिले परिणाम:</span>
+                        <span id="match-count-display" class="text-sm font-extrabold text-blue-800 bg-white px-3 py-0.5 rounded-lg border border-blue-200 shadow-xs">0</span>
+                    </div>
+                    <button type="button" id="export-csv-btn" onclick="exportMatchedToCSV()" class="hidden bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-lg shadow-xs transition items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-file-export"></i> Excel डाउनलोड
+                    </button>
                 </div>
             </div>
         </div>
@@ -167,13 +233,13 @@
             ondragleave="this.classList.remove('border-blue-600', 'bg-blue-50/70');"
             ondrop="handleFileDrop(event)"
             class="cursor-pointer bg-white border-2 border-dashed border-blue-300 hover:border-blue-600 hover:bg-blue-50/40 rounded-3xl p-8 sm:p-12 text-center shadow-sm transition group">
-            <input type="file" id="local-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleLocalFileUpload(event)">
+            <input type="file" id="local-file-input" accept=".xlsx,.xls,.csv,.txt" class="hidden" onchange="handleLocalFileUpload(event)">
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 group-hover:scale-105 transition flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
                 <i class="fa-solid fa-file-excel"></i>
             </div>
-            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">मासिक अकाउंट फाइन्डर फाइल अपलोड करें (Excel या CSV)</h2>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1.5">किसी भी ब्रांच की फाइन्डर फाइल अपलोड करें (Excel या CSV)</h2>
             <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mb-5">
-                सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु मासिक <strong>.xlsx, .xls या .csv</strong> फाइल यहाँ चुनें — सभी खातों के बचत, कैश व काइंड नंबर तुरंत खोजने के लिए तैयार हो जाएंगे।
+                सहकारी समिति (सोसायटी) कर्मचारियों की सहायता हेतु किसी भी ब्रांच की <strong>.xlsx, .xls या .csv</strong> फाइल यहाँ चुनें — सभी कॉलम अपने आप पहचान लिए जाएंगे।
             </p>
             <span class="inline-flex items-center gap-2 bg-blue-700 group-hover:bg-blue-800 text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-blue-700/20 transition">
                 <i class="fa-solid fa-folder-open"></i> फाइल चुनें (Select File)
@@ -187,7 +253,7 @@
             </div>
             <h2 class="text-lg font-extrabold text-slate-800 mb-1">फाइल पढ़ी जा रही है, कृपया प्रतीक्षा करें...</h2>
             <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
-                सभी बैंक खाता रिकॉर्ड्स आपके ब्राउज़र में सुरक्षित रूप से तैयार किए जा रहे हैं।
+                सभी बैंक खाता रिकॉर्ड्स और कॉलम ऑटो-डिटेक्ट किए जा रहे हैं।
             </p>
         </div>
 
@@ -198,11 +264,11 @@
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-slate-800 mb-1">खाता नंबर या किसान का नाम लिखकर खोजें</h2>
             <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
-                ऊपर दिए गए सर्च बॉक्स में नाम या खाता नंबर लिखकर <strong>"खोजें" बटन दबाएं या Enter</strong> प्रेस करें। एक ही किसान के <strong>बचत (SB), कैश (CASH) और काइंड (KIND)</strong> तीनों खाते एक साथ दिखेंगे।
+                ऊपर दिए गए सर्च बॉक्स में नाम, कस्टमर ID या खाता नंबर लिखकर <strong>"खोजें" बटन दबाएं या Enter</strong> प्रेस करें।
             </p>
         </div>
 
-        <!-- Results Container (Consolidated Farmer Profiles with SB + CASH + KIND Side-by-Side) -->
+        <!-- Results Container -->
         <div id="results-grid" class="space-y-5"></div>
 
     </main>
@@ -225,6 +291,10 @@
         let allRecords = [];
         let groupedCustomers = [];
         let activeFileName = "";
+        let lastRawRows = [];
+        let currentWorkbook = null;
+        let currentSheetName = "";
+        let detectedMapping = { acc: 0, custId: 1, name: 2, type: 3, branch: 4, headerRowIdx: -1 };
 
         // Safely escape HTML & highlight matched query tokens
         function highlightMatch(text, query) {
@@ -243,7 +313,6 @@
             return safeStr.replace(regex, '<mark class="bg-amber-200 text-slate-900 px-1 rounded font-extrabold">$1</mark>');
         }
 
-        // Display file load error gracefully
         function handleLoadError(message) {
             const statusText = document.getElementById('status-text');
             const statusDot = document.getElementById('status-dot');
@@ -254,25 +323,237 @@
             showToast(message);
         }
 
-        // Parse 5-column bank row:
-        // Col A (0): Account No | Col B (1): Customer/FKP ID | Col C (2): Name | Col D (3): Type (SB/CASH/KIND) | Col E (4): Branch
-        function parseBankRow(arr, rowIndex) {
-            const cells = arr.map(c => String(c ?? "").trim());
-            const accNo = cells[0] || "";
-            const custId = cells[1] || "";
-            const name = cells[2] || "";
-            const rawType = (cells[3] || "").toUpperCase();
-            const branch = cells[4] || "";
+        // Clean Excel scientific notation or trailing .0 on numeric account IDs
+        function cleanCellText(val) {
+            if (val === null || val === undefined) return "";
+            let str = String(val).trim();
+            if (/^\d+\.0+$/.test(str)) {
+                str = str.replace(/\.0+$/, "");
+            }
+            return str;
+        }
+
+        // Smart Auto-Detection of Columns for ANY Branch Excel/CSV Format
+        function detectColumnMapping(rows) {
+            let headerRowIdx = -1;
+            let map = { acc: -1, custId: -1, name: -1, type: -1, branch: -1 };
+
+            // Step 1: Check first 15 rows for explicit Header Names
+            const scanLimit = Math.min(rows.length, 15);
+            for (let r = 0; r < scanLimit; r++) {
+                const row = rows[r].map(c => cleanCellText(c).toLowerCase());
+                const nonEmpty = row.filter(Boolean).length;
+                if (nonEmpty < 2) continue;
+
+                let temp = { acc: -1, custId: -1, name: -1, type: -1, branch: -1 };
+                let score = 0;
+
+                row.forEach((cell, cIdx) => {
+                    if (!cell) return;
+                    if (temp.acc === -1 && /(acc|account|a\/c|ac_no|acno|खाता\s*न|खाता\s*सं)/i.test(cell) && !/(type|प्रकार|name|नाम)/i.test(cell)) {
+                        temp.acc = cIdx; score += 2;
+                    } else if (temp.custId === -1 && /(cust|cif|fkp|member|id|कस्टमर|सदस्य)/i.test(cell)) {
+                        temp.custId = cIdx; score += 1;
+                    } else if (temp.name === -1 && /(name|farmer|holder|customer_name|नाम|किसान|धारक)/i.test(cell)) {
+                        temp.name = cIdx; score += 2;
+                    } else if (temp.type === -1 && /(type|scheme|prod|cat|sb|cash|kind|प्रकार|खाता\s*प्रकार)/i.test(cell)) {
+                        temp.type = cIdx; score += 2;
+                    } else if (temp.branch === -1 && /(branch|br|sol|brcode|society|pacs|शाखा|समिति)/i.test(cell)) {
+                        temp.branch = cIdx; score += 1;
+                    }
+                });
+
+                if (score >= 3 && (temp.acc !== -1 || temp.name !== -1)) {
+                    headerRowIdx = r;
+                    map = temp;
+                    break;
+                }
+            }
+
+            // Step 2: Content-based heuristic detection if headers were missing or unnamed
+            const startDataRow = headerRowIdx + 1;
+            const sampleRows = rows.slice(startDataRow, startDataRow + 500).filter(r => r.filter(c => cleanCellText(c) !== "").length >= 2);
+
+            if (sampleRows.length > 0) {
+                const maxCols = Math.max(...sampleRows.map(r => r.length));
+                const colStats = Array.from({ length: maxCols }, (_, idx) => ({
+                    idx,
+                    longDigits: 0,
+                    mediumDigits: 0,
+                    alphaNames: 0,
+                    typeKeywords: 0,
+                    shortBranch: 0,
+                    nonEmpty: 0
+                }));
+
+                sampleRows.forEach(r => {
+                    for (let c = 0; c < maxCols; c++) {
+                        const val = cleanCellText(r[c]);
+                        if (!val) continue;
+                        colStats[c].nonEmpty++;
+                        const upper = val.toUpperCase();
+
+                        if (["SB", "SBA", "SAV", "SAVING", "SAVINGS", "CASH", "CAS", "CC", "CASH CREDIT", "KIND", "KCC", "KIND LOAN", "बचत", "कैश", "काइंड"].includes(upper) ||
+                            /\b(SB|SBA|SAV|SAVING|CASH|CAS|KIND|KCC)\b/i.test(upper)) {
+                            colStats[c].typeKeywords++;
+                        } else if (/^\d{9,18}$/.test(val.replace(/[\s-]/g, ""))) {
+                            colStats[c].longDigits++;
+                        } else if (/^\d{4,10}$/.test(val)) {
+                            colStats[c].mediumDigits++;
+                        } else if (/[A-Za-z\u0900-\u097F]{3,}/.test(val) && !/^\d+$/.test(val)) {
+                            colStats[c].alphaNames++;
+                        }
+
+                        if (/^[A-Za-z0-9_-]{1,8}$/.test(val) && !["SB", "SBA", "SAV", "CASH", "CAS", "KIND", "KCC"].includes(upper)) {
+                            colStats[c].shortBranch++;
+                        }
+                    }
+                });
+
+                // Fill missing mappings from content statistics
+                if (map.type === -1) {
+                    const bestType = [...colStats].sort((a, b) => b.typeKeywords - a.typeKeywords)[0];
+                    if (bestType && bestType.typeKeywords >= 2) {
+                        map.type = bestType.idx;
+                    }
+                }
+
+                if (map.acc === -1) {
+                    const bestAcc = [...colStats]
+                        .filter(c => c.idx !== map.type)
+                        .sort((a, b) => b.longDigits - a.longDigits)[0];
+                    map.acc = (bestAcc && bestAcc.longDigits > 0) ? bestAcc.idx : 0;
+                }
+
+                if (map.name === -1) {
+                    const bestName = [...colStats]
+                        .filter(c => c.idx !== map.acc && c.idx !== map.type)
+                        .sort((a, b) => b.alphaNames - a.alphaNames)[0];
+                    map.name = (bestName && bestName.alphaNames > 0) ? bestName.idx : Math.min(2, maxCols - 1);
+                }
+
+                if (map.custId === -1) {
+                    const bestCust = [...colStats]
+                        .filter(c => c.idx !== map.acc && c.idx !== map.name && c.idx !== map.type)
+                        .sort((a, b) => b.mediumDigits - a.mediumDigits)[0];
+                    if (bestCust && bestCust.mediumDigits > 0) {
+                        map.custId = bestCust.idx;
+                    }
+                }
+
+                if (map.branch === -1) {
+                    const bestBr = [...colStats]
+                        .filter(c => c.idx !== map.acc && c.idx !== map.name && c.idx !== map.type && c.idx !== map.custId)
+                        .sort((a, b) => b.shortBranch - a.shortBranch)[0];
+                    if (bestBr && bestBr.shortBranch > 0) {
+                        map.branch = bestBr.idx;
+                    }
+                }
+            }
+
+            if (map.acc === -1) map.acc = 0;
+            if (map.name === -1) map.name = 2;
+
+            return { ...map, headerRowIdx };
+        }
+
+        function colLetter(idx) {
+            if (idx < 0) return "कोई नहीं";
+            let s = "";
+            let n = idx + 1;
+            while (n > 0) {
+                const mod = (n - 1) % 26;
+                s = String.fromCharCode(65 + mod) + s;
+                n = Math.floor((n - mod) / 26);
+            }
+            return `कॉलम ${s}`;
+        }
+
+        function populateMapperDropdowns(rows, mapping) {
+            const maxCols = Math.max(6, ...rows.slice(0, 20).map(r => r.length));
+            const selects = [
+                { id: 'map-acc', val: mapping.acc, optional: false },
+                { id: 'map-name', val: mapping.name, optional: false },
+                { id: 'map-custid', val: mapping.custId, optional: true },
+                { id: 'map-type', val: mapping.type, optional: true },
+                { id: 'map-branch', val: mapping.branch, optional: true }
+            ];
+
+            selects.forEach(item => {
+                const el = document.getElementById(item.id);
+                el.innerHTML = item.optional ? `<option value="-1">-- उपलब्ध नहीं / Auto --</option>` : "";
+                for (let c = 0; c < maxCols; c++) {
+                    const sampleVal = cleanCellText(rows[mapping.headerRowIdx >= 0 ? mapping.headerRowIdx : 0]?.[c] || rows[1]?.[c] || "");
+                    const opt = document.createElement('option');
+                    opt.value = String(c);
+                    opt.textContent = `${colLetter(c)}${sampleVal ? ` (${sampleVal.slice(0, 22)})` : ""}`;
+                    if (item.val === c) opt.selected = true;
+                    el.appendChild(opt);
+                }
+            });
+
+            // Render first 5 rows in sample preview table
+            const previewTable = document.getElementById('sample-preview-table');
+            const previewSlice = rows.slice(0, 5);
+            let thead = `<thead class="bg-slate-100 text-slate-700 font-extrabold border-b border-slate-200"><tr><th class="px-2.5 py-1.5 border-r border-slate-200">Row</th>`;
+            for (let c = 0; c < maxCols; c++) {
+                thead += `<th class="px-2.5 py-1.5 border-r border-slate-200">${colLetter(c)}</th>`;
+            }
+            thead += `</tr></thead>`;
+
+            let tbody = `<tbody>`;
+            previewSlice.forEach((r, rIdx) => {
+                tbody += `<tr class="border-b border-slate-100 hover:bg-blue-50/40"><td class="px-2.5 py-1.5 font-bold text-slate-500 border-r border-slate-200">#${rIdx + 1}</td>`;
+                for (let c = 0; c < maxCols; c++) {
+                    const cellText = cleanCellText(r[c]);
+                    tbody += `<td class="px-2.5 py-1.5 border-r border-slate-200 whitespace-nowrap font-mono text-slate-800">${cellText || '<span class="text-slate-300">—</span>'}</td>`;
+                }
+                tbody += `</tr>`;
+            });
+            tbody += `</tbody>`;
+            previewTable.innerHTML = thead + tbody;
+        }
+
+        function toggleColumnMapper() {
+            const panel = document.getElementById('column-mapper-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function applyManualMapping() {
+            detectedMapping = {
+                acc: parseInt(document.getElementById('map-acc').value, 10),
+                name: parseInt(document.getElementById('map-name').value, 10),
+                custId: parseInt(document.getElementById('map-custid').value, 10),
+                type: parseInt(document.getElementById('map-type').value, 10),
+                branch: parseInt(document.getElementById('map-branch').value, 10),
+                headerRowIdx: detectedMapping.headerRowIdx
+            };
+            buildRecordsFromMapping(lastRawRows, detectedMapping, activeFileName);
+            document.getElementById('column-mapper-panel').classList.add('hidden');
+            showToast("नई कॉलम सेटिंग से डेटा अपडेट हो गया!");
+        }
+
+        function parseBankRowWithMapping(arr, rowIndex, mapping) {
+            const cells = arr.map(c => cleanCellText(c));
+            const accNo = mapping.acc >= 0 ? (cells[mapping.acc] || "") : "";
+            const custId = mapping.custId >= 0 ? (cells[mapping.custId] || "") : "";
+            const name = mapping.name >= 0 ? (cells[mapping.name] || "") : "";
+            const rawType = mapping.type >= 0 ? (cells[mapping.type] || "").toUpperCase() : "";
+            const branch = mapping.branch >= 0 ? (cells[mapping.branch] || "") : "";
+
+            // Search both mapped type column and fallback row cells for SB / CASH / KIND keywords
+            const rowJoinedUpper = cells.join(" | ").toUpperCase();
+            const typeSource = rawType || rowJoinedUpper;
 
             let typeCode = "OTHER";
             let typeLabel = rawType || "अन्य खाता";
-            if (rawType === "SB" || rawType.includes("SAVING") || rawType.includes("बचत")) {
+            if (/\b(SB|SBA|SAV|SAVING|SAVINGS)\b/.test(typeSource) || typeSource.includes("बचत")) {
                 typeCode = "SB";
                 typeLabel = "बचत खाता (SB)";
-            } else if (rawType === "CASH" || rawType === "CAS" || rawType.includes("कैश")) {
+            } else if (/\b(CASH|CAS|CC|CASH\s*CREDIT)\b/.test(typeSource) || typeSource.includes("कैश")) {
                 typeCode = "CASH";
                 typeLabel = "कैश खाता (CASH)";
-            } else if (rawType === "KIND" || rawType.includes("काइंड")) {
+            } else if (/\b(KIND|KCC|KIND\s*LOAN)\b/.test(typeSource) || typeSource.includes("काइंड")) {
                 typeCode = "KIND";
                 typeLabel = "काइंड खाता (KIND)";
             }
@@ -300,26 +581,32 @@
                 if (b) branches.add(b);
             }
 
-            branchSelect.innerHTML = `<option value="ALL">सभी शाखा कोड (All Branches)</option>`;
+            branchSelect.innerHTML = `<option value="ALL">सभी शाखाएं (All Branches)</option>`;
             Array.from(branches).sort().forEach(b => {
                 const opt = document.createElement('option');
                 opt.value = b.toLowerCase();
-                opt.textContent = `शाखा कोड: ${b}`;
+                opt.textContent = `शाखा: ${b}`;
                 branchSelect.appendChild(opt);
             });
         }
 
-        // Group SB, CASH, and KIND rows of the same customer into ONE single customer record
         function processParsedRows(rawRows2D, fileName = "") {
-            const validRows = (rawRows2D || []).filter(r => Array.isArray(r) && r.some(cell => String(cell ?? "").trim() !== ""));
+            const validRows = (rawRows2D || []).filter(r => Array.isArray(r) && r.some(cell => cleanCellText(cell) !== ""));
 
             if (validRows.length === 0) {
                 handleLoadError("अपलोड की गई फाइल में कोई डेटा नहीं मिला।");
                 return;
             }
 
+            lastRawRows = validRows;
             activeFileName = fileName;
+            detectedMapping = detectColumnMapping(validRows);
+            populateMapperDropdowns(validRows, detectedMapping);
+            buildRecordsFromMapping(validRows, detectedMapping, fileName);
+        }
 
+        // Group SB, CASH, and KIND rows of the same customer into ONE single customer record
+        function buildRecordsFromMapping(validRows, mapping, fileName = "") {
             let sbCount = 0;
             let cashCount = 0;
             let kindCount = 0;
@@ -329,11 +616,15 @@
             const customerMap = new Map();
 
             for (let idx = 0; idx < validRows.length; idx++) {
-                const rowObj = parseBankRow(validRows[idx], idx);
-                // Skip header row if user uploaded a file with column titles
-                if (idx === 0 && /account|acc|खाता/i.test(rowObj.accNo) && /name|नाम/i.test(rowObj.name)) {
+                if (idx <= mapping.headerRowIdx) continue;
+
+                const rowObj = parseBankRowWithMapping(validRows[idx], idx, mapping);
+
+                // Skip accidental header rows
+                if (/^(account|acc|a\/c|खाता)/i.test(rowObj.accNo) && /^(name|farmer|नाम)/i.test(rowObj.name)) {
                     continue;
                 }
+                if (!rowObj.accNo && !rowObj.name) continue;
 
                 allRecords.push(rowObj);
                 if (rowObj.typeCode === "SB") sbCount++;
@@ -341,18 +632,17 @@
                 else if (rowObj.typeCode === "KIND") kindCount++;
                 else otherCount++;
 
-                // Primary grouping key: Customer ID (Col B) + Branch (Col E), fallback to Normalized Name + Branch
                 const normName = rowObj.name.toUpperCase().replace(/\s+/g, " ").trim();
                 const normBranch = rowObj.branch.toUpperCase().trim();
                 const normCustId = rowObj.custId.toUpperCase().trim();
                 const groupKey = normCustId
                     ? `CID:${normCustId}|BR:${normBranch}`
-                    : `NM:${normName}|BR:${normBranch}`;
+                    : (normName ? `NM:${normName}|BR:${normBranch}` : `ACC:${rowObj.accNo}|ROW:${idx}`);
 
                 if (!customerMap.has(groupKey)) {
                     customerMap.set(groupKey, {
                         custId: rowObj.custId,
-                        name: rowObj.name,
+                        name: rowObj.name || "नाम उपलब्ध नहीं",
                         branch: rowObj.branch,
                         sb: null,
                         cash: null,
@@ -364,7 +654,7 @@
                 }
 
                 const profile = customerMap.get(groupKey);
-                if (!profile.name && rowObj.name) profile.name = rowObj.name;
+                if ((!profile.name || profile.name === "नाम उपलब्ध नहीं") && rowObj.name) profile.name = rowObj.name;
                 if (!profile.custId && rowObj.custId) profile.custId = rowObj.custId;
                 if (!profile.branch && rowObj.branch) profile.branch = rowObj.branch;
 
@@ -396,7 +686,18 @@
                 otherBadge.classList.add('hidden');
             }
 
+            // If SB, CASH, and KIND are all 0, automatically open the Column Mapper table so user can pick the right column
+            if (sbCount === 0 && cashCount === 0 && kindCount === 0 && otherCount > 0) {
+                document.getElementById('column-mapper-panel').classList.remove('hidden');
+            }
+
             populateBranchFilter(groupedCustomers);
+
+            // Update mapping info bar
+            const infoBar = document.getElementById('mapping-info-bar');
+            const summaryText = document.getElementById('mapping-summary-text');
+            summaryText.textContent = `कॉलम मिलान: खाता नंबर (${colLetter(mapping.acc)}), नाम (${colLetter(mapping.name)}), ID (${colLetter(mapping.custId)}), प्रकार (${colLetter(mapping.type)}), शाखा (${colLetter(mapping.branch)})`;
+            infoBar.classList.remove('hidden');
 
             const statusText = document.getElementById('status-text');
             const statusDot = document.getElementById('status-dot');
@@ -405,7 +706,8 @@
             statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
 
             if (fileName) {
-                document.getElementById('active-file-subtitle').textContent = `सक्रिय फाइल: ${fileName}`;
+                const sheetLabel = currentSheetName ? ` | शीट: ${currentSheetName}` : "";
+                document.getElementById('active-file-subtitle').textContent = `सक्रिय फाइल: ${fileName}${sheetLabel}`;
             }
 
             const searchInput = document.getElementById('search-input');
@@ -435,7 +737,6 @@
             document.getElementById('local-file-input').click();
         }
 
-        // Support Drag & Drop on Upload Panel
         function handleFileDrop(event) {
             event.preventDefault();
             const panel = document.getElementById('upload-panel');
@@ -445,12 +746,59 @@
             }
         }
 
-        // Handle direct Excel (.xlsx/.xls) or CSV file selection
         function handleLocalFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             processUploadedFile(file);
             event.target.value = "";
+        }
+
+        // Fallback text/HTML table parser for bank .xls exports that are actually HTML or TSV
+        function parseTextOrHtmlFallback(textContent) {
+            const trimmed = textContent.trim();
+            if (/<table|<tr|<td/i.test(trimmed)) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(trimmed, 'text/html');
+                const trs = Array.from(doc.querySelectorAll('tr'));
+                return trs.map(tr => Array.from(tr.querySelectorAll('td, th')).map(td => td.textContent.trim()));
+            }
+            const lines = trimmed.split(/\r?\n/).filter(l => l.trim() !== "");
+            const delimiter = (lines[0] && lines[0].includes('\t')) ? '\t' : ',';
+            return lines.map(line => line.split(delimiter).map(c => c.replace(/^"|"$/g, '').trim()));
+        }
+
+        // Score each sheet to prioritize the sheet containing SB / CASH / KIND accounts over REPORT sheets
+        function scoreSheetForAccounts(rows, sheetName) {
+            if (!rows || rows.length === 0) return -1;
+            const upperSheetName = String(sheetName || "").toUpperCase();
+            let sbCashKindHits = 0;
+            const sampleLimit = Math.min(rows.length, 400);
+
+            for (let r = 0; r < sampleLimit; r++) {
+                const row = rows[r];
+                if (!Array.isArray(row)) continue;
+                for (let c = 0; c < row.length; c++) {
+                    const val = cleanCellText(row[c]).toUpperCase();
+                    if (val === "SB" || val === "CASH" || val === "KIND" || val === "SBA" || val === "KCC") {
+                        sbCashKindHits++;
+                    }
+                }
+            }
+
+            let score = sbCashKindHits * 100 + Math.min(rows.length, 50000);
+            if (upperSheetName.includes("REPORT")) {
+                score -= 50000;
+            }
+            return score;
+        }
+
+        function switchWorkbookSheet(sheetName) {
+            if (!currentWorkbook || !currentWorkbook.Sheets[sheetName]) return;
+            currentSheetName = sheetName;
+            const sheet = currentWorkbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            processParsedRows(rows, activeFileName);
+            showToast(`शीट "${sheetName}" लोड हो गई (${allRecords.length.toLocaleString('en-IN')} खाते)`);
         }
 
         function processUploadedFile(file) {
@@ -464,15 +812,19 @@
             document.getElementById('ready-panel').classList.add('hidden');
             loadingPanel.classList.remove('hidden');
 
-            const isCsv = file.name.toLowerCase().endsWith('.csv');
+            const lowerName = file.name.toLowerCase();
+            const isCsvOrTxt = lowerName.endsWith('.csv') || lowerName.endsWith('.txt');
 
-            if (isCsv && typeof Papa !== 'undefined') {
+            if (isCsvOrTxt && typeof Papa !== 'undefined') {
+                currentWorkbook = null;
+                currentSheetName = "";
+                document.getElementById('sheet-selector-wrapper').classList.add('hidden');
                 Papa.parse(file, {
                     header: false,
                     skipEmptyLines: true,
                     complete: function(results) {
                         processParsedRows(results.data, file.name);
-                        showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स (Row 1 से) सफलतापूर्वक लोड हो गए!`);
+                        showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स सफलतापूर्वक लोड हो गए!`);
                     },
                     error: function() {
                         handleLoadError("CSV फाइल पढ़ने में त्रुटि हुई। कृपया सही फाइल चुनें।");
@@ -483,24 +835,67 @@
                 reader.onload = function(e) {
                     setTimeout(() => {
                         try {
-                            const data = new Uint8Array(e.target.result);
+                            const arrayBuffer = e.target.result;
+                            const data = new Uint8Array(arrayBuffer);
                             const workbook = XLSX.read(data, { type: 'array' });
+                            currentWorkbook = workbook;
+
                             let bestRows = [];
+                            let bestSheet = workbook.SheetNames[0] || "";
+                            let bestScore = -Infinity;
+
+                            const sheetSelector = document.getElementById('sheet-selector');
+                            const sheetWrapper = document.getElementById('sheet-selector-wrapper');
+                            sheetSelector.innerHTML = "";
 
                             for (let s = 0; s < workbook.SheetNames.length; s++) {
                                 const sheetName = workbook.SheetNames[s];
                                 const sheet = workbook.Sheets[sheetName];
                                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
-                                if (rows.length > bestRows.length) {
+                                const score = scoreSheetForAccounts(rows, sheetName);
+
+                                const opt = document.createElement('option');
+                                opt.value = sheetName;
+                                opt.textContent = `${sheetName} (${rows.length.toLocaleString('en-IN')} पंक्तियाँ)`;
+                                sheetSelector.appendChild(opt);
+
+                                if (score > bestScore) {
+                                    bestScore = score;
                                     bestRows = rows;
+                                    bestSheet = sheetName;
                                 }
                             }
 
+                            currentSheetName = bestSheet;
+                            sheetSelector.value = bestSheet;
+                            if (workbook.SheetNames.length > 1) {
+                                sheetWrapper.classList.remove('hidden');
+                                sheetWrapper.classList.add('inline-flex');
+                            } else {
+                                sheetWrapper.classList.add('hidden');
+                            }
+
+                            if (bestRows.length === 0) {
+                                const textDecoder = new TextDecoder('utf-8');
+                                bestRows = parseTextOrHtmlFallback(textDecoder.decode(data));
+                            }
+
                             processParsedRows(bestRows, file.name);
-                            showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स सफलतापूर्वक लोड हो गए!`);
+                            showToast(`शीट "${bestSheet}" से ${allRecords.length.toLocaleString('en-IN')} खाते सफलतापूर्वक लोड हो गए!`);
                         } catch (err) {
-                            console.error("Excel parse error:", err);
-                            handleLoadError("Excel फाइल पढ़ने में त्रुटि हुई। कृपया सही .xlsx या .csv फाइल चुनें।");
+                            console.warn("Primary Excel parse failed, trying fallback parser:", err);
+                            try {
+                                const textDecoder = new TextDecoder('utf-8');
+                                const fallbackRows = parseTextOrHtmlFallback(textDecoder.decode(new Uint8Array(e.target.result)));
+                                if (fallbackRows.length > 0) {
+                                    processParsedRows(fallbackRows, file.name);
+                                    showToast(`${allRecords.length.toLocaleString('en-IN')} रिकॉर्ड्स सफलतापूर्वक लोड हो गए!`);
+                                    return;
+                                }
+                            } catch (fallbackErr) {
+                                console.error("Fallback parse failed:", fallbackErr);
+                            }
+                            handleLoadError("फाइल पढ़ने में त्रुटि हुई। कृपया Excel में खोलकर इसे .xlsx या .csv में Save As करके अपलोड करें।");
                         }
                     }, 40);
                 };
@@ -513,7 +908,17 @@
             }
         }
 
-        // Execute Search: Searching ANY account number (SB/CASH/KIND), Customer ID, or Name returns 1 unified box with ALL 3 accounts
+        // Execute Search
+        let __liveSearchTimer = null;
+        function handleLiveSearchDebounced() {
+            clearTimeout(__liveSearchTimer);
+            __liveSearchTimer = setTimeout(() => {
+                executeSearch();
+            }, 220);
+        }
+
+        let __lastAllMatchedProfiles = [];
+
         function executeSearch() {
             if (groupedCustomers.length === 0) return;
 
@@ -523,11 +928,15 @@
             const readyPanel = document.getElementById('ready-panel');
             const resultsGrid = document.getElementById('results-grid');
             const matchDisplay = document.getElementById('match-count-display');
+            const exportBtn = document.getElementById('export-csv-btn');
 
             if (rawQuery.length === 0 && typeFilter === "ALL" && branchFilter === "ALL") {
                 resultsGrid.innerHTML = "";
                 readyPanel.classList.remove('hidden');
                 matchDisplay.textContent = "0";
+                exportBtn.classList.add('hidden');
+                exportBtn.classList.remove('inline-flex');
+                __lastAllMatchedProfiles = [];
                 return;
             }
 
@@ -538,6 +947,7 @@
             for (let i = 0; i < groupedCustomers.length; i++) {
                 const profile = groupedCustomers[i];
 
+                if (typeFilter === "COMPLETE3" && !(profile.sb && profile.cash && profile.kind)) continue;
                 if (typeFilter === "SB" && !profile.sb) continue;
                 if (typeFilter === "CASH" && !profile.cash) continue;
                 if (typeFilter === "KIND" && !profile.kind) continue;
@@ -557,12 +967,22 @@
                 matchedProfiles.push(profile);
             }
 
+            __lastAllMatchedProfiles = matchedProfiles;
             const totalMatched = matchedProfiles.length;
             matchDisplay.textContent = totalMatched.toLocaleString('en-IN');
+
+            if (totalMatched > 0) {
+                exportBtn.classList.remove('hidden');
+                exportBtn.classList.add('inline-flex');
+            } else {
+                exportBtn.classList.add('hidden');
+                exportBtn.classList.remove('inline-flex');
+            }
+
             renderConsolidatedCustomerCards(matchedProfiles.slice(0, MAX_RESULTS_DISPLAY), totalMatched, rawQuery);
         }
 
-        // Render 1 Unified Card per Farmer containing SB, CASH, and KIND accounts together
+        // Render Unified Card per Farmer containing SB, CASH, KIND, and any Other accounts
         function renderConsolidatedCustomerCards(profilesList, totalMatched, rawQuery) {
             const resultsGrid = document.getElementById('results-grid');
 
@@ -610,6 +1030,12 @@
                         badge: "bg-pink-600 text-white",
                         accText: "text-pink-950",
                         btn: "bg-pink-700 hover:bg-pink-800 text-white"
+                    },
+                    slate: {
+                        box: "bg-slate-50 border-slate-300",
+                        badge: "bg-slate-700 text-white",
+                        accText: "text-slate-900",
+                        btn: "bg-slate-800 hover:bg-slate-900 text-white"
                     }
                 }[theme];
 
@@ -650,9 +1076,16 @@
 
             profilesList.forEach((profile, idx) => {
                 const safeCustId = (profile.custId || "").replace(/'/g, "\\'");
+                const hasStandard = profile.sb || profile.cash || profile.kind;
+                let extraSlotsHtml = "";
+                if (profile.others && profile.others.length > 0) {
+                    extraSlotsHtml = profile.others.map(o =>
+                        renderAccountSlot(o.rawType ? `खाता (${o.rawType})` : "अन्य खाता", o.rawType || "ACC", o, "slate")
+                    ).join("");
+                }
+
                 html += `
                     <div class="bg-white rounded-3xl border-2 border-slate-200 hover:border-blue-500 shadow-md overflow-hidden transition">
-                        <!-- Top Farmer Identity Strip -->
                         <div class="bg-gradient-to-r from-amber-50 via-blue-50/80 to-slate-50 border-b border-slate-200 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
                             <div class="flex flex-wrap items-center gap-2.5 text-xs">
                                 <span class="bg-blue-700 text-white font-extrabold px-3 py-1 rounded-xl text-xs">
@@ -672,20 +1105,26 @@
                             <div class="flex flex-wrap items-center gap-2 shrink-0">
                                 <button type="button" onclick="copyFullRowTogether(${idx})" class="py-2 px-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-solid fa-copy"></i>
-                                    <span>तीनों खाता एक साथ Copy करें</span>
+                                    <span>सभी खाता एक साथ Copy करें</span>
                                 </button>
                                 <button type="button" onclick="shareRowOnWhatsApp(${idx})" class="py-2 px-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-brands fa-whatsapp text-base"></i>
                                     <span>WhatsApp भेजें</span>
                                 </button>
+                                <button type="button" onclick="printFarmerSlip(${idx})" class="py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-extrabold shadow-xs transition flex items-center gap-1.5 cursor-pointer" title="किसान पर्ची प्रिंट करें">
+                                    <i class="fa-solid fa-print"></i>
+                                    <span>पर्ची</span>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Unified 3-Account Grid (SB + CASH + KIND together in 1 single box) -->
                         <div class="p-4 sm:p-5 bg-white grid grid-cols-1 md:grid-cols-3 gap-3.5">
-                            ${renderAccountSlot("बचत खाता", "SB", profile.sb, "emerald")}
-                            ${renderAccountSlot("कैश खाता", "CASH", profile.cash, "blue")}
-                            ${renderAccountSlot("काइंड खाता", "KIND", profile.kind, "pink")}
+                            ${hasStandard ? `
+                                ${renderAccountSlot("बचत खाता", "SB", profile.sb, "emerald")}
+                                ${renderAccountSlot("कैश खाता", "CASH", profile.cash, "blue")}
+                                ${renderAccountSlot("काइंड खाता", "KIND", profile.kind, "pink")}
+                            ` : ""}
+                            ${extraSlotsHtml}
                         </div>
                     </div>
                 `;
@@ -695,7 +1134,6 @@
             resultsGrid.innerHTML = html;
         }
 
-        // Copy ALL 3 accounts (SB + CASH + KIND) of the farmer together in one click
         function copyFullRowTogether(displayIndex) {
             const list = window.__currentDisplayedProfiles || [];
             const profile = list[displayIndex];
@@ -708,6 +1146,11 @@
                 `कैश खाता (CASH): ${profile.cash ? profile.cash.accNo : "उपलब्ध नहीं"}`,
                 `काइंड खाता (KIND): ${profile.kind ? profile.kind.accNo : "उपलब्ध नहीं"}`
             ];
+            if (profile.others && profile.others.length > 0) {
+                profile.others.forEach(o => {
+                    lines.push(`${o.rawType || "अन्य खाता"}: ${o.accNo}`);
+                });
+            }
 
             const tempInput = document.createElement("textarea");
             tempInput.value = lines.join("\n");
@@ -722,10 +1165,9 @@
             }
             document.body.removeChild(tempInput);
 
-            showToast(`${profile.name} के तीनों खाता नंबर एक साथ कॉपी हो गए!`);
+            showToast(`${profile.name} के खाता नंबर कॉपी हो गए!`);
         }
 
-        // Share all 3 accounts (SB + CASH + KIND) together on WhatsApp
         function shareRowOnWhatsApp(displayIndex) {
             const list = window.__currentDisplayedProfiles || [];
             const profile = list[displayIndex];
@@ -739,16 +1181,20 @@
                 "----------------------------------",
                 `🟢 *बचत खाता (SB):* ${profile.sb ? profile.sb.accNo : "उपलब्ध नहीं"}`,
                 `🔵 *कैश खाता (CASH):* ${profile.cash ? profile.cash.accNo : "उपलब्ध नहीं"}`,
-                `🟣 *काइंड खाता (KIND):* ${profile.kind ? profile.kind.accNo : "उपलब्ध नहीं"}`,
-                "----------------------------------",
-                "⚠️ _नोट: प्राप्त खाता नंबर का किसान के पासबुक से एक बार मिलान अवश्य करें।_"
+                `🟣 *काइंड खाता (KIND):* ${profile.kind ? profile.kind.accNo : "उपलब्ध नहीं"}`
             ];
+            if (profile.others && profile.others.length > 0) {
+                profile.others.forEach(o => {
+                    lines.push(`⚪ *${o.rawType || "अन्य खाता"}:* ${o.accNo}`);
+                });
+            }
+            lines.push("----------------------------------");
+            lines.push("⚠️ _नोट: प्राप्त खाता नंबर का किसान के पासबुक से एक बार मिलान अवश्य करें।_");
 
             const waUrl = `https://wa.me/?text=${encodeURIComponent(lines.join("\n"))}`;
             window.open(waUrl, '_blank', 'noopener,noreferrer');
         }
 
-        // Show/Hide Clear button only on typing; search executes strictly on "खोजें" button or Enter key
         document.getElementById('search-input').addEventListener('input', (e) => {
             const clearBtn = document.getElementById('clear-search-btn');
             if (e.target.value.trim().length > 0) {
@@ -768,7 +1214,6 @@
             document.getElementById('search-input').focus();
         }
 
-        // Reliable iFrame-safe Clipboard Copy
         function copyAccountNumber(accNo) {
             if (!accNo) return;
             const tempInput = document.createElement("textarea");
@@ -797,6 +1242,92 @@
                 toast.classList.add('hidden');
                 toast.classList.remove('flex');
             }, 2600);
+        }
+
+        // Export currently matched farmer accounts to CSV/Excel file
+        function exportMatchedToCSV() {
+            if (!__lastAllMatchedProfiles || __lastAllMatchedProfiles.length === 0) {
+                showToast("डाउनलोड करने के लिए कोई परिणाम उपलब्ध नहीं है।");
+                return;
+            }
+
+            const rows = [
+                ["क्र.सं.", "किसान का नाम", "कस्टमर ID", "शाखा", "बचत खाता (SB)", "कैश खाता (CASH)", "काइंड खाता (KIND)"]
+            ];
+
+            __lastAllMatchedProfiles.forEach((p, idx) => {
+                rows.push([
+                    idx + 1,
+                    p.name || "",
+                    p.custId || "",
+                    p.branch || "",
+                    p.sb ? `="${p.sb.accNo}"` : "",
+                    p.cash ? `="${p.cash.accNo}"` : "",
+                    p.kind ? `="${p.kind.accNo}"` : ""
+                ]);
+            });
+
+            const csvContent = "\uFEFF" + rows.map(r =>
+                r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+            ).join("\n");
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Account_Finder_List_${__lastAllMatchedProfiles.length}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`${__lastAllMatchedProfiles.length.toLocaleString('en-IN')} किसानों की सूची Excel (CSV) में डाउनलोड हो गई!`);
+        }
+
+        // Print clean A5/thermal slip for a single farmer
+        function printFarmerSlip(displayIndex) {
+            const list = window.__currentDisplayedProfiles || [];
+            const p = list[displayIndex];
+            if (!p) return;
+
+            const printWin = window.open("", "_blank", "width=460,height=620");
+            if (!printWin) {
+                showToast("पॉप-अप ब्लॉक है, कृपया ब्राउज़र में पॉप-अप अनुमति दें।");
+                return;
+            }
+
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html lang="hi">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>खाता विवरण पर्ची - ${p.name}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 18px; color: #0f172a; }
+                        .box { border: 2px solid #1e3a8a; border-radius: 12px; padding: 16px; }
+                        h2 { margin: 0 0 4px; font-size: 18px; text-align: center; color: #1e3a8a; }
+                        .sub { text-align: center; font-size: 12px; color: #475569; margin-bottom: 12px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; }
+                        .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
+                        .acc { font-family: monospace; font-size: 15px; font-weight: bold; }
+                        .note { margin-top: 12px; font-size: 11px; background: #fef3c7; padding: 8px; border-radius: 6px; color: #78350f; }
+                    </style>
+                </head>
+                <body onload="window.print(); window.close();">
+                    <div class="box">
+                        <h2>अकाउंट फाइन्डर विवरण पर्ची</h2>
+                        <div class="sub">सहकारी समिति (सोसायटी) कर्मचारी सहायता पोर्टल</div>
+                        <div class="row"><span>किसान का नाम:</span><strong>${p.name}</strong></div>
+                        <div class="row"><span>कस्टमर ID:</span><strong>${p.custId || "—"}</strong></div>
+                        <div class="row"><span>शाखा (Branch):</span><strong>${p.branch || "—"}</strong></div>
+                        <div class="row"><span>बचत खाता (SB):</span><span class="acc">${p.sb ? p.sb.accNo : "उपलब्ध नहीं"}</span></div>
+                        <div class="row"><span>कैश खाता (CASH):</span><span class="acc">${p.cash ? p.cash.accNo : "उपलब्ध नहीं"}</span></div>
+                        <div class="row"><span>काइंड खाता (KIND):</span><span class="acc">${p.kind ? p.kind.accNo : "उपलब्ध नहीं"}</span></div>
+                        <div class="note">नोट: कृपया प्राप्त खाता नंबर का किसान की पासबुक से मिलान अवश्य करें।</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
         }
     </script>
 </body>
