@@ -19,8 +19,115 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- Common Header & Navigation (Loaded from common-layout.js) -->
-    <div id="site-header"></div>
+    <!-- Common Header & Navigation (Loaded from common-layout.js or fallback header matching screenshot) -->
+    <div id="site-header" class="sticky top-0 z-40 shadow-lg">
+        <!-- 1. Top Marquee / Notice Bar -->
+        <div class="bg-[#1e296b] text-white py-2 px-4 border-b border-blue-900/50">
+            <div class="max-w-7xl mx-auto flex items-center gap-3 overflow-hidden">
+                <span class="bg-amber-400 text-slate-950 text-[11px] font-black px-2.5 py-0.5 rounded shrink-0 shadow-sm">
+                    सूचना
+                </span>
+                <marquee behavior="scroll" direction="left" scrollamount="5" class="text-xs sm:text-sm font-medium tracking-wide text-slate-100">
+                    🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क, आय-जाति-निवास प्रमाण पत्र, केंद्रीय जाति प्रमाण पत्र एवं सभी ऑनलाइन सेवाओं के लिए संपर्क करें।
+                </marquee>
+            </div>
+        </div>
+
+        <!-- 2. Main Brand & Branch Selector Bar -->
+        <div class="bg-white py-3.5 px-4 border-b border-slate-200">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+                <!-- Logo & Title -->
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md group-hover:scale-105 transition">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-black text-lg sm:text-2xl text-slate-900 tracking-tight leading-none">RUPESH COMPUTERS</h1>
+                        <p class="text-xs font-bold text-blue-600 mt-1">चोंगरीबहार &amp; दोकड़ा शाखा</p>
+                    </div>
+                </a>
+
+                <!-- Right Actions: Install App & Branch Toggle -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                    <button onclick="installPWA()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs px-3.5 py-2 rounded-full shadow-sm transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> ऐप इंस्टॉल करें
+                    </button>
+                    <div class="bg-slate-100 p-1 rounded-full flex items-center border border-slate-200">
+                        <button id="btn-branch-chongribahar" onclick="selectBranch('chongribahar')" class="bg-blue-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition">
+                            चोंगरीबहार
+                        </button>
+                        <button id="btn-branch-dokda" onclick="selectBranch('dokda')" class="text-slate-700 hover:text-slate-900 font-bold text-xs px-3.5 py-1.5 rounded-full transition">
+                            दोकड़ा
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Navigation Menu Bar -->
+        <nav class="bg-[#111827] text-slate-200 py-2.5 px-4 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center gap-2">
+                <a href="index.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house text-amber-400"></i> होम
+                </a>
+                <a href="services.html" class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-2 rounded-full shadow-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-layer-group"></i> सेवाएँ
+                </a>
+                <a href="lpg.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire-flame-curved text-orange-400"></i> Indane गैस बुकिंग
+                </a>
+                <a href="aadhaar-print.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-id-card text-sky-400"></i> आधार प्रिंट
+                </a>
+                <a href="jpeg-to-pdf.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-pdf text-rose-400"></i> JPEG to PDF
+                </a>
+                <a href="passport-photo.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-image-portrait text-blue-400"></i> पासपोर्ट फोटो
+                </a>
+                <a href="dob-calculator.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-cake-candles text-purple-400"></i> DOB Calculator
+                </a>
+                <a href="barcode-reader.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-barcode text-emerald-400"></i> Barcode Reader
+                </a>
+                <a href="hindi-typing.html" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-language text-pink-400"></i> Hindi Typing &amp; Kruti Dev
+                </a>
+                <a href="#mobile-app" onclick="installPWA()" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-mobile-screen text-amber-300"></i> मोबाइल ऐप
+                </a>
+                <a href="#contact-footer" class="bg-slate-800/90 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-location-dot text-emerald-400"></i> शाखाएँ
+                </a>
+            </div>
+        </nav>
+
+        <!-- 4. Selected Branch Info Bar -->
+        <div class="bg-[#162044] text-white py-2 px-4 border-b border-blue-950">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="bg-amber-400 text-slate-950 font-black px-2.5 py-0.5 rounded text-[11px]">
+                        चयनित शाखा
+                    </span>
+                    <span id="branch-name-display" class="font-extrabold text-amber-300">चोंगरीबहार शाखा</span>
+                    <span class="text-slate-400">|</span>
+                    <span id="branch-address-display" class="text-slate-200">मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="branch-call-link" href="tel:6264531630" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded-full transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-phone text-[10px]"></i> <span id="branch-phone-display">6264531630</span>
+                    </a>
+                    <a id="branch-wa-link" href="https://wa.me/916264531630" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1 rounded-full transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a id="branch-map-link" href="https://maps.google.com/?q=Chongribahar" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-bold px-3 py-1 rounded-full transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> लोकेशन
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN PAGE CONTENT (services.html) -->
     <main class="min-h-[65vh]">
@@ -36,209 +143,284 @@
                     </p>
                     <div class="mt-6 max-w-md mx-auto relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="service-search" oninput="filterServices()" placeholder="सेवा खोजें (जैसे: जाति, निवास, आधार, पैन, आयुष्मान)..." class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium">
+                        <input type="text" id="service-search" oninput="filterServices()" placeholder="सेवा खोजें (जैसे: केंद्रीय जाति, निवास, आधार, पैन, आयुष्मान)..." class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-sm font-medium">
                     </div>
                 </div>
 
                 <div id="services-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-building-columns"></i>
+                    <!-- Service 1: SBI Kiosk -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">SBI कियोस्क (पासबुक प्रिंट एवं माइक्रो एटीएम)</h3>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">SBI कियोस्क (पासबुक प्रिंट एवं माइक्रो एटीएम)</h3>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बैंक खाता खोलना एवं आधार सीडिंग</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पैसे जमा करना एवं निकासी (Micro ATM)</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पासबुक प्रिंटिंग की सुविधा</span></li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बैंक खाता खोलना एवं आधार सीडिंग</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पैसे जमा करना एवं निकासी (Micro ATM)</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पासबुक प्रिंटिंग की सुविधा</span></li>
-                            </ul>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('SBI कियोस्क (पासबुक प्रिंट एवं माइक्रो एटीएम)', `बैंक खाता खोलना एवं आधार सीडिंग, पैसे जमा करना एवं निकासी (Micro ATM), पासबुक प्रिंटिंग की सुविधा`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
                         </div>
                     </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('SBI कियोस्क (पासबुक प्रिंट एवं माइक्रो एटीएम)', `बैंक खाता खोलना एवं आधार सीडिंग, पैसे जमा करना एवं निकासी (Micro ATM), पासबुक प्रिंटिंग की सुविधा`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
+
+                    <!-- Service 2: Aadhaar Update -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आधार अपडेट सेंटर</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>नया आधार नामांकन (New Enrollment)</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार में मोबाइल नंबर एवं नाम सुधार</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बायोमेट्रिक अपडेट (फिंगरप्रिंट/आंख)</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पता और जन्मतिथि संशोधन</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('आधार अपडेट सेंटर', `नया आधार नामांकन (New Enrollment), आधार में मोबाइल नंबर एवं नाम सुधार, बायोमेट्रिक अपडेट (फिंगरप्रिंट/आंख), पता और जन्मतिथि संशोधन`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 3: Transport / Learning Licence -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-car"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">परिवहन सुविधा (लर्निंग लाइसेंस)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>तुरंत लर्निंग लाइसेंस (Learning Licence) बनवाना</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>ड्राइविंग लाइसेंस (DL) आवेदन</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>वाहन ट्रांसफर एवं फिटनेस कार्य</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड और फोटो आवश्यक</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('परिवहन सुविधा (लर्निंग लाइसेंस)', `तुरंत लर्निंग लाइसेंस (Learning Licence) बनवाना, ड्राइविंग लाइसेंस (DL) आवेदन, वाहन ट्रांसफर एवं फिटनेस कार्य, आधार कार्ड और फोटो आवश्यक`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 4: State Caste Certificate -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-file-shield"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">जाति प्रमाण पत्र (राज्य / स्थायी)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी एवं सरपंच का प्रतिवेदन</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) स्व-घोषणा पत्र</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) अधिकार अभिलेख</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) P-6 जमाबंदी / मिसल (1950 के पूर्व का दस्तावेज)</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) कक्षा 5वीं/8वीं एवं 10वीं अंकसूची या दाखिल ख़ारिज पंजी</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>6) वंशावली सूची की मूल प्रति</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>7) वर्तमान वर्ष का बी-1 की मूल प्रति</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>8) पहचान पत्र (आधार कार्ड / राशन कार्ड / वोटर आईडी)</b></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('जाति प्रमाण पत्र (राज्य / स्थायी)', `1) पटवारी एवं सरपंच का प्रतिवेदन, 2) स्व-घोषणा पत्र, 3) अधिकार अभिलेख, 4) P-6 जमाबंदी / मिसल (1950 के पूर्व का दस्तावेज), 5) कक्षा 5वीं/8वीं एवं 10वीं अंकसूची या दाखिल ख़ारिज पंजी, 6) वंशावली सूची की मूल प्रति, 7) वर्तमान वर्ष का बी-1 की मूल प्रति, 8) पहचान पत्र (आधार कार्ड / राशन कार्ड / वोटर आईडी)`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- NEW SERVICE 5: Central Caste Certificate -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border-2 border-orange-200 bg-white relative">
+                        <span class="absolute -top-3 right-6 bg-orange-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-sm">
+                            नई सेवा
+                        </span>
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-landmark"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">केंद्रीय जाति प्रमाण पत्र (Central Caste Certificate)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2.5">आवश्यक दस्तावेज (श्रेणी अनुसार):</h4>
+                                <ul class="space-y-2.5">
+                                    <li class="text-xs sm:text-sm text-slate-700 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                        <i class="fa-solid fa-circle-check text-orange-600 text-xs mt-1 shrink-0"></i> 
+                                        <span><b class="text-slate-900">ST / SC वर्ग के लिए:</b> केवल स्थायी जाति प्रमाण पत्र (राज्य सरकार द्वारा जारी)।</span>
+                                    </li>
+                                    <li class="text-xs sm:text-sm text-slate-700 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                        <i class="fa-solid fa-circle-check text-orange-600 text-xs mt-1 shrink-0"></i> 
+                                        <span><b class="text-slate-900">OBC (अन्य पिछड़ा वर्ग) के लिए:</b> स्थायी जाति प्रमाण पत्र एवं वर्तमान आय प्रमाण पत्र।</span>
+                                    </li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2 px-1">
+                                        <i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> 
+                                        <span><b>अन्य आवश्यक:</b> आधार कार्ड, 10 वीं अंकसूची एवं मोबाइल नंबर।</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('केंद्रीय जाति प्रमाण पत्र (Central Caste Certificate)', `• ST / SC वर्ग के लिए: केवल स्थायी जाति प्रमाण पत्र (राज्य सरकार द्वारा जारी) • OBC (अन्य पिछड़ा वर्ग) के लिए: स्थायी जाति प्रमाण पत्र एवं वर्तमान आय प्रमाण पत्र • अन्य आवश्यक: आधार कार्ड, 10 वीं अंकसूची एवं मोबाइल नंबर`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 6: Domicile Certificate -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-house-chimney"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">निवास प्रमाण पत्र (Domicile Certificate)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी एवं सरपंच का प्रतिवेदन</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं / 12वीं अंकसूची)</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) वर्तमान वर्ष का बी-1</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) स्व-घोषणा पत्र</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)</b></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('निवास प्रमाण पत्र (Domicile Certificate)', `1) पटवारी एवं सरपंच का प्रतिवेदन, 2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं / 12वीं अंकसूची), 3) वर्तमान वर्ष का बी-1, 4) स्व-घोषणा पत्र, 5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 7: Income Certificate -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आय प्रमाण पत्र (Income Certificate)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी का प्रतिवेदन</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं)</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) स्व-घोषणा पत्र</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) वर्तमान वर्ष का बी-1 (यदि कृषि से आय हो)</b></span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)</b></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('आय प्रमाण पत्र (Income Certificate)', `1) पटवारी का प्रतिवेदन, 2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं), 3) स्व-घोषणा पत्र, 4) वर्तमान वर्ष का बी-1 (यदि कृषि से आय हो), 5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 8: PAN Card -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-id-card"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">नया पैन कार्ड (UTI / NSDL)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>नया पैन कार्ड बनवाना</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड एवं 2 पासपोर्ट फोटो</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पैन सुधार (Correction) कार्य</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('नया पैन कार्ड (UTI / NSDL)', `नया पैन कार्ड बनवाना, आधार कार्ड एवं 2 पासपोर्ट फोटो, पैन सुधार (Correction) कार्य`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 9: Ayushman Card -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-notes-medical"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आयुष्मान कार्ड (Ayushman Card)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>राशन कार्ड (सूची में नाम होना अनिवार्य)</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>मोबाइल नंबर (OTP के लिए)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('आयुष्मान कार्ड (Ayushman Card)', `आधार कार्ड, राशन कार्ड (सूची में नाम होना अनिवार्य), मोबाइल नंबर (OTP के लिए)`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 10: e-Shram Card -->
+                    <div class="service-card glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-helmet-safety"></i>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">ई-श्रम कार्ड (e-Shram)</h3>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
+                                <ul class="space-y-1.5">
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड (मोबाइल लिंक होना चाहिए)</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बैंक पासबुक विवरण</span></li>
+                                    <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>असंगठित श्रमिकों का पंजीयन</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 flex flex-col gap-2">
+                            <button onclick="shareOnWhatsApp('ई-श्रम कार्ड (e-Shram)', `आधार कार्ड (मोबाइल लिंक होना चाहिए), बैंक पासबुक विवरण, असंगठित श्रमिकों का पंजीयन`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
+                            </button>
+                        </div>
                     </div>
                 </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-fingerprint"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आधार अपडेट सेंटर</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>नया आधार नामांकन (New Enrollment)</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार में मोबाइल नंबर एवं नाम सुधार</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बायोमेट्रिक अपडेट (फिंगरप्रिंट/आंख)</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पता और जन्मतिथि संशोधन</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('आधार अपडेट सेंटर', `नया आधार नामांकन (New Enrollment), आधार में मोबाइल नंबर एवं नाम सुधार, बायोमेट्रिक अपडेट (फिंगरप्रिंट/आंख), पता और जन्मतिथि संशोधन`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-car"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">परिवहन सुविधा (लर्निंग लाइसेंस)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>तुरंत लर्निंग लाइसेंस (Learning Licence) बनवाना</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>ड्राइविंग लाइसेंस (DL) आवेदन</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>वाहन ट्रांसफर एवं फिटनेस कार्य</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड और फोटो आवश्यक</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('परिवहन सुविधा (लर्निंग लाइसेंस)', `तुरंत लर्निंग लाइसेंस (Learning Licence) बनवाना, ड्राइविंग लाइसेंस (DL) आवेदन, वाहन ट्रांसफर एवं फिटनेस कार्य, आधार कार्ड और फोटो आवश्यक`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-file-shield"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">जाति प्रमाण पत्र (Caste Certificate)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी एवं सरपंच का प्रतिवेदन</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) स्व-घोषणा पत्र</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) अधिकार अभिलेख</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) P-6 जमाबंदी / मिसल (1950 के पूर्व का दस्तावेज)</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) कक्षा 5वीं/8वीं एवं 10वीं अंकसूची या दाखिल ख़ारिज पंजी</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>6) वंशावली सूची की मूल प्रति</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>7) वर्तमान वर्ष का बी-1 की मूल प्रति</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>8) पहचान पत्र (आधार कार्ड / राशन कार्ड / वोटर आईडी)</b></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('जाति प्रमाण पत्र (Caste Certificate)', `&lt;b&gt;1) पटवारी एवं सरपंच का प्रतिवेदन&lt;/b&gt;, &lt;b&gt;2) स्व-घोषणा पत्र&lt;/b&gt;, &lt;b&gt;3) अधिकार अभिलेख&lt;/b&gt;, &lt;b&gt;4) P-6 जमाबंदी / मिसल (1950 के पूर्व का दस्तावेज)&lt;/b&gt;, &lt;b&gt;5) कक्षा 5वीं/8वीं एवं 10वीं अंकसूची या दाखिल ख़ारिज पंजी&lt;/b&gt;, &lt;b&gt;6) वंशावली सूची की मूल प्रति&lt;/b&gt;, &lt;b&gt;7) वर्तमान वर्ष का बी-1 की मूल प्रति&lt;/b&gt;, &lt;b&gt;8) पहचान पत्र (आधार कार्ड / राशन कार्ड / वोटर आईडी)&lt;/b&gt;`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-house-chimney"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">निवास प्रमाण पत्र (Domicile Certificate)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी एवं सरपंच का प्रतिवेदन</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं / 12वीं अंकसूची)</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) वर्तमान वर्ष का बी-1</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) स्व-घोषणा पत्र</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)</b></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('निवास प्रमाण पत्र (Domicile Certificate)', `&lt;b&gt;1) पटवारी एवं सरपंच का प्रतिवेदन&lt;/b&gt;, &lt;b&gt;2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं / 12वीं अंकसूची)&lt;/b&gt;, &lt;b&gt;3) वर्तमान वर्ष का बी-1&lt;/b&gt;, &lt;b&gt;4) स्व-घोषणा पत्र&lt;/b&gt;, &lt;b&gt;5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)&lt;/b&gt;`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-file-invoice-dollar"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आय प्रमाण पत्र (Income Certificate)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>1) पटवारी का प्रतिवेदन</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं)</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>3) स्व-घोषणा पत्र</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>4) वर्तमान वर्ष का बी-1 (यदि कृषि से आय हो)</b></span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span><b>5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)</b></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('आय प्रमाण पत्र (Income Certificate)', `&lt;b&gt;1) पटवारी का प्रतिवेदन&lt;/b&gt;, &lt;b&gt;2) शैक्षणिक प्रमाण पत्र (कक्षा 5वीं / 8वीं / 10वीं)&lt;/b&gt;, &lt;b&gt;3) स्व-घोषणा पत्र&lt;/b&gt;, &lt;b&gt;4) वर्तमान वर्ष का बी-1 (यदि कृषि से आय हो)&lt;/b&gt;, &lt;b&gt;5) पहचान पत्र (आधार कार्ड / राशन कार्ड / मतदाता परिचय पत्र)&lt;/b&gt;`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-id-card"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">नया पैन कार्ड (UTI / NSDL)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>नया पैन कार्ड बनवाना</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड एवं 2 पासपोर्ट फोटो</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>पैन सुधार (Correction) कार्य</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('नया पैन कार्ड (UTI / NSDL)', `नया पैन कार्ड बनवाना, आधार कार्ड एवं 2 पासपोर्ट फोटो, पैन सुधार (Correction) कार्य`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-notes-medical"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">आयुष्मान कार्ड (Ayushman Card)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>राशन कार्ड (सूची में नाम होना अनिवार्य)</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>मोबाइल नंबर (OTP के लिए)</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('आयुष्मान कार्ड (Ayushman Card)', `आधार कार्ड, राशन कार्ड (सूची में नाम होना अनिवार्य), मोबाइल नंबर (OTP के लिए)`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            
-                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition flex flex-col justify-between border border-slate-200 bg-white">
-                    <div>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl shrink-0 shadow-sm">
-                                <i class="fa-solid fa-helmet-safety"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-snug">ई-श्रम कार्ड (e-Shram)</h3>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">आवश्यक दस्तावेज / सुविधाएं:</h4>
-                            <ul class="space-y-1.5">
-                                <li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>आधार कार्ड (मोबाइल लिंक होना चाहिए)</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>बैंक पासबुक विवरण</span></li><li class="text-xs sm:text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-600 text-[10px] mt-1 shrink-0"></i> <span>असंगठित श्रमिकों का पंजीयन</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 flex flex-col gap-2">
-                        <button onclick="shareOnWhatsApp('ई-श्रम कार्ड (e-Shram)', `आधार कार्ड (मोबाइल लिंक होना चाहिए), बैंक पासबुक विवरण, असंगठित श्रमिकों का पंजीयन`)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर यह लिस्ट भेजें
-                        </button>
-                    </div>
-                </div>
-            </div>
             </div>
         </section>
     </main>
@@ -355,14 +537,11 @@
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
                         नमस्ते! 🙏 मैं <b>रूपेश कंप्यूटर्स (Gemini AI)</b> असिस्टेंट हूँ। आप मुझसे किसी भी प्रमाण पत्र के दस्तावेज, सरकारी योजना, Indane गैस बुकिंग या डिजिटल टूल के बारे में कोई भी सवाल पूछ सकते हैं:
                         <div class="mt-3 flex flex-col gap-1.5">
-                            <button onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग व पेमेंट नियम
+                            <button onclick="handleQuickAction('central_caste')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-landmark text-orange-600"></i> केंद्रीय जाति प्रमाण पत्र दस्तावेज
                             </button>
-                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-shield-halved text-emerald-600"></i> डेटा सुरक्षा व विज्ञापन-मुक्त (No Ads)
-                            </button>
-                            <button onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
-                                <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> मोबाइल में ऐप इंस्टॉल कैसे करें?
+                            <button onclick="handleQuickAction('lpg')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-simple text-amber-600"></i> Indane गैस बुकिंग व पेमेंट नियम
                             </button>
                             <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
                                 <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
@@ -393,6 +572,126 @@
         <span id="custom-toast-msg"></span>
     </div>
 
+    <!-- Built-in Fallback Scripts (Works standalone in preview & with external files) -->
+    <script>
+        const branchesData = {
+            chongribahar: {
+                name: 'चोंगरीबहार शाखा',
+                address: 'मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)',
+                phone: '6264531630',
+                wa: 'https://wa.me/916264531630',
+                map: 'https://maps.google.com/?q=Chongribahar'
+            },
+            dokda: {
+                name: 'दोकड़ा शाखा',
+                address: 'ग्राम - दोकड़ा, मुख्य मार्ग (जशपुर, छ.ग.)',
+                phone: '9713926390',
+                wa: 'https://wa.me/919713926390',
+                map: 'https://maps.google.com/?q=Dokda'
+            }
+        };
+
+        function selectBranch(branchKey) {
+            const data = branchesData[branchKey];
+            if (!data) return;
+
+            document.getElementById('branch-name-display').innerText = data.name;
+            document.getElementById('branch-address-display').innerText = data.address;
+            document.getElementById('branch-phone-display').innerText = data.phone;
+            document.getElementById('branch-call-link').href = 'tel:' + data.phone;
+            document.getElementById('branch-wa-link').href = data.wa;
+            document.getElementById('branch-map-link').href = data.map;
+
+            const mobCall = document.getElementById('mobile-call-btn');
+            const mobWa = document.getElementById('mobile-wa-btn');
+            if (mobCall) mobCall.href = 'tel:' + data.phone;
+            if (mobWa) mobWa.href = data.wa;
+
+            const btnChongri = document.getElementById('btn-branch-chongribahar');
+            const btnDokda = document.getElementById('btn-branch-dokda');
+
+            if (branchKey === 'chongribahar') {
+                btnChongri.className = 'bg-blue-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition';
+                btnDokda.className = 'text-slate-700 hover:text-slate-900 font-bold text-xs px-3.5 py-1.5 rounded-full transition';
+            } else {
+                btnDokda.className = 'bg-blue-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-sm transition';
+                btnChongri.className = 'text-slate-700 hover:text-slate-900 font-bold text-xs px-3.5 py-1.5 rounded-full transition';
+            }
+        }
+
+        function installPWA() {
+            const toast = document.getElementById('custom-toast');
+            const msg = document.getElementById('custom-toast-msg');
+            if (toast && msg) {
+                msg.innerText = 'ऐप इंस्टॉल करने के लिए ब्राउज़र मेन्यू से "Add to Home Screen" चुनें।';
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 4000);
+            }
+        }
+
+        function filterServices() {
+            const query = document.getElementById('service-search').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#services-container > div');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function shareOnWhatsApp(serviceName, docsList) {
+            const message = `*RUPESH COMPUTERS - आवश्यक दस्तावेज*\n\n📌 *सेवा:* ${serviceName}\n📄 *दस्तावेज:* ${docsList}\n\n📍 चोंगरीबहार (6264531630) | दोकड़ा (9713926390)`;
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function toggleChat() {
+            const win = document.getElementById('chat-window');
+            win.classList.toggle('hidden');
+            win.classList.toggle('flex');
+        }
+
+        function openChatWindow() {
+            const win = document.getElementById('chat-window');
+            win.classList.remove('hidden');
+            win.classList.add('flex');
+        }
+
+        function handleQuickAction(type) {
+            const msgBox = document.getElementById('chat-messages');
+            let reply = '';
+            if (type === 'central_caste') {
+                reply = '<b>केंद्रीय जाति प्रमाण पत्र (Central Caste Certificate):</b><br>• <b>ST / SC वर्ग:</b> केवल स्थायी जाति प्रमाण पत्र।<br>• <b>OBC वर्ग:</b> स्थायी जाति प्रमाण पत्र + वर्तमान आय प्रमाण पत्र।';
+            } else if (type === 'lpg') {
+                reply = 'Indane गैस बुकिंग के लिए रजिस्टर्ड मोबाइल नंबर और आधार KYC आवश्यक है।';
+            } else {
+                reply = 'किसी भी सेवा की जानकारी के लिए आप हमारे चोंगरीबहार (6264531630) या दोकड़ा (9713926390) केंद्र पर संपर्क कर सकते हैं।';
+            }
+            msgBox.innerHTML += `<div class="bg-blue-50 p-3 rounded-2xl text-xs text-slate-800 border border-blue-100">${reply}</div>`;
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const val = input.value.trim();
+            if (!val) return;
+            const msgBox = document.getElementById('chat-messages');
+            msgBox.innerHTML += `<div class="bg-slate-900 text-white p-2.5 rounded-2xl text-xs ml-auto max-w-[80%]">${val}</div>`;
+            input.value = '';
+            setTimeout(() => {
+                let botReply = 'धन्यवाद! अधिक जानकारी के लिए कृपया ऊपर दिए गए सर्च बॉक्स में सेवा का नाम खोजें या WhatsApp पर संपर्क करें।';
+                if (val.includes('केंद्रीय') || val.includes('central') || val.includes('obc')) {
+                    botReply = 'केंद्रीय जाति प्रमाण पत्र के लिए <b>ST/SC</b> को केवल स्थायी जाति प्रमाण पत्र और <b>OBC</b> को स्थायी जाति + आय प्रमाण पत्र लगेगा।';
+                }
+                msgBox.innerHTML += `<div class="bg-white p-3 rounded-2xl text-xs text-slate-700 border border-slate-200 max-w-[85%]">${botReply}</div>`;
+                msgBox.scrollTop = msgBox.scrollHeight;
+            }, 300);
+        }
+    </script>
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
 </body>
