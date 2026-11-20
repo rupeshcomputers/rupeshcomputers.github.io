@@ -245,6 +245,44 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Daily Motivational Thought & Today in History (Fills Left Space Neatly) -->
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+                            <!-- 1. Motivational Quote Card -->
+                            <div class="bg-gradient-to-br from-amber-50 via-orange-50/70 to-white border border-amber-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-amber-200/80">
+                                        <h3 class="text-sm font-black text-amber-950 flex items-center gap-2">
+                                            <i class="fa-solid fa-fire text-orange-600"></i> आज का प्रेरक सुविचार
+                                        </h3>
+                                        <button onclick="nextMotivationalQuote()" title="अगला सुविचार देखें" class="text-[11px] font-bold bg-white hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition">
+                                            <i class="fa-solid fa-rotate"></i> बदलें
+                                        </button>
+                                    </div>
+                                    <blockquote id="daily-quote-text" class="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed italic"></blockquote>
+                                    <p id="daily-quote-author" class="mt-2.5 text-[11px] font-extrabold text-amber-800"></p>
+                                </div>
+                                <button onclick="shareQuoteOnWhatsApp()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold py-2 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> सुविचार WhatsApp पर शेयर करें
+                                </button>
+                            </div>
+
+                            <!-- 2. Today in History Card -->
+                            <div class="bg-gradient-to-br from-sky-50 via-blue-50/60 to-white border border-blue-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-blue-200/80">
+                                        <h3 class="text-sm font-black text-blue-950 flex items-center gap-2">
+                                            <i class="fa-solid fa-landmark text-blue-600"></i> आज का इतिहास
+                                        </h3>
+                                        <span id="history-date-badge" class="text-[10px] font-extrabold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full"></span>
+                                    </div>
+                                    <ul id="today-history-list" class="space-y-2 text-xs text-slate-700 leading-relaxed font-medium"></ul>
+                                </div>
+                                <button onclick="shareHistoryOnWhatsApp()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold py-2 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> इतिहास WhatsApp पर शेयर करें
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Sidebar: Direct Links + Mini Holiday Calendar 2026 (Right 4 Cols) -->
@@ -348,8 +386,8 @@
 
                             <!-- Today's Daily Rashifal Widget -->
                             <div class="mt-2.5 bg-gradient-to-br from-indigo-50 via-purple-50/60 to-white border border-indigo-200/90 rounded-2xl p-3 text-[11px] text-slate-800 space-y-2">
-                                <div class="flex items-center justify-between border-b border-indigo-200/80 pb-1.5">
-                                    <span class="font-black text-indigo-950 flex items-center gap-1.5">
+                                <div class="flex items-center justify-between gap-2 border-b border-indigo-200/80 pb-1.5">
+                                    <span class="font-black text-indigo-950 flex items-center gap-1.5 shrink-0">
                                         <i class="fa-solid fa-star-and-crescent text-indigo-600"></i> आज का राशिफल
                                     </span>
                                     <select id="rashifal-select" onchange="renderDailyRashifal()" class="bg-white border border-indigo-200 rounded-lg px-2 py-0.5 text-[11px] font-extrabold text-indigo-900 outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer">
@@ -369,13 +407,16 @@
                                 </div>
                                 <p id="rashifal-text" class="text-[11px] leading-relaxed text-slate-700 font-medium"></p>
                                 <div class="flex items-center justify-between pt-0.5 text-[10px] font-extrabold">
-                                    <span class="bg-white border border-indigo-100 px-2 py-0.5 rounded-lg text-indigo-900">
+                                    <span class="bg-white border border-indigo-100 px-2.5 py-0.5 rounded-lg text-indigo-900">
                                         शुभ रंग: <span id="rashifal-color" class="text-indigo-600"></span>
                                     </span>
-                                    <span class="bg-white border border-indigo-100 px-2 py-0.5 rounded-lg text-indigo-900">
+                                    <span class="bg-white border border-indigo-100 px-2.5 py-0.5 rounded-lg text-indigo-900">
                                         शुभ अंक: <span id="rashifal-number" class="text-purple-700"></span>
                                     </span>
                                 </div>
+                                <button onclick="shareRashifalOnWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold py-2 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> राशिफल WhatsApp पर शेयर करें
+                                </button>
                             </div>
                         </div>
 
@@ -818,6 +859,9 @@
                         <span><i class="fa-regular fa-clock mr-1"></i> राहुकाल:</span>
                         <span>${p.rahukaal}</span>
                     </div>
+                    <button onclick="sharePanchangOnWhatsApp()" class="mt-1.5 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold py-1.5 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> पंचांग WhatsApp पर शेयर करें
+                    </button>
                 `;
             }
         }
@@ -838,40 +882,201 @@
             startLiveClock();
             renderMiniCalendar();
             initDailyRashifal();
+            initDailyQuoteAndHistory();
         });
 
-        // Daily Rashifal (12 Zodiac Signs)
-        const RASHIFAL_PREDICTIONS = [
-            { text: 'आज कार्यक्षेत्र में नई ऊर्जा और आत्मविश्वास बना रहेगा। रुके हुए सरकारी या कागजी काम पूरे होने के योग हैं।', color: 'लाल', num: '9' },
-            { text: 'आर्थिक पक्ष मजबूत होगा और परिवार के साथ सुखद समय बीतेगा। किसी नए कार्य की शुरुआत के लिए दिन शुभ है।', color: 'सफेद', num: '6' },
-            { text: 'वाणी में मधुरता बनाए रखें, सामाजिक व व्यावसायिक संपर्क से लाभ मिलेगा। विद्यार्थियों के लिए दिन अनुकूल है।', color: 'हरा', num: '5' },
-            { text: 'मन प्रसन्न रहेगा और घर-परिवार में सकारात्मक माहौल बनेगा। स्वास्थ्य के प्रति थोड़ी सावधानी रखें।', color: 'क्रीम', num: '2' },
-            { text: 'मान-सम्मान में वृद्धि होगी और आपके प्रयासों की सराहना होगी। महत्वपूर्ण निर्णय सोच-समझकर लें।', color: 'सुनहरा', num: '1' },
-            { text: 'मेहनत का पूरा फल प्राप्त होगा। व्यापार और नौकरी में उन्नति के अवसर बनेंगे, खर्चों पर नियंत्रण रखें।', color: 'हल्का हरा', num: '5' },
-            { text: 'रिश्तों में सामंजस्य बढ़ेगा और साझेदारी के कार्यों में सफलता मिलेगी। यात्रा के शुभ योग बन रहे हैं।', color: 'गुलाबी', num: '7' },
-            { text: 'धैर्य और संयम से काम लें, दिन के उत्तरार्ध में कोई शुभ समाचार मिल सकता है। धन लाभ के संकेत हैं।', color: 'केसरिया', num: '8' },
-            { text: 'भाग्य का साथ मिलेगा और धार्मिक या शुभ कार्यों में रुचि बढ़ेगी। वरिष्ठजनों का सहयोग प्राप्त होगा।', color: 'पीला', num: '3' },
-            { text: 'कार्यस्थल पर जिम्मेदारी बढ़ सकती है, जिसे आप बखूबी निभाएंगे। अनावश्यक भागदौड़ से बचें।', color: 'नीला', num: '8' },
-            { text: 'नए विचारों और योजनाओं पर काम करने के लिए उत्तम समय है। मित्रों और सहयोगियों से पूरा समर्थन मिलेगा।', color: 'आसमानी', num: '4' },
-            { text: 'रचनात्मक कार्यों में सफलता मिलेगी और मानसिक शांति बनी रहेगी। परिवार के बड़ों का आशीर्वाद लाभदायक रहेगा।', color: 'पीला', num: '7' }
+        // Daily Motivational Quotes (Auto-rotates daily + manual button)
+        const MOTIVATIONAL_QUOTES = [
+            { quote: '“उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।”', author: '— स्वामी विवेकानंद' },
+            { quote: '“सपने वो नहीं जो आप नींद में देखते हैं, सपने वो हैं जो आपको सोने नहीं देते।”', author: '— डॉ. ए.पी.जे. अब्दुल कलाम' },
+            { quote: '“कड़ी मेहनत आपको वहाँ पहुँचा देती है जहाँ अच्छी किस्मत शायद आपको न पहुँचा सके।”', author: '— प्रेरक विचार' },
+            { quote: '“हर छोटा बदलाव बड़ी कामयाबी का हिस्सा होता है, बस लगातार आगे बढ़ते रहें।”', author: '— प्रेरक विचार' },
+            { quote: '“मुश्किलें केवल बेहतरीन लोगों के हिस्से में आती हैं, क्योंकि वही उन्हें बेहतरीन तरीके से अंजाम देने की ताकत रखते हैं।”', author: '— प्रेरक विचार' },
+            { quote: '“विश्वास वह शक्ति है जिससे उजड़ी हुई दुनिया में भी प्रकाश किया जा सकता है।”', author: '— हेलेन केलर' },
+            { quote: '“सफलता का कोई शॉर्टकट नहीं होता, यह निरंतर प्रयास और धैर्य का परिणाम है।”', author: '— प्रेरक विचार' },
+            { quote: '“जो समय की कद्र करता है, समय एक दिन उसकी कद्र जरूर करता है।”', author: '— प्रेरक विचार' },
+            { quote: '“खुद पर विश्वास रखें, आपके भीतर हर चुनौती को पार करने की क्षमता मौजूद है।”', author: '— प्रेरक विचार' },
+            { quote: '“शिक्षा सबसे शक्तिशाली हथियार है जिससे आप दुनिया को बदल सकते हैं।”', author: '— नेल्सन मंडेला' }
+        ];
+
+        let currentQuoteIdx = 0;
+
+        function renderMotivationalQuote() {
+            const qEl = document.getElementById('daily-quote-text');
+            const aEl = document.getElementById('daily-quote-author');
+            if (!qEl || !aEl) return;
+            const item = MOTIVATIONAL_QUOTES[currentQuoteIdx % MOTIVATIONAL_QUOTES.length];
+            qEl.textContent = item.quote;
+            aEl.textContent = item.author;
+        }
+
+        window.nextMotivationalQuote = function() {
+            currentQuoteIdx = (currentQuoteIdx + 1) % MOTIVATIONAL_QUOTES.length;
+            renderMotivationalQuote();
+        };
+
+        // Today in History (Date-wise Historical Events)
+        const HISTORY_BY_MMDD = {
+            '11-20': [
+                '1989: संयुक्त राष्ट्र महासभा द्वारा बाल अधिकार समझौते (UNCRC) को अपनाया गया।',
+                '1750: मैसूर के शासक टीपू सुल्तान का जन्म हुआ।',
+                '1985: माइक्रोसॉफ्ट ने अपना पहला ग्राफिकल ऑपरेटिंग सिस्टम Windows 1.0 जारी किया।'
+            ],
+            '11-21': [
+                '1963: भारत का पहला साउंडिंग रॉकेट (नाइकी-अपाचे) थुंबा, केरल से सफलतापूर्वक प्रक्षेपित किया गया।',
+                '1877: थॉमस अल्वा एडिसन ने ध्वनि रिकॉर्ड करने वाले फोनोग्राफ का आविष्कार घोषित किया।'
+            ],
+            '11-22': [
+                '1830: स्वतंत्रता संग्राम की वीरांगना झलकारी बाई का जन्म हुआ।',
+                '1968: मद्रास राज्य का नाम बदलकर तमिलनाडु करने का प्रस्ताव पारित हुआ।'
+            ],
+            '01-26': [
+                '1950: भारत का संविधान लागू हुआ और भारत एक संप्रभु लोकतांत्रिक गणराज्य बना।',
+                '1930: भारतीय राष्ट्रीय कांग्रेस ने पूर्ण स्वराज दिवस मनाया।'
+            ],
+            '08-15': [
+                '1947: भारत को ब्रिटिश शासन से स्वतंत्रता प्राप्त हुई।',
+                '1972: भारत में पिन कोड (PIN Code) प्रणाली की शुरुआत हुई।'
+            ],
+            '10-02': [
+                '1869: राष्ट्रपिता महात्मा गांधी का जन्म पोरबंदर, गुजरात में हुआ।',
+                '1904: भारत के द्वितीय प्रधानमंत्री लाल बहादुर शास्त्री का जन्म हुआ।'
+            ]
+        };
+
+        const GENERAL_HISTORY_POOL = [
+            [
+                '1947: स्वतंत्र भारत में देश के विकास और डिजिटल व वैज्ञानिक प्रगति की नींव रखी गई।',
+                '1975: भारत का पहला उपग्रह “आर्यभट्ट” अंतरिक्ष में सफलतापूर्वक प्रक्षेपित किया गया।',
+                '1983: भारत ने पहली बार क्रिकेट विश्व कप जीतकर इतिहास रचा।'
+            ],
+            [
+                '1913: गुरुदेव रवींद्रनाथ टैगोर साहित्य का नोबेल पुरस्कार पाने वाले पहले एशियाई बने।',
+                '1930: महान वैज्ञानिक डॉ. सी.वी. रमन को “रमन प्रभाव” के लिए नोबेल पुरस्कार मिला।',
+                '2008: इसरो (ISRO) ने चंद्रयान-1 मिशन का सफल प्रक्षेपण किया।'
+            ],
+            [
+                '1950: भारत के सर्वोच्च न्यायालय (Supreme Court) का उद्घाटन हुआ।',
+                '2014: भारत अपने पहले ही प्रयास में मंगल ग्रह की कक्षा (मंगलयान) में पहुँचने वाला पहला देश बना।',
+                '1995: भारत में आम नागरिकों के लिए इंटरनेट सेवा की औपचारिक शुरुआत हुई।'
+            ]
+        ];
+
+        function initDailyQuoteAndHistory() {
+            const daySeed = Math.floor(Date.now() / 86400000);
+            currentQuoteIdx = daySeed % MOTIVATIONAL_QUOTES.length;
+            renderMotivationalQuote();
+
+            const badgeEl = document.getElementById('history-date-badge');
+            const listEl = document.getElementById('today-history-list');
+            if (!badgeEl || !listEl) return;
+
+            const now = new Date();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            badgeEl.textContent = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]}`;
+
+            const events = HISTORY_BY_MMDD[`${mm}-${dd}`] || GENERAL_HISTORY_POOL[daySeed % GENERAL_HISTORY_POOL.length];
+            listEl.innerHTML = events.map(ev => `
+                <li class="flex items-start gap-2 bg-white/90 border border-blue-100 rounded-xl px-3 py-2">
+                    <i class="fa-solid fa-circle-dot text-blue-600 text-[10px] mt-1 shrink-0"></i>
+                    <span>${ev}</span>
+                </li>
+            `).join('');
+        }
+
+        // Share Daily Rashifal on WhatsApp
+        window.shareRashifalOnWhatsApp = function() {
+            const now = new Date();
+            const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+            const sel = document.getElementById('rashifal-select');
+            const rashiName = sel ? sel.options[sel.selectedIndex].text : 'राशिफल';
+            const rashiText = document.getElementById('rashifal-text')?.textContent || '';
+            const rashiColor = document.getElementById('rashifal-color')?.textContent || '';
+            const rashiNum = document.getElementById('rashifal-number')?.textContent || '';
+
+            const shareText =
+`🔮 *आज का राशिफल (${todayStr})*
+
+✨ *राशि:* ${rashiName}
+📖 *राशिफल:* ${rashiText}
+🎨 *शुभ रंग:* ${rashiColor} | 🔢 *शुभ अंक:* ${rashiNum}
+
+🌐 *RUPESH COMPUTERS (चोंगरीबहार & दोकड़ा)*`;
+
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+        };
+
+        // Share Daily Motivational Quote on WhatsApp
+        window.shareQuoteOnWhatsApp = function() {
+            const now = new Date();
+            const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+            const qText = document.getElementById('daily-quote-text')?.textContent || '';
+            const qAuthor = document.getElementById('daily-quote-author')?.textContent || '';
+
+            const shareText =
+`🔥 *आज का प्रेरक सुविचार (${todayStr})*
+
+${qText}
+${qAuthor}
+
+🌐 *RUPESH COMPUTERS (चोंगरीबहार & दोकड़ा)*`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
+        };
+
+        // Share Today in History on WhatsApp
+        window.shareHistoryOnWhatsApp = function() {
+            const now = new Date();
+            const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+            const items = Array.from(document.querySelectorAll('#today-history-list li span'))
+                .map(el => `• ${el.textContent.trim()}`)
+                .join('\n');
+
+            const shareText =
+`🏛️ *आज का इतिहास (${todayStr})*
+
+${items}
+
+🌐 *RUPESH COMPUTERS (चोंगरीबहार & दोकड़ा)*`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
+        };
+
+        // Daily Rashifal Data & Renderer (Auto-rotates daily for all 12 Rashis)
+        const RASHIFAL_DATA = [
+            { texts: ['मेहनत का पूरा फल प्राप्त होगा। व्यापार और नौकरी में उन्नति के अवसर बनेंगे, खर्चों पर नियंत्रण रखें।', 'नए कार्यों की शुरुआत के लिए दिन शुभ है। परिवार में सुख-शांति रहेगी और रुका हुआ धन मिल सकता है।'], colors: ['हल्का हरा', 'केसरिया'], nums: ['5', '9'] },
+            { texts: ['आर्थिक स्थिति मजबूत होगी। परिवार के साथ अच्छा समय बीतेगा, वाणी में मधुरता बनाए रखें।', 'भूमि या वाहन से जुड़े कार्यों में सफलता मिलेगी। सहकर्मियों का पूरा सहयोग प्राप्त होगा।'], colors: ['सफेद', 'गुलाबी'], nums: ['2', '6'] },
+            { texts: ['रचनात्मक कार्यों में रुचि बढ़ेगी। मित्रों के सहयोग से महत्वपूर्ण काम पूरे होंगे, यात्रा शुभ रहेगी।', 'संचार और व्यापार से जुड़े लोगों को विशेष लाभ होगा। जल्दबाजी में कोई निर्णय न लें।'], colors: ['हरा', 'हल्का पीला'], nums: ['3', '5'] },
+            { texts: ['मन प्रसन्न रहेगा और पारिवारिक सुख बढ़ेगा। कार्यक्षेत्र में आपके काम की सराहना होगी।', 'माता-पिता का आशीर्वाद लेकर घर से निकलें, हर कार्य में सफलता के प्रबल योग हैं।'], colors: ['क्रीम', 'सिल्वर'], nums: ['2', '7'] },
+            { texts: ['आत्मविश्वास में वृद्धि होगी। नेतृत्व क्षमता निखरेगी और मान-सम्मान में बढ़ोतरी होगी।', 'सरकारी या प्रशासनिक कार्यों में सफलता मिलेगी। स्वास्थ्य के प्रति थोड़ी सावधानी रखें।'], colors: ['सुनहरा', 'नारंगी'], nums: ['1', '9'] },
+            { texts: ['योजनाबद्ध तरीके से काम करने पर बड़ी सफलता मिलेगी। विद्यार्थियों के लिए दिन बहुत अनुकूल है।', 'आर्थिक लेन-देन में सतर्क रहें। पुराने मित्र से मुलाकात मन को प्रसन्न कर देगी।'], colors: ['हरा', 'आसमानी'], nums: ['5', '8'] },
+            { texts: ['साझेदारी के कार्यों में लाभ होगा। जीवनसाथी का सहयोग मिलेगा और संतुलित निर्णय ले पाएंगे।', 'कला और व्यवसाय के क्षेत्र में नए अवसर प्राप्त होंगे। तनाव से दूर रहें।'], colors: ['हल्का नीला', 'सफेद'], nums: ['6', '7'] },
+            { texts: ['साहस और पराक्रम से कठिन कार्य भी आसानी से पूरे होंगे। धन लाभ के नए स्रोत बनेंगे।', 'गुप्त शत्रुओं से सावधान रहें। अपनी योजनाओं को समय से पहले किसी के सामने उजागर न करें।'], colors: ['लाल', 'मैरून'], nums: ['4', '9'] },
+            { texts: ['भाग्य का पूरा साथ मिलेगा। धार्मिक या मांगलिक कार्यों में रुचि बढ़ेगी, शुभ समाचार मिल सकता है।', 'उच्च शिक्षा और करियर में आगे बढ़ने के नए रास्ते खुलेंगे। यात्रा लाभदायक रहेगी।'], colors: ['पीला', 'केसरिया'], nums: ['3', '9'] },
+            { texts: ['कार्यक्षेत्र में जिम्मेदारी बढ़ सकती है, जिसे आप बखूबी निभाएंगे। धैर्य और संयम से काम लें।', 'मेहनत से किए गए निवेश भविष्य में अच्छा लाभ देंगे। बुजुर्गों की सलाह उपयोगी रहेगी।'], colors: ['नीला', 'स्लेटी'], nums: ['4', '8'] },
+            { texts: ['नए विचार और तकनीक से काम में तेजी आएगी। सामाजिक दायरा बढ़ेगा और मित्रों का साथ मिलेगा।', 'अचानक धन लाभ के योग बन रहे हैं। खान-पान पर ध्यान दें और नियमित दिनचर्या रखें।'], colors: ['गहरा नीला', 'बैंगनी'], nums: ['8', '11'] },
+            { texts: ['आध्यात्मिक शांति और मानसिक प्रसन्नता का अनुभव होगा। रचनात्मक प्रयास सफल रहेंगे।', 'परिवार में खुशहाली का माहौल रहेगा। रुके हुए सरकारी व बैंकिंग कार्य पूरे हो सकते हैं।'], colors: ['पीला', 'सुनहरा'], nums: ['3', '7'] }
         ];
 
         window.renderDailyRashifal = function() {
             const sel = document.getElementById('rashifal-select');
-            const txtEl = document.getElementById('rashifal-text');
-            const colEl = document.getElementById('rashifal-color');
+            const textEl = document.getElementById('rashifal-text');
+            const colorEl = document.getElementById('rashifal-color');
             const numEl = document.getElementById('rashifal-number');
-            if (!sel || !txtEl || !colEl || !numEl) return;
+            if (!sel || !textEl || !colorEl || !numEl) return;
 
-            const signIdx = parseInt(sel.value, 10) || 0;
-            try { localStorage.setItem('rupesh_selected_rashi', String(signIdx)); } catch (e) {}
+            const idx = parseInt(sel.value, 10) || 0;
+            try { localStorage.setItem('rupesh_selected_rashi', String(idx)); } catch (e) {}
 
-            // Rotate daily predictions smoothly based on calendar day
             const daySeed = Math.floor(Date.now() / 86400000);
-            const item = RASHIFAL_PREDICTIONS[(signIdx + daySeed) % RASHIFAL_PREDICTIONS.length];
-            txtEl.textContent = item.text;
-            colEl.textContent = item.color;
-            numEl.textContent = item.num;
+            const item = RASHIFAL_DATA[idx] || RASHIFAL_DATA[0];
+            const variant = (daySeed + idx) % item.texts.length;
+
+            textEl.textContent = item.texts[variant];
+            colorEl.textContent = item.colors[variant % item.colors.length];
+            numEl.textContent = item.nums[variant % item.nums.length];
         };
 
         function initDailyRashifal() {
