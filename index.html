@@ -136,44 +136,50 @@
                     
                     <!-- Main Hero Content (Left 8 Cols) -->
                     <div class="lg:col-span-8 text-center lg:text-left">
-                        <div class="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
-                            <!-- Top Accent Gradient Bar -->
-                            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-amber-500"></div>
-
-                            <h2 class="text-2xl sm:text-4xl lg:text-[2.6rem] font-black text-slate-900 tracking-normal leading-[1.45] sm:leading-[1.4] pt-1">
-                                आपका संपूर्ण <span class="inline-block pt-1.5 pb-0.5 text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-900">डिजिटल सेवा पोर्टल</span>
-                                <span class="block text-xl sm:text-3xl lg:text-[2.1rem] font-extrabold text-slate-800 mt-1.5 leading-snug">
-                                    अब हर ऑनलाइन काम मिनटों में!
-                                </span>
-                            </h2>
-
-                            <p class="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                                रूपेश कंप्यूटर्स की इस आधिकारिक वेबसाइट पर सभी महत्वपूर्ण सरकारी पोर्टल लिंक, मुफ्त ऑनलाइन टूल्स (पासपोर्ट फोटो, JPEG से PDF, हिंदी टाइपिंग, DOB कैलकुलेटर), Indane गैस बुकिंग और स्मार्ट AI सहायता एक ही जगह उपलब्ध हैं।
-                            </p>
-
-                            <!-- 100% No Ads & Privacy Guarantee Banner -->
-                            <div class="mt-5 inline-flex flex-wrap items-center justify-center lg:justify-start gap-2.5 bg-emerald-50/80 border border-emerald-200 text-emerald-950 px-4 py-2 rounded-2xl text-xs font-bold">
-                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-ban text-red-600"></i> कोई विज्ञापन (No Ads) नहीं</span>
-                                <span class="text-emerald-300">|</span>
-                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% सुरक्षित — आपका कोई भी डेटा कहीं सेव या शेयर नहीं होता</span>
-                            </div>
-                            
-                            <!-- Primary CTA Buttons -->
-                            <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-3">
-                                <button onclick="openPage('services')" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-5 py-3 rounded-2xl shadow-md shadow-blue-500/20 transition transform hover:-translate-y-0.5 text-xs sm:text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-list-check"></i> सभी सेवाएँ देखें
-                                </button>
-                                <a href="https://whatsapp.com/channel/0029VaiRF4FBFLgN7DLCME3M" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-5 py-3 rounded-2xl shadow-md shadow-emerald-500/20 transition transform hover:-translate-y-0.5 text-xs sm:text-sm flex items-center gap-2">
-                                    <i class="fa-brands fa-whatsapp text-base"></i> व्हाट्सएप चैनल
+                        <!-- Live Notice, Recruitment & Website Updates Board (Left Column) -->
+                        <div id="leftLiveUpdatesBoard" class="hidden bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm text-left relative overflow-hidden">
+                            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 via-amber-400 to-blue-600"></div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-bullhorn text-amber-500"></i> लाइव सूचना, भर्ती एवं वेबसाइट अपडेट
+                                    </h3>
+                                    <p id="smartPopupDate" class="text-[11px] font-bold text-slate-500 mt-0.5"></p>
+                                </div>
+                                <a id="combinedWaShareBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp शेयर करें
                                 </a>
-                                <button onclick="openChatWindow()" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 hover:from-slate-800 hover:to-blue-800 text-white font-black px-5 py-3 rounded-2xl shadow-md shadow-indigo-500/20 transition transform hover:-translate-y-0.5 text-xs sm:text-sm flex items-center gap-2 border border-amber-400/50">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-base"></i> Rupesh AI
-                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- Section 1: Daily Notice -->
+                                <div id="noticeSectionBox" class="hidden space-y-2">
+                                    <div class="text-xs font-black text-rose-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-circle-exclamation"></i> आज की जरूरी सूचना:
+                                    </div>
+                                    <div id="noticeItemsList" class="space-y-2"></div>
+                                </div>
+
+                                <!-- Section 2: Active Job & Admission Alerts -->
+                                <div id="jobPopupSectionBox" class="hidden space-y-2">
+                                    <div class="text-xs font-black text-emerald-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-graduation-cap"></i> नवीनतम भर्ती एवं एडमिशन अलर्ट:
+                                    </div>
+                                    <div id="jobPopupItemsList" class="space-y-2"></div>
+                                </div>
+
+                                <!-- Section 3: Website What's New Updates -->
+                                <div id="whatsNewSectionBox" class="hidden space-y-2">
+                                    <div class="text-xs font-black text-blue-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-sparkles"></i> वेबसाइट पर आज के नए सुधार एवं फीचर्स:
+                                    </div>
+                                    <div id="whatsNewItemsList" class="space-y-2"></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Quick Tool Launch Cards -->
-                        <div class="mt-9">
+                        <div class="mt-7">
                             <div class="flex items-center justify-center lg:justify-start gap-2 mb-3">
                                 <span class="text-xs font-black uppercase tracking-wider text-slate-500">त्वरित डिजिटल टूल्स (निःशुल्क उपयोग)</span>
                                 <span class="h-px flex-1 bg-slate-200 hidden sm:block max-w-[140px]"></span>
@@ -215,38 +221,6 @@
                                     </div>
                                     <div class="text-xs font-extrabold text-pink-950">Hindi & Kruti Dev</div>
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Quick Service Highlights Card on Left -->
-                        <div class="mt-8 bg-white/95 border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm text-left">
-                            <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
-                                <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-blue-600"></i> केंद्र पर उपलब्ध प्रमुख ऑनलाइन एवं बैंकिंग सेवाएँ
-                                </h3>
-                                <button onclick="openPage('services')" class="text-xs font-extrabold text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                                    पूरी सूची देखें <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs font-bold text-slate-700">
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-building-columns text-blue-600"></i> SBI कियोस्क बैंकिंग
-                                </div>
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-fingerprint text-emerald-600"></i> आधार प्रिंट एवं अपडेट
-                                </div>
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-file-signature text-indigo-600"></i> आय, जाति व निवास
-                                </div>
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-heart-pulse text-rose-600"></i> आयुष्मान भारत कार्ड
-                                </div>
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-car text-amber-600"></i> लर्निंग ड्राइविंग लाइसेंस
-                                </div>
-                                <div class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
-                                    <i class="fa-solid fa-wheat-awn text-orange-600"></i> एग्रीस्टेक (AgriStack) पंजीयन
-                                </div>
                             </div>
                         </div>
 
@@ -727,7 +701,6 @@
         }
 
         function getHindiPanchang(dateObj) {
-            // Astronomical lunar phase approximation (Reference New Moon: 2000-01-06 18:14 UTC)
             const synodicMonth = 29.530588853;
             const refNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
             const currentUtc = Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 6, 0, 0);
@@ -739,11 +712,9 @@
             const paksha = tithiIndex < 15 ? 'शुक्ल पक्ष' : 'कृष्ण पक्ष';
             const tithi = TITHI_NAMES[tithiIndex];
 
-            // Approximate Purnimanta Hindu Lunar Month
             const approxMonthIdx = (dateObj.getMonth() + 9 + (tithiIndex >= 15 ? 1 : 0)) % 12;
             const hinduMonth = HINDU_LUNAR_MONTHS[approxMonthIdx];
 
-            // Vikram Samvat (transitions around March/April - Chaitra Shukla Pratipada)
             const gregYear = dateObj.getFullYear();
             const vikramSamvat = (dateObj.getMonth() > 2 || (dateObj.getMonth() === 2 && dateObj.getDate() >= 20))
                 ? gregYear + 57
@@ -777,7 +748,6 @@
             const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
             let saturdayCounter = 0;
 
-            // Empty cells before 1st day
             for (let i = 0; i < firstDay; i++) {
                 const empty = document.createElement('div');
                 empty.className = 'h-7';
@@ -836,7 +806,6 @@
                 gridEl.appendChild(cell);
             }
 
-            // Render Today's Panchang below calendar
             if (panchangEl) {
                 const p = getHindiPanchang(todayDate);
                 panchangEl.innerHTML = `
@@ -863,12 +832,29 @@
                         <span><i class="fa-regular fa-clock mr-1"></i> राहुकाल:</span>
                         <span>${p.rahukaal}</span>
                     </div>
-                    <button onclick="sharePanchangOnWhatsApp()" class="mt-1.5 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold py-1.5 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                    <button type="button" onclick="sharePanchangOnWhatsApp()" class="mt-1.5 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold py-1.5 px-3 rounded-xl shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
                         <i class="fa-brands fa-whatsapp text-sm"></i> पंचांग WhatsApp पर शेयर करें
                     </button>
                 `;
             }
         }
+
+        window.sharePanchangOnWhatsApp = function() {
+            const p = getHindiPanchang(new Date());
+            const shareText =
+`🕉️ *आज का पंचांग*
+
+📅 *दिनांक:* ${p.dateStr}
+📜 *विक्रम संवत्:* ${p.vikramSamvat}
+🌙 *हिंदू मास / पक्ष:* ${p.hinduMonth}, ${p.paksha}
+✨ *आज की तिथि:* ${p.tithi}
+⏳ *राहुकाल:* ${p.rahukaal}
+
+🌐 *RUPESH COMPUTERS (चोंगरीबहार & दोकड़ा)*`;
+
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+        };
 
         window.changeCalMonth = function(delta) {
             viewMonth += delta;
@@ -882,14 +868,176 @@
             renderMiniCalendar();
         };
 
+        // 2. Left Column Live Notice, Jobs/Admissions & What's New Board Logic
+        const SHEET_FEED_URLS = [
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vRD24RQmscAWzwHPvdciSBeui0vyHTF8RUcMLiikYzqYyWu2QkTy9m4CWbCBTmyga523vmkFVVlBCqj/pub?output=csv",
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vST5xx5TQxWzjekgYjyj5lkaFyZ8g2HU967RUHjaRyTFGR1qyvSF_FDOXz71oyjrwRJMHX6RgdtLXXd/pub?output=csv",
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNDmmAMdtSq-DkOO0LjQUbXLm_18whDU-Rkjkl0K7aZoj_U1ztmFVFJMquWfoxwAFcctnbsrlduk1W/pub?output=csv"
+        ];
+
+        function renderPopupContent(noticeList, jobList, updateList, displayDate) {
+            let hasNotice = noticeList.length > 0;
+            let hasJobs = jobList.length > 0;
+            let hasUpdate = updateList.length > 0;
+            let waShareParts = [];
+
+            const noticeContainer = document.getElementById("noticeItemsList");
+            if (hasNotice && noticeContainer) {
+                noticeContainer.innerHTML = noticeList.map(msg => `
+                    <div class="bg-rose-50/90 border-l-4 border-rose-500 p-3 rounded-xl text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                        ${msg}
+                    </div>
+                `).join("");
+                document.getElementById("noticeSectionBox")?.classList.remove("hidden");
+                waShareParts.push(`🚨 *जरूरी सूचना:*\n` + noticeList.join("\n"));
+            }
+
+            const jobContainer = document.getElementById("jobPopupItemsList");
+            if (hasJobs && jobContainer) {
+                jobContainer.innerHTML = jobList.map(job => {
+                    const singleJobWaText = encodeURIComponent(
+                        `🎓 *${job.category}: ${job.title}*\n` +
+                        (job.lastDate ? `⏳ *अंतिम तिथि:* ${job.lastDate}\n` : "") +
+                        (job.details ? `📋 *विवरण:* ${job.details}\n` : "") +
+                        (job.link ? `🔗 *आवेदन लिंक:* ${job.link}\n` : "") +
+                        `\n📌 *फॉर्म भरवाने हेतु संपर्क करें:*\nRUPESH COMPUTERS (चोंगरीबहार & दोकड़ा)\n🌐 https://rupeshcomputers.in`
+                    );
+                    const singleJobWaUrl = `https://api.whatsapp.com/send?text=${singleJobWaText}`;
+
+                    return `
+                        <div class="bg-emerald-50/80 border-l-4 border-emerald-600 p-3 rounded-xl">
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <span class="inline-block bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded">${job.category}</span>
+                                ${job.lastDate ? `<span class="text-[10px] font-bold text-rose-600">⏳ अंतिम तिथि: ${job.lastDate}</span>` : ""}
+                            </div>
+                            <div class="text-xs sm:text-sm font-black text-slate-900">${job.title}</div>
+                            <div class="text-xs text-slate-600 mt-0.5 leading-relaxed">${job.details}</div>
+                            <div class="mt-2 flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-emerald-200/70">
+                                ${job.link ? `<a href="${job.link}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-extrabold text-blue-700 hover:underline">🔗 नोटिफिकेशन / लिंक देखें →</a>` : `<span></span>`}
+                                <a href="${singleJobWaUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm transition">
+                                    <i class="fa-brands fa-whatsapp text-xs"></i> इस भर्ती को शेयर करें
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+                document.getElementById("jobPopupSectionBox")?.classList.remove("hidden");
+                waShareParts.push(`🎓 *भर्ती एवं एडमिशन अलर्ट:*\n` + jobList.map(j => `📌 *${j.title}* (${j.category})${j.lastDate ? ` - अंतिम तिथि: ${j.lastDate}` : ""}`).join("\n"));
+            }
+
+            const updateContainer = document.getElementById("whatsNewItemsList");
+            if (hasUpdate && updateContainer) {
+                updateContainer.innerHTML = updateList.map(item => `
+                    <div class="bg-blue-50/80 border-l-4 border-blue-600 p-3 rounded-xl">
+                        <span class="inline-block bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded mb-1">${item.type}</span>
+                        <div class="text-xs sm:text-sm font-black text-slate-900">${item.title}</div>
+                        <div class="text-xs text-slate-600 mt-0.5 leading-relaxed">${item.details}</div>
+                    </div>
+                `).join("");
+                document.getElementById("whatsNewSectionBox")?.classList.remove("hidden");
+                waShareParts.push(`✨ *वेबसाइट के नए फीचर्स:*\n` + updateList.map(u => `✅ *${u.title}* (${u.type}): ${u.details}`).join("\n"));
+            }
+
+            if (hasNotice || hasJobs || hasUpdate) {
+                const dateLabel = document.getElementById("smartPopupDate");
+                if (dateLabel) dateLabel.textContent = "दिनांक: " + displayDate;
+
+                const finalWaText = encodeURIComponent(
+                    `📢 *RUPESH COMPUTERS सूचना एवं अपडेट (${displayDate})*\n\n` +
+                    waShareParts.join("\n\n") +
+                    `\n\nअधिक जानकारी के लिए विज़िट करें:\nhttps://rupeshcomputers.in`
+                );
+                const waBtn = document.getElementById("combinedWaShareBtn");
+                if (waBtn) waBtn.href = "https://api.whatsapp.com/send?text=" + finalWaText;
+
+                const leftBoard = document.getElementById("leftLiveUpdatesBoard");
+                if (leftBoard) {
+                    leftBoard.classList.remove("hidden");
+                }
+            }
+        }
+
+        function loadCombinedSmartPopup() {
+            const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+            const uniqueUrls = [...new Set(SHEET_FEED_URLS.filter(u => u && u.startsWith('http')))];
+
+            Promise.all(
+                uniqueUrls.map(url => fetch(url).then(r => r.ok ? r.text() : "").catch(() => ""))
+            ).then(csvList => {
+                const liveNotices = [];
+                const liveJobs = [];
+                const liveUpdates = [];
+                const seenKeys = new Set();
+
+                csvList.forEach(csv => {
+                    if (!csv) return;
+                    const rows = csv.split("\n");
+                    if (rows.length < 2) return;
+
+                    // हेडर की पहचान करके अपने आप सही टैब का डेटा पार्स करें
+                    const headerCols = rows[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+
+                    for (let i = 1; i < rows.length; i++) {
+                        if (!rows[i].trim()) continue;
+                        const cols = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
+
+                        // 1. Job_Admission_Alerts Format: Title, Category, LastDate, Details, Link, Status
+                        if (headerCols.includes("category") && headerCols.includes("lastdate")) {
+                            const title = cols[0] || "";
+                            const category = cols[1] || "सूचना";
+                            const lastDate = cols[2] || "";
+                            const details = cols[3] || "";
+                            const link = cols[4] || "";
+                            const status = (cols[5] || "").toUpperCase();
+                            const key = "job:" + title;
+
+                            if (status === "ON" && title !== "" && (lastDate === "" || lastDate >= todayIST) && !seenKeys.has(key)) {
+                                seenKeys.add(key);
+                                liveJobs.push({ title, category, lastDate, details, link });
+                            }
+                        }
+                        // 2. Whats_New_Popup Format: Date, Update_Type, Feature_Title, Details, Status
+                        else if (headerCols.includes("update_type") || headerCols.includes("feature_title")) {
+                            const date = cols[0] || "";
+                            const type = cols[1] || "अपडेट";
+                            const title = cols[2] || "";
+                            const details = cols[3] || "";
+                            const status = (cols[4] || "").toUpperCase();
+                            const key = "upd:" + date + ":" + title;
+
+                            if (date === todayIST && status === "ON" && title !== "" && !seenKeys.has(key)) {
+                                seenKeys.add(key);
+                                liveUpdates.push({ type, title, details });
+                            }
+                        }
+                        // 3. Daily_Popup Format: Date, Status, Message
+                        else if (headerCols.includes("message")) {
+                            const date = cols[0] || "";
+                            const status = (cols[1] || "").toUpperCase();
+                            const msg = cols[2] || "";
+                            const key = "not:" + date + ":" + msg;
+
+                            if (date === todayIST && status === "ON" && msg !== "" && !seenKeys.has(key)) {
+                                seenKeys.add(key);
+                                liveNotices.push(msg);
+                            }
+                        }
+                    }
+                });
+
+                renderPopupContent(liveNotices, liveJobs, liveUpdates, todayIST);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             startLiveClock();
             renderMiniCalendar();
             initDailyRashifal();
             initDailyQuoteAndHistory();
+            loadCombinedSmartPopup();
         });
 
-        // Daily Motivational Quotes (Auto-rotates daily + manual button)
+        // Daily Motivational Quotes
         const MOTIVATIONAL_QUOTES = [
             { quote: '“उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।”', author: '— स्वामी विवेकानंद' },
             { quote: '“सपने वो नहीं जो आप नींद में देखते हैं, सपने वो हैं जो आपको सोने नहीं देते।”', author: '— डॉ. ए.पी.जे. अब्दुल कलाम' },
@@ -919,7 +1067,7 @@
             renderMotivationalQuote();
         };
 
-        // Today in History (Date-wise Historical Events)
+        // Today in History
         const HISTORY_BY_MMDD = {
             '11-20': [
                 '1989: संयुक्त राष्ट्र महासभा द्वारा बाल अधिकार समझौते (UNCRC) को अपनाया गया।',
@@ -989,7 +1137,6 @@
             `).join('');
         }
 
-        // Share Daily Rashifal on WhatsApp
         window.shareRashifalOnWhatsApp = function() {
             const now = new Date();
             const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
@@ -1012,7 +1159,6 @@
             window.open(waUrl, '_blank', 'noopener,noreferrer');
         };
 
-        // Share Daily Motivational Quote on WhatsApp
         window.shareQuoteOnWhatsApp = function() {
             const now = new Date();
             const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
@@ -1030,7 +1176,6 @@ ${qAuthor}
             window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
         };
 
-        // Share Today in History on WhatsApp
         window.shareHistoryOnWhatsApp = function() {
             const now = new Date();
             const todayStr = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
@@ -1048,7 +1193,6 @@ ${items}
             window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener,noreferrer');
         };
 
-        // Daily Rashifal Data & Renderer (Auto-rotates daily for all 12 Rashis)
         const RASHIFAL_DATA = [
             { texts: ['मेहनत का पूरा फल प्राप्त होगा। व्यापार और नौकरी में उन्नति के अवसर बनेंगे, खर्चों पर नियंत्रण रखें।', 'नए कार्यों की शुरुआत के लिए दिन शुभ है। परिवार में सुख-शांति रहेगी और रुका हुआ धन मिल सकता है।'], colors: ['हल्का हरा', 'केसरिया'], nums: ['5', '9'] },
             { texts: ['आर्थिक स्थिति मजबूत होगी। परिवार के साथ अच्छा समय बीतेगा, वाणी में मधुरता बनाए रखें।', 'भूमि या वाहन से जुड़े कार्यों में सफलता मिलेगी। सहकर्मियों का पूरा सहयोग प्राप्त होगा।'], colors: ['सफेद', 'गुलाबी'], nums: ['2', '6'] },
@@ -1093,7 +1237,7 @@ ${items}
             renderDailyRashifal();
         }
 
-        // 2. Branch Data & Selection
+        // 3. Branch Data & Selection
         const BRANCH_INFO = {
             chongribahar: {
                 title: 'चोंगरीबहार शाखा',
@@ -1188,7 +1332,7 @@ ${items}
             }
         };
 
-        // 3. Rupesh AI Chatbot Engine
+        // 4. Rupesh AI Chatbot Engine
         let chatHistory = [];
 
         window.toggleChat = function() {
