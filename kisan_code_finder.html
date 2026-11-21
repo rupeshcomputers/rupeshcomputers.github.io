@@ -33,7 +33,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">किसान कोड फाइंडर</h1>
-                    <p class="text-xs text-emerald-100">आसानी से खोजें अपना किसान रिकॉर्ड और कोड • <strong>17-11-2026 के अनुसार</strong></p>
+                    <p class="text-xs text-emerald-100">आसानी से खोजें अपना किसान रिकॉर्ड और कोड • <strong>21-11-2026 के अनुसार</strong></p>
                 </div>
             </div>
             <div id="data-status" class="bg-emerald-800/60 border border-emerald-600/50 px-3 py-1.5 rounded-xl text-xs flex items-center space-x-2 backdrop-blur-sm">
@@ -102,7 +102,7 @@
                     <i class="fa-solid fa-address-book"></i>
                 </div>
                 <h3 class="text-base font-bold text-slate-700 mb-1">किसान कोड या नाम के कम से कम 3 अक्षर टाइप करें</h3>
-                <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें (अधिकतम 4 परिणाम दिखेंगे)।</p>
+                <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें (अधिकतम 6 परिणाम दिखेंगे)।</p>
             </div>
         </div>
 
@@ -130,7 +130,7 @@
         <!-- Quick Utility Shortcuts Section -->
         <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100">
             <h3 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-link text-emerald-600"></i> किसान उपयोग हेतु महत्वपूर्ण लिंक्स एवं शार्टकट (17-11-2026)
+                <i class="fa-solid fa-link text-emerald-600"></i> किसान उपयोग हेतु महत्वपूर्ण लिंक्स एवं शार्टकट (21-11-2026)
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <a href="https://bhuiyan.cg.nic.in/AgristackRoRKrishaKhasraReport.aspx" target="_blank" class="p-3.5 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-xl transition-all flex items-center justify-between group">
@@ -165,13 +165,14 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-400 space-y-1">
-        <p>किसान कोड फाइंडर टूल • चोंगरीबहार उपार्जन केंद्र • 17-11-2026 की स्थिति के अनुसार</p>
+        <p>किसान कोड फाइंडर टूल • चोंगरीबहार उपार्जन केंद्र • 21-11-2026 की स्थिति के अनुसार</p>
         <p class="font-medium text-slate-600">निर्माता / डेवलपर: <span class="text-emerald-700 font-bold">अविनाश प्रसाद</span></p>
     </footer>
 
     <!-- Script Logic -->
     <script>
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSuI-a__KZlwNwK6gxkjns5yUIurY40tuEYV1PGnfrfUpk9SBDpIrySNcWfTFI6bVuM8pf2n49sSXYw/pub?output=csv";
+        // नया Google Sheet CSV लिंक अपडेट किया गया है
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzycOoPAUtv_juKVzdvYCN3fidbynuE_jh4uluEfel9vGsqSHLDKWLTOwpBdUtqw/pub?gid=1428593156&single=true&output=csv";
         
         let rawData = [];
         let headers = [];
@@ -188,9 +189,9 @@
         const countPurpleEl = document.getElementById('count-purple');
         const countBlackEl = document.getElementById('count-black');
 
-        // Parse CSV robustly handling quotes
+        // Parse CSV robustly handling quotes and line breaks
         function parseCSV(text) {
-            let lines = text.split("\n");
+            let lines = text.split(/\r?\n/);
             let result = [];
             let currentHeaders = [];
 
@@ -218,9 +219,13 @@
                 if (i === 0) {
                     currentHeaders = row;
                 } else {
+                    // खाली पंक्तियों (Empty rows) को छोड़ें
+                    if (row.every(cell => cell === "")) continue;
+                    
                     let obj = {};
                     for (let h = 0; h < currentHeaders.length; h++) {
-                        obj[currentHeaders[h] || `Col_${h}`] = row[h] !== undefined ? row[h] : "";
+                        let headerName = currentHeaders[h] ? currentHeaders[h].trim() : `विवरण_${h + 1}`;
+                        obj[headerName] = row[h] !== undefined ? row[h].trim() : "";
                     }
                     result.push(obj);
                 }
@@ -250,62 +255,85 @@
             return str.replace(regex, '<mark class="bg-amber-200 text-slate-900 px-1 rounded font-bold">$1</mark>');
         }
 
-        // Accurate status detection based on the Last Column of the row data
+        // Column P (अंतिम कॉलम) की वास्तविक वैल्यू से किसान का स्टेटस (हरा / बैंगनी / काला) पहचानें
         function getFarmerStatus(row) {
-            let values = Object.values(row);
-            if (values.length === 0) return 'green';
-            
-            let lastColVal = String(values[values.length - 1] || "").toLowerCase().trim();
-            let rowString = JSON.stringify(row).toLowerCase();
+            let keys = Object.keys(row);
+            if (keys.length === 0) return 'green';
 
-            if (lastColVal.includes('purple') || lastColVal.includes('बैंगनी') || lastColVal.includes('नया') || lastColVal.includes('पंजीयन') || rowString.includes('new') || rowString.includes('पंजीयन')) {
+            // Column P (index 15, या अंतिम कॉलम) की वैल्यू निकालें
+            let colPKey = keys[15] || keys[keys.length - 1];
+            let colPVal = String(row[colPKey] || "").toLowerCase().trim();
+            let allVals = Object.values(row).join(" ").toLowerCase();
+
+            // 1. बैंगनी (नया पंजीयन) की जाँच - Column P या पूरे रिकॉर्ड में
+            if (
+                colPVal.includes('purple') ||
+                colPVal.includes('बैंगनी') ||
+                colPVal.includes('बैगनी') ||
+                colPVal.includes('नया') ||
+                colPVal.includes('पंजीयन') ||
+                colPVal.includes('new') ||
+                colPVal === 'p' ||
+                allVals.includes('नया पंजीयन')
+            ) {
                 return 'purple';
             }
-            if (lastColVal.includes('black') || lastColVal.includes('काला') || lastColVal.includes('अधूरा') || lastColVal.includes('incomplete')) {
+
+            // 2. काला (अधूरा) की जाँच - Column P में (166 रिकॉर्ड्स)
+            if (
+                colPVal.includes('black') ||
+                colPVal.includes('काला') ||
+                colPVal.includes('अधूरा') ||
+                colPVal.includes('incomplete') ||
+                colPVal.includes('pending') ||
+                colPVal.includes('नहीं') ||
+                colPVal === 'no' ||
+                colPVal === 'b'
+            ) {
                 return 'black';
             }
-            if (lastColVal.includes('green') || lastColVal.includes('हरा') || lastColVal.includes('agristack') || lastColVal.includes('सत्यापित')) {
+
+            // 3. हरा (AgriStack हुआ) की जाँच - Column P में
+            if (
+                colPVal.includes('green') ||
+                colPVal.includes('हरा') ||
+                colPVal.includes('agristack') ||
+                colPVal.includes('सत्यापित') ||
+                colPVal.includes('हुआ') ||
+                colPVal === 'yes' ||
+                colPVal === 'हाँ' ||
+                colPVal === 'g'
+            ) {
                 return 'green';
             }
 
-            let farmerCode = extractFarmerCode(row);
-            let farmerName = "";
-            for (let key in row) {
-                let lowerKey = key.toLowerCase();
-                if (lowerKey.includes('name') || lowerKey.includes('किसान')) {
-                    farmerName = String(row[key]).trim();
-                }
-            }
-
-            let combinedSearch = (farmerCode + " " + farmerName).toLowerCase();
-            if (combinedSearch.includes('nisha') || combinedSearch.includes('rajkumar ram') || combinedSearch.includes('rakesh roshan') || combinedSearch.includes('maria auxilia') || combinedSearch.includes('shani ram')) {
-                return 'purple';
-            }
-
-            let hash = 0;
-            let lowerCode = farmerCode.toLowerCase();
-            for (let i = 0; i < lowerCode.length; i++) {
-                hash = ((hash << 5) - hash) + lowerCode.charCodeAt(i);
-                hash |= 0;
-            }
-            let mod = Math.abs(hash) % 1789;
-
-            if (mod < 104) {
-                return 'purple';
-            } else if (mod < (104 + 178)) {
+            // यदि Column P खाली है तो अधूरा (काला) या डिफ़ॉल्ट स्थिति
+            if (colPVal === '') {
                 return 'black';
-            } else {
-                return 'green';
             }
+
+            return 'green';
         }
 
+        // Column P से सीधे हरा, बैंगनी और काला (166) की असली गिनती करें
         function calculateStatusCounts() {
-            countGreenEl.textContent = "1507";
-            countPurpleEl.textContent = "104";
-            countBlackEl.textContent = "178";
+            let greenCount = 0;
+            let purpleCount = 0;
+            let blackCount = 0;
+
+            rawData.forEach(row => {
+                const status = getFarmerStatus(row);
+                if (status === 'green') greenCount++;
+                else if (status === 'purple') purpleCount++;
+                else if (status === 'black') blackCount++;
+            });
+
+            countGreenEl.textContent = greenCount;
+            countPurpleEl.textContent = purpleCount;
+            countBlackEl.textContent = blackCount;
         }
 
-        // Render matching results limited strictly to maximum 4 items
+        // Render matching results limited strictly to maximum 6 items
         function renderResults(dataList, query = "") {
             matchedCountEl.textContent = dataList.length;
 
@@ -324,8 +352,8 @@
 
             let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
             
-            // Limit strictly to maximum 4 results
-            dataList.slice(0, 4).forEach((row, index) => {
+            // Limit strictly to maximum 6 results
+            dataList.slice(0, 6).forEach((row, index) => {
                 let keys = Object.keys(row);
                 let primaryTitle = row[keys[0]] || `रिकॉर्ड #${index + 1}`;
                 let secondaryTitle = row[keys[1]] || "";
@@ -376,14 +404,20 @@
                             <div class="space-y-1.5 border-t border-slate-100 pt-3 text-xs">
                 `;
 
+                // पहले 2 कॉलम (कोड और नाम) के बाद के सभी कॉलम (नई जोड़ी गई 2 लाइनों सहित) यहाँ दिखेंगे
                 keys.forEach((key, idx) => {
-                    if (idx > 1 && row[key]) {
+                    if (idx > 1 && row[key] !== "") {
                         const isVillageCol = key.toLowerCase().includes('village') || key.toLowerCase().includes('ग्राम') || key.toLowerCase().includes('गाँव');
                         const displayVal = isVillageCol ? row[key] : highlightText(row[key], query);
+                        
+                        // अंतिम 2 नए जोड़े गए कॉलम को थोड़ा हाइलाइट करके दिखाएं
+                        const isNewExtraRow = idx >= keys.length - 2;
+                        const rowHighlightClass = isNewExtraRow ? "bg-emerald-50/60 px-2 py-1 rounded-lg border border-emerald-100/80" : "py-0.5";
+
                         html += `
-                            <div class="flex justify-between py-0.5">
-                                <span class="text-slate-400 font-medium">${key}:</span>
-                                <span class="text-slate-700 font-semibold text-right">${displayVal}</span>
+                            <div class="flex justify-between items-start gap-2 ${rowHighlightClass}">
+                                <span class="text-slate-500 font-medium shrink-0">${key}:</span>
+                                <span class="text-slate-800 font-semibold text-right break-words">${displayVal}</span>
                             </div>
                         `;
                     }
@@ -408,7 +442,7 @@
             resultsContainer.innerHTML = html;
         }
 
-        // Search Filter Logic: Strictly excludes Village column, searches only Farmer Code, Farmer Name, Father/Husband Name
+        // Search Filter Logic: Excludes Village column, searches Farmer Code, Farmer Name, Father/Husband Name & other details
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
             
@@ -513,7 +547,7 @@
             let statusLabel = statusType === 'green' ? 'AgriStack हुआ है (हरा)' : (statusType === 'purple' ? 'नया पंजीयन (बैंगनी)' : 'AgriStack अधूरा था (काला)');
 
             let lines = [
-                "🌾 *किसान कोड विवरण (चोंगरीबहार उपार्जन केंद्र)* 🌾",
+                "🌾 *किसान कोड विवरण (चोंगरीबहार उपार्जन केंद्र • 21-11-2026)* 🌾",
                 "----------------------------------"
             ];
 
@@ -563,7 +597,8 @@
             retryBtn.classList.add('hidden');
 
             try {
-                const response = await fetch(CSV_URL);
+                const cacheBusterUrl = `${CSV_URL}&t=${new Date().getTime()}`;
+                const response = await fetch(cacheBusterUrl);
                 if (!response.ok) throw new Error("Network response was not ok");
                 const dataText = await response.text();
                 
