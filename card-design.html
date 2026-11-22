@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>शोक संदेश एवं तेरहवीं कार्ड मेकर - RUPESH COMPUTERS</title>
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="description" content="RUPESH COMPUTERS का निःशुल्क शोक संदेश एवं तेरहवीं कार्ड जनरेटर टूल। A4 पर 4 या 6 कार्ड और पोस्टकार्ड साइज में तत्काल प्रिंट करें।">
+    <link rel="manifest" id="pwa-manifest-link">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif+Devanagari:wght@400;500;600;700;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=Rozha+One&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-bg: #f1f5f9;
+            --panel-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --accent-color: #1e293b;
+            --accent-hover: #0f172a;
+            --text-main: #1e293b;
+            --card-width: 148mm;
+            --card-height: 105mm;
+            --card-font: 'Noto Serif Devanagari', serif;
+            --body-size: 10.2pt;
+            --line-height: 1.38;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif Devanagari', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .bot-float { animation: float 3s ease-in-out infinite; }
+
+        /* Embed-friendly Tool Container Wrapper */
+        .web-tool-container {
+            width: 100%;
+            max-width: 1420px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 1.25rem;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toast-notice {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 14px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+        .toast-notice.show {
+            opacity: 1;
+        }
+
+        /* Main Workspace Layout */
+        .workspace {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            width: 100%;
+            font-family: 'Noto Serif Devanagari', serif;
+        }
+
+        /* Editor Sidebar */
+        .editor-panel {
+            flex: 1.05;
+            min-width: 340px;
+            max-width: 530px;
+            background: var(--panel-bg);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+            border: 1px solid #e2e8f0;
+            height: fit-content;
+            max-height: 84vh;
+            overflow-y: auto;
+        }
+
+        /* Design Selector Tabs */
+        .design-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .design-btn {
+            padding: 7px 5px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #334155;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .design-btn span.sub {
+            font-size: 0.66rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .design-btn.active {
+            border-color: #1e3a8a;
+            background: #1e3a8a;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.25);
+        }
+
+        .design-btn.active span.sub {
+            color: #dbeafe;
+        }
+
+        /* Highlighted Recipient Input Box */
+        .recipient-highlight-box {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1.5px solid #f59e0b;
+            border-radius: 10px;
+            padding: 9px 11px;
+            margin-top: 2px;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.12);
+        }
+
+        .recipient-highlight-box label {
+            color: #92400e !important;
+            font-weight: 700 !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .recipient-highlight-box input[type="text"] {
+            background-color: #ffffff !important;
+            border: 1.5px solid #d97706 !important;
+            font-weight: 600;
+        }
+
+        .recipient-highlight-box input[type="text"]:focus {
+            border-color: #b45309 !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+
+        .design-btn {
+            padding: 7px 6px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #334155;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .design-btn span.sub {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .design-btn.active {
+            border-color: #1e293b;
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        .design-btn.active span.sub {
+            color: #cbd5e1;
+        }
+
+        /* Preset Quick Chips */
+        .preset-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .chip-btn {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            padding: 3px 8px;
+            border-radius: 14px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .chip-btn:hover {
+            background: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 4px;
+            margin: 14px 0 9px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 7px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .editor-panel label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 3px;
+        }
+
+        .editor-panel input[type="text"],
+        .editor-panel input[type="date"],
+        .editor-panel textarea,
+        .editor-panel select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+            font-size: 0.86rem;
+            color: #0f172a;
+            transition: border-color 0.2s;
+            background-color: #f8fafc;
+        }
+
+        .editor-panel input[type="text"]:focus,
+        .editor-panel input[type="date"]:focus,
+        .editor-panel textarea:focus,
+        .editor-panel select:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+        }
+
+        .date-input-wrap {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .date-picker-btn {
+            position: relative;
+            width: 36px;
+            height: 34px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .date-picker-btn:hover {
+            background: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        .date-picker-hidden {
+            position: absolute;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
+            opacity: 0;
+            cursor: pointer;
+            padding: 0 !important;
+            margin: 0 !important;
+            z-index: 2;
+        }
+
+        .date-picker-mini {
+            width: 32px !important;
+            padding: 5px 3px !important;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .editor-panel textarea {
+            resize: vertical;
+            min-height: 52px;
+            line-height: 1.45;
+        }
+
+        .small-action-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #1e293b;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+        }
+
+        .small-action-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .remove-row-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            border-radius: 4px;
+            padding: 0 7px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .ritual-input-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1.3fr auto;
+            gap: 5px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        .member-input-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Action Buttons */
+        .btn-group {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(6px);
+            padding: 12px 2px 4px 2px;
+            border-top: 1px solid #e2e8f0;
+            z-index: 10;
+        }
+
+        .btn-tool {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Noto Serif Devanagari', sans-serif;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .btn-tool:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary-clear {
+            background-color: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 10px 12px;
+        }
+
+        .btn-secondary-clear:hover {
+            background-color: #ffe4e6;
+            border-color: #fda4af;
+        }
+
+        .btn-whatsapp-send {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28);
+        }
+
+        .btn-whatsapp-send:hover {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.36);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary-print {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+        }
+
+        .btn-primary-print:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.36);
+            transform: translateY(-1px);
+        }
+
+        /* Preview Area */
+        .preview-panel {
+            flex: 1.35;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: radial-gradient(circle at top, #e2e8f0 0%, #cbd5e1 100%);
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid #cbd5e1;
+            overflow-x: auto;
+        }
+
+        .preview-controls {
+            width: 100%;
+            max-width: 156mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #ffffff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+        }
+
+        .preview-controls-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sheet-preview-toggle {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1.5px solid #93c5fd;
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .sheet-preview-toggle:hover {
+            background: #dbeafe;
+        }
+
+        .sheet-preview-toggle.active {
+            background: #1e3a8a;
+            color: #ffffff;
+            border-color: #1e3a8a;
+        }
+
+        .preview-controls select {
+            width: auto;
+            padding: 5px 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            border: 1.5px solid #94a3b8;
+            border-radius: 7px;
+            background-color: #f8fafc;
+            cursor: pointer;
+        }
+
+        .direct-edit-hint {
+            font-size: 0.78rem;
+            color: #713f12;
+            background: #fefce8;
+            border: 1px solid #fde047;
+            padding: 6px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            max-width: 156mm;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* =========================================================
+           POSTCARD BASE & 3 DISTINCT DESIGN STYLES (CLEAN WHITE PAPER)
+           ========================================================= */
+        .print-sheet {
+            display: flex;
+            flex-direction: column;
+            gap: 10mm;
+            align-items: center;
+        }
+
+        /* By default show 1 crisp editable card; when user clicks "शीट प्रिव्यू देखें", show exact A4 multi-card layout */
+        #extraCardsContainer {
+            display: none;
+        }
+
+        .print-sheet.show-sheet-preview {
+            background: #ffffff;
+            padding: 6mm;
+            border-radius: 6px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+            border: 1px solid #94a3b8;
+        }
+
+        .print-sheet.show-sheet-preview.layout-a4-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 4mm;
+            align-items: center;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-2 #extraCardsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 4mm;
+            align-items: center;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-2 .postcard-wrapper {
+            zoom: 0.68;
+            box-shadow: none;
+            outline: 1px dashed #94a3b8;
+        }
+
+        .print-sheet.show-sheet-preview.layout-a4-4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5mm;
+            justify-items: center;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-4 #extraCardsContainer {
+            display: contents;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-4 .postcard-wrapper {
+            zoom: 0.56;
+            box-shadow: none;
+            outline: 1px dashed #94a3b8;
+            outline-offset: 2px;
+        }
+
+        .print-sheet.show-sheet-preview.layout-a4-6 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4mm 5mm;
+            justify-items: center;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-6 #extraCardsContainer {
+            display: contents;
+        }
+        .print-sheet.show-sheet-preview.layout-a4-6 .postcard-wrapper {
+            zoom: 0.50;
+            box-shadow: none;
+            outline: 1px dashed #94a3b8;
+            outline-offset: 2px;
+        }
+
+        .postcard-wrapper {
+            width: var(--card-width);
+            height: var(--card-height);
+            background-color: #ffffff;
+            padding: 4.2mm;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+            position: relative;
+            color: #000000;
+            font-family: var(--card-font);
+            flex-shrink: 0;
+        }
+
+        /* Direct click-to-edit highlight on screen */
+        [contenteditable="true"]:hover {
+            outline: 1px dashed #3b82f6;
+            background-color: rgba(239, 246, 255, 0.4);
+        }
+        [contenteditable="true"]:focus {
+            outline: 1.5px solid #2563eb;
+            background-color: rgba(239, 246, 255, 0.7);
+        }
+
+        /* --- DESIGN 1: CLASSIC EXACT PROFORMA --- */
+        .postcard-wrapper.design-1 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #000000;
+            padding: 3.2mm 5.5mm 3mm 5.5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-1 .top-mantra {
+            display: none;
+        }
+
+        .postcard-wrapper.design-1 .card-title {
+            font-size: 18.5pt;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            line-height: 1.15;
+            color: #000000;
+            border-bottom: 1.5px solid #000000;
+            display: inline-block;
+            padding: 0 6mm 0.5mm 6mm;
+        }
+
+        .postcard-wrapper.design-1 .rituals-box {
+            border: 1.6px solid #000000;
+            border-radius: 6px;
+            padding: 1.8mm 5.5mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 2: DOUBLE BORDER + OM SHANTI HEADER --- */
+        .postcard-wrapper.design-2 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 3.5px double #000000;
+            outline: 1px solid #000000;
+            outline-offset: -5px;
+            padding: 2.8mm 6mm 3mm 6mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-1 .top-mantra {
+            display: none;
+        }
+
+        .postcard-wrapper.design-1 .card-title {
+            font-size: 18pt;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.15;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-1 .rituals-box {
+            border: 1.6px solid #000000;
+            border-radius: 6px;
+            padding: 1.6mm 4mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 2: DOUBLE BORDER + OM SHANTI HEADER --- */
+        .postcard-wrapper.design-2 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 3.5px double #000000;
+            outline: 1px solid #000000;
+            outline-offset: -5px;
+            padding: 2.5mm 5.5mm 3mm 5.5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-2 .top-mantra {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.5mm;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-2 .card-title {
+            font-size: 16.5pt;
+            font-weight: 800;
+            border-bottom: 1.5px solid #000000;
+            padding: 0 8mm 0.5mm 8mm;
+            line-height: 1.15;
+            color: #000000;
+            display: inline-block;
+        }
+
+        .postcard-wrapper.design-2 .rituals-box-container {
+            justify-content: center;
+            padding-left: 0;
+        }
+
+        .postcard-wrapper.design-2 .rituals-box {
+            border: 1.5px solid #000000;
+            border-radius: 0px;
+            box-shadow: 2px 2px 0px #000000;
+            padding: 1.5mm 5mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 3: TRADITIONAL CORNER ORNAMENT + CLEAN OUTLINED HEADER --- */
+        .postcard-wrapper.design-3 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 1.8px solid #000000;
+            padding: 3mm 5mm 3mm 5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-3 .card-border::before,
+        .postcard-wrapper.design-3 .card-border::after {
+            content: "";
+            position: absolute;
+            width: 4.5mm;
+            height: 4.5mm;
+            border: 2px solid #000000;
+            pointer-events: none;
+        }
+
+        .postcard-wrapper.design-3 .card-border::before {
+            top: 1.3mm;
+            left: 1.3mm;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .postcard-wrapper.design-3 .card-border::after {
+            bottom: 1.3mm;
+            right: 1.3mm;
+            border-left: none;
+            border-top: none;
+        }
+
+        .postcard-wrapper.design-3 .top-mantra {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            margin-bottom: 0.8mm;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-3 .card-title {
+            font-size: 16pt;
+            font-weight: 800;
+            background-color: #ffffff;
+            color: #000000;
+            border: 1.6px solid #000000;
+            padding: 0.6mm 9mm;
+            border-radius: 4px;
+            line-height: 1.15;
+            display: inline-block;
+        }
+
+        .postcard-wrapper.design-3 .rituals-box-container {
+            justify-content: center;
+            padding-left: 0;
+        }
+
+        .postcard-wrapper.design-3 .rituals-box {
+            border-top: 1.5px solid #000000;
+            border-bottom: 1.5px solid #000000;
+            border-left: 3.5px solid #000000;
+            border-right: 3.5px solid #000000;
+            border-radius: 2px;
+            padding: 1.5mm 5mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 4: ROUNDED ARCH & INNER FRAME --- */
+        .postcard-wrapper.design-4 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #000000;
+            border-radius: 12px;
+            outline: 1px solid #000000;
+            outline-offset: -4px;
+            padding: 2.8mm 5.5mm 3mm 5.5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-4 .top-mantra {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            margin-bottom: 0.5mm;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-4 .card-title {
+            font-size: 16.5pt;
+            font-weight: 800;
+            color: #000000;
+            border-top: 1.5px solid #000000;
+            border-bottom: 1.5px solid #000000;
+            padding: 0.4mm 10mm;
+            line-height: 1.15;
+            display: inline-block;
+        }
+
+        .postcard-wrapper.design-4 .rituals-box {
+            border: 1.5px dashed #000000;
+            border-radius: 8px;
+            padding: 1.6mm 5.5mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 5: ROYAL DOUBLE-LINE & PILL HEADER --- */
+        .postcard-wrapper.design-5 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 4px double #000000;
+            padding: 2.8mm 5.5mm 3mm 5.5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-5 .top-mantra {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.6mm;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-5 .card-title {
+            font-size: 15.8pt;
+            font-weight: 800;
+            color: #000000;
+            border: 1.8px solid #000000;
+            border-radius: 20px;
+            padding: 0.5mm 10mm;
+            line-height: 1.15;
+            display: inline-block;
+        }
+
+        .postcard-wrapper.design-5 .rituals-box {
+            border: 1.6px solid #000000;
+            outline: 1px solid #000000;
+            outline-offset: 2px;
+            border-radius: 3px;
+            padding: 1.5mm 5mm;
+            background-color: #ffffff;
+        }
+
+        /* --- DESIGN 6: HERITAGE DOTTED OUTER + BOLD INNER --- */
+        .postcard-wrapper.design-6 .card-border {
+            width: 100%;
+            height: 100%;
+            border: 2.5px dotted #000000;
+            outline: 1.8px solid #000000;
+            outline-offset: -4.5px;
+            padding: 3mm 6mm 3mm 6mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .postcard-wrapper.design-6 .top-mantra {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            margin-bottom: 0.5mm;
+            color: #000000;
+        }
+
+        .postcard-wrapper.design-6 .card-title {
+            font-size: 17pt;
+            font-weight: 800;
+            color: #000000;
+            border-bottom: 2.5px double #000000;
+            padding: 0 9mm 0.5mm 9mm;
+            line-height: 1.15;
+            display: inline-block;
+        }
+
+        .postcard-wrapper.design-6 .rituals-box {
+            border: 2.5px double #000000;
+            border-radius: 4px;
+            padding: 1.5mm 5.5mm;
+            background-color: #ffffff;
+        }
+
+        /* Common Inner Typography */
+        .card-header {
+            text-align: center;
+            margin-bottom: 1.2mm;
+        }
+
+        .salutation-block {
+            font-size: var(--body-size);
+            font-weight: 600;
+            color: #000000;
+            line-height: 1.32;
+            margin-bottom: 1.6mm;
+            padding-left: 1mm;
+        }
+
+        .salutation-line-2 {
+            padding-left: 11mm;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .dotted-fill {
+            flex: 1;
+            border-bottom: 1.5px dotted #000000;
+            min-width: 48mm;
+            max-width: 78mm;
+            display: inline-block;
+            padding-left: 4px;
+            font-weight: 700;
+            min-height: 12pt;
+        }
+
+        .main-body-text {
+            font-size: var(--body-size);
+            font-weight: 500;
+            color: #000000;
+            text-align: justify;
+            line-height: var(--line-height);
+            text-indent: 11mm;
+            margin-bottom: 1.8mm;
+        }
+
+        .bold-text {
+            font-weight: 700;
+        }
+
+        .rituals-box-container {
+            display: flex;
+            justify-content: center;
+            padding-left: 0;
+            margin-bottom: 1.8mm;
+        }
+
+        .ritual-row {
+            font-size: var(--body-size);
+            font-weight: 600;
+            line-height: 1.36;
+            color: #000000;
+            white-space: nowrap;
+        }
+
+        .middle-request-text {
+            font-size: calc(var(--body-size) - 0.1pt);
+            font-weight: 500;
+            line-height: 1.34;
+            color: #000000;
+            text-align: justify;
+            text-indent: 8mm;
+            margin-bottom: 1.6mm;
+            padding: 0 1mm;
+        }
+
+        .card-footer-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 4mm;
+            margin-top: auto;
+            padding-top: 1mm;
+        }
+
+        .footer-left {
+            flex: 1.15;
+            font-size: calc(var(--body-size) - 0.3pt);
+            font-weight: 600;
+            line-height: 1.32;
+            color: #000000;
+            text-align: left;
+            padding-left: 1mm;
+        }
+
+        .footer-right {
+            flex: 1;
+            text-align: center;
+            font-size: calc(var(--body-size) - 0.3pt);
+            font-weight: 600;
+            line-height: 1.28;
+            color: #000000;
+        }
+
+        .vineet-label {
+            font-weight: 700;
+            margin-bottom: 0.5mm;
+        }
+
+        /* Responsive Mobile Adjustments */
+        @media (max-width: 900px) {
+            .workspace {
+                flex-direction: column;
+                padding: 12px;
+            }
+            .editor-panel {
+                max-width: 100%;
+                max-height: none;
+            }
+            .preview-panel {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .postcard-wrapper {
+                zoom: 0.62;
+            }
+        }
+
+        /* =========================================================
+           PRINT STYLES (POSTCARD & A4 1/2/4/6-UP PRINT)
+           ========================================================= */
+        @media print {
+            body {
+                background: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            /* Hide Website Header, Footer, Mobile Bar, AI Chatbot & Tool Chrome when printing */
+            #site-header,
+            #contact-footer,
+            #mobile-bottom-bar,
+            #chatbot-container,
+            .tool-hero-header,
+            .tool-bar-header,
+            .toast-notice,
+            .editor-panel,
+            .preview-controls,
+            .direct-edit-hint {
+                display: none !important;
+            }
+            main,
+            section,
+            .tool-outer-wrap {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: none !important;
+                background: #ffffff !important;
+            }
+            .web-tool-container {
+                border: none !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                max-width: none !important;
+                border-radius: 0 !important;
+            }
+            .workspace {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: none !important;
+                background: #ffffff !important;
+            }
+            .preview-panel {
+                background: none !important;
+                border: none !important;
+                padding: 0 !important;
+                display: block !important;
+                overflow: visible !important;
+            }
+            [contenteditable="true"] {
+                outline: none !important;
+                background: transparent !important;
+            }
+
+            /* Mode 1: Direct Postcard Size Paper (148mm x 105mm) */
+            body.print-mode-postcard .print-sheet {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            body.print-mode-postcard .postcard-wrapper {
+                box-shadow: none !important;
+                zoom: 1 !important;
+                margin: 0 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* Mode 2: A4 Single Card */
+            body.print-mode-a4-1 .print-sheet {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                padding-top: 8mm !important;
+            }
+            body.print-mode-a4-1 .postcard-wrapper {
+                box-shadow: none !important;
+                zoom: 1 !important;
+            }
+
+            /* Mode 3: A4 2 Cards (Top & Bottom) */
+            body.print-mode-a4-2 .print-sheet {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 4mm !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding-top: 4mm !important;
+            }
+            body.print-mode-a4-2 #extraCardsContainer {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 4mm !important;
+            }
+            body.print-mode-a4-2 .postcard-wrapper {
+                box-shadow: none !important;
+                zoom: 1 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .cut-line {
+                width: 148mm;
+                border-top: 1px dashed #666;
+                text-align: center;
+                font-size: 8pt;
+                color: #666;
+                margin: 1mm 0;
+            }
+
+            /* Mode 4: A4 4 Cards (2 Columns x 2 Rows - 66% scale, crisp & clear) */
+            body.print-mode-a4-4 .print-sheet {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 5mm !important;
+                padding: 8mm 6mm !important;
+                justify-items: center !important;
+                align-items: center !important;
+                width: 210mm !important;
+            }
+            body.print-mode-a4-4 #extraCardsContainer {
+                display: contents !important;
+            }
+            body.print-mode-a4-4 .postcard-wrapper {
+                box-shadow: none !important;
+                zoom: 0.65 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                outline: 1px dashed #94a3b8;
+                outline-offset: 2mm;
+            }
+
+            /* Mode 5: A4 6 Cards (2 Columns x 3 Rows - 62% scale, fits 6 on 1 A4 sheet) */
+            body.print-mode-a4-6 .print-sheet {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 3.5mm 5mm !important;
+                padding: 4mm 6mm !important;
+                justify-items: center !important;
+                align-items: center !important;
+                width: 210mm !important;
+            }
+            body.print-mode-a4-6 #extraCardsContainer {
+                display: contents !important;
+            }
+            body.print-mode-a4-6 .postcard-wrapper {
+                box-shadow: none !important;
+                zoom: 0.61 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                outline: 1px dashed #94a3b8;
+                outline-offset: 1.5mm;
+            }
+        }
+    </style>
+    <style id="dynamicPageStyle">
+        @page { size: A4 portrait; margin: 5mm; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white print-mode-a4-4">
+
+    <!-- Common Header & Navigation (Loaded from common-layout.js) -->
+    <div id="site-header"></div>
+
+    <!-- MAIN PAGE CONTENT -->
+    <main class="min-h-[65vh]">
+        <section class="py-10 sm:py-14 bg-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 tool-outer-wrap">
+                
+                <!-- Tool Page Heading (Matching RUPESH COMPUTERS Style) -->
+                <div class="text-center max-w-3xl mx-auto mb-8 tool-hero-header">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-800 bg-blue-100 px-3.5 py-1 rounded-full mb-3">
+                        <i class="fa-solid fa-scroll"></i> निःशुल्क प्रिंटिंग एवं कार्ड जनरेटर टूल
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900">कस्टम शोक संदेश एवं तेरहवीं कार्ड प्रोफार्मा</h1>
+                    <p class="mt-2 text-slate-600 text-sm">पोस्टकार्ड साइज (14.8 × 10.5 सेमी) या A4 पेज पर 1, 2, 4 व 6 कार्ड एक साथ तैयार करें और सीधे प्रिंट या PDF सेव करें।</p>
+                </div>
+
+                <div class="web-tool-container" id="shokSandeshToolWidget">
+                    <!-- Tool Action Bar -->
+                    <div class="tool-bar-header bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white px-5 py-3.5 flex flex-wrap justify-between items-center gap-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-sm sm:text-base font-black tracking-wide">शोक संदेश प्रोफार्मा एडिटर</h2>
+                                <p class="text-[11px] text-blue-200">शुद्ध हिंदी वर्तनी • लाइव प्रिव्यू • 100% विज्ञापन-मुक्त</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="sendWhatsAppCard()" class="bg-[#25D366] hover:bg-[#1ebe5d] text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp पर भेजें
+                            </button>
+                            <button type="button" onclick="downloadCardImage()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-image"></i> कार्ड फोटो सेव करें
+                            </button>
+                            <button type="button" onclick="copyShareLink()" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-share-nodes text-amber-300"></i> लिंक कॉपी करें
+                            </button>
+                            <button type="button" onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-print"></i> प्रिंट / PDF सेव करें
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workspace">
+                        <!-- Left Form Editor -->
+                        <aside class="editor-panel">
+                            <div class="section-title">
+                                <span>डिज़ाइन एवं फॉन्ट सेटिंग (6 डिज़ाइन)</span>
+                            </div>
+                            <div class="design-selector">
+                                <button type="button" class="design-btn active" id="btnDesign1" onclick="selectDesign('design-1')">
+                                    डिज़ाइन 1
+                                    <span class="sub">सादा क्लासिक</span>
+                                </button>
+                                <button type="button" class="design-btn" id="btnDesign2" onclick="selectDesign('design-2')">
+                                    डिज़ाइन 2
+                                    <span class="sub">डबल बॉर्डर + ॐ</span>
+                                </button>
+                                <button type="button" class="design-btn" id="btnDesign3" onclick="selectDesign('design-3')">
+                                    डिज़ाइन 3
+                                    <span class="sub">कोने बॉर्डर + बॉक्स</span>
+                                </button>
+                                <button type="button" class="design-btn" id="btnDesign4" onclick="selectDesign('design-4')">
+                                    डिज़ाइन 4
+                                    <span class="sub">गोल कोने + डैश बॉक्स</span>
+                                </button>
+                                <button type="button" class="design-btn" id="btnDesign5" onclick="selectDesign('design-5')">
+                                    डिज़ाइन 5
+                                    <span class="sub">शाही गोल शीर्षक</span>
+                                </button>
+                                <button type="button" class="design-btn" id="btnDesign6" onclick="selectDesign('design-6')">
+                                    डिज़ाइन 6
+                                    <span class="sub">बिंदु बॉर्डर + डबल रेखा</span>
+                                </button>
+                            </div>
+
+                            <div class="form-grid-3">
+                                <div class="form-group">
+                                    <label>फॉन्ट स्टाइल</label>
+                                    <select id="inFontFamily" onchange="updateTypography()">
+                                        <option value="'Noto Serif Devanagari', serif">नोटो सेरिफ (पारंपरिक)</option>
+                                        <option value="'Tiro Devanagari Hindi', serif">तिरो देवनागरी (सुंदर)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>अक्षर साइज (pt)</label>
+                                    <select id="inFontSize" onchange="updateTypography()">
+                                        <option value="9.5pt">छोटा (9.5 pt)</option>
+                                        <option value="10.2pt" selected>मध्यम (10.2 pt)</option>
+                                        <option value="11pt">बड़ा (11 pt)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>लाइन गैप</label>
+                                    <select id="inLineHeight" onchange="updateTypography()">
+                                        <option value="1.28">कम (1.28)</option>
+                                        <option value="1.38" selected>सामान्य (1.38)</option>
+                                        <option value="1.50">अधिक (1.50)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="section-title">
+                                <span>1. शीर्षक एवं संबोधन (कस्टम लिखें)</span>
+                            </div>
+                            <div class="preset-bar">
+                                <button type="button" class="chip-btn" onclick="setHeadingPreset('शोक संदेश', '॥ ॐ शांति ॥')">शोक संदेश</button>
+                                <button type="button" class="chip-btn" onclick="setHeadingPreset('शोक पत्र', '॥ श्री गणेशाय नमः ॥')">शोक पत्र</button>
+                                <button type="button" class="chip-btn" onclick="setHeadingPreset('तेरहवीं एवं श्रद्धांजलि', '॥ ॐ शांति ॥')">तेरहवीं निमंत्रण</button>
+                                <button type="button" class="chip-btn" onclick="setHeadingPreset('उठावना / शोक सभा', '॥ ॐ शांति ॥')">शोक सभा</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>ऊपरी मंत्र (डिज़ाइन 2 व 3 हेतु)</label>
+                                    <input type="text" id="inMantra" value="॥ ॐ शांति ॥" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>मुख्य शीर्षक</label>
+                                    <input type="text" id="inTitle" value="शोक संदेश" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>संबोधन पंक्ति 1</label>
+                                    <input type="text" id="inSalutation1" value="मान्यवर," oninput="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>संबोधन पंक्ति 2</label>
+                                    <input type="text" id="inSalutation2" value="श्रीमान् / श्रीमती" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group full recipient-highlight-box">
+                                    <label for="inRecipient">
+                                        <i class="fa-solid fa-star text-amber-600"></i>
+                                        प्राप्तकर्ता का नाम (खाली रखें तो डॉटेड लाइन प्रिंट होगी)
+                                    </label>
+                                    <input type="text" id="inRecipient" placeholder="यहाँ नाम लिखें या डॉटेड लाइन के लिए खाली छोड़ें..." oninput="updatePreview()">
+                                </div>
+                            </div>
+
+                            <div class="section-title">
+                                <span>2. मुख्य संदेश / पैराग्राफ (पूरी तरह कस्टम)</span>
+                                <button type="button" class="small-action-btn" onclick="rebuildParagraphFromFields()">ऑटो वाक्य बनाएं</button>
+                            </div>
+                            <div class="preset-bar">
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('हमारे पूजनीय पिताजी')">पिताजी</button>
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('हमारी पूजनीया माताजी')">माताजी</button>
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('हमारे पूजनीय दादाजी')">दादाजी</button>
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('हमारी पूजनीया दादीजी')">दादीजी</button>
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('मेरे धर्मपत्नी / पति')">पति/पत्नी</button>
+                                <button type="button" class="chip-btn" onclick="setRelationPreset('हमारे प्रिय भ्राता')">भाई</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>संबंध चुनें / लिखें</label>
+                                    <input type="text" id="helperRelation" value="हमारे पूजनीय पिताजी" placeholder="जैसे: हमारे पूजनीय पिताजी" oninput="rebuildParagraphFromFields()">
+                                </div>
+                                <div class="form-group">
+                                    <label>दिवंगत का नाम</label>
+                                    <input type="text" id="helperName" placeholder="उदा. स्व. श्री ... जी" oninput="rebuildParagraphFromFields()">
+                                </div>
+                                <div class="form-group">
+                                    <label>निधन दिनांक</label>
+                                    <div class="date-input-wrap">
+                                        <input type="text" id="helperDate" placeholder="DD / MM / YYYY" oninput="rebuildParagraphFromFields()">
+                                        <span class="date-picker-btn" onclick="openNativeDatePicker(this)" title="कैलेंडर से तारीख चुनें">
+                                            <i class="fa-regular fa-calendar-days text-sm pointer-events-none"></i>
+                                            <input type="date" class="date-picker-hidden" onchange="applyHelperDate(this)" oninput="applyHelperDate(this)">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>निधन का दिन (स्वतः या लिखें)</label>
+                                    <input type="text" id="helperDay" placeholder="जैसे: शुक्रवार" oninput="rebuildParagraphFromFields()">
+                                </div>
+                                <div class="form-group full">
+                                    <label>कस्टम मुख्य पैराग्राफ (यहाँ आप कोई भी शब्द अपनी मर्जी से बदल या लिख सकते हैं)</label>
+                                    <textarea id="inCustomParagraph" rows="4" oninput="updatePreview()">अत्यंत दुःख के साथ सूचित करना पड़ रहा है कि हमारे पूजनीय पिताजी [दिवंगत का नाम] का दिनांक [तिथि] दिन [दिन] को स्वर्गवास हो गया है। जिनका अंत्येष्टि एवं दशगात्र कार्यक्रम निम्नानुसार रखा गया है।</textarea>
+                                </div>
+                            </div>
+
+                            <div class="section-title">
+                                <span>3. कार्यक्रम बॉक्स (कितनी भी पंक्तियाँ जोड़ें)</span>
+                                <button type="button" class="small-action-btn" onclick="addRitualRow('', '')">+ कार्यक्रम जोड़ें</button>
+                            </div>
+                            <div class="preset-bar">
+                                <button type="button" class="chip-btn" onclick="applyRitualTemplate('dashkarm')">दशकर्म + ब्राह्मण भोज</button>
+                                <button type="button" class="chip-btn" onclick="applyRitualTemplate('terahvin')">उठावना + तेरहवीं</button>
+                                <button type="button" class="chip-btn" onclick="applyRitualTemplate('shradhanjali')">शोक सभा + ब्रह्मभोज</button>
+                            </div>
+                            <div id="ritualsInputsContainer">
+                                <!-- Dynamic Ritual Rows Rendered Here -->
+                            </div>
+
+                            <div class="section-title">
+                                <span>4. निवेदन वाक्य एवं विनीत (परिवार)</span>
+                                <button type="button" class="small-action-btn" onclick="addMemberField('')">+ नाम जोड़ें</button>
+                            </div>
+                            <div class="preset-bar">
+                                <button type="button" class="chip-btn" onclick="setFooterPreset('जिसमें आप सपरिवार पधारकर दिवंगत आत्मा की शांति एवं शोकाकुल परिवार को सांत्वना प्रदान कर हमें अनुगृहीत करें।')">निवेदन 1 (मानक)</button>
+                                <button type="button" class="chip-btn" onclick="setFooterPreset('अतः आपसे विनम्र अनुरोध है कि उपरोक्त कार्यक्रम में पधारकर दिवंगत आत्मा को श्रद्धांजलि अर्पित करें।')">निवेदन 2 (संक्षिप्त)</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label>मध्य भाग का निवेदन वाक्य (कार्यक्रम बॉक्स के ठीक नीचे दिखेगा)</label>
+                                    <textarea id="inFooterNote" rows="2" oninput="updatePreview()">जिसमें आप सपरिवार पधारकर दिवंगत आत्मा की शांति एवं शोकाकुल परिवार को सांत्वना प्रदान कर हमें अनुगृहीत करें।</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>विनीत / शोकाकुल शीर्षक</label>
+                                    <input type="text" id="inVineetTitle" value="विनीत" placeholder="विनीत / शोकाकुल परिवार" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>संपर्क मोबाइल (वैकल्पिक)</label>
+                                    <input type="text" id="inMobile" placeholder="मोबाइल नं. (यदि लिखना हो)" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group full" id="membersInputsContainer">
+                                    <!-- Dynamic Member Rows Rendered Here -->
+                                </div>
+                                <div class="form-group">
+                                    <label>ग्राम / मोहल्ला / पता</label>
+                                    <input type="text" id="inVillage" placeholder="ग्राम / पता लिखें" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>तहसील / जिला / राज्य</label>
+                                    <input type="text" id="inDistrict" placeholder="जिला व राज्य लिखें" oninput="updatePreview()">
+                                </div>
+                                <div class="form-group full">
+                                    <label>नीचे बाईं ओर का पता / विशेष टिप्पणी (वैकल्पिक)</label>
+                                    <input type="text" id="inBottomLeftNote" placeholder="जैसे: कार्यक्रम स्थल - निज निवास ग्राम..." oninput="updatePreview()">
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn-tool btn-secondary-clear" onclick="clearAllBlank()" title="सभी बॉक्स खाली करें">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    साफ करें
+                                </button>
+                                <button type="button" class="btn-tool btn-whatsapp-send" onclick="sendWhatsAppCard()">
+                                    <i class="fa-brands fa-whatsapp text-base"></i>
+                                    WhatsApp भेजें
+                                </button>
+                                <button type="button" class="btn-tool btn-primary-print" onclick="window.print()">
+                                    <i class="fa-solid fa-print"></i>
+                                    प्रिंट करें
+                                </button>
+                            </div>
+                        </aside>
+
+                        <!-- Right Live Postcard Preview -->
+                        <section class="preview-panel">
+                            <div class="preview-controls">
+                                <span><strong>पेपर व प्रिंट:</strong></span>
+                                <div class="preview-controls-group">
+                                    <select id="printLayoutSelect" onchange="changePrintLayout()">
+                                        <option value="a4-4" selected>A4 पेपर पर 4 कार्ड (2×2)</option>
+                                        <option value="a4-6">A4 पेपर पर 6 कार्ड (2×3)</option>
+                                        <option value="a4-2">A4 पेपर पर 2 कार्ड</option>
+                                        <option value="a4-1">A4 पेपर पर 1 कार्ड</option>
+                                        <option value="postcard">सीधे पोस्टकार्ड पेपर (14.8×10.5 सेमी)</option>
+                                    </select>
+                                    <button type="button" id="toggleSheetPreviewBtn" class="sheet-preview-toggle" onclick="toggleSheetPreview()" title="पूरा A4 पेज प्रिव्यू देखें या वापस 1 कार्ड पर जाएं">
+                                        <i class="fa-solid fa-table-cells"></i>
+                                        <span id="toggleSheetPreviewText">शीट प्रिव्यू देखें</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="direct-edit-hint" id="previewHintText">
+                                💡 <strong>टिप:</strong> अभी 1 बड़ा कार्ड दिख रहा है। पूरा A4 पेज (4 या 6 कार्ड) एक साथ देखने के लिए ऊपर <strong>"शीट प्रिव्यू देखें"</strong> दबाएं।
+                            </div>
+
+                            <div class="print-sheet layout-a4-4" id="printSheet">
+                                <!-- Primary Postcard -->
+                                <div class="postcard-wrapper design-1" id="cardTemplate">
+                                    <div class="card-border">
+                                        <!-- Top Title -->
+                                        <div class="card-header">
+                                            <div class="top-mantra" id="outMantra" contenteditable="true">॥ ॐ शांति ॥</div>
+                                            <div class="card-title" id="outTitle" contenteditable="true">शोक संदेश</div>
+                                        </div>
+
+                                        <!-- Salutation -->
+                                        <div class="salutation-block">
+                                            <div id="outSalutation1" contenteditable="true">मान्यवर,</div>
+                                            <div class="salutation-line-2">
+                                                <span id="outSalutation2" contenteditable="true">श्रीमान् / श्रीमती</span>
+                                                <span class="dotted-fill" id="outRecipient" contenteditable="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Main Body Paragraph -->
+                                        <div class="main-body-text" id="outCustomParagraph" contenteditable="true">
+                                            अत्यंत दुःख के साथ सूचित करना पड़ रहा है कि हमारे पूजनीय पिताजी [दिवंगत का नाम] का दिनांक [तिथि] दिन [दिन] को स्वर्गवास हो गया है। जिनका अंत्येष्टि एवं दशगात्र कार्यक्रम निम्नानुसार रखा गया है।
+                                        </div>
+
+                                        <!-- Middle Rounded Date Box -->
+                                        <div class="rituals-box-container">
+                                            <div class="rituals-box" id="outRitualsBox">
+                                                <!-- Ritual rows rendered dynamically -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Middle Request Sentence (Well-aligned below rituals box) -->
+                                        <div class="middle-request-text" id="outFooterNote" contenteditable="true">
+                                            जिसमें आप सपरिवार पधारकर दिवंगत आत्मा की शांति एवं शोकाकुल परिवार को सांत्वना प्रदान कर हमें अनुगृहीत करें।
+                                        </div>
+
+                                        <!-- Bottom Footer Grid -->
+                                        <div class="card-footer-grid">
+                                            <div class="footer-left" id="outBottomLeftNote" contenteditable="true"></div>
+                                            <div class="footer-right">
+                                                <div class="vineet-label" id="outVineetTitle" contenteditable="true">विनीत</div>
+                                                <div id="outMembersList" contenteditable="true"></div>
+                                                <div id="outVillage" contenteditable="true"></div>
+                                                <div id="outDistrict" contenteditable="true"></div>
+                                                <div id="outMobile" contenteditable="true"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Extra Copies Container (Hidden on screen, automatically printed as per selected layout) -->
+                                <div id="extraCardsContainer"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Common Footer (RUPESH COMPUTERS) -->
+    <footer id="contact-footer" class="bg-slate-950 text-slate-300 py-12 border-t-4 border-amber-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-white text-xl font-black mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-laptop-code text-amber-400"></i> RUPESH COMPUTERS
+                </h3>
+                <p class="text-sm mb-3">सभी डिजिटल, बैंकिंग एवं ऑनलाइन सेवाओं का एक मात्र विश्वसनीय केंद्र।</p>
+                <p class="text-xs text-slate-300 mb-3">
+                    <i class="fa-solid fa-envelope text-amber-400 mr-1"></i>
+                    <a href="mailto:help@rupeshcomputers.in" class="hover:text-amber-300 underline" target="_blank" rel="noopener noreferrer">help@rupeshcomputers.in</a>
+                </p>
+                <div class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-lg mb-4">
+                    <i class="fa-regular fa-clock"></i> सोम - शनि: 10:00 AM - 06:00 PM (रविवार बंद)
+                </div>
+
+                <!-- Live Visitor Counter Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 max-w-xs flex items-center justify-between shadow-inner">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">कुल विज़िटर्स (Visitors)</div>
+                            <div id="visitor-count" class="text-base font-black text-amber-400 tracking-wider">14</div>
+                        </div>
+                    </div>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-amber-400"></i> चोंगरीबहार शाखा
+                </h4>
+                <p class="text-sm mb-1.5">मुख्य मार्ग, चोंगरीबहार</p>
+                <p class="text-xs text-slate-300 mb-1.5">मोबाइल / WhatsApp: <a href="tel:6264531630" class="text-amber-300 font-bold" target="_blank" rel="noopener noreferrer">6264531630</a></p>
+                <p class="text-xs text-slate-300 mb-2">ईमेल: <a href="mailto:chongribahar@rupeshcomputers.in" class="text-amber-300" target="_blank" rel="noopener noreferrer">chongribahar@rupeshcomputers.in</a></p>
+                <div class="flex flex-wrap gap-3 text-xs font-bold">
+                    <a href="https://wa.me/916264531630" target="_blank" class="text-emerald-400 hover:underline" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                    <a href="https://maps.google.com/?q=Chongribahar" target="_blank" class="text-amber-400 hover:underline" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> गूगल मैप</a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-amber-400"></i> दोकड़ा शाखा
+                </h4>
+                <p class="text-sm mb-1.5">ग्राम - दोकड़ा (मुख्य मार्ग)</p>
+                <p class="text-xs text-slate-300 mb-1.5">मोबाइल / WhatsApp: <a href="tel:9713926390" class="text-amber-300 font-bold" target="_blank" rel="noopener noreferrer">9713926390</a></p>
+                <p class="text-xs text-slate-300 mb-2">ईमेल: <a href="mailto:dokda@rupeshcomputers.in" class="text-amber-300" target="_blank" rel="noopener noreferrer">dokda@rupeshcomputers.in</a></p>
+                <div class="flex flex-wrap gap-3 text-xs font-bold">
+                    <a href="https://wa.me/919713926390" target="_blank" class="text-emerald-400 hover:underline" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                    <a href="https://maps.google.com/?q=Dokda" target="_blank" class="text-amber-400 hover:underline" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> गूगल मैप</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer & Credits -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-slate-800 text-center text-xs pb-16 sm:pb-4">
+            <p class="text-slate-400 mb-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800 inline-block max-w-2xl">
+                ⚠️ <b>अस्वीकरण (Disclaimer):</b> इस वेबसाइट पर दी गई सभी सरकारी लिंक और जानकारी केवल सुविधा के लिए हैं। किसी भी त्रुटि या अद्यतन जानकारी के लिए संबंधित विभाग की आधिकारिक वेबसाइट या कार्यालय से पुष्टि अवश्य करें।
+            </p>
+            <p class="text-slate-400 mb-1">© 2026 Rupesh Computers (Chongribahar &amp; Dokda). All rights reserved.</p>
+            <p class="text-amber-400 font-bold tracking-wide">Website Created &amp; Designed by: अविनाश प्रसाद &amp; रूपेश प्रसाद</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Bar -->
+    <div id="mobile-bottom-bar" class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-3 shadow-lg sm:hidden flex justify-around items-center">
+        <a id="mobile-call-btn" href="tel:6264531630" class="flex items-center gap-1.5 bg-blue-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-solid fa-phone"></i> कॉल करें
+        </a>
+        <a id="mobile-wa-btn" href="https://wa.me/916264531630" target="_blank" class="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+        <button onclick="openChatWindow()" class="flex items-center gap-1.5 bg-slate-900 text-white px-3.5 py-2 rounded-full text-xs font-bold shadow">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Gemini AI
+        </button>
+    </div>
+
+    <!-- AI Chatbot -->
+    <div id="chatbot-container" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end">
+        <div id="chat-window" class="hidden w-[92vw] sm:w-[385px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 mb-3 overflow-hidden flex-col transition-all origin-bottom-right backdrop-blur-xl">
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white p-4 flex justify-between items-center shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 flex items-center justify-center shadow-lg font-bold">
+                        <i class="fa-solid fa-robot text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-sm tracking-wide flex items-center gap-1.5">
+                            रूपेश AI असिस्टेंट
+                            <span class="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full">✨ Gemini AI</span>
+                        </h4>
+                        <p class="text-[10px] text-amber-300 font-medium flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> स्मार्ट दस्तावेज एवं योजना गाइड
+                        </p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            
+            <div id="chat-messages" class="h-[320px] overflow-y-auto p-4 space-y-3 bg-slate-50/70 text-sm">
+                <div class="flex gap-2.5">
+                    <div class="w-7 h-7 rounded-xl bg-slate-900 shrink-0 flex items-center justify-center mt-1 shadow-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles text-xs text-amber-400"></i>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-700 text-xs leading-relaxed">
+                        नमस्ते! 🙏 मैं <b>रूपेश कंप्यूटर्स (Gemini AI)</b> असिस्टेंट हूँ। आप मुझसे किसी भी प्रमाण पत्र के दस्तावेज, सरकारी योजना, Indane गैस बुकिंग या डिजिटल टूल के बारे में कोई भी सवाल पूछ सकते हैं:
+                        <div class="mt-3 flex flex-col gap-1.5">
+                            <button onclick="handleQuickAction('lpg')" class="text-left bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-simple text-orange-600"></i> Indane गैस बुकिंग व पेमेंट नियम
+                            </button>
+                            <button onclick="handleQuickAction('privacy')" class="text-left bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-emerald-600"></i> डेटा सुरक्षा व विज्ञापन-मुक्त (No Ads)
+                            </button>
+                            <button onclick="handleQuickAction('pwa')" class="text-left bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> मोबाइल में ऐप इंस्टॉल कैसे करें?
+                            </button>
+                            <button onclick="handleQuickAction('aadhaar')" class="text-left bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-2">
+                                <i class="fa-solid fa-fingerprint text-blue-600"></i> आधार / पैन / सेवा सेतु स्टेटस लिंक
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-t border-slate-200 bg-white shadow-inner">
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="अपना सवाल यहाँ लिखें..." class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 bg-slate-50" required="" autocomplete="off">
+                    <button type="submit" class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-900 to-blue-900 text-white flex items-center justify-center hover:scale-105 transition shrink-0 shadow-md">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <button onclick="toggleChat()" id="chat-toggle-btn" class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-slate-900 via-blue-900 to-amber-500 hover:scale-110 text-white rounded-full shadow-[0_10px_25px_rgba(15,23,42,0.5)] flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 bot-float ring-4 ring-white/90 group">
+            <i class="fa-solid fa-robot group-hover:rotate-12 transition-transform text-amber-300"></i>
+        </button>
+    </div>
+
+    <div class="toast-notice" id="toastNotice"></div>
+
+    <!-- Common Site Layout & Tools Scripts -->
+    <script src="common-layout.js"></script>
+    <script src="tools.js"></script>
+
+    <script>
+        const hindiDays = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+
+        // Sync direct card edits back to left form inputs so design switch never loses data
+        function syncDirectEditsToInputs() {
+            const directMap = [
+                ['outMantra', 'inMantra'],
+                ['outTitle', 'inTitle'],
+                ['outSalutation1', 'inSalutation1'],
+                ['outSalutation2', 'inSalutation2'],
+                ['outRecipient', 'inRecipient'],
+                ['outCustomParagraph', 'inCustomParagraph'],
+                ['outFooterNote', 'inFooterNote'],
+                ['outBottomLeftNote', 'inBottomLeftNote'],
+                ['outVineetTitle', 'inVineetTitle'],
+                ['outVillage', 'inVillage'],
+                ['outDistrict', 'inDistrict']
+            ];
+
+            directMap.forEach(([outId, inId]) => {
+                const outEl = document.getElementById(outId);
+                const inEl = document.getElementById(inId);
+                if (outEl && inEl) {
+                    inEl.value = outEl.innerText.trim();
+                }
+            });
+        }
+
+        function selectDesign(designClass) {
+            syncDirectEditsToInputs();
+
+            const card = document.getElementById('cardTemplate');
+            card.classList.remove('design-1', 'design-2', 'design-3', 'design-4', 'design-5', 'design-6');
+            card.classList.add(designClass);
+
+            document.querySelectorAll('.design-btn').forEach(btn => btn.classList.remove('active'));
+            const designNum = designClass.replace('design-', '');
+            const activeBtn = document.getElementById('btnDesign' + designNum);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            syncCopies();
+        }
+
+        function updateTypography() {
+            const root = document.documentElement;
+            root.style.setProperty('--card-font', document.getElementById('inFontFamily').value);
+            root.style.setProperty('--body-size', document.getElementById('inFontSize').value);
+            root.style.setProperty('--line-height', document.getElementById('inLineHeight').value);
+            syncCopies();
+        }
+
+        function setHeadingPreset(title, mantra) {
+            document.getElementById('inTitle').value = title;
+            document.getElementById('inMantra').value = mantra;
+            updatePreview();
+        }
+
+        function setRelationPreset(relText) {
+            document.getElementById('helperRelation').value = relText;
+            rebuildParagraphFromFields();
+        }
+
+        function setFooterPreset(text) {
+            document.getElementById('inFooterNote').value = text;
+            updatePreview();
+        }
+
+        function openNativeDatePicker(wrapperEl) {
+            const input = wrapperEl.querySelector('input[type="date"]');
+            if (!input) return;
+            try {
+                if (typeof input.showPicker === 'function') {
+                    input.showPicker();
+                } else {
+                    input.focus();
+                    input.click();
+                }
+            } catch (e) {
+                input.focus();
+            }
+        }
+
+        function applyHelperDate(pickerEl) {
+            if (!pickerEl || !pickerEl.value) return;
+            const [y, m, d] = pickerEl.value.split('-').map(Number);
+            if (!y || !m || !d) return;
+            document.getElementById('helperDate').value = `${String(d).padStart(2, '0')} / ${String(m).padStart(2, '0')} / ${y}`;
+            const dateObj = new Date(y, m - 1, d);
+            document.getElementById('helperDay').value = hindiDays[dateObj.getDay()];
+            rebuildParagraphFromFields();
+        }
+
+        function rebuildParagraphFromFields() {
+            const rel = document.getElementById('helperRelation').value.trim() || '[संबंध]';
+            const name = document.getElementById('helperName').value.trim() || '[दिवंगत का नाम]';
+            const dt = document.getElementById('helperDate').value.trim() || '[तिथि]';
+            const day = document.getElementById('helperDay').value.trim() || '[दिन]';
+
+            const sentence = `अत्यंत दुःख के साथ सूचित करना पड़ रहा है कि ${rel} ${name} का दिनांक ${dt} दिन ${day} को स्वर्गवास हो गया है। जिनका अंत्येष्टि एवं दशगात्र कार्यक्रम निम्नानुसार रखा गया है।`;
+            document.getElementById('inCustomParagraph').value = sentence;
+            updatePreview();
+        }
+
+        function addRitualRow(dateVal = '', eventVal = '') {
+            const container = document.getElementById('ritualsInputsContainer');
+            const row = document.createElement('div');
+            row.className = 'ritual-input-row';
+            row.innerHTML = `
+                <div class="date-input-wrap">
+                    <input type="text" class="ritual-date-in" value="${dateVal}" placeholder="दिनांक (23/11/2026)" oninput="updatePreview()">
+                    <span class="date-picker-btn" onclick="openNativeDatePicker(this)" title="तारीख चुनें">
+                        <i class="fa-regular fa-calendar-days text-sm pointer-events-none"></i>
+                        <input type="date" class="date-picker-hidden" onchange="pickRitualDate(this)" oninput="pickRitualDate(this)">
+                    </span>
+                </div>
+                <input type="text" class="ritual-event-in" value="${eventVal}" placeholder="दिन व कार्यक्रम (जैसे: सोमवार — दशकर्म)" oninput="updatePreview()">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove(); updatePreview();" title="पंक्ति हटाएं">×</button>
+            `;
+            container.appendChild(row);
+            updatePreview();
+        }
+
+        function pickRitualDate(pickerEl) {
+            if (!pickerEl || !pickerEl.value) return;
+            const [y, m, d] = pickerEl.value.split('-').map(Number);
+            if (!y || !m || !d) return;
+            const formatted = `${String(d).padStart(2, '0')} / ${String(m).padStart(2, '0')} / ${y}`;
+            const dateObj = new Date(y, m - 1, d);
+            const dayName = hindiDays[dateObj.getDay()];
+
+            const row = pickerEl.closest('.ritual-input-row');
+            row.querySelector('.ritual-date-in').value = formatted;
+            const evInput = row.querySelector('.ritual-event-in');
+            const currentVal = evInput.value.trim();
+
+            // Replace existing day name or prepend new day name cleanly
+            const dayRegex = new RegExp(`^(${hindiDays.join('|')})\\s*(—|-|:)?\\s*`);
+            if (!currentVal) {
+                evInput.value = `${dayName} — `;
+            } else if (dayRegex.test(currentVal)) {
+                evInput.value = currentVal.replace(dayRegex, `${dayName} — `);
+            } else {
+                evInput.value = `${dayName} — ${currentVal}`;
+            }
+            updatePreview();
+        }
+
+        function applyRitualTemplate(type) {
+            const container = document.getElementById('ritualsInputsContainer');
+            container.innerHTML = '';
+            if (type === 'dashkarm') {
+                addRitualRow('', 'सोमवार — दशकर्म');
+                addRitualRow('', 'बुधवार — ब्राह्मण भोज');
+            } else if (type === 'terahvin') {
+                addRitualRow('', 'उठावना / शोक सभा');
+                addRitualRow('', 'तेरहवीं एवं ब्रह्मभोज');
+            } else if (type === 'shradhanjali') {
+                addRitualRow('', 'शोक सभा एवं श्रद्धांजलि');
+                addRitualRow('', 'पगड़ी रस्म एवं ब्रह्मभोज');
+            }
+        }
+
+        function addMemberField(val = '') {
+            const container = document.getElementById('membersInputsContainer');
+            const row = document.createElement('div');
+            row.className = 'member-input-row';
+            row.innerHTML = `
+                <input type="text" class="member-input" value="${val}" placeholder="विनीत सदस्य का नाम लिखें" oninput="updatePreview()">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove(); updatePreview();" title="नाम हटाएं">×</button>
+            `;
+            container.appendChild(row);
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const map = [
+                ['inMantra', 'outMantra'],
+                ['inTitle', 'outTitle'],
+                ['inSalutation1', 'outSalutation1'],
+                ['inSalutation2', 'outSalutation2'],
+                ['inRecipient', 'outRecipient'],
+                ['inCustomParagraph', 'outCustomParagraph'],
+                ['inFooterNote', 'outFooterNote'],
+                ['inBottomLeftNote', 'outBottomLeftNote'],
+                ['inVineetTitle', 'outVineetTitle'],
+                ['inVillage', 'outVillage'],
+                ['inDistrict', 'outDistrict']
+            ];
+
+            map.forEach(([inId, outId]) => {
+                const inEl = document.getElementById(inId);
+                const outEl = document.getElementById(outId);
+                if (inEl && outEl) {
+                    outEl.textContent = inEl.value;
+                }
+            });
+
+            const mob = document.getElementById('inMobile').value.trim();
+            document.getElementById('outMobile').textContent = mob ? `मो. ${mob}` : '';
+
+            const ritualsBox = document.getElementById('outRitualsBox');
+            ritualsBox.innerHTML = '';
+            const ritualRows = document.querySelectorAll('.ritual-input-row');
+            let hasAnyRitual = false;
+
+            ritualRows.forEach(row => {
+                const dVal = row.querySelector('.ritual-date-in').value.trim();
+                const eVal = row.querySelector('.ritual-event-in').value.trim();
+                if (dVal !== '' || eVal !== '') {
+                    hasAnyRitual = true;
+                    const div = document.createElement('div');
+                    div.className = 'ritual-row';
+                    if (dVal !== '') {
+                        div.innerHTML = `दिनांक <span class="bold-text">${escapeHtml(dVal)}</span> ${escapeHtml(eVal)}`;
+                    } else {
+                        div.textContent = eVal;
+                    }
+                    ritualsBox.appendChild(div);
+                }
+            });
+
+            if (!hasAnyRitual) {
+                ritualsBox.innerHTML = `
+                    <div class="ritual-row">दिनांक .............................. दशकर्म</div>
+                    <div class="ritual-row">दिनांक .............................. ब्राह्मण भोज</div>
+                `;
+            }
+
+            const membersOut = document.getElementById('outMembersList');
+            membersOut.innerHTML = '';
+            document.querySelectorAll('.member-input').forEach(inp => {
+                const val = inp.value.trim();
+                if (val !== '') {
+                    const div = document.createElement('div');
+                    div.textContent = val;
+                    membersOut.appendChild(div);
+                }
+            });
+
+            syncCopies();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;");
+        }
+
+        function changePrintLayout() {
+            const mode = document.getElementById('printLayoutSelect').value;
+            const pageStyle = document.getElementById('dynamicPageStyle');
+            const printSheet = document.getElementById('printSheet');
+
+            document.body.classList.remove(
+                'print-mode-postcard',
+                'print-mode-a4-1',
+                'print-mode-a4-2',
+                'print-mode-a4-4',
+                'print-mode-a4-6'
+            );
+            document.body.classList.add('print-mode-' + mode);
+
+            printSheet.classList.remove(
+                'layout-postcard',
+                'layout-a4-1',
+                'layout-a4-2',
+                'layout-a4-4',
+                'layout-a4-6'
+            );
+            printSheet.classList.add('layout-' + mode);
+
+            if (mode === 'postcard') {
+                pageStyle.textContent = '@page { size: 148mm 105mm; margin: 0; }';
+            } else {
+                pageStyle.textContent = '@page { size: A4 portrait; margin: 4mm; }';
+            }
+
+            syncCopies();
+        }
+
+        function toggleSheetPreview() {
+            const printSheet = document.getElementById('printSheet');
+            const btn = document.getElementById('toggleSheetPreviewBtn');
+            const btnText = document.getElementById('toggleSheetPreviewText');
+            const hint = document.getElementById('previewHintText');
+
+            const isShowingSheet = printSheet.classList.toggle('show-sheet-preview');
+            btn.classList.toggle('active', isShowingSheet);
+
+            if (isShowingSheet) {
+                btnText.textContent = '1 बड़ा कार्ड देखें';
+                hint.innerHTML = '📄 <strong>A4 शीट प्रिव्यू:</strong> प्रिंट होने पर पेज ठीक इसी तरह दिखेगा। वापस बड़े कार्ड पर एडिट करने के लिए <strong>"1 बड़ा कार्ड देखें"</strong> दबाएं।';
+            } else {
+                btnText.textContent = 'शीट प्रिव्यू देखें';
+                hint.innerHTML = '💡 <strong>टिप:</strong> अभी 1 बड़ा कार्ड दिख रहा है। पूरा A4 पेज (4 या 6 कार्ड) एक साथ देखने के लिए ऊपर <strong>"शीट प्रिव्यू देखें"</strong> दबाएं।';
+            }
+        }
+
+        function syncCopies() {
+            const mode = document.getElementById('printLayoutSelect').value;
+            const container = document.getElementById('extraCardsContainer');
+            const originalCard = document.getElementById('cardTemplate');
+            container.innerHTML = '';
+
+            let totalCards = 1;
+            if (mode === 'a4-2') totalCards = 2;
+            if (mode === 'a4-4') totalCards = 4;
+            if (mode === 'a4-6') totalCards = 6;
+
+            if (totalCards === 1) return;
+
+            if (mode === 'a4-2') {
+                const cutDiv = document.createElement('div');
+                cutDiv.className = 'cut-line';
+                cutDiv.textContent = '✂ ----------------------------------- यहाँ से काटें ----------------------------------- ✂';
+                container.appendChild(cutDiv);
+
+                const clone = originalCard.cloneNode(true);
+                clone.removeAttribute('id');
+                clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                container.appendChild(clone);
+            } else {
+                for (let i = 1; i < totalCards; i++) {
+                    const clone = originalCard.cloneNode(true);
+                    clone.removeAttribute('id');
+                    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                    container.appendChild(clone);
+                }
+            }
+        }
+
+        function clearAllBlank() {
+            document.getElementById('inRecipient').value = '';
+            document.getElementById('helperName').value = '';
+            document.getElementById('helperDate').value = '';
+            document.getElementById('helperDay').value = '';
+            document.getElementById('inMobile').value = '';
+            document.getElementById('inVillage').value = '';
+            document.getElementById('inDistrict').value = '';
+            document.getElementById('inBottomLeftNote').value = '';
+
+            document.querySelectorAll('.ritual-date-in').forEach(el => el.value = '');
+            document.querySelectorAll('.member-input').forEach(el => el.value = '');
+            rebuildParagraphFromFields();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotice');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        function copyShareLink() {
+            const toolUrl = window.location.href;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = toolUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('RUPESH COMPUTERS टूल का लिंक कॉपी हो गया है!');
+        }
+
+        // Build formatted Hindi WhatsApp message from current card details
+        function buildWhatsAppMessageText() {
+            syncDirectEditsToInputs();
+
+            const mantra = document.getElementById('outMantra').innerText.trim();
+            const title = document.getElementById('outTitle').innerText.trim();
+            const sal1 = document.getElementById('outSalutation1').innerText.trim();
+            const sal2 = document.getElementById('outSalutation2').innerText.trim();
+            const recipient = document.getElementById('outRecipient').innerText.trim();
+            const bodyPara = document.getElementById('outCustomParagraph').innerText.trim();
+            const requestNote = document.getElementById('outFooterNote').innerText.trim();
+            const bottomLeft = document.getElementById('outBottomLeftNote').innerText.trim();
+            const vineet = document.getElementById('outVineetTitle').innerText.trim();
+            const members = Array.from(document.querySelectorAll('#outMembersList div')).map(d => d.innerText.trim()).filter(Boolean).join(', ');
+            const village = document.getElementById('outVillage').innerText.trim();
+            const district = document.getElementById('outDistrict').innerText.trim();
+            const mobile = document.getElementById('outMobile').innerText.trim();
+
+            const ritualLines = Array.from(document.querySelectorAll('#outRitualsBox .ritual-row'))
+                .map(r => '▪ ' + r.innerText.trim())
+                .filter(Boolean)
+                .join('\n');
+
+            let lines = [];
+            if (mantra) lines.push(`*${mantra}*`);
+            if (title) lines.push(`*॥ ${title} ॥*`);
+            lines.push('');
+            if (sal1) lines.push(sal1);
+            if (sal2 || recipient) lines.push(`${sal2} ${recipient}`.trim());
+            lines.push('');
+            if (bodyPara) lines.push(bodyPara);
+            if (ritualLines) {
+                lines.push('');
+                lines.push(ritualLines);
+            }
+            if (requestNote) {
+                lines.push('');
+                lines.push(requestNote);
+            }
+            if (bottomLeft) {
+                lines.push('');
+                lines.push(`📍 ${bottomLeft}`);
+            }
+            lines.push('');
+            if (vineet) lines.push(`*${vineet}:*`);
+            if (members) lines.push(members);
+            if (village) lines.push(village);
+            if (district) lines.push(district);
+            if (mobile) lines.push(mobile);
+
+            return lines.join('\n');
+        }
+
+        // Send card image (on mobile share sheet) or formatted text directly on WhatsApp
+        async function sendWhatsAppCard() {
+            syncDirectEditsToInputs();
+            const msgText = buildWhatsAppMessageText();
+            const cardEl = document.getElementById('cardTemplate');
+
+            // Try sharing both High-Res Card Photo + Text via Web Share API (works natively on Android/iOS WhatsApp)
+            if (navigator.canShare && typeof html2canvas === 'function') {
+                try {
+                    showToast('कार्ड तैयार हो रहा है...');
+                    const canvas = await html2canvas(cardEl, {
+                        scale: 2.5,
+                        backgroundColor: '#ffffff',
+                        useCORS: true
+                    });
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                    if (blob) {
+                        const file = new File([blob], 'Shok-Sandesh-Card.png', { type: 'image/png' });
+                        if (navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                files: [file],
+                                text: msgText
+                            });
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;
+                }
+            }
+
+            // Fallback for Desktop / WhatsApp Web: Open WhatsApp with full formatted message
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(msgText)}`;
+            window.open(waUrl, '_blank', 'noopener,noreferrer');
+            showToast('WhatsApp खुल गया है! फोटो भेजने के लिए "कार्ड फोटो सेव करें" भी दबा सकते हैं।');
+        }
+
+        // Download high-resolution PNG image of the card to attach in WhatsApp
+        async function downloadCardImage() {
+            if (typeof html2canvas !== 'function') {
+                showToast('इमेज टूल लोड हो रहा है, कृपया पुनः प्रयास करें।');
+                return;
+            }
+            syncDirectEditsToInputs();
+            showToast('कार्ड फोटो डाउनलोड हो रही है...');
+            const cardEl = document.getElementById('cardTemplate');
+            const canvas = await html2canvas(cardEl, {
+                scale: 3,
+                backgroundColor: '#ffffff',
+                useCORS: true
+            });
+            const link = document.createElement('a');
+            link.download = 'Shok-Sandesh-Card-RupeshComputers.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('कार्ड फोटो सेव हो गई! अब आप इसे WhatsApp पर भेज सकते हैं।');
+        }
+
+        function bindDirectEditSync() {
+            const editableIds = [
+                'outMantra', 'outTitle', 'outSalutation1', 'outSalutation2',
+                'outRecipient', 'outCustomParagraph', 'outFooterNote',
+                'outBottomLeftNote', 'outVineetTitle', 'outVillage', 'outDistrict'
+            ];
+            editableIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('blur', () => {
+                        syncDirectEditsToInputs();
+                        syncCopies();
+                    });
+                }
+            });
+        }
+
+        // Fallback toggle for AI Chatbot if tools.js loads asynchronously
+        if (typeof window.toggleChat !== 'function') {
+            window.toggleChat = function() {
+                const win = document.getElementById('chat-window');
+                if (win) {
+                    win.classList.toggle('hidden');
+                    win.classList.toggle('flex');
+                }
+            };
+            window.openChatWindow = window.toggleChat;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            addRitualRow('', 'दशकर्म');
+            addRitualRow('', 'ब्राह्मण भोज');
+            addMemberField('');
+            addMemberField('');
+            bindDirectEditSync();
+            changePrintLayout();
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
