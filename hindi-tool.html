@@ -431,6 +431,14 @@
             const box = document.getElementById('hindi-typing-box');
             if (!box) return;
 
+            // If external tools.js function exists, let it run first
+            if (typeof window.handleHindiTransliteration === 'function') {
+                window.handleHindiTransliteration(event);
+                updateTypingStats();
+                attachCopyIconsToSuggestions();
+                return;
+            }
+
             updateTypingStats();
             const val = box.value;
             const isCommitKey = event.key === ' ' || event.key === 'Enter' || event.keyCode === 32 || event.keyCode === 13;
@@ -454,7 +462,7 @@
                     translitTimer = setTimeout(async () => {
                         const suggestions = await fetchHindiTransliteration(liveMatch[1]);
                         renderTranslitSuggestions(suggestions, liveMatch[1]);
-                    }, 150);
+                    }, 180);
                 }
             }
         }
