@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindi Typing & Kruti Dev ↔ Mangal - RUPESH COMPUTERS</title>
+    <title>Hindi Typing & Mangal ↔ Kruti Dev - RUPESH COMPUTERS</title>
     <meta name="theme-color" content="#1e3a8a">
     <link rel="manifest" id="pwa-manifest-link">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,8 +30,8 @@
                     <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-pink-700 bg-pink-100 px-3.5 py-1 rounded-full mb-3">
                         <i class="fa-solid fa-language"></i> हिंदी टाइपिंग एवं फॉन्ट कन्वर्टर
                     </span>
-                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Hindi Typing &amp; Kruti Dev ↔ Mangal Converter</h2>
-                    <p class="mt-2 text-slate-600 text-sm">अंग्रेजी में लिखकर (या बोलकर) तुरंत हिंदी टाइप करें और Kruti Dev 010 को Mangal (Unicode) या Mangal को Kruti Dev में बदलें।</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Hindi Typing &amp; Mangal ↔ Kruti Dev Converter</h2>
+                    <p class="mt-2 text-slate-600 text-sm">अंग्रेजी में लिखकर (या बोलकर) तुरंत हिंदी टाइप करें और Mangal (Unicode) को Kruti Dev 010 या Kruti Dev को Mangal में बदलें।</p>
                 </div>
 
                 <!-- 1. Easy English-to-Hindi Typing & Voice Typing Box -->
@@ -42,62 +42,88 @@
                                 <i class="fa-solid fa-keyboard"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg sm:text-xl font-black text-slate-900">आसान हिंदी टाइपिंग (अंग्रेजी में लिखें → हिंदी बनेगा)</h3>
-                                <p class="text-xs text-slate-500">उदाहरण: <b>"mera naam rupesh hai"</b> लिखकर Space दबाएं → <b>"मेरा नाम रूपेश है"</b> बन जाएगा</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-lg sm:text-xl font-black text-slate-900">आसान हिंदी टाइपिंग (अंग्रेजी में लिखें → हिंदी बनेगा)</h3>
+                                    <span class="inline-flex items-center gap-1 text-[11px] font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
+                                        <i class="fa-solid fa-id-card"></i> आधार में नाम हिंदी टाइपिंग में सहायक
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5">उदाहरण: <b>"mera naam rupesh hai"</b> लिखकर Space दबाएं → <b>"मेरा नाम रूपेश है"</b> बन जाएगा</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <button type="button" id="hindi-voice-btn" onclick="startHindiVoiceTyping()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow">
                                 <i class="fa-solid fa-microphone"></i> बोलकर लिखें
                             </button>
                             <button type="button" onclick="copyTextField('hindi-typing-box')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow">
                                 <i class="fa-regular fa-copy"></i> कॉपी करें
                             </button>
-                            <button type="button" onclick="document.getElementById('hindi-typing-box').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-2 rounded-xl text-xs transition">
+                            <button type="button" onclick="shareWhatsAppText('hindi-typing-box')" class="bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button type="button" onclick="clearHindiTypingBox()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-2 rounded-xl text-xs transition">
                                 साफ करें
                             </button>
                         </div>
                     </div>
 
-                    <textarea id="hindi-typing-box" rows="4" onkeyup="handleHindiTransliteration(event)" placeholder="यहाँ अंग्रेजी अक्षरों में हिंदी लिखें (जैसे: namaste chongribahar) या माइक दबाकर बोलें..." class="w-full border border-slate-300 rounded-2xl p-4 text-base focus:ring-2 focus:ring-pink-500 outline-none bg-slate-50 focus:bg-white leading-relaxed"></textarea>
-                    <div id="hindi-word-suggestions" class="mt-2.5 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                        <span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।
+                    <textarea id="hindi-typing-box" rows="4" oninput="updateTypingStats()" onkeyup="handleHindiTransliterationWithCopy(event)" placeholder="यहाँ अंग्रेजी अक्षरों में हिंदी लिखें (जैसे: namaste chongribahar) या माइक दबाकर बोलें..." class="w-full border border-slate-300 rounded-2xl p-4 text-base focus:ring-2 focus:ring-pink-500 outline-none bg-slate-50 focus:bg-white leading-relaxed"></textarea>
+                    
+                    <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+                        <div id="hindi-word-suggestions" class="flex flex-wrap items-center gap-2">
+                            <span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।
+                        </div>
+                        <span id="typing-stats" class="font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg ml-auto">0 शब्द • 0 अक्षर</span>
+                    </div>
+
+                    <!-- Quick One-Click Copy Chips for Aadhaar & Address Words -->
+                    <div class="mt-4 pt-3.5 border-t border-slate-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-hand-pointer text-pink-600"></i> आधार व पता के उपयोगी शब्द (शब्द पर क्लिक करते ही कॉपी हो जाएगा):
+                            </span>
+                            <span class="text-[11px] text-slate-400 hidden sm:inline">क्लिक करें → तुरंत कॉपी</span>
+                        </div>
+                        <div id="quick-copy-chips" class="flex flex-wrap gap-1.5"></div>
                     </div>
                 </div>
 
-                <!-- 2. Kruti Dev 010 <-> Mangal (Unicode) Converter -->
+                <!-- 2. Google Hindi Input Offline Software Download Card -->
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-sm mb-8 border border-blue-800/50">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl text-amber-400 shrink-0">
+                                <i class="fa-brands fa-windows"></i>
+                            </div>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-0.5">
+                                    <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full">PC Software</span>
+                                    <span class="text-[11px] text-blue-200 font-semibold">Windows 7 / 8 / 10 / 11 (Offline)</span>
+                                </div>
+                                <h3 class="text-base sm:text-lg font-black">Google Hindi Input Tools (ऑफलाइन सेटअप डाउनलोड करें)</h3>
+                                <p class="text-xs text-blue-100/90">बिना इंटरनेट के कंप्यूटर (MS Word, Excel, Notepad, Chrome) में सीधे हिंदी लिखने के लिए इंस्टॉल करें।</p>
+                            </div>
+                        </div>
+                        <a href="https://drive.google.com/file/d/1Q62GMMRhonFoK9a4hzl9sx3AfLRcTu4q/view" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-5 py-3 rounded-2xl text-xs transition shadow flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-solid fa-cloud-arrow-down text-sm"></i> Google Hindi Input डाउनलोड करें
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Mangal (Unicode) <-> Kruti Dev 010 Converter -->
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-arrows-rotate"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900">Kruti Dev 010 ↔ Mangal (Unicode) कन्वर्टर</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-slate-900">Mangal (Unicode) ↔ Kruti Dev 010 कन्वर्टर</h3>
                             <p class="text-xs text-slate-500">सरकारी पोर्टल, MS Word और PageMaker के लिए तुरंत फॉन्ट बदलें</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Kruti Dev Box -->
-                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <label class="text-xs font-black uppercase tracking-wider text-indigo-800">Kruti Dev 010 टेक्स्ट</label>
-                                <div class="flex gap-1.5">
-                                    <button type="button" onclick="copyTextField('krutidev-text')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">
-                                        <i class="fa-regular fa-copy"></i> कॉपी
-                                    </button>
-                                    <button type="button" onclick="document.getElementById('krutidev-text').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-1 rounded-lg text-[11px]">
-                                        साफ
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea id="krutidev-text" rows="6" placeholder="यहाँ Kruti Dev 010 वाला टेक्स्ट पेस्ट करें (जैसे: :is'k dEI;wVlZ)..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-mono"></textarea>
-                            <button type="button" onclick="convertKrutiToUnicode()" class="mt-3 w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
-                                Kruti Dev → Mangal (Unicode) में बदलें <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Mangal Unicode Box -->
+                        <!-- Mangal Unicode Box (First) -->
                         <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                             <div class="flex items-center justify-between mb-2">
                                 <label class="text-xs font-black uppercase tracking-wider text-emerald-800">Mangal (Unicode हिंदी) टेक्स्ट</label>
@@ -112,7 +138,26 @@
                             </div>
                             <textarea id="unicode-text" rows="6" placeholder="यहाँ मंगल (यूनिकोड हिंदी) टेक्स्ट पेस्ट करें या देखें (जैसे: रूपेश कंप्यूटर्स)..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white"></textarea>
                             <button type="button" onclick="convertUnicodeToKruti()" class="mt-3 w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-arrow-left"></i> Mangal (Unicode) → Kruti Dev में बदलें
+                                Mangal (Unicode) → Kruti Dev में बदलें <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Kruti Dev Box (Second) -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-black uppercase tracking-wider text-indigo-800">Kruti Dev 010 टेक्स्ट</label>
+                                <div class="flex gap-1.5">
+                                    <button type="button" onclick="copyTextField('krutidev-text')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">
+                                        <i class="fa-regular fa-copy"></i> कॉपी
+                                    </button>
+                                    <button type="button" onclick="document.getElementById('krutidev-text').value=''" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-2 py-1 rounded-lg text-[11px]">
+                                        साफ
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea id="krutidev-text" rows="6" placeholder="यहाँ Kruti Dev 010 वाला टेक्स्ट पेस्ट करें (जैसे: :is'k dEI;wVlZ)..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-mono"></textarea>
+                            <button type="button" onclick="convertKrutiToUnicode()" class="mt-3 w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrow-left"></i> Kruti Dev → Mangal (Unicode) में बदलें
                             </button>
                         </div>
                     </div>
@@ -273,5 +318,299 @@
 
     <script src="common-layout.js"></script>
     <script src="tools.js"></script>
+
+    <!-- Custom Helper Script for Quick Copy Chips, Suggestion Copy Icons & Stats -->
+    <script>
+        const aadhaarQuickWords = [
+            "श्री", "श्रीमती", "कुमारी", "सुश्री", "स्वर्गीय",
+            "पिता", "पति", "पुत्र", "पुत्री", "पत्नी", "केयर ऑफ (C/O)",
+            "ग्राम", "पोस्ट", "तहसील", "विकासखंड", "जिला", "राज्य",
+            "वार्ड क्रमांक", "मोहल्ला", "पारा", "थाना", "पिन कोड",
+            "चोंगरीबहार", "दोकड़ा", "कांसाबेल", "कुनकुरी", "पत्थलगांव", "जशपुर", "छत्तीसगढ़",
+            "कुमार", "प्रसाद", "सिंह", "राम", "लाल", "देवी", "बाई", "एक्का", "तिग्गा", "बघेल", "यादव", "साहू", "पटेल", "वर्मा", "ठाकुर"
+        ];
+
+        function renderQuickCopyChips() {
+            const container = document.getElementById('quick-copy-chips');
+            if (!container) return;
+            container.innerHTML = aadhaarQuickWords.map(word => `
+                <button type="button" onclick="copyPlainWord('${word}', this)"
+                    class="group inline-flex items-center gap-1.5 bg-slate-50 hover:bg-pink-50 active:bg-pink-100 text-slate-700 hover:text-pink-700 border border-slate-200 hover:border-pink-300 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer"
+                    title="'${word}' कॉपी करें">
+                    <span>${word}</span>
+                    <i class="fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition"></i>
+                </button>
+            `).join('');
+        }
+
+        function copyPlainWord(word, btnElement) {
+            const temp = document.createElement('textarea');
+            temp.value = word;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            if (btnElement) {
+                const icon = btnElement.querySelector('i');
+                if (icon) {
+                    icon.className = 'fa-solid fa-check text-[10px] text-emerald-600';
+                    btnElement.classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
+                    setTimeout(() => {
+                        icon.className = 'fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition';
+                        btnElement.classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
+                    }, 1200);
+                }
+            }
+            if (typeof showToast === 'function') {
+                showToast(`"${word}" कॉपी हो गया!`);
+            } else {
+                const toast = document.getElementById('custom-toast');
+                const toastMsg = document.getElementById('custom-toast-msg');
+                if (toast && toastMsg) {
+                    toastMsg.textContent = `"${word}" कॉपी हो गया!`;
+                    toast.classList.remove('hidden');
+                    toast.classList.add('flex');
+                    setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('flex'); }, 2500);
+                }
+            }
+        }
+
+        // Wrapper around tools.js handleHindiTransliteration so suggestion chips also get a Copy icon
+        let translitTimer = null;
+        let lastTranslitWord = '';
+
+        async function fetchHindiTransliteration(word) {
+            try {
+                const url = `https://inputtools.google.com/request?text=${encodeURIComponent(word)}&itc=hi-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data && data[0] === 'SUCCESS' && data[1] && data[1][0] && data[1][0][1]) {
+                    return data[1][0][1];
+                }
+            } catch (err) {
+                console.warn('Transliteration retry fallback:', err);
+            }
+            return [word];
+        }
+
+        function renderTranslitSuggestions(suggestions, rawWord) {
+            const suggBox = document.getElementById('hindi-word-suggestions');
+            if (!suggBox) return;
+            if (!suggestions || !suggestions.length) {
+                suggBox.innerHTML = `<span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।`;
+                return;
+            }
+            suggBox.innerHTML = `<span class="font-bold text-slate-600">विकल्प:</span> ` + suggestions.map(item => `
+                <button type="button" onclick="replaceLastHindiWord('${item}')"
+                    class="inline-flex items-center bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 px-2.5 py-1 rounded-lg text-xs font-bold transition">
+                    <span>${item}</span>
+                    <span onclick="event.stopPropagation(); copyPlainWord('${item}', this)" title="'${item}' कॉपी करें"
+                        class="ml-1.5 pl-1.5 border-l border-pink-300 text-pink-500 hover:text-emerald-600 inline-flex items-center">
+                        <i class="fa-regular fa-copy text-[10px]"></i>
+                    </span>
+                </button>
+            `).join('');
+        }
+
+        function replaceLastHindiWord(selectedHindi) {
+            const box = document.getElementById('hindi-typing-box');
+            if (!box) return;
+            const val = box.value;
+            const endsWithSpace = /\s$/.test(val);
+            const parts = val.trimEnd().split(/(\s+)/);
+            if (parts.length > 0) {
+                parts[parts.length - 1] = selectedHindi;
+                box.value = parts.join('') + (endsWithSpace ? ' ' : '');
+                updateTypingStats();
+                box.focus();
+            }
+        }
+
+        async function handleHindiTransliterationWithCopy(event) {
+            const box = document.getElementById('hindi-typing-box');
+            if (!box) return;
+
+            // If external tools.js function exists, let it run first
+            if (typeof window.handleHindiTransliteration === 'function') {
+                window.handleHindiTransliteration(event);
+                updateTypingStats();
+                attachCopyIconsToSuggestions();
+                return;
+            }
+
+            updateTypingStats();
+            const val = box.value;
+            const isCommitKey = event.key === ' ' || event.key === 'Enter' || event.keyCode === 32 || event.keyCode === 13;
+
+            if (isCommitKey) {
+                const match = val.match(/([a-zA-Z]+)(\s+)$/);
+                if (match) {
+                    const engWord = match[1];
+                    const trailingSpace = match[2];
+                    const suggestions = await fetchHindiTransliteration(engWord);
+                    const bestHindi = suggestions[0] || engWord;
+                    box.value = val.slice(0, val.length - match[0].length) + bestHindi + trailingSpace;
+                    updateTypingStats();
+                    renderTranslitSuggestions(suggestions, engWord);
+                }
+            } else {
+                const liveMatch = val.match(/([a-zA-Z]+)$/);
+                if (liveMatch && liveMatch[1] !== lastTranslitWord) {
+                    lastTranslitWord = liveMatch[1];
+                    clearTimeout(translitTimer);
+                    translitTimer = setTimeout(async () => {
+                        const suggestions = await fetchHindiTransliteration(liveMatch[1]);
+                        renderTranslitSuggestions(suggestions, liveMatch[1]);
+                    }, 180);
+                }
+            }
+        }
+
+        function attachCopyIconsToSuggestions() {
+            const suggBox = document.getElementById('hindi-word-suggestions');
+            if (!suggBox) return;
+            const buttons = suggBox.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if (btn.dataset.hasCopyIcon) return;
+                const wordText = btn.textContent.trim();
+                if (!wordText) return;
+                btn.dataset.hasCopyIcon = 'true';
+
+                const copySpan = document.createElement('span');
+                copySpan.className = 'ml-1.5 pl-1.5 border-l border-slate-300 text-slate-400 hover:text-emerald-600 inline-flex items-center';
+                copySpan.title = `"${wordText}" कॉपी करें`;
+                copySpan.innerHTML = '<i class="fa-regular fa-copy text-[10px]"></i>';
+                copySpan.onclick = function(e) {
+                    e.stopPropagation();
+                    copyPlainWord(wordText, copySpan);
+                };
+                btn.appendChild(copySpan);
+            });
+        }
+
+        function updateTypingStats() {
+            const box = document.getElementById('hindi-typing-box');
+            const stats = document.getElementById('typing-stats');
+            if (!box || !stats) return;
+            const text = box.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            stats.textContent = `${words} शब्द • ${text.length} अक्षर`;
+        }
+
+        function clearHindiTypingBox() {
+            const box = document.getElementById('hindi-typing-box');
+            if (box) box.value = '';
+            updateTypingStats();
+        }
+
+        function shareWhatsAppText(boxId) {
+            const el = document.getElementById(boxId);
+            const text = el ? el.value.trim() : '';
+            if (!text) return;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        // Safe Fallbacks if external tools.js is not loaded in preview environment
+        if (typeof window.copyTextField !== 'function') {
+            window.copyTextField = function(fieldId) {
+                const el = document.getElementById(fieldId);
+                if (!el || !el.value.trim()) return;
+                el.select();
+                document.execCommand('copy');
+                copyPlainWord(el.value.trim());
+            };
+        }
+
+        if (typeof window.startHindiVoiceTyping !== 'function') {
+            window.startHindiVoiceTyping = function() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    copyPlainWord("आपके ब्राउज़र में वॉइस टाइपिंग उपलब्ध नहीं है");
+                    return;
+                }
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'hi-IN';
+                recognition.onresult = function(e) {
+                    const transcript = e.results[0][0].transcript;
+                    const box = document.getElementById('hindi-typing-box');
+                    if (box) {
+                        box.value = (box.value ? box.value + ' ' : '') + transcript;
+                        updateTypingStats();
+                    }
+                };
+                recognition.start();
+            };
+        }
+
+        if (typeof window.convertUnicodeToKruti !== 'function') {
+            window.convertUnicodeToKruti = function() {
+                const uniBox = document.getElementById('unicode-text');
+                const krutiBox = document.getElementById('krutidev-text');
+                if (!uniBox || !krutiBox) return;
+                let text = uniBox.value;
+                if (!text.trim()) return;
+
+                const map = {
+                    'ज्ञ': 'K', 'क्ष': '{k', 'त्र': '=k', 'श्र': 'J',
+                    'अ': 'v', 'आ': 'vk', 'इ': 'b', 'ई': 'bZ', 'उ': 'm', 'ऊ': 'Å', 'ए': ',', 'ऐ': ',s', 'ओ': 'vks', 'औ': 'vkS',
+                    'क': 'd', 'ख': '[k', 'ग': 'x', 'घ': '?k', 'च': 'p', 'छ': 'N', 'ज': 't', 'झ': '>',
+                    'ट': 'V', 'ठ': 'B', 'ड': 'M', 'ढ': '<', 'ण': '.k',
+                    'त': 'r', 'थ': 'Fk', 'द': 'n', 'ध': '/k', 'न': 'u',
+                    'प': 'i', 'फ': 'Q', 'ब': 'c', 'भ': 'Hk', 'म': 'e',
+                    'य': ';', 'र': 'j', 'ल': 'y', 'व': 'o', 'श': "'k", 'ष': '"k', 'स': 'l', 'ह': 'g',
+                    'ा': 'k', 'ी': 'h', 'ु': 'q', 'ू': 'w', 'े': 's', 'ै': 'S', 'ो': 'ks', 'ौ': 'kS',
+                    'ं': 'a', 'ः': '%', 'ँ': '¡', '।': 'A', '्': '~'
+                };
+                text = text.replace(/([क-हक़-य़])ि/g, 'f$1');
+                for (const [u, k] of Object.entries(map)) {
+                    text = text.split(u).join(k);
+                }
+                krutiBox.value = text;
+            };
+        }
+
+        if (typeof window.convertKrutiToUnicode !== 'function') {
+            window.convertKrutiToUnicode = function() {
+                const krutiBox = document.getElementById('krutidev-text');
+                const uniBox = document.getElementById('unicode-text');
+                if (!krutiBox || !uniBox) return;
+                let text = krutiBox.value;
+                if (!text.trim()) return;
+
+                const map = {
+                    'vkS': 'औ', 'vks': 'ओ', 'vk': 'आ', 'bZ': 'ई', ',s': 'ऐ',
+                    '[k': 'ख', '?k': 'घ', '.k': 'ण', 'Fk': 'थ', '/k': 'ध', 'Hk': 'भ', "'k": 'श', '"k': 'ष',
+                    '{k': 'क्ष', '=k': 'त्र', 'ks': 'ो', 'kS': 'ौ',
+                    'K': 'ज्ञ', 'J': 'श्र', 'v': 'अ', 'b': 'इ', 'm': 'उ', 'Å': 'ऊ', ',': 'ए',
+                    'd': 'क', 'x': 'ग', 'p': 'च', 'N': 'छ', 't': 'ज', '>': 'झ',
+                    'V': 'ट', 'B': 'ठ', 'M': 'ड', '<': 'ढ',
+                    'r': 'त', 'n': 'द', 'u': 'न',
+                    'i': 'प', 'Q': 'फ', 'c': 'ब', 'e': 'म',
+                    ';': 'य', 'j': 'र', 'y': 'ल', 'o': 'व', 'l': 'स', 'g': 'ह',
+                    'k': 'ा', 'h': 'ी', 'q': 'ु', 'w': 'ू', 's': 'े', 'S': 'ै',
+                    'a': 'ं', '%': 'ः', '¡': 'ँ', 'A': '।', '~': '्'
+                };
+                for (const [k, u] of Object.entries(map)) {
+                    text = text.split(k).join(u);
+                }
+                text = text.replace(/f([क-ह])/g, '$1ि');
+                uniBox.value = text;
+            };
+        }
+
+        if (typeof window.toggleChat !== 'function') {
+            window.toggleChat = function() {
+                const win = document.getElementById('chat-window');
+                if (win) {
+                    win.classList.toggle('hidden');
+                    win.classList.toggle('flex');
+                }
+            };
+            window.openChatWindow = window.toggleChat;
+        }
+
+        document.addEventListener('DOMContentLoaded', renderQuickCopyChips);
+    </script>
 </body>
 </html>
