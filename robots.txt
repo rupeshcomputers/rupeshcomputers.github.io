@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /kisan_code_finder.html
+Disallow: /account_finder.html
+
+Sitemap: https://rupeshcomputers.in/sitemap.xml
