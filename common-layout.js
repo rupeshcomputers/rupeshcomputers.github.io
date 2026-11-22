@@ -14,7 +14,7 @@ const navLinks = [
     { file: 'dob-tool.html', icon: 'fa-cake-candles', color: 'text-purple-400', label: 'DOB Calculator' },
     { file: 'scanner-tool.html', icon: 'fa-barcode', color: 'text-emerald-400', label: 'Barcode Reader' },
     { file: 'hindi-tool.html', icon: 'fa-language', color: 'text-pink-400', label: 'Hindi Typing & Kruti Dev' },
-    { file: 'pwa-app.html', icon: 'fa-mobile-screen-button', color: 'text-amber-300', label: 'मोबाइल ऐप' },
+    { file: 'card-design.html', icon: 'fa-card-design', color: 'text-amber-300', label: 'शोक पत्र' },
     { file: 'branches.html', icon: 'fa-location-dot', color: 'text-lime-400', label: 'शाखाएँ' }
 ];
 
