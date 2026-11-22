@@ -321,296 +321,339 @@
 
     <!-- Custom Helper Script for Quick Copy Chips, Suggestion Copy Icons & Stats -->
     <script>
-        const aadhaarQuickWords = [
-            "श्री", "श्रीमती", "कुमारी", "सुश्री", "स्वर्गीय",
-            "पिता", "पति", "पुत्र", "पुत्री", "पत्नी", "केयर ऑफ (C/O)",
-            "ग्राम", "पोस्ट", "तहसील", "विकासखंड", "जिला", "राज्य",
-            "वार्ड क्रमांक", "मोहल्ला", "पारा", "थाना", "पिन कोड",
-            "चोंगरीबहार", "दोकड़ा", "कांसाबेल", "कुनकुरी", "पत्थलगांव", "जशपुर", "छत्तीसगढ़",
-            "कुमार", "प्रसाद", "सिंह", "राम", "लाल", "देवी", "बाई", "एक्का", "तिग्गा", "बघेल", "यादव", "साहू", "पटेल", "वर्मा", "ठाकुर"
-        ];
+        (function() {
+            const aadhaarQuickWords = [
+                "श्री", "श्रीमती", "कुमारी", "सुश्री", "स्वर्गीय",
+                "पिता", "पति", "पुत्र", "पुत्री", "पत्नी", "केयर ऑफ (C/O)",
+                "ग्राम", "पोस्ट", "तहसील", "विकासखंड", "जिला", "राज्य",
+                "वार्ड क्रमांक", "मोहल्ला", "पारा", "थाना", "पिन कोड",
+                "चोंगरीबहार", "दोकड़ा", "कांसाबेल", "कुनकुरी", "पत्थलगांव", "जशपुर", "छत्तीसगढ़",
+                "कुमार", "प्रसाद", "सिंह", "राम", "लाल", "देवी", "बाई", "एक्का", "तिग्गा", "बघेल", "यादव", "साहू", "पटेल", "वर्मा", "ठाकुर"
+            ];
 
-        function renderQuickCopyChips() {
-            const container = document.getElementById('quick-copy-chips');
-            if (!container) return;
-            container.innerHTML = aadhaarQuickWords.map(word => `
-                <button type="button" onclick="copyPlainWord('${word}', this)"
-                    class="group inline-flex items-center gap-1.5 bg-slate-50 hover:bg-pink-50 active:bg-pink-100 text-slate-700 hover:text-pink-700 border border-slate-200 hover:border-pink-300 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer"
-                    title="'${word}' कॉपी करें">
-                    <span>${word}</span>
-                    <i class="fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition"></i>
-                </button>
-            `).join('');
-        }
+            window.renderQuickCopyChips = function() {
+                const container = document.getElementById('quick-copy-chips');
+                if (!container) return;
+                container.innerHTML = aadhaarQuickWords.map(word => `
+                    <button type="button" onclick="copyPlainWord('${word}', this)"
+                        class="group inline-flex items-center gap-1.5 bg-slate-50 hover:bg-pink-50 active:bg-pink-100 text-slate-700 hover:text-pink-700 border border-slate-200 hover:border-pink-300 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer"
+                        title="'${word}' कॉपी करें">
+                        <span>${word}</span>
+                        <i class="fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition"></i>
+                    </button>
+                `).join('');
+            };
 
-        function copyPlainWord(word, btnElement) {
-            const temp = document.createElement('textarea');
-            temp.value = word;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
+            window.copyPlainWord = function(word, btnElement) {
+                const temp = document.createElement('textarea');
+                temp.value = word;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
 
-            if (btnElement) {
-                const icon = btnElement.querySelector('i');
-                if (icon) {
-                    icon.className = 'fa-solid fa-check text-[10px] text-emerald-600';
-                    btnElement.classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
-                    setTimeout(() => {
-                        icon.className = 'fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition';
-                        btnElement.classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
-                    }, 1200);
+                if (btnElement) {
+                    const icon = btnElement.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fa-solid fa-check text-[10px] text-emerald-600';
+                        btnElement.classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
+                        setTimeout(() => {
+                            icon.className = 'fa-regular fa-copy text-[10px] text-slate-400 group-hover:text-pink-600 transition';
+                            btnElement.classList.remove('border-emerald-400', 'bg-emerald-50', 'text-emerald-800');
+                        }, 1200);
+                    }
                 }
-            }
-            if (typeof showToast === 'function') {
-                showToast(`"${word}" कॉपी हो गया!`);
-            } else {
                 const toast = document.getElementById('custom-toast');
                 const toastMsg = document.getElementById('custom-toast-msg');
                 if (toast && toastMsg) {
                     toastMsg.textContent = `"${word}" कॉपी हो गया!`;
                     toast.classList.remove('hidden');
                     toast.classList.add('flex');
-                    setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('flex'); }, 2500);
+                    setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('flex'); }, 2200);
                 }
-            }
-        }
-
-        // Wrapper around tools.js handleHindiTransliteration so suggestion chips also get a Copy icon
-        let translitTimer = null;
-        let lastTranslitWord = '';
-
-        async function fetchHindiTransliteration(word) {
-            try {
-                const url = `https://inputtools.google.com/request?text=${encodeURIComponent(word)}&itc=hi-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`;
-                const res = await fetch(url);
-                const data = await res.json();
-                if (data && data[0] === 'SUCCESS' && data[1] && data[1][0] && data[1][0][1]) {
-                    return data[1][0][1];
-                }
-            } catch (err) {
-                console.warn('Transliteration retry fallback:', err);
-            }
-            return [word];
-        }
-
-        function renderTranslitSuggestions(suggestions, rawWord) {
-            const suggBox = document.getElementById('hindi-word-suggestions');
-            if (!suggBox) return;
-            if (!suggestions || !suggestions.length) {
-                suggBox.innerHTML = `<span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।`;
-                return;
-            }
-            suggBox.innerHTML = `<span class="font-bold text-slate-600">विकल्प:</span> ` + suggestions.map(item => `
-                <button type="button" onclick="replaceLastHindiWord('${item}')"
-                    class="inline-flex items-center bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 px-2.5 py-1 rounded-lg text-xs font-bold transition">
-                    <span>${item}</span>
-                    <span onclick="event.stopPropagation(); copyPlainWord('${item}', this)" title="'${item}' कॉपी करें"
-                        class="ml-1.5 pl-1.5 border-l border-pink-300 text-pink-500 hover:text-emerald-600 inline-flex items-center">
-                        <i class="fa-regular fa-copy text-[10px]"></i>
-                    </span>
-                </button>
-            `).join('');
-        }
-
-        function replaceLastHindiWord(selectedHindi) {
-            const box = document.getElementById('hindi-typing-box');
-            if (!box) return;
-            const val = box.value;
-            const endsWithSpace = /\s$/.test(val);
-            const parts = val.trimEnd().split(/(\s+)/);
-            if (parts.length > 0) {
-                parts[parts.length - 1] = selectedHindi;
-                box.value = parts.join('') + (endsWithSpace ? ' ' : '');
-                updateTypingStats();
-                box.focus();
-            }
-        }
-
-        async function handleHindiTransliterationWithCopy(event) {
-            const box = document.getElementById('hindi-typing-box');
-            if (!box) return;
-
-            // If external tools.js function exists, let it run first
-            if (typeof window.handleHindiTransliteration === 'function') {
-                window.handleHindiTransliteration(event);
-                updateTypingStats();
-                attachCopyIconsToSuggestions();
-                return;
-            }
-
-            updateTypingStats();
-            const val = box.value;
-            const isCommitKey = event.key === ' ' || event.key === 'Enter' || event.keyCode === 32 || event.keyCode === 13;
-
-            if (isCommitKey) {
-                const match = val.match(/([a-zA-Z]+)(\s+)$/);
-                if (match) {
-                    const engWord = match[1];
-                    const trailingSpace = match[2];
-                    const suggestions = await fetchHindiTransliteration(engWord);
-                    const bestHindi = suggestions[0] || engWord;
-                    box.value = val.slice(0, val.length - match[0].length) + bestHindi + trailingSpace;
-                    updateTypingStats();
-                    renderTranslitSuggestions(suggestions, engWord);
-                }
-            } else {
-                const liveMatch = val.match(/([a-zA-Z]+)$/);
-                if (liveMatch && liveMatch[1] !== lastTranslitWord) {
-                    lastTranslitWord = liveMatch[1];
-                    clearTimeout(translitTimer);
-                    translitTimer = setTimeout(async () => {
-                        const suggestions = await fetchHindiTransliteration(liveMatch[1]);
-                        renderTranslitSuggestions(suggestions, liveMatch[1]);
-                    }, 180);
-                }
-            }
-        }
-
-        function attachCopyIconsToSuggestions() {
-            const suggBox = document.getElementById('hindi-word-suggestions');
-            if (!suggBox) return;
-            const buttons = suggBox.querySelectorAll('button');
-            buttons.forEach(btn => {
-                if (btn.dataset.hasCopyIcon) return;
-                const wordText = btn.textContent.trim();
-                if (!wordText) return;
-                btn.dataset.hasCopyIcon = 'true';
-
-                const copySpan = document.createElement('span');
-                copySpan.className = 'ml-1.5 pl-1.5 border-l border-slate-300 text-slate-400 hover:text-emerald-600 inline-flex items-center';
-                copySpan.title = `"${wordText}" कॉपी करें`;
-                copySpan.innerHTML = '<i class="fa-regular fa-copy text-[10px]"></i>';
-                copySpan.onclick = function(e) {
-                    e.stopPropagation();
-                    copyPlainWord(wordText, copySpan);
-                };
-                btn.appendChild(copySpan);
-            });
-        }
-
-        function updateTypingStats() {
-            const box = document.getElementById('hindi-typing-box');
-            const stats = document.getElementById('typing-stats');
-            if (!box || !stats) return;
-            const text = box.value.trim();
-            const words = text ? text.split(/\s+/).length : 0;
-            stats.textContent = `${words} शब्द • ${text.length} अक्षर`;
-        }
-
-        function clearHindiTypingBox() {
-            const box = document.getElementById('hindi-typing-box');
-            if (box) box.value = '';
-            updateTypingStats();
-        }
-
-        function shareWhatsAppText(boxId) {
-            const el = document.getElementById(boxId);
-            const text = el ? el.value.trim() : '';
-            if (!text) return;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
-        }
-
-        // Safe Fallbacks if external tools.js is not loaded in preview environment
-        if (typeof window.copyTextField !== 'function') {
-            window.copyTextField = function(fieldId) {
-                const el = document.getElementById(fieldId);
-                if (!el || !el.value.trim()) return;
-                el.select();
-                document.execCommand('copy');
-                copyPlainWord(el.value.trim());
             };
-        }
 
-        if (typeof window.startHindiVoiceTyping !== 'function') {
-            window.startHindiVoiceTyping = function() {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SpeechRecognition) {
-                    copyPlainWord("आपके ब्राउज़र में वॉइस टाइपिंग उपलब्ध नहीं है");
+            let translitTimer = null;
+            let lastTranslitWord = '';
+            const translitCache = new Map([
+                ['ram', ['राम', 'रम', 'क्रम']],
+                ['mera', ['मेरा', 'मेरी', 'मेरे']],
+                ['meri', ['मेरी', 'मेरा']],
+                ['naam', ['नाम', 'नम']],
+                ['rupesh', ['रूपेश', 'रुपेश']],
+                ['hai', ['है', 'हैं', 'हाय']],
+                ['hain', ['हैं', 'है']],
+                ['shri', ['श्री', 'श्रीमान']],
+                ['shrimati', ['श्रीमती']],
+                ['kumari', ['कुमारी']],
+                ['pita', ['पिता', 'पीता']],
+                ['pati', ['पति', 'पत्ती']],
+                ['gram', ['ग्राम', 'गरम']],
+                ['post', ['पोस्ट']],
+                ['tahsil', ['तहसील']],
+                ['tehsil', ['तहसील']],
+                ['jila', ['जिला']],
+                ['jashpur', ['जशपुर']],
+                ['chhattisgarh', ['छत्तीसगढ़']],
+                ['chongribahar', ['चोंगरीबहार']],
+                ['dokda', ['दोकड़ा']],
+                ['kansabel', ['कांसाबेल']],
+                ['kunkuri', ['कुनकुरी']],
+                ['namaste', ['नमस्ते']],
+                ['kumar', ['कुमार']],
+                ['prasad', ['प्रसाद']],
+                ['singh', ['सिंह']],
+                ['devi', ['देवी']],
+                ['bai', ['बाई']],
+                ['ram', ['राम', 'रम']],
+                ['ka', ['का', 'क']],
+                ['ki', ['की', 'कि']],
+                ['ke', ['के', 'कहे']],
+                ['ko', ['को']],
+                ['se', ['से']],
+                ['mein', ['में', 'मैं']],
+                ['main', ['मैं', 'में']],
+                ['aur', ['और']],
+                ['par', ['पर', 'पार']],
+                ['yeh', ['यह', 'ये']],
+                ['yah', ['यह']],
+                ['woh', ['वह', 'वो']],
+                ['vah', ['वह']]
+            ]);
+
+            async function fetchHindiTransliteration(word) {
+                const key = word.toLowerCase();
+                if (translitCache.has(key)) {
+                    return translitCache.get(key);
+                }
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 1500);
+                    const url = `https://inputtools.google.com/request?text=${encodeURIComponent(word)}&itc=hi-t-i0-und&num=5&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`;
+                    const res = await fetch(url, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    const data = await res.json();
+                    if (data && data[0] === 'SUCCESS' && data[1] && data[1][0] && data[1][0][1]) {
+                        const results = data[1][0][1];
+                        translitCache.set(key, results);
+                        return results;
+                    }
+                } catch (err) {
+                    console.warn('Transliteration API fallback:', err);
+                }
+                return [word];
+            }
+
+            function renderTranslitSuggestions(suggestions) {
+                const suggBox = document.getElementById('hindi-word-suggestions');
+                if (!suggBox) return;
+                if (!suggestions || !suggestions.length) {
+                    suggBox.innerHTML = `<span class="font-bold text-slate-600">सुझाव:</span> शब्द लिखकर Space दबाते ही अपने आप हिंदी में बदल जाएगा।`;
                     return;
                 }
-                const recognition = new SpeechRecognition();
-                recognition.lang = 'hi-IN';
-                recognition.onresult = function(e) {
-                    const transcript = e.results[0][0].transcript;
-                    const box = document.getElementById('hindi-typing-box');
-                    if (box) {
-                        box.value = (box.value ? box.value + ' ' : '') + transcript;
-                        updateTypingStats();
+                suggBox.innerHTML = `<span class="font-bold text-slate-600">विकल्प:</span> ` + suggestions.map(item => `
+                    <button type="button" onclick="replaceLastHindiWord('${item}')"
+                        class="inline-flex items-center bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 px-2.5 py-1 rounded-lg text-xs font-bold transition">
+                        <span>${item}</span>
+                        <span onclick="event.stopPropagation(); copyPlainWord('${item}', this)" title="'${item}' कॉपी करें"
+                            class="ml-1.5 pl-1.5 border-l border-pink-300 text-pink-500 hover:text-emerald-600 inline-flex items-center">
+                            <i class="fa-regular fa-copy text-[10px]"></i>
+                        </span>
+                    </button>
+                `).join('');
+            }
+
+            window.replaceLastHindiWord = function(selectedHindi) {
+                const box = document.getElementById('hindi-typing-box');
+                if (!box) return;
+                const val = box.value;
+                const endsWithSpace = /\s$/.test(val);
+                const parts = val.trimEnd().split(/(\s+)/);
+                if (parts.length > 0) {
+                    parts[parts.length - 1] = selectedHindi;
+                    box.value = parts.join('') + (endsWithSpace ? ' ' : '');
+                    window.updateTypingStats();
+                    box.focus();
+                }
+            };
+
+            window.handleHindiTransliterationWithCopy = async function(event) {
+                const box = document.getElementById('hindi-typing-box');
+                if (!box) return;
+
+                window.updateTypingStats();
+                const val = box.value;
+                const isCommitKey = event.key === ' ' || event.key === 'Enter' || event.keyCode === 32 || event.keyCode === 13;
+
+                if (isCommitKey) {
+                    const match = val.match(/([a-zA-Z]+)(\s+)$/);
+                    if (match) {
+                        const engWord = match[1];
+                        const trailingSpace = match[2];
+                        const key = engWord.toLowerCase();
+
+                        // Instant replacement if already cached or prefetched
+                        if (translitCache.has(key)) {
+                            const cached = translitCache.get(key);
+                            box.value = val.slice(0, val.length - match[0].length) + (cached[0] || engWord) + trailingSpace;
+                            window.updateTypingStats();
+                            renderTranslitSuggestions(cached);
+                            return;
+                        }
+
+                        const suggestions = await fetchHindiTransliteration(engWord);
+                        const bestHindi = suggestions[0] || engWord;
+                        // Replace only if the user hasn't already edited that word
+                        if (box.value.endsWith(match[0])) {
+                            box.value = box.value.slice(0, box.value.length - match[0].length) + bestHindi + trailingSpace;
+                        }
+                        window.updateTypingStats();
+                        renderTranslitSuggestions(suggestions);
+                    }
+                } else {
+                    const liveMatch = val.match(/([a-zA-Z]+)$/);
+                    if (liveMatch && liveMatch[1] !== lastTranslitWord) {
+                        lastTranslitWord = liveMatch[1];
+                        const key = liveMatch[1].toLowerCase();
+                        if (translitCache.has(key)) {
+                            renderTranslitSuggestions(translitCache.get(key));
+                            return;
+                        }
+                        clearTimeout(translitTimer);
+                        translitTimer = setTimeout(async () => {
+                            const suggestions = await fetchHindiTransliteration(liveMatch[1]);
+                            renderTranslitSuggestions(suggestions);
+                        }, 80);
+                    }
+                }
+            };
+
+            window.updateTypingStats = function() {
+                const box = document.getElementById('hindi-typing-box');
+                const stats = document.getElementById('typing-stats');
+                if (!box || !stats) return;
+                const text = box.value.trim();
+                const words = text ? text.split(/\s+/).length : 0;
+                stats.textContent = `${words} शब्द • ${text.length} अक्षर`;
+            };
+
+            window.clearHindiTypingBox = function() {
+                const box = document.getElementById('hindi-typing-box');
+                if (box) box.value = '';
+                window.updateTypingStats();
+            };
+
+            window.shareWhatsAppText = function(boxId) {
+                const el = document.getElementById(boxId);
+                const text = el ? el.value.trim() : '';
+                if (!text) return;
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+            };
+
+            if (typeof window.copyTextField !== 'function') {
+                window.copyTextField = function(fieldId) {
+                    const el = document.getElementById(fieldId);
+                    if (!el || !el.value.trim()) return;
+                    el.select();
+                    document.execCommand('copy');
+                    window.copyPlainWord(el.value.trim());
+                };
+            }
+
+            if (typeof window.startHindiVoiceTyping !== 'function') {
+                window.startHindiVoiceTyping = function() {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        window.copyPlainWord("आपके ब्राउज़र में वॉइस टाइपिंग उपलब्ध नहीं है");
+                        return;
+                    }
+                    const recognition = new SpeechRecognition();
+                    recognition.lang = 'hi-IN';
+                    recognition.onresult = function(e) {
+                        const transcript = e.results[0][0].transcript;
+                        const box = document.getElementById('hindi-typing-box');
+                        if (box) {
+                            box.value = (box.value ? box.value + ' ' : '') + transcript;
+                            window.updateTypingStats();
+                        }
+                    };
+                    recognition.start();
+                };
+            }
+
+            if (typeof window.convertUnicodeToKruti !== 'function') {
+                window.convertUnicodeToKruti = function() {
+                    const uniBox = document.getElementById('unicode-text');
+                    const krutiBox = document.getElementById('krutidev-text');
+                    if (!uniBox || !krutiBox) return;
+                    let text = uniBox.value;
+                    if (!text.trim()) return;
+
+                    const map = {
+                        'ज्ञ': 'K', 'क्ष': '{k', 'त्र': '=k', 'श्र': 'J',
+                        'अ': 'v', 'आ': 'vk', 'इ': 'b', 'ई': 'bZ', 'उ': 'm', 'ऊ': 'Å', 'ए': ',', 'ऐ': ',s', 'ओ': 'vks', 'औ': 'vkS',
+                        'क': 'd', 'ख': '[k', 'ग': 'x', 'घ': '?k', 'च': 'p', 'छ': 'N', 'ज': 't', 'झ': '>',
+                        'ट': 'V', 'ठ': 'B', 'ड': 'M', 'ढ': '<', 'ण': '.k',
+                        'त': 'r', 'थ': 'Fk', 'द': 'n', 'ध': '/k', 'न': 'u',
+                        'प': 'i', 'फ': 'Q', 'ब': 'c', 'भ': 'Hk', 'म': 'e',
+                        'य': ';', 'र': 'j', 'ल': 'y', 'व': 'o', 'श': "'k", 'ष': '"k', 'स': 'l', 'ह': 'g',
+                        'ा': 'k', 'ी': 'h', 'ु': 'q', 'ू': 'w', 'े': 's', 'ै': 'S', 'ो': 'ks', 'ौ': 'kS',
+                        'ं': 'a', 'ः': '%', 'ँ': '¡', '।': 'A', '्': '~'
+                    };
+                    text = text.replace(/([क-ह]़?)ि/g, 'f$1');
+                    for (const [u, k] of Object.entries(map)) {
+                        text = text.split(u).join(k);
+                    }
+                    krutiBox.value = text;
+                };
+            }
+
+            if (typeof window.convertKrutiToUnicode !== 'function') {
+                window.convertKrutiToUnicode = function() {
+                    const krutiBox = document.getElementById('krutidev-text');
+                    const uniBox = document.getElementById('unicode-text');
+                    if (!krutiBox || !uniBox) return;
+                    let text = krutiBox.value;
+                    if (!text.trim()) return;
+
+                    const map = {
+                        'vkS': 'औ', 'vks': 'ओ', 'vk': 'आ', 'bZ': 'ई', ',s': 'ऐ',
+                        '[k': 'ख', '?k': 'घ', '.k': 'ण', 'Fk': 'थ', '/k': 'ध', 'Hk': 'भ', "'k": 'श', '"k': 'ष',
+                        '{k': 'क्ष', '=k': 'त्र', 'ks': 'ो', 'kS': 'ौ',
+                        'K': 'ज्ञ', 'J': 'श्र', 'v': 'अ', 'b': 'इ', 'm': 'उ', 'Å': 'ऊ', ',': 'ए',
+                        'd': 'क', 'x': 'ग', 'p': 'च', 'N': 'छ', 't': 'ज', '>': 'झ',
+                        'V': 'ट', 'B': 'ठ', 'M': 'ड', '<': 'ढ',
+                        'r': 'त', 'n': 'द', 'u': 'न',
+                        'i': 'प', 'Q': 'फ', 'c': 'ब', 'e': 'म',
+                        ';': 'य', 'j': 'र', 'y': 'ल', 'o': 'व', 'l': 'स', 'g': 'ह',
+                        'k': 'ा', 'h': 'ी', 'q': 'ु', 'w': 'ू', 's': 'े', 'S': 'ै',
+                        'a': 'ं', '%': 'ः', '¡': 'ँ', 'A': '।', '~': '्'
+                    };
+                    for (const [k, u] of Object.entries(map)) {
+                        text = text.split(k).join(u);
+                    }
+                    text = text.replace(/f([क-ह]़?)/g, '$1ि');
+                    uniBox.value = text;
+                };
+            }
+
+            if (typeof window.toggleChat !== 'function') {
+                window.toggleChat = function() {
+                    const win = document.getElementById('chat-window');
+                    if (win) {
+                        win.classList.toggle('hidden');
+                        win.classList.toggle('flex');
                     }
                 };
-                recognition.start();
-            };
-        }
+                window.openChatWindow = window.toggleChat;
+            }
 
-        if (typeof window.convertUnicodeToKruti !== 'function') {
-            window.convertUnicodeToKruti = function() {
-                const uniBox = document.getElementById('unicode-text');
-                const krutiBox = document.getElementById('krutidev-text');
-                if (!uniBox || !krutiBox) return;
-                let text = uniBox.value;
-                if (!text.trim()) return;
-
-                const map = {
-                    'ज्ञ': 'K', 'क्ष': '{k', 'त्र': '=k', 'श्र': 'J',
-                    'अ': 'v', 'आ': 'vk', 'इ': 'b', 'ई': 'bZ', 'उ': 'm', 'ऊ': 'Å', 'ए': ',', 'ऐ': ',s', 'ओ': 'vks', 'औ': 'vkS',
-                    'क': 'd', 'ख': '[k', 'ग': 'x', 'घ': '?k', 'च': 'p', 'छ': 'N', 'ज': 't', 'झ': '>',
-                    'ट': 'V', 'ठ': 'B', 'ड': 'M', 'ढ': '<', 'ण': '.k',
-                    'त': 'r', 'थ': 'Fk', 'द': 'n', 'ध': '/k', 'न': 'u',
-                    'प': 'i', 'फ': 'Q', 'ब': 'c', 'भ': 'Hk', 'म': 'e',
-                    'य': ';', 'र': 'j', 'ल': 'y', 'व': 'o', 'श': "'k", 'ष': '"k', 'स': 'l', 'ह': 'g',
-                    'ा': 'k', 'ी': 'h', 'ु': 'q', 'ू': 'w', 'े': 's', 'ै': 'S', 'ो': 'ks', 'ौ': 'kS',
-                    'ं': 'a', 'ः': '%', 'ँ': '¡', '।': 'A', '्': '~'
-                };
-                text = text.replace(/([क-हक़-य़])ि/g, 'f$1');
-                for (const [u, k] of Object.entries(map)) {
-                    text = text.split(u).join(k);
-                }
-                krutiBox.value = text;
-            };
-        }
-
-        if (typeof window.convertKrutiToUnicode !== 'function') {
-            window.convertKrutiToUnicode = function() {
-                const krutiBox = document.getElementById('krutidev-text');
-                const uniBox = document.getElementById('unicode-text');
-                if (!krutiBox || !uniBox) return;
-                let text = krutiBox.value;
-                if (!text.trim()) return;
-
-                const map = {
-                    'vkS': 'औ', 'vks': 'ओ', 'vk': 'आ', 'bZ': 'ई', ',s': 'ऐ',
-                    '[k': 'ख', '?k': 'घ', '.k': 'ण', 'Fk': 'थ', '/k': 'ध', 'Hk': 'भ', "'k": 'श', '"k': 'ष',
-                    '{k': 'क्ष', '=k': 'त्र', 'ks': 'ो', 'kS': 'ौ',
-                    'K': 'ज्ञ', 'J': 'श्र', 'v': 'अ', 'b': 'इ', 'm': 'उ', 'Å': 'ऊ', ',': 'ए',
-                    'd': 'क', 'x': 'ग', 'p': 'च', 'N': 'छ', 't': 'ज', '>': 'झ',
-                    'V': 'ट', 'B': 'ठ', 'M': 'ड', '<': 'ढ',
-                    'r': 'त', 'n': 'द', 'u': 'न',
-                    'i': 'प', 'Q': 'फ', 'c': 'ब', 'e': 'म',
-                    ';': 'य', 'j': 'र', 'y': 'ल', 'o': 'व', 'l': 'स', 'g': 'ह',
-                    'k': 'ा', 'h': 'ी', 'q': 'ु', 'w': 'ू', 's': 'े', 'S': 'ै',
-                    'a': 'ं', '%': 'ः', '¡': 'ँ', 'A': '।', '~': '्'
-                };
-                for (const [k, u] of Object.entries(map)) {
-                    text = text.split(k).join(u);
-                }
-                text = text.replace(/f([क-ह])/g, '$1ि');
-                uniBox.value = text;
-            };
-        }
-
-        if (typeof window.toggleChat !== 'function') {
-            window.toggleChat = function() {
-                const win = document.getElementById('chat-window');
-                if (win) {
-                    win.classList.toggle('hidden');
-                    win.classList.toggle('flex');
-                }
-            };
-            window.openChatWindow = window.toggleChat;
-        }
-
-        document.addEventListener('DOMContentLoaded', renderQuickCopyChips);
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', window.renderQuickCopyChips);
+            } else {
+                window.renderQuickCopyChips();
+            }
+        })();
     </script>
 </body>
 </html>
