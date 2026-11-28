@@ -33,7 +33,7 @@
                 </div>
                 <div>
                     <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">सिस्टम एवं डिवाइस डायग्नोस्टिक टूल</h2>
-                    <p class="text-xs text-slate-500">कंप्यूटर/मोबाइल हार्डवेयर, IP, स्पीड टेस्ट व बायोमेट्रिक स्कैनर</p>
+                    <p class="text-xs text-slate-500">हार्डवेयर, मदरबोर्ड स्लॉट्स, बैटरी हेल्थ, स्पीड टेस्ट व बायोमेट्रिक स्कैनर</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 flex-wrap justify-center">
@@ -57,9 +57,9 @@
         <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-950">
             <i class="fa-solid fa-shield-halved text-amber-600 text-lg mt-0.5"></i>
             <div>
-                <p class="font-bold">ब्राउज़र सुरक्षा एवं प्राइवेसी जानकारी:</p>
+                <p class="font-bold">ब्राउज़र सुरक्षा एवं हार्डवेयर अपग्रेड जानकारी:</p>
                 <p class="text-amber-800 text-xs mt-0.5 leading-relaxed">
-                    यह टूल पूरी तरह सुरक्षित है और आपका कोई भी डेटा किसी बाहरी सर्वर पर नहीं भेजता। सुरक्षा कारणों से वेब ब्राउज़र कंप्यूटर का <strong>BIOS सीरियल नंबर</strong> या <strong>Windows लाइसेंस की</strong> साझा नहीं करते, लेकिन नीचे दी गई सभी हार्डवेयर, OS, बैटरी, और अनुमति-आधारित जानकारियाँ तुरंत देखी जा सकती हैं।
+                    यह टूल पूरी तरह सुरक्षित है और आपका कोई भी डेटा बाहरी सर्वर पर नहीं भेजता। सुरक्षा कारणों से वेब ब्राउज़र सीधे <strong>CPU का असली मॉडल नाम, मदरबोर्ड के खाली RAM स्लॉट्स, DDR प्रकार या बैटरी हेल्थ (%)</strong> नहीं पढ़ सकते—इसके लिए नीचे दिए गए <strong>1-क्लिक .BAT टूल</strong> या <strong>CMD कमांड</strong> का उपयोग करें।
                 </p>
             </div>
         </div>
@@ -182,7 +182,7 @@
 
         </div>
 
-        <!-- 7. Advanced Browser & Audio/Graphics Technical Specs (Full Width Organized Bar) -->
+        <!-- 7. Advanced Browser & Audio/Graphics Technical Specs -->
         <section class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2.5">
@@ -201,42 +201,42 @@
             </div>
         </section>
 
-        <!-- Interactive Hardware & Speed Testing Lab (Placed Right Below Core Specs for Easy Access) -->
+        <!-- Interactive Hardware & Speed Testing Lab (Now 4 Cards including Live Webcam Tester) -->
         <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
             <div class="mb-5">
                 <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-stethoscope text-indigo-600"></i>
-                    <span>लाइव हार्डवेयर एवं इंटरनेट स्पीड टेस्टर (Download, Upload & Hardware Check)</span>
+                    <span>लाइव हार्डवेयर एवं इंटरनेट स्पीड टेस्टर (Speed, Audio, Webcam & Screen Check)</span>
                 </h2>
-                <p class="text-xs text-slate-500 mt-1">अपने इंटरनेट की असली डाउनलोड/अपलोड स्पीड, स्पीकर, माइक्रोफ़ोन, कीबोर्ड, माउस और मॉनिटर स्क्रीन की तुरंत जाँच करें:</p>
+                <p class="text-xs text-slate-500 mt-1">इंटरनेट की असली स्पीड, स्पीकर, माइक्रोफ़ोन, वेबकैम, कीबोर्ड, माउस और मॉनिटर स्क्रीन की तुरंत जाँच करें:</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                <!-- 1. Live Internet Speed (Ping, Download & Upload Test) -->
+                <!-- 1. Live Internet Speed -->
                 <div class="border border-blue-200 rounded-2xl p-4 bg-blue-50/40 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-gauge-high text-blue-600"></i> इंटरनेट स्पीड टेस्ट
+                                <i class="fa-solid fa-gauge-high text-blue-600"></i> इंटरनेट स्पीड
                             </span>
-                            <button type="button" id="speed-test-btn" onclick="runInternetSpeedTest()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                            <button type="button" id="speed-test-btn" onclick="runInternetSpeedTest()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
                                 स्पीड जाँचें
                             </button>
                         </div>
-                        <p class="text-[11px] text-slate-600 mb-3">सर्वर पिंग, लाइव डाउनलोड और अपलोड स्पीड (Mbps) मापें।</p>
+                        <p class="text-[11px] text-slate-600 mb-3">पिंग, लाइव डाउनलोड और अपलोड स्पीड (Mbps) मापें।</p>
                     </div>
                     <div id="speed-test-result" class="text-xs bg-white border border-blue-200 rounded-xl p-3 text-slate-700 space-y-1.5">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                            <span class="text-slate-500"><i class="fa-solid fa-signal text-amber-500 mr-1"></i>पिंग (Latency):</span>
+                            <span class="text-slate-500">पिंग:</span>
                             <strong id="ping-val" class="text-slate-900">-- ms</strong>
                         </div>
                         <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                            <span class="text-slate-500"><i class="fa-solid fa-arrow-down text-emerald-600 mr-1"></i>डाउनलोड (Download):</span>
+                            <span class="text-slate-500">डाउनलोड:</span>
                             <strong id="download-speed-val" class="text-emerald-700">-- Mbps</strong>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-500"><i class="fa-solid fa-arrow-up text-blue-600 mr-1"></i>अपलोड (Upload):</span>
+                            <span class="text-slate-500">अपलोड:</span>
                             <strong id="upload-speed-val" class="text-blue-700">-- Mbps</strong>
                         </div>
                     </div>
@@ -247,22 +247,22 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-volume-high text-purple-600"></i> स्पीकर व माइक टेस्ट
+                                <i class="fa-solid fa-volume-high text-purple-600"></i> स्पीकर व माइक
                             </span>
-                            <div class="flex items-center gap-1.5">
-                                <button type="button" onclick="testSpeakerTone()" class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
-                                    स्पीकर बजाएं
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="testSpeakerTone()" class="px-2 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    स्पीकर
                                 </button>
-                                <button type="button" id="mic-test-btn" onclick="toggleMicLevelTest()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
-                                    माइक जाँच
+                                <button type="button" id="mic-test-btn" onclick="toggleMicLevelTest()" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    माइक
                                 </button>
                             </div>
                         </div>
-                        <p class="text-[11px] text-slate-600 mb-3">स्पीकर से टेस्ट टोन बजाएं या बोलकर माइक्रोफ़ोन का आवाज़ लेवल देखें।</p>
+                        <p class="text-[11px] text-slate-600 mb-3">स्पीकर टोन बजाएं या बोलकर माइक आवाज़ स्तर देखें।</p>
                     </div>
                     <div class="text-xs bg-white border border-purple-200 rounded-xl p-3 space-y-2">
                         <div class="flex justify-between text-[11px] text-slate-600">
-                            <span>माइक आवाज़ स्तर:</span>
+                            <span>माइक लेवल:</span>
                             <span id="mic-status-label" class="font-semibold text-slate-500">बंद</span>
                         </div>
                         <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
@@ -271,27 +271,46 @@
                     </div>
                 </div>
 
-                <!-- 3. Keyboard, Mouse & Display Screen Tester -->
+                <!-- 3. Live Webcam Preview Tester -->
+                <div class="border border-rose-200 rounded-2xl p-4 bg-rose-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-camera text-rose-600"></i> लाइव वेबकैम टेस्ट
+                            </span>
+                            <button type="button" id="cam-test-btn" onclick="toggleWebcamPreview()" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                कैमरा चालू
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2">लैपटॉप/USB वेबकैम की पिक्चर क्वालिटी तुरंत जांचें।</p>
+                    </div>
+                    <div class="bg-slate-900 rounded-xl overflow-hidden h-24 flex items-center justify-center relative border border-rose-200">
+                        <video id="webcam-preview-video" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+                        <span id="webcam-placeholder" class="text-[11px] text-slate-400">कैमरा बंद है</span>
+                    </div>
+                </div>
+
+                <!-- 4. Keyboard, Mouse & Display Screen Tester -->
                 <div class="border border-teal-200 rounded-2xl p-4 bg-teal-50/40 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-keyboard text-teal-600"></i> कीबोर्ड, माउस व स्क्रीन टेस्ट
+                                <i class="fa-solid fa-keyboard text-teal-600"></i> कीबोर्ड व स्क्रीन
                             </span>
-                            <button type="button" onclick="startDisplayColorTest()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                            <button type="button" onclick="startDisplayColorTest()" class="px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
                                 स्क्रीन टेस्ट
                             </button>
                         </div>
-                        <p class="text-[11px] text-slate-600 mb-3">कोई भी कीबोर्ड बटन दबाएं या माउस क्लिक करें—यहाँ तुरंत दिखेगा।</p>
+                        <p class="text-[11px] text-slate-600 mb-3">कोई बटन दबाएं या डेड-पिक्सेल रंग जाँचें।</p>
                     </div>
                     <div id="input-test-result" class="text-xs bg-white border border-teal-200 rounded-xl p-3 text-slate-700 space-y-1.5">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-1">
-                            <span class="text-slate-500">अंतिम कुंजी:</span>
-                            <span id="last-key-pressed" class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-teal-800 font-semibold">कोई नहीं</span>
+                            <span class="text-slate-500">कुंजी:</span>
+                            <span id="last-key-pressed" class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-teal-800 font-semibold text-[11px]">कोई नहीं</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-500">माउस स्थिति:</span>
-                            <span id="last-mouse-action" class="font-semibold text-slate-800">प्रतीक्षा में...</span>
+                            <span class="text-slate-500">माउस:</span>
+                            <span id="last-mouse-action" class="font-semibold text-slate-800 text-[11px]">प्रतीक्षा में...</span>
                         </div>
                     </div>
                 </div>
@@ -299,14 +318,14 @@
             </div>
         </section>
 
-        <!-- Permission-Based & Local Service Diagnostics Section (Clean 2-Column Layout) -->
+        <!-- Permission-Based & Local Service Diagnostics Section -->
         <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
             <div class="mb-5">
                 <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-key text-teal-600"></i>
-                    <span>अनुमति (Permission) एवं लोकल सर्विस आधारित डिवाइस स्कैन</span>
+                    <span>अनुमति (Permission), मदरबोर्ड स्लॉट्स एवं लोकल सर्विस स्कैन</span>
                 </h2>
-                <p class="text-xs text-slate-500 mt-1">नीचे दिए गए विकल्पों से आप सटीक लोकेशन, Mantra/Morpho बायोमेट्रिक सीरियल नंबर, कैमरा/माइक, USB और TPM जाँच सकते हैं:</p>
+                <p class="text-xs text-slate-500 mt-1">सटीक लोकेशन, Mantra/Morpho बायोमेट्रिक सीरियल नंबर, मदरबोर्ड के RAM स्लॉट्स (DDR3/DDR4/DDR5), Max RAM क्षमता, बैटरी हेल्थ व SSD/HDD स्लॉट की जाँच करें:</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -352,7 +371,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-blue-600"></i> कैमरा व माइक डिवाइस
+                                <i class="fa-solid fa-video text-blue-600"></i> कैमरा व माइक डिवाइस सूची
                             </span>
                             <button onclick="requestMediaDevicesInfo()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
                                 अनुमति दें
@@ -423,25 +442,58 @@
                     </div>
                 </div>
 
-                <!-- G. Computer Model Number, Serial Number & Total Storage Command -->
-                <div class="border border-slate-300 rounded-2xl p-4 bg-slate-100/80 flex flex-col justify-between md:col-span-2">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                        <span class="font-bold text-xs text-slate-900 flex items-center gap-1.5">
-                            <i class="fa-solid fa-laptop-medical text-teal-700"></i> कंप्यूटर का असली मॉडल नंबर, सीरियल नंबर, कुल SSD/HDD स्टोरेज और Windows की निकालें
-                        </span>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <button type="button" onclick="downloadHardwareBatchScript()" class="px-3.5 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                <!-- G. Complete Motherboard, CPU, RAM Slots, Battery Health & SSD/HDD Upgrade Scanner -->
+                <div class="border-2 border-teal-500/40 rounded-2xl p-5 bg-gradient-to-br from-teal-50/70 via-white to-blue-50/60 flex flex-col justify-between md:col-span-2 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                        <div>
+                            <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-600 text-white mb-1">पूर्ण कंप्यूटर व लैपटॉप हार्डवेयर अपग्रेड स्कैनर</span>
+                            <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-memory text-teal-700"></i>
+                                <span>मदरबोर्ड स्लॉट्स, DDR3/DDR4/DDR5, Max RAM, SSD/HDD, असली CPU नाम व बैटरी हेल्थ (%)</span>
+                            </h3>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <button type="button" onclick="downloadHardwareBatchScript()" class="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
                                 <i class="fa-solid fa-download"></i><span>1-क्लिक .BAT टूल डाउनलोड</span>
                             </button>
-                            <button type="button" onclick="copyFullHardwareCmd()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                            <button type="button" onclick="copyFullHardwareCmd()" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
                                 <i class="fa-solid fa-terminal"></i><span>कमांड दिखाएं व कॉपी करें</span>
                             </button>
                         </div>
                     </div>
+
+                    <!-- 4 Feature Badges -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-3 text-[11px]">
+                        <div class="bg-white border border-slate-200 rounded-xl p-2.5">
+                            <div class="font-bold text-teal-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-server"></i> मदरबोर्ड व RAM स्लॉट्स
+                            </div>
+                            <p class="text-slate-600 mt-0.5">कुल स्लॉट्स (2 या 4), भरे/खाली स्लॉट और अधिकतम सपोर्टेड RAM (Max GB) बताएगा।</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-2.5">
+                            <div class="font-bold text-blue-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-microchip"></i> कौन-सा RAM व CPU?
+                            </div>
+                            <p class="text-slate-600 mt-0.5">असली CPU जेनरेशन नाम, RAM प्रकार (DDR3/DDR4/DDR5), DIMM/SODIMM व MHz बताएगा।</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-2.5">
+                            <div class="font-bold text-indigo-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-hard-drive"></i> SSD (NVMe/SATA) व HDD
+                            </div>
+                            <p class="text-slate-600 mt-0.5">डिस्क प्रकार (NVMe M.2 / SATA SSD / HDD), कुल क्षमता (GB) और M.2 स्पोर्ट बताएगा।</p>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-2.5">
+                            <div class="font-bold text-emerald-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-battery-full"></i> बैटरी हेल्थ (%) व सिक्योरिटी
+                            </div>
+                            <p class="text-slate-600 mt-0.5">लैपटॉप बैटरी की असली हेल्थ (%), चार्ज साइकल, Secure Boot व Windows की बताएगा।</p>
+                        </div>
+                    </div>
+
                     <p class="text-[11px] text-slate-600 leading-relaxed">
-                        <strong>कैसे चलाएं:</strong> यदि प्रीव्यू बॉक्स में डाउनलोड ब्लॉक हो, तो <strong>"कमांड दिखाएं व कॉपी करें"</strong> दबाएं, फिर अपने कीबोर्ड पर <kbd class="bg-white border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Win + R</kbd> दबाकर उसे पेस्ट करें और <strong>Enter</strong> दबाएं। सारा डेटा सीधे स्क्रीन पर दिखेगा और डेस्कटॉप पर <code>PC_Details.txt</code> फ़ाइल में भी सेव हो जाएगा।
+                        <strong>चलाने का तरीका:</strong> <strong>"1-क्लिक .BAT टूल डाउनलोड"</strong> करके डबल-क्लिक करें, या <strong>"कमांड दिखाएं व कॉपी करें"</strong> दबाकर कीबोर्ड पर <kbd class="bg-white border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Win + R</kbd> दबाएं, पेस्ट करें और <strong>Enter</strong> दबाएं। पूरी रिपोर्ट स्क्रीन पर दिखेगी, क्लिपबोर्ड पर कॉपी होगी और डेस्कटॉप पर <code>PC_Details.txt</code> में सेव हो जाएगी।
                     </p>
-                    <div id="cmd-display-box" class="hidden mt-2 bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-[11px] select-all break-all border border-slate-700"></div>
+                    <div id="cmd-display-box" class="hidden mt-2.5 bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-[11px] select-all break-all border border-slate-700"></div>
                 </div>
 
             </div>
@@ -466,7 +518,7 @@
     <!-- Common Footer Container (RUPESH COMPUTERS Layout) -->
     <div id="site-footer"></div>
 
-    <!-- आपकी वेबसाइट की असली कॉमन Header & Footer फाइल (प्रीव्यू में अनुपस्थित होने पर सुरक्षित फ़ॉलबैक सहित) -->
+    <!-- आपकी वेबसाइट की असली कॉमन Header & Footer फाइल -->
     <script src="common-layout.js" onerror="window.__commonLayoutMissing = true;"></script>
 
     <!-- Script Logic -->
@@ -549,7 +601,7 @@
             let osName = navigator.platform || "अज्ञात OS";
             let osVersion = "मानक संस्करण";
             let arch = navigator.userAgent.includes("Win64") || navigator.userAgent.includes("x86_64") || navigator.userAgent.includes("WOW64") ? "64-bit" : "32-bit / ARM";
-            let deviceModel = "डेस्कटॉप / लैपटॉप (ब्राउज़र सीमित)";
+            let deviceModel = "डेस्कटॉप / लैपटॉप (नीचे स्लॉट स्कैनर देखें)";
 
             const ua = navigator.userAgent;
             if (ua.includes("Windows NT 10.0")) osName = "Windows 10 / 11";
@@ -594,7 +646,7 @@
 
         function detectHardwareInfo() {
             const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} लॉजिकल कोर (CPU)` : "उपलब्ध नहीं";
-            const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB+ (ब्राउज़र अनुमान)` : "उपलब्ध नहीं";
+            const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB+ (सटीक स्लॉट नीचे देखें)` : "उपलब्ध नहीं";
             const touchPoints = navigator.maxTouchPoints > 0 ? `हाँ (${navigator.maxTouchPoints} टच पॉइंट्स)` : "नहीं (माउस/कीबोर्ड)";
 
             let gpuRenderer = "अज्ञात GPU";
@@ -791,7 +843,7 @@
             }
         }
 
-        // लाइव इंटरनेट स्पीड टेस्ट (Ping, Download & Upload)
+        // लाइव इंटरनेट स्पीड टेस्ट
         async function runInternetSpeedTest() {
             const btn = document.getElementById('speed-test-btn');
             const pingEl = document.getElementById('ping-val');
@@ -805,13 +857,11 @@
             upEl.textContent = "माप रहा है...";
 
             try {
-                // 1. Ping Test
                 const t0 = performance.now();
                 await fetch("https://httpbin.org/get?t=" + Date.now(), { cache: "no-store" });
                 const pingMs = Math.max(12, Math.round(performance.now() - t0));
                 pingEl.textContent = `${pingMs} ms`;
 
-                // 2. Download Test (~1 MB payload)
                 const d0 = performance.now();
                 const dRes = await fetch("https://httpbin.org/bytes/1048576?t=" + Date.now(), { cache: "no-store" });
                 const blob = await dRes.blob();
@@ -819,7 +869,6 @@
                 const downMbps = ((blob.size * 8) / (dSec * 1000000)).toFixed(2);
                 downEl.textContent = `${downMbps} Mbps`;
 
-                // 3. Upload Test (~512 KB payload)
                 const uploadData = new Uint8Array(524288);
                 const u0 = performance.now();
                 await fetch("https://httpbin.org/post", {
@@ -878,7 +927,7 @@
                 micStream.getTracks().forEach(t => t.stop());
                 micStream = null;
                 cancelAnimationFrame(micAnimId);
-                btn.textContent = "माइक जाँच";
+                btn.textContent = "माइक";
                 label.textContent = "बंद";
                 bar.style.width = "0%";
                 return;
@@ -893,8 +942,8 @@
                 src.connect(analyser);
                 const dataArr = new Uint8Array(analyser.frequencyBinCount);
 
-                btn.textContent = "माइक बंद करें";
-                label.textContent = "चालू (बोलकर जाँचें)";
+                btn.textContent = "रोकें";
+                label.textContent = "चालू (बोलें)";
 
                 const updateMeter = () => {
                     if (!micStream) return;
@@ -910,10 +959,39 @@
             }
         }
 
+        // लाइव वेबकैम प्रीव्यू टेस्टर
+        let camStream = null;
+        async function toggleWebcamPreview() {
+            const btn = document.getElementById('cam-test-btn');
+            const video = document.getElementById('webcam-preview-video');
+            const placeholder = document.getElementById('webcam-placeholder');
+
+            if (camStream) {
+                camStream.getTracks().forEach(t => t.stop());
+                camStream = null;
+                video.srcObject = null;
+                video.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                btn.textContent = "कैमरा चालू";
+                return;
+            }
+
+            try {
+                camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = camStream;
+                video.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                btn.textContent = "बंद करें";
+                showToast("लाइव वेबकैम प्रीव्यू चालू हो गया है!");
+            } catch (e) {
+                showToast("वेबकैम अनुमति अस्वीकृत या कैमरा जुड़ा नहीं है।");
+            }
+        }
+
         // कीबोर्ड व माउस लाइव लिसनर
         document.addEventListener('keydown', (e) => {
             const keyEl = document.getElementById('last-key-pressed');
-            if (keyEl) keyEl.textContent = `${e.key === ' ' ? 'Spacebar' : e.key} (${e.code})`;
+            if (keyEl) keyEl.textContent = `${e.key === ' ' ? 'Space' : e.key}`;
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('display-test-overlay');
                 if (overlay) overlay.classList.add('hidden');
@@ -923,8 +1001,8 @@
         document.addEventListener('mousedown', (e) => {
             const mouseEl = document.getElementById('last-mouse-action');
             if (!mouseEl) return;
-            const names = ["बायां क्लिक (Left)", "मध्य क्लिक (Middle)", "दायां क्लिक (Right)"];
-            mouseEl.textContent = `${names[e.button] || 'क्लिक'} (${e.clientX}, ${e.clientY})`;
+            const names = ["Left Click", "Middle Click", "Right Click"];
+            mouseEl.textContent = `${names[e.button] || 'Click'} (${e.clientX},${e.clientY})`;
         });
 
         // मॉनिटर स्क्रीन डेड-पिक्सेल टेस्ट
@@ -1097,41 +1175,97 @@
             showToast("Wi-Fi पासवर्ड CMD कमांड कॉपी हो गया!");
         }
 
+        // 1-क्लिक .BAT टूल (CPU Generation, Motherboard Slots, DDR Type, Max RAM, SSD/NVMe, Battery Health % & Secure Boot सहित)
         function downloadHardwareBatchScript() {
+            const psScript = [
+                "$cs = gcim Win32_ComputerSystem;",
+                "$cpu = gcim Win32_Processor | Select-Object -First 1;",
+                "$mb = gcim Win32_BaseBoard;",
+                "$bios = gcim Win32_BIOS;",
+                "$os = gcim Win32_OperatingSystem;",
+                "$memArr = gcim Win32_PhysicalMemoryArray;",
+                "$rams = gcim Win32_PhysicalMemory;",
+                "$totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum;",
+                "$usedSlots = ($rams | Measure-Object).Count;",
+                "$freeSlots = $totalSlots - $usedSlots;",
+                "$maxRamGB = [math]::Round((($memArr | Measure-Object MaxCapacity -Sum).Sum / 1MB), 2);",
+                "$ddrMap = @{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5';0='Unknown/LPDDR'};",
+                "$ffMap = @{8='DIMM (Desktop)';12='SODIMM (Laptop)'};",
+                "$ramDetails = $rams | ForEach-Object { $t = if($ddrMap.ContainsKey([int]$_.SMBIOSMemoryType)){$ddrMap[[int]$_.SMBIOSMemoryType]}else{'DDR-Type('+$_.SMBIOSMemoryType+')'}; $f = if($ffMap.ContainsKey([int]$_.FormFactor)){$ffMap[[int]$_.FormFactor]}else{'Standard'}; $cap = [math]::Round($_.Capacity/1GB,2); $spd = $_.Speed; $slot = $_.DeviceLocator; \"$slot : $cap GB $t ($f) @ $spd MHz\" };",
+                "$physDisks = Get-PhysicalDisk | ForEach-Object { $sz = [math]::Round($_.Size/1GB,2); \"$($_.FriendlyName) | Type: $($_.MediaType) | Bus/Slot: $($_.BusType) | Capacity: $sz GB | Health: $($_.HealthStatus)\" };",
+                "$slots = gcim Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' } | ForEach-Object { \"$($_.SlotDesignation) (Status: $(if($_.CurrentUsage -eq 3){'Empty/Available'}elseif($_.CurrentUsage -eq 4){'In Use'}else{'Present'}))\" };",
+                "$batStatic = gcim -Namespace root/wmi -ClassName BatteryStaticData -ErrorAction SilentlyContinue | Select-Object -First 1;",
+                "$batFull = gcim -Namespace root/wmi -ClassName BatteryFullChargedCapacity -ErrorAction SilentlyContinue | Select-Object -First 1;",
+                "$batHealth = if($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0){ [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity)*100, 1).ToString() + '% (Full: ' + $batFull.FullChargedCapacity + ' mWh / Design: ' + $batStatic.DesignedCapacity + ' mWh)' } else { 'Desktop PC or Battery Info Unavailable' };",
+                "$secBoot = try { if(Confirm-SecureBootUEFI){'Enabled (On)'}else{'Disabled (Off)'} } catch { 'Legacy BIOS / Unsupported' };",
+                "$key = (gcim SoftwareLicensingService).OA3xOriginalProductKey;",
+                "$report = @(",
+                "'============================================================',",
+                "'   RUPESH COMPUTERS - COMPLETE SYSTEM & UPGRADE REPORT',",
+                "'============================================================',",
+                "'Manufacturer & Model : ' + $cs.Manufacturer + ' ' + $cs.Model,",
+                "'Processor (CPU)      : ' + $cpu.Name.Trim() + ' (' + $cpu.NumberOfCores + ' Cores / ' + $cpu.NumberOfLogicalProcessors + ' Threads)',",
+                "'Motherboard Board    : ' + $mb.Manufacturer + ' ' + $mb.Product + ' (Ver: ' + $mb.Version + ')',",
+                "'BIOS Serial Number   : ' + $bios.SerialNumber,",
+                "'Operating System     : ' + $os.Caption + ' (' + $os.OSArchitecture + ')',",
+                "'Secure Boot Status   : ' + $secBoot,",
+                "'Windows License Key  : ' + $(if($key){$key}else{'Digital License / OEM'}),",
+                "'Laptop Battery Health: ' + $batHealth,",
+                "'',",
+                "'--- [1] RAM SLOTS & COMPATIBILITY (कौन सा RAM लगेगा) ---',",
+                "'Total RAM Slots      : ' + $totalSlots + ' Slots',",
+                "'Used / Empty Slots   : ' + $usedSlots + ' Used  |  ' + $freeSlots + ' Empty (खाली स्लॉट)',",
+                "'Max Supported RAM    : ' + $maxRamGB + ' GB (मदरबोर्ड अधिकतम क्षमता)',",
+                "'Installed RAM Sticks :',",
+                "($ramDetails -join \"`r`n\"),",
+                "'',",
+                "'--- [2] STORAGE & SSD / HDD SLOTS (हार्डडिस्क व SSD) ---',",
+                "($physDisks -join \"`r`n\"),",
+                "'',",
+                "'--- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---',",
+                "$(if($slots){$slots -join \"`r`n\"}else{'Check Motherboard Manual / Physical M.2 Port (NVMe/SATA supported on modern boards)'}),",
+                "'============================================================'",
+                ") -join \"`r`n\";",
+                "Write-Output $report;",
+                "$report | Set-Clipboard;",
+                "$report | Out-File -FilePath ($env:USERPROFILE + '\\Desktop\\PC_Details.txt') -Encoding UTF8;"
+            ].join(" ");
+
             const batLines = [
                 "@echo off",
-                "title System Model Serial Number and Storage Scanner",
-                "color 0A",
-                "echo ====================================================",
-                "echo   System Model, Serial Number and Storage Scanner",
-                "echo ====================================================",
+                "chcp 65001 >nul",
+                "title RUPESH COMPUTERS - Full Hardware, RAM Slots, SSD and Battery Health Scanner",
+                "color 0B",
+                "echo Scanning CPU, Motherboard RAM Slots, DDR Type, Max Capacity, SSD/HDD and Battery Health...",
                 "echo.",
-                "powershell -NoProfile -Command \"$cs=gcim Win32_ComputerSystem; $bios=gcim Win32_BIOS; $os=gcim Win32_OperatingSystem; $disk=gcim Win32_DiskDrive | ForEach-Object { $_.Model + ' (' + [math]::Round($_.Size/1GB,2) + ' GB)' }; $key=(gcim SoftwareLicensingService).OA3xOriginalProductKey; $out = 'Manufacturer: ' + $cs.Manufacturer + \\\"`r`nModel: \\\" + $cs.Model + \\\"`r`nSerialNumber: \\\" + $bios.SerialNumber + \\\"`r`nWindows: \\\" + $os.Caption + ' (' + $os.Version + ')' + \\\"`r`nStorage: \\\" + ($disk -join ', ') + \\\"`r`nWindowsKey: \\\" + $key; Write-Output $out; $out | Set-Clipboard; $out | Out-File -FilePath ($env:USERPROFILE + '\\Desktop\\PC_Details.txt') -Encoding UTF8\"",
+                `powershell -NoProfile -Command "${psScript.replace(/"/g, '\\"')}"`,
                 "echo.",
-                "echo [SUCCESS] Details copied to Clipboard and saved to Desktop\\PC_Details.txt!",
+                "echo [SUCCESS] पूरी रिपोर्ट क्लिपबोर्ड पर कॉपी हो गई है और Desktop\\PC_Details.txt में सेव हो गई है!",
                 "echo.",
                 "pause"
             ];
+
             const content = batLines.join("\r\n");
             const dataUri = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(content);
             const a = document.createElement("a");
             a.href = dataUri;
-            a.download = "Check_PC_Model_Serial.bat";
+            a.download = "Rupesh_Computers_Full_PC_Scanner.bat";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            showToast("Check_PC_Model_Serial.bat डाउनलोड शुरू हुआ!");
+            showToast("Rupesh_Computers_Full_PC_Scanner.bat डाउनलोड शुरू हुआ!");
         }
 
+        // Win + R के लिए वन-लाइनर PowerShell कमांड (CPU, RAM स्लॉट्स, DDR प्रकार, Max RAM, SSD/HDD व Battery Health सहित)
         function copyFullHardwareCmd() {
-            const oneLiner = `powershell -NoExit -Command "$cs=gcim Win32_ComputerSystem;$bios=gcim Win32_BIOS;$os=gcim Win32_OperatingSystem;'Model: '+$cs.Manufacturer+' '+$cs.Model;'Serial: '+$bios.SerialNumber;'Windows: '+$os.Caption"`;
+            const oneLiner = `powershell -NoExit -Command "$cpu=(gcim Win32_Processor).Name;$mb=gcim Win32_BaseBoard;$ma=gcim Win32_PhysicalMemoryArray;$r=gcim Win32_PhysicalMemory;$d=Get-PhysicalDisk;$bs=gcim -Namespace root/wmi -ClassName BatteryStaticData -EA 0;$bf=gcim -Namespace root/wmi -ClassName BatteryFullChargedCapacity -EA 0;$ddr=@{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5'};'CPU: '+$cpu;'Board: '+$mb.Manufacturer+' '+$mb.Product;'Total Slots: '+$ma.MemoryDevices+' | Used: '+$r.Count+' | Free: '+($ma.MemoryDevices-$r.Count)+' | Max RAM: '+[math]::Round($ma.MaxCapacity/1MB,0)+' GB';$r|ForEach-Object{'RAM: '+[math]::Round($_.Capacity/1GB,0)+'GB '+$ddr[[int]$_.SMBIOSMemoryType]+' @ '+$_.Speed+'MHz ('+$_.DeviceLocator+')'};$d|ForEach-Object{'Disk: '+$_.FriendlyName+' | '+$_.MediaType+' ('+$_.BusType+') | '+[math]::Round($_.Size/1GB,0)+' GB'};if($bs -and $bf){'Battery Health: '+[math]::Round(($bf.FullChargedCapacity/$bs.DesignedCapacity)*100,1)+'%'}"`;
             copyTextSafe(oneLiner);
             const box = document.getElementById('cmd-display-box');
             if (box) {
                 box.textContent = oneLiner;
                 box.classList.remove('hidden');
             }
-            showToast("कमांड कॉपी हो गया! Win + R दबाकर पेस्ट करें।");
+            showToast("पूर्ण हार्डवेयर व बैटरी हेल्थ कमांड कॉपी हो गया! Win + R दबाकर पेस्ट करें।");
         }
 
         function copyFullSystemReport() {
