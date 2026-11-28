@@ -12,6 +12,7 @@ const navLinks = [
     { file: 'pdf-tool.html', icon: 'fa-file-pdf', color: 'text-rose-400', label: 'JPEG to PDF' },
     { file: 'passport-tool.html', icon: 'fa-id-badge', color: 'text-cyan-400', label: 'पासपोर्ट फोटो' },
     { file: 'dob-tool.html', icon: 'fa-cake-candles', color: 'text-purple-400', label: 'DOB Calculator' },
+    { file: 'system_info_scanner.html', icon: 'fa-laptop-medical', color: 'text-teal-300', label: 'PC डायग्नोस्टिक' },
     { file: 'scanner-tool.html', icon: 'fa-barcode', color: 'text-emerald-400', label: 'Barcode Reader' },
     { file: 'hindi-tool.html', icon: 'fa-language', color: 'text-pink-400', label: 'Hindi Typing & Kruti Dev' },
     { file: 'card-design.html', icon: 'fa-card-design', color: 'text-amber-300', label: 'शोक पत्र' },
