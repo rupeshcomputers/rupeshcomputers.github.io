@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>त्वरित फ़ाइल एवं टेक्स्ट ट्रांसफ़र टूल - P2P File Share</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PeerJS for Direct Browser-to-Browser (WebRTC) File & Text Transfer -->
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <!-- QRCode.js for Instant Mobile Scan Connect -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+        .dropzone-active {
+            border-color: #0d9488 !important;
+            background-color: #f0fdfa !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Common Header Container (RUPESH COMPUTERS Layout) -->
+    <div id="site-header"></div>
+
+    <!-- Tool Action Sub-Bar -->
+    <div class="bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">त्वरित P2P फ़ाइल एवं टेक्स्ट ट्रांसफ़र (Direct Share)</h2>
+                    <p class="text-xs text-slate-500">मोबाइल से कंप्यूटर या PC से PC में बिना डेटा खर्च/क्लाउड अपलोड के सीधे फ़ाइल व लिंक भेजें</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="connection-status-pill" class="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span>डिवाइस ID बन रही है...</span>
+                </span>
+                <button type="button" onclick="resetPeerSession()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate text-blue-600"></i><span>नया कोड</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow space-y-6">
+
+        <!-- Simple Step-by-Step Guide Banner -->
+        <div class="bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-3xl p-5 shadow-md">
+            <h3 class="text-sm sm:text-base font-extrabold flex items-center gap-2">
+                <i class="fa-solid fa-network-wired text-amber-300 text-lg"></i>
+                <span>4 कंप्यूटर या मोबाइल को एक साथ जोड़ने और मनचाहे डिवाइस पर भेजने का तरीका:</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3 text-xs">
+                <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
+                    <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 1 (अपना नाम रखें)</span>
+                    <p class="font-semibold">हर कंप्यूटर/मोबाइल का नाम रखें (जैसे: <strong>Counter-1, Counter-2, Office PC</strong>) ताकि पहचान आसान रहे।</p>
+                </div>
+                <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
+                    <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 2 (चारों को जोड़ें)</span>
+                    <p class="font-semibold">बाकी तीनों कंप्यूटर/मोबाइल से पहले कंप्यूटर का <strong>QR स्कैन</strong> करें या <strong>6-अंकीय कोड</strong> डालें—चारों आपस में जुड़ जाएंगे।</p>
+                </div>
+                <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
+                    <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 3 (मनचाहा चुनें)</span>
+                    <p class="font-semibold">फ़ाइल या संदेश भेजते समय ऊपर से चुनें कि <strong>किस एक कंप्यूटर</strong> को भेजना है या <strong>सभी चारों</strong> को एक साथ!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unified Pairing Section: Device Name, QR/Code & Multi-Device Mesh Connect -->
+        <div id="pairing-section" class="bg-white rounded-3xl p-4 sm:p-6 card-shadow border border-slate-200/80 space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                <div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-wifi text-teal-600"></i>
+                        <span>मल्टी-डिवाइस नेटवर्क (4+ कंप्यूटर और मोबाइल एक साथ जोड़ें)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">किसी एक डिवाइस से जुड़ने पर ग्रुप के बाकी सभी जुड़े हुए कंप्यूटर भी अपने आप जुड़ जाते हैं (Auto-Mesh)</p>
+                </div>
+                <!-- Device Name Customizer -->
+                <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-2xl border border-slate-200 shrink-0">
+                    <i class="fa-solid fa-desktop text-blue-600 text-xs"></i>
+                    <span class="text-[11px] font-bold text-slate-600">इस डिवाइस का नाम:</span>
+                    <input type="text" id="my-device-name-input" maxlength="20" onchange="updateMyDeviceName(this.value)"
+                        class="w-32 sm:w-36 px-2 py-1 text-xs font-extrabold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!-- LEFT BOX: MY QR & 6-DIGIT CODE (For Others to Scan/Connect) -->
+                <div class="bg-teal-50/70 border border-teal-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4">
+                    <!-- QR Code -->
+                    <div class="bg-white p-3 rounded-2xl border-2 border-teal-300 shadow-sm shrink-0 text-center">
+                        <div id="qrcode-box" class="w-36 h-36 flex items-center justify-center text-xs text-slate-400 mx-auto">
+                            QR बन रहा है...
+                        </div>
+                        <span class="block mt-1.5 text-[10px] font-bold text-teal-800">
+                            <i class="fa-solid fa-camera mr-1"></i>स्कैन करके जोड़ें
+                        </span>
+                    </div>
+
+                    <!-- 6-Digit Code -->
+                    <div class="flex-grow text-center sm:text-left space-y-2.5 w-full">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 text-[11px] font-bold">
+                            <i class="fa-solid fa-circle-dot animate-ping text-[7px]"></i>
+                            <span>इस डिवाइस का कोड (Receive)</span>
+                        </span>
+                        <div>
+                            <p class="text-[11px] font-semibold text-slate-600">दूसरे मोबाइल/PC को जोड़ने के लिए यह कोड दें:</p>
+                            <div class="mt-1.5 flex items-center justify-center sm:justify-start gap-2">
+                                <span id="my-peer-code" class="text-2xl sm:text-3xl font-black tracking-[0.18em] text-teal-700 font-mono bg-white px-4 py-2 rounded-xl border-2 border-teal-300 select-all shadow-inner">
+                                    ------
+                                </span>
+                                <button type="button" onclick="copyMyCode()" class="px-3.5 py-3 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1">
+                                    <i class="fa-solid fa-copy"></i><span>कॉपी</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 pt-1">
+                            <button type="button" onclick="copyDirectInviteLink()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 rounded-xl text-[11px] font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-share-nodes text-blue-600"></i><span>लिंक कॉपी</span>
+                            </button>
+                            <button type="button" onclick="connectLocalBroadcastTab()" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-xl text-[11px] font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-window-restore"></i><span>लोकल टैब</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT BOX: ENTER OTHER DEVICE CODE TO CONNECT -->
+                <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold mb-2">
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                            <span>दूसरे डिवाइस से जुड़ें (Connect / Send)</span>
+                        </span>
+                        <h4 class="text-sm font-extrabold text-slate-900">
+                            सामने वाले डिवाइस का 6-अंकीय कोड यहाँ डालें:
+                        </h4>
+                        <p class="text-[11px] text-slate-600 mt-0.5">
+                            आप एक के बाद एक कई मोबाइल या कंप्यूटर के कोड डालकर उन सभी को एक साथ जोड़ सकते हैं:
+                        </p>
+                    </div>
+
+                    <form onsubmit="handleConnectSubmit(event)" class="flex flex-col sm:flex-row gap-2.5 pt-1">
+                        <input type="tel" inputmode="numeric" pattern="[0-9]*" id="target-peer-input" maxlength="6" placeholder="6-अंकीय कोड (जैसे: 482910)"
+                            autocomplete="off"
+                            class="flex-grow px-4 py-3 text-lg sm:text-xl text-center sm:text-left font-mono font-black tracking-[0.2em] bg-white border-2 border-blue-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 text-slate-900">
+                        <button type="submit" id="connect-btn" class="px-5 py-3 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl text-xs sm:text-sm font-extrabold transition shadow-md flex items-center justify-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-link"></i><span>अभी जोड़ें</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Connected Devices Status Bar (Always Visible) -->
+            <div class="pt-3 border-t border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                        <i class="fa-solid fa-link text-emerald-600"></i>
+                        <span>जुड़े हुए कंप्यूटर व मोबाइल (Connected Devices):</span>
+                    </span>
+                    <span id="connected-count-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">0 जुड़े हैं</span>
+                </div>
+                <div id="connected-peers-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+                    <div class="sm:col-span-2 md:col-span-4 text-xs text-slate-500 bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-3 text-center">
+                        अभी कोई दूसरा डिवाइस जुड़ा नहीं है। बाएं बॉक्स का QR स्कैन करें या दाएं बॉक्स में मुख्य कंप्यूटर का 6-अंकीय कोड डालें।
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Active File & Text Sharing Workspace -->
+        <div id="workspace-section" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Send Files & Text (7 Columns) -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane text-blue-600"></i>
+                        <span>फ़ाइल, फ़ोटो, PDF या टेक्स्ट भेजें</span>
+                    </h3>
+                    <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700">मोबाइल व PC समर्थित</span>
+                </div>
+
+                <!-- Target Recipient Selector (Choose Specific Computer or All) -->
+                <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-extrabold text-amber-950 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bullseye text-amber-600"></i>
+                            <span>किसे भेजना है? (डिवाइस चुनें):</span>
+                        </label>
+                        <span class="text-[10px] font-bold text-amber-800">अपनी पसंद से एक या सभी चुनें</span>
+                    </div>
+                    <div id="recipient-selector-pills" class="flex flex-wrap gap-1.5">
+                        <span class="text-xs text-slate-500">डिवाइस जुड़ने के बाद यहाँ नाम दिखेंगे...</span>
+                    </div>
+                </div>
+
+                <!-- Mobile-Friendly Big Action Buttons + Drag & Drop Zone -->
+                <div id="drop-zone" onclick="document.getElementById('file-picker-input').click()"
+                    class="border-2 border-dashed border-blue-300 hover:border-blue-600 bg-blue-50/40 hover:bg-blue-50 rounded-3xl p-6 text-center cursor-pointer transition active:scale-[0.99]">
+                    <input type="file" id="file-picker-input" multiple class="hidden" onchange="handleFilesSelected(this.files)">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <p class="text-sm sm:text-base font-extrabold text-slate-900">फ़ाइल या फ़ोटो चुनने के लिए यहाँ टच करें</p>
+                    <p class="text-xs text-slate-500 mt-1">गैलरी फ़ोटो, PDF, डॉक्यूमेंट, ZIP या वीडियो चुनें (एक साथ कई फ़ाइलें चुन सकते हैं)</p>
+                    <span class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm">
+                        <i class="fa-solid fa-folder-plus"></i><span>फ़ाइलें चुनें (Select Files)</span>
+                    </span>
+                </div>
+
+                <!-- Send Progress Bar (Visible during transfer) -->
+                <div id="send-progress-wrapper" class="hidden bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-blue-900">
+                        <span id="send-file-label" class="truncate max-w-[70%]">फ़ाइल भेजी जा रही है...</span>
+                        <span id="send-percent-label">0%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-blue-200 rounded-full overflow-hidden">
+                        <div id="send-progress-bar" class="h-full bg-blue-600 transition-all duration-100" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Quick Text / Link / OTP Share Box -->
+                <div class="pt-3 border-t border-slate-100">
+                    <label class="block text-xs font-extrabold text-slate-700 mb-1.5">
+                        <i class="fa-solid fa-message text-teal-600 mr-1"></i>तुरंत टेक्स्ट, लिंक या आवेदन नंबर भेजें:
+                    </label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <textarea id="quick-text-input" rows="2" placeholder="यहाँ कोई लिंक, आवेदन नंबर या संदेश लिखें..."
+                            class="flex-grow px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white"></textarea>
+                        <button type="button" onclick="sendTextMessage()" class="px-5 py-3 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-2xl text-xs font-extrabold transition shadow-sm flex items-center justify-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-paper-plane"></i><span>संदेश भेजें</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer History & Received Items (5 Columns) -->
+            <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-inbox text-emerald-600"></i>
+                            <span>प्राप्त व भेजी गई फ़ाइलें / संदेश</span>
+                        </h3>
+                        <button type="button" onclick="clearTransferHistory()" class="text-[11px] font-bold text-slate-500 hover:text-rose-600 transition">
+                            साफ़ करें
+                        </button>
+                    </div>
+
+                    <!-- Incoming Progress Bar -->
+                    <div id="receive-progress-wrapper" class="hidden mb-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-xs font-bold text-emerald-900">
+                            <span id="receive-file-label" class="truncate max-w-[75%]">फ़ाइल आ रही है...</span>
+                            <span id="receive-percent-label">0%</span>
+                        </div>
+                        <div class="w-full h-2 bg-emerald-200 rounded-full overflow-hidden">
+                            <div id="receive-progress-bar" class="h-full bg-emerald-600 transition-all duration-100" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div id="transfer-history-list" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                        <div id="empty-history-msg" class="text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
+                            <i class="fa-solid fa-folder-open text-2xl text-slate-300 mb-2 block"></i>
+                            यहाँ आपकी प्राप्त हुई फ़ाइलें (ऑटो-डाउनलोड बटन सहित) और संदेश दिखाई देंगे।
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast-modal" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold hidden items-center gap-2 z-50 border border-slate-700">
+        <i class="fa-solid fa-circle-check text-teal-400 text-base"></i>
+        <span id="toast-message">सूचना</span>
+    </div>
+
+    <!-- Common Footer Container (RUPESH COMPUTERS Layout) -->
+    <div id="site-footer"></div>
+
+    <!-- आपकी वेबसाइट की tools.js (Header & Footer) फाइल -->
+    <script src="tools.js"></script>
+    <script src="common-layout.js"></script>
+
+    <!-- P2P WebRTC File & Text Transfer Logic -->
+    <script>
+        function renderPreviewFallbackLayout() {
+            const headerEl = document.getElementById('site-header');
+            const footerEl = document.getElementById('site-footer');
+            if (headerEl && !headerEl.innerHTML.trim()) {
+                headerEl.innerHTML = `
+                <header class="bg-slate-900 text-white border-b border-slate-800 px-4 py-3">
+                    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center"><i class="fa-solid fa-laptop-code"></i></span>
+                            <div>
+                                <h1 class="text-sm sm:text-base font-black tracking-tight">RUPESH COMPUTERS</h1>
+                                <p class="text-[10px] text-amber-300 font-semibold">चोंगरीबहार & दोकड़ा शाखा</p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] bg-white/10 px-2.5 py-1 rounded-lg text-slate-200">लाइव साइट पर tools.js से पूर्ण नेविगेशन सक्रिय रहेगा</span>
+                    </div>
+                </header>`;
+            }
+            if (footerEl && !footerEl.innerHTML.trim()) {
+                footerEl.innerHTML = `
+                <footer class="bg-slate-950 text-slate-400 text-xs py-5 px-4 mt-8 border-t border-slate-800 text-center">
+                    <p class="text-slate-200 font-bold">RUPESH COMPUTERS • चोंगरीबहार एवं दोकड़ा शाखा</p>
+                </footer>`;
+            }
+        }
+
+        const PEER_PREFIX = "rc-share-";
+        const CHUNK_SIZE = 64 * 1024; // 64 KB chunks for reliable high-speed WebRTC transfer
+        let peer = null;
+        let myShortCode = "";
+        let myDeviceName = "";
+        let activeConnections = new Map(); // fullPeerId -> DataConnection or LocalChannelAdapter
+        let peerNames = new Map(); // fullPeerId -> Friendly Name (e.g. "PC-1 (482910)")
+        let selectedRecipients = "ALL"; // "ALL" or Set of fullPeerIds
+        let incomingFileBuffers = new Map(); // transferId -> { meta, chunks, receivedBytes }
+        let localChannel = null;
+
+        function getDefaultDeviceName() {
+            const saved = localStorage.getItem('rc_transfer_device_name');
+            if (saved && saved.trim()) return saved.trim();
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const randNum = Math.floor(10 + Math.random() * 89);
+            return isMobile ? `Mobile-${randNum}` : `Computer-${randNum}`;
+        }
+
+        function updateMyDeviceName(newName) {
+            const clean = (newName || "").trim() || getDefaultDeviceName();
+            myDeviceName = clean;
+            localStorage.setItem('rc_transfer_device_name', clean);
+            const inp = document.getElementById('my-device-name-input');
+            if (inp) inp.value = clean;
+
+            // सभी जुड़े हुए डिवाइसों को नया नाम बताएं
+            for (const conn of activeConnections.values()) {
+                if (conn.open) {
+                    conn.send({ type: 'peer-intro', code: myShortCode, name: myDeviceName, knownPeers: getKnownPeersPayload() });
+                }
+            }
+            showToast(`डिवाइस का नाम "${clean}" सेट हो गया!`);
+        }
+
+        function getKnownPeersPayload() {
+            const list = [];
+            for (const fullId of activeConnections.keys()) {
+                const code = fullId.replace(PEER_PREFIX, '');
+                if (code !== myShortCode) {
+                    list.push({ code, name: peerNames.get(fullId) || `Device-${code}` });
+                }
+            }
+            return list;
+        }
+
+        function copyTextSafe(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand('copy');
+            } catch (e) {
+                console.error(e);
+            }
+            document.body.removeChild(ta);
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function generateSixDigitCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function updateStatusPill(state, text) {
+            const pill = document.getElementById('connection-status-pill');
+            if (!pill) return;
+            if (state === 'ready') {
+                pill.className = "px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5";
+                pill.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>${text}</span>`;
+            } else if (state === 'error') {
+                pill.className = "px-3 py-1.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1.5";
+                pill.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>${text}</span>`;
+            } else {
+                pill.className = "px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1.5";
+                pill.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span><span>${text}</span>`;
+            }
+        }
+
+        function renderQRCode(code) {
+            const box = document.getElementById('qrcode-box');
+            if (!box) return;
+            box.innerHTML = "";
+            const inviteUrl = new URL(window.location.href);
+            inviteUrl.searchParams.set('connect', code);
+
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(box, {
+                    text: inviteUrl.toString(),
+                    width: 136,
+                    height: 136,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } else {
+                box.innerHTML = `<span class="text-sm font-mono font-bold text-slate-600">${code}</span>`;
+            }
+        }
+
+        function initPeerConnection() {
+            if (peer) {
+                try { peer.destroy(); } catch (e) {}
+            }
+            activeConnections.clear();
+            peerNames.clear();
+            selectedRecipients = "ALL";
+            renderConnectedPeersUI();
+
+            if (!myDeviceName) {
+                myDeviceName = getDefaultDeviceName();
+            }
+            const nameInp = document.getElementById('my-device-name-input');
+            if (nameInp) nameInp.value = myDeviceName;
+
+            myShortCode = generateSixDigitCode();
+            const fullPeerId = PEER_PREFIX + myShortCode;
+            document.getElementById('my-peer-code').textContent = myShortCode;
+            renderQRCode(myShortCode);
+            updateStatusPill('loading', 'नेटवर्क से जुड़ रहा है...');
+
+            // यदि QR कोड स्कैन करके या लिंक से ?connect=XXXXXX खुला है तो इनपुट बॉक्स में कोड भर दें
+            const urlParams = new URLSearchParams(window.location.search);
+            const prefillCode = urlParams.get('connect');
+            if (prefillCode && prefillCode !== myShortCode) {
+                const inp = document.getElementById('target-peer-input');
+                if (inp) inp.value = prefillCode;
+            }
+
+            // यदि ब्राउज़र सैंडबॉक्स (Canvas/iFrame) में WebSocket ब्लॉक हो तो सुरक्षित रूप से संभालें
+            if (typeof Peer === 'undefined') {
+                updateStatusPill('error', 'ऑफ़लाइन / लोकल मोड सक्रिय');
+                return;
+            }
+
+            try {
+                peer = new Peer(fullPeerId, {
+                    debug: 0,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' }
+                        ]
+                    }
+                });
+
+                peer.on('open', () => {
+                    updateStatusPill('ready', 'ऑनलाइन • शेयर के लिए तैयार');
+
+                    // यदि QR कोड या लिंक में ?connect=XXXXXX हो तो स्वतः कनेक्ट करें
+                    const params = new URLSearchParams(window.location.search);
+                    const autoTarget = params.get('connect');
+                    if (autoTarget && autoTarget !== myShortCode) {
+                        const inp = document.getElementById('target-peer-input');
+                        if (inp) inp.value = autoTarget;
+                        connectToPeerCode(autoTarget);
+                    }
+                });
+
+                peer.on('connection', (conn) => {
+                    setupDataConnection(conn);
+                });
+
+                peer.on('error', (err) => {
+                    if (err.type === 'unavailable-id') {
+                        initPeerConnection();
+                    } else if (err.type === 'peer-unavailable') {
+                        showToast("यह डिवाइस कोड उपलब्ध नहीं है। कृपया सामने वाले डिवाइस का सही कोड जांचें।");
+                    } else {
+                        updateStatusPill('ready', 'लोकल मोड तैयार (लाइव साइट पर P2P सक्रिय)');
+                    }
+                });
+            } catch (secErr) {
+                // Canvas प्रीव्यू में WebSocket SecurityError को रोकें और लोकल मोड चालू रखें
+                peer = null;
+                updateStatusPill('ready', 'प्रीव्यू लोकल मोड • लाइव साइट पर P2P सक्रिय');
+            }
+        }
+
+        // एक ही ब्राउज़र के दो टैब्स या प्रीव्यू में तुरंत टेस्टिंग के लिए BroadcastChannel ब्रिज
+        function connectLocalBroadcastTab() {
+            if (!('BroadcastChannel' in window)) {
+                showToast("इस ब्राउज़र में लोकल टैब सिंक समर्थित नहीं है।");
+                return;
+            }
+            if (!localChannel) {
+                localChannel = new BroadcastChannel('rupesh_computers_local_transfer');
+                localChannel.onmessage = (event) => {
+                    const msg = event.data;
+                    if (!msg || msg.sender === myShortCode) return;
+
+                    if (msg.type === 'hello') {
+                        const virtualId = PEER_PREFIX + msg.sender;
+                        if (!activeConnections.has(virtualId)) {
+                            peerNames.set(virtualId, msg.name || `Tab-${msg.sender}`);
+                            activeConnections.set(virtualId, {
+                                peer: virtualId,
+                                open: true,
+                                send: (pkt) => localChannel.postMessage({ sender: myShortCode, name: myDeviceName, packet: pkt }),
+                                close: () => {}
+                            });
+                            renderConnectedPeersUI();
+                            localChannel.postMessage({ type: 'hello', sender: myShortCode, name: myDeviceName });
+                            showToast(`${peerNames.get(virtualId)} जुड़ गया है!`);
+                        }
+                    } else if (msg.packet) {
+                        if (msg.name) peerNames.set(PEER_PREFIX + msg.sender, msg.name);
+                        handleIncomingPacket(PEER_PREFIX + msg.sender, msg.packet);
+                    }
+                };
+            }
+            localChannel.postMessage({ type: 'hello', sender: myShortCode, name: myDeviceName });
+            showToast("दूसरे खुले टैब को सिग्नल भेजा गया है—दूसरे टैब में भी 'लोकल टैब' दबाएं।");
+        }
+
+        function resetPeerSession() {
+            initPeerConnection();
+            showToast("नया कनेक्शन कोड तैयार किया गया!");
+        }
+
+        function handleConnectSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('target-peer-input');
+            const code = (input.value || '').trim().replace(/\s+/g, '');
+            if (!code || code.length < 4) {
+                showToast("कृपया सही 6-अंकीय डिवाइस कोड डालें।");
+                return;
+            }
+            if (code === myShortCode) {
+                showToast("आप अपने ही डिवाइस कोड से कनेक्ट नहीं कर सकते!");
+                return;
+            }
+            connectToPeerCode(code);
+        }
+
+        function connectToPeerCode(shortCode) {
+            if (!peer || peer.disconnected) {
+                showToast("प्रीव्यू बॉक्स में बाहरी WebSocket ब्लॉक है—लाइव वेबसाइट पर यह कोड सीधे जुड़ेगा।");
+                return;
+            }
+            const targetFullId = PEER_PREFIX + shortCode;
+            if (activeConnections.has(targetFullId)) {
+                showToast("यह डिवाइस पहले से जुड़ा हुआ है!");
+                return;
+            }
+            showToast(`डिवाइस ${shortCode} से जुड़ रहा है...`);
+            const conn = peer.connect(targetFullId, { reliable: true });
+            setupDataConnection(conn);
+        }
+
+        function setupDataConnection(conn) {
+            conn.on('open', () => {
+                activeConnections.set(conn.peer, conn);
+                const shortId = conn.peer.replace(PEER_PREFIX, '');
+                if (!peerNames.has(conn.peer)) {
+                    peerNames.set(conn.peer, `Device-${shortId}`);
+                }
+
+                // अपना नाम और पहले से जुड़े बाकी कंप्यूटरों की सूची भेजें (Auto-Mesh ताकि चारों आपस में जुड़ जाएं)
+                conn.send({
+                    type: 'peer-intro',
+                    code: myShortCode,
+                    name: myDeviceName,
+                    knownPeers: getKnownPeersPayload()
+                });
+
+                renderConnectedPeersUI();
+                showToast(`${peerNames.get(conn.peer)} जुड़ गया है!`);
+            });
+
+            conn.on('data', (packet) => {
+                handleIncomingPacket(conn.peer, packet);
+            });
+
+            conn.on('close', () => {
+                const leftName = peerNames.get(conn.peer) || conn.peer.replace(PEER_PREFIX, '');
+                activeConnections.delete(conn.peer);
+                peerNames.delete(conn.peer);
+                if (selectedRecipients instanceof Set) {
+                    selectedRecipients.delete(conn.peer);
+                    if (selectedRecipients.size === 0) selectedRecipients = "ALL";
+                }
+                renderConnectedPeersUI();
+                showToast(`${leftName} डिस्कनेक्ट हो गया।`);
+            });
+
+            conn.on('error', () => {
+                activeConnections.delete(conn.peer);
+                peerNames.delete(conn.peer);
+                renderConnectedPeersUI();
+            });
+        }
+
+        function selectRecipientTarget(targetId) {
+            if (targetId === "ALL") {
+                selectedRecipients = "ALL";
+            } else {
+                if (selectedRecipients === "ALL") {
+                    selectedRecipients = new Set([targetId]);
+                } else {
+                    if (selectedRecipients.has(targetId)) {
+                        selectedRecipients.delete(targetId);
+                        if (selectedRecipients.size === 0) selectedRecipients = "ALL";
+                    } else {
+                        selectedRecipients.add(targetId);
+                    }
+                }
+            }
+            renderRecipientPills();
+        }
+
+        function renderRecipientPills() {
+            const container = document.getElementById('recipient-selector-pills');
+            if (!container) return;
+
+            if (activeConnections.size === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-500">डिवाइस जुड़ने के बाद यहाँ नाम दिखेंगे...</span>`;
+                return;
+            }
+
+            const isAll = selectedRecipients === "ALL";
+            let html = `
+                <button type="button" onclick="selectRecipientTarget('ALL')"
+                    class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 border ${isAll ? 'bg-amber-600 text-white border-amber-700 shadow-sm' : 'bg-white text-slate-700 border-slate-300 hover:bg-amber-100'}">
+                    <i class="fa-solid fa-users"></i><span>सभी को एक साथ (${activeConnections.size})</span>
+                </button>
+            `;
+
+            for (const fullId of activeConnections.keys()) {
+                const shortId = fullId.replace(PEER_PREFIX, '');
+                const label = peerNames.get(fullId) || `Device-${shortId}`;
+                const isSelected = !isAll && selectedRecipients instanceof Set && selectedRecipients.has(fullId);
+                html += `
+                    <button type="button" onclick="selectRecipientTarget('${fullId}')"
+                        class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 border ${isSelected ? 'bg-blue-600 text-white border-blue-700 shadow-sm' : 'bg-white text-slate-800 border-slate-300 hover:bg-blue-50'}">
+                        <i class="fa-solid fa-desktop text-[10px]"></i><span>${label} (${shortId})</span>
+                    </button>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function renderConnectedPeersUI() {
+            const listEl = document.getElementById('connected-peers-list');
+            const badgeEl = document.getElementById('connected-count-badge');
+            badgeEl.textContent = `${activeConnections.size} जुड़े हैं`;
+
+            renderRecipientPills();
+
+            if (activeConnections.size === 0) {
+                listEl.innerHTML = `
+                    <div class="sm:col-span-2 md:col-span-4 text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-xl p-3 text-center">
+                        अभी कोई दूसरा डिवाइस जुड़ा नहीं है। बाएं बॉक्स का QR स्कैन करें या दाएं बॉक्स में कोड डालें।
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = Array.from(activeConnections.keys()).map(fullId => {
+                const shortId = fullId.replace(PEER_PREFIX, '');
+                const label = peerNames.get(fullId) || `Device-${shortId}`;
+                return `
+                    <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 text-xs">
+                        <div class="truncate pr-1">
+                            <div class="font-extrabold text-emerald-950 flex items-center gap-1.5 truncate">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                                <span class="truncate">${label}</span>
+                            </div>
+                            <div class="text-[10px] font-mono text-emerald-700 pl-3.5">कोड: ${shortId}</div>
+                        </div>
+                        <button type="button" onclick="disconnectPeer('${fullId}')" class="text-rose-600 hover:text-rose-800 font-bold text-[11px] shrink-0">
+                            हटाएं
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function disconnectPeer(fullId) {
+            const conn = activeConnections.get(fullId);
+            if (conn) {
+                try { conn.close(); } catch (e) {}
+                activeConnections.delete(fullId);
+                renderConnectedPeersUI();
+            }
+        }
+
+        // फ़ाइलें भेजने का फंक्शन (Chunked Streaming)
+        async function handleFilesSelected(fileList) {
+            if (!fileList || fileList.length === 0) return;
+            if (activeConnections.size === 0) {
+                showToast("पहले दूसरे डिवाइस का कोड डालकर कनेक्ट करें!");
+                return;
+            }
+
+            const files = Array.from(fileList);
+            for (const file of files) {
+                await sendSingleFileToAllPeers(file);
+            }
+            document.getElementById('file-picker-input').value = "";
+        }
+
+        async function sendSingleFileToAllPeers(file) {
+            const transferId = Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+            const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+            const progWrap = document.getElementById('send-progress-wrapper');
+            const progLabel = document.getElementById('send-file-label');
+            const progPct = document.getElementById('send-percent-label');
+            const progBar = document.getElementById('send-progress-bar');
+
+            progWrap.classList.remove('hidden');
+            progLabel.textContent = `भेजा जा रहा है: ${file.name} (${formatBytes(file.size)})`;
+            progPct.textContent = "0%";
+            progBar.style.width = "0%";
+
+            // 1. Metadata भेजें
+            const metaPacket = {
+                type: 'file-meta',
+                transferId,
+                name: file.name,
+                size: file.size,
+                mimeType: file.type || 'application/octet-stream',
+                totalChunks
+            };
+            broadcastPacket(metaPacket);
+
+            // 2. Chunks पढ़ें और भेजें
+            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+                const start = chunkIndex * CHUNK_SIZE;
+                const end = Math.min(file.size, start + CHUNK_SIZE);
+                const slice = file.slice(start, end);
+                const buffer = await slice.arrayBuffer();
+
+                broadcastPacket({
+                    type: 'file-chunk',
+                    transferId,
+                    chunkIndex,
+                    data: buffer
+                });
+
+                const pct = Math.round(((chunkIndex + 1) / totalChunks) * 100);
+                progPct.textContent = `${pct}%`;
+                progBar.style.width = `${pct}%`;
+
+                // ब्राउज़र UI और WebRTC बफर को सांस लेने दें
+                if (chunkIndex % 8 === 0) {
+                    await new Promise(r => setTimeout(r, 8));
+                }
+            }
+
+            // 3. Complete सिग्नल भेजें
+            broadcastPacket({ type: 'file-end', transferId });
+
+            const targetNames = getSelectedTargetNamesLabel();
+            addHistoryItem({
+                direction: 'sent',
+                kind: 'file',
+                title: file.name,
+                subtitle: `${formatBytes(file.size)} • भेजा गया → ${targetNames}`
+            });
+
+            setTimeout(() => progWrap.classList.add('hidden'), 1500);
+            showToast(`फ़ाइल "${file.name}" (${targetNames}) को भेजी गई!`);
+        }
+
+        function getSelectedTargetNamesLabel() {
+            if (selectedRecipients === "ALL") {
+                return `सभी डिवाइस (${activeConnections.size})`;
+            }
+            const names = [];
+            for (const id of selectedRecipients) {
+                const shortId = id.replace(PEER_PREFIX, '');
+                names.push(peerNames.get(id) || shortId);
+            }
+            return names.join(', ');
+        }
+
+        function sendTextMessage() {
+            const textarea = document.getElementById('quick-text-input');
+            const text = textarea.value.trim();
+            if (!text) {
+                showToast("कृपया भेजने के लिए कोई संदेश या लिंक लिखें।");
+                return;
+            }
+            if (activeConnections.size === 0) {
+                showToast("पहले दूसरे डिवाइस को कनेक्ट करें!");
+                return;
+            }
+
+            broadcastPacket({
+                type: 'text-message',
+                senderName: myDeviceName,
+                text,
+                timestamp: new Date().toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })
+            });
+
+            addHistoryItem({
+                direction: 'sent',
+                kind: 'text',
+                title: text,
+                subtitle: `भेजा गया → ${getSelectedTargetNamesLabel()}`
+            });
+
+            textarea.value = "";
+            showToast("संदेश भेजा गया!");
+        }
+
+        function broadcastPacket(packet) {
+            for (const [fullId, conn] of activeConnections.entries()) {
+                const shouldSend = selectedRecipients === "ALL" || (selectedRecipients instanceof Set && selectedRecipients.has(fullId));
+                if (shouldSend && conn.open) {
+                    conn.send(packet);
+                }
+            }
+        }
+
+        // प्राप्त डेटा प्रोसेस करना
+        function handleIncomingPacket(senderPeerId, packet) {
+            if (!packet || !packet.type) return;
+
+            // Auto-Mesh Peer Discovery: जब कोई नया कंप्यूटर जुड़े तो ग्रुप के बाकी कंप्यूटरों से भी स्वतः जुड़ जाए
+            if (packet.type === 'peer-intro') {
+                if (packet.name) {
+                    peerNames.set(senderPeerId, packet.name);
+                    renderConnectedPeersUI();
+                }
+                if (Array.isArray(packet.knownPeers) && peer && !peer.disconnected) {
+                    for (const kp of packet.knownPeers) {
+                        if (kp.code && kp.code !== myShortCode) {
+                            const kpFullId = PEER_PREFIX + kp.code;
+                            if (!activeConnections.has(kpFullId)) {
+                                peerNames.set(kpFullId, kp.name || `Device-${kp.code}`);
+                                const meshConn = peer.connect(kpFullId, { reliable: true });
+                                setupDataConnection(meshConn);
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            const senderLabel = peerNames.get(senderPeerId) || senderPeerId.replace(PEER_PREFIX, '');
+
+            if (packet.type === 'text-message') {
+                addHistoryItem({
+                    direction: 'received',
+                    kind: 'text',
+                    title: packet.text,
+                    subtitle: `${packet.senderName || senderLabel} से प्राप्त (${packet.timestamp || 'अभी'})`
+                });
+                showToast(`${packet.senderName || senderLabel} से नया संदेश आया!`);
+                return;
+            }
+
+            if (packet.type === 'file-meta') {
+                incomingFileBuffers.set(packet.transferId, {
+                    meta: packet,
+                    senderLabel,
+                    chunks: [],
+                    receivedBytes: 0
+                });
+                const rWrap = document.getElementById('receive-progress-wrapper');
+                document.getElementById('receive-file-label').textContent = `${senderLabel} से आ रही है: ${packet.name}`;
+                document.getElementById('receive-percent-label').textContent = "0%";
+                document.getElementById('receive-progress-bar').style.width = "0%";
+                rWrap.classList.remove('hidden');
+                return;
+            }
+
+            if (packet.type === 'file-chunk') {
+                const entry = incomingFileBuffers.get(packet.transferId);
+                if (!entry) return;
+                entry.chunks.push(packet.data);
+                entry.receivedBytes += packet.data.byteLength || 0;
+                const pct = Math.min(100, Math.round((entry.receivedBytes / entry.meta.size) * 100));
+                document.getElementById('receive-percent-label').textContent = `${pct}%`;
+                document.getElementById('receive-progress-bar').style.width = `${pct}%`;
+                return;
+            }
+
+            if (packet.type === 'file-end') {
+                const entry = incomingFileBuffers.get(packet.transferId);
+                if (!entry) return;
+                const blob = new Blob(entry.chunks, { type: entry.meta.mimeType });
+                const downloadUrl = URL.createObjectURL(blob);
+
+                addHistoryItem({
+                    direction: 'received',
+                    kind: 'file',
+                    title: entry.meta.name,
+                    subtitle: `${formatBytes(entry.meta.size)} • ${entry.senderLabel} से प्राप्त`,
+                    downloadUrl
+                });
+
+                // स्वतः डाउनलोड ट्रिगर करें
+                const autoLink = document.createElement('a');
+                autoLink.href = downloadUrl;
+                autoLink.download = entry.meta.name;
+                document.body.appendChild(autoLink);
+                autoLink.click();
+                document.body.removeChild(autoLink);
+
+                incomingFileBuffers.delete(packet.transferId);
+                setTimeout(() => {
+                    document.getElementById('receive-progress-wrapper').classList.add('hidden');
+                }, 1500);
+                showToast(`फ़ाइल "${entry.meta.name}" प्राप्त हो गई!`);
+            }
+        }
+
+        function addHistoryItem(item) {
+            const list = document.getElementById('transfer-history-list');
+            const emptyMsg = document.getElementById('empty-history-msg');
+            if (emptyMsg) emptyMsg.remove();
+
+            const isReceived = item.direction === 'received';
+            const badgeClass = isReceived
+                ? "bg-emerald-100 text-emerald-800"
+                : "bg-blue-100 text-blue-800";
+            const badgeText = isReceived ? "प्राप्त (Received)" : "भेजा गया (Sent)";
+
+            const card = document.createElement('div');
+            card.className = "p-3 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-2";
+
+            let actionHtml = "";
+            if (item.kind === 'file' && item.downloadUrl) {
+                actionHtml = `
+                    <a href="${item.downloadUrl}" download="${item.title}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold transition shadow-sm">
+                        <i class="fa-solid fa-download"></i><span>पुनः डाउनलोड करें</span>
+                    </a>
+                `;
+            } else if (item.kind === 'text') {
+                const escaped = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                actionHtml = `
+                    <button type="button" onclick="copyTextSafe('${escaped}'); showToast('टेक्स्ट कॉपी हो गया!');" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-bold transition">
+                        <i class="fa-solid fa-copy"></i><span>टेक्स्ट कॉपी करें</span>
+                    </button>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}">${badgeText}</span>
+                    <span class="text-[11px] text-slate-500">${item.subtitle}</span>
+                </div>
+                <div class="text-xs font-bold text-slate-900 break-all bg-white p-2.5 rounded-xl border border-slate-200/80">
+                    ${item.title}
+                </div>
+                ${actionHtml ? `<div>${actionHtml}</div>` : ''}
+            `;
+
+            list.prepend(card);
+        }
+
+        function clearTransferHistory() {
+            const list = document.getElementById('transfer-history-list');
+            list.innerHTML = `
+                <div id="empty-history-msg" class="text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
+                    <i class="fa-solid fa-folder-open text-2xl text-slate-300 mb-2 block"></i>
+                    यहाँ आपकी प्राप्त हुई फ़ाइलें (ऑटो-डाउनलोड बटन सहित) और संदेश दिखाई देंगे।
+                </div>
+            `;
+        }
+
+        function copyMyCode() {
+            if (!myShortCode) return;
+            copyTextSafe(myShortCode);
+            showToast(`डिवाइस कोड ${myShortCode} कॉपी हो गया!`);
+        }
+
+        function copyDirectInviteLink() {
+            if (!myShortCode) return;
+            const url = new URL(window.location.href);
+            url.searchParams.set('connect', myShortCode);
+            copyTextSafe(url.toString());
+            showToast("डायरेक्ट कनेक्शन लिंक कॉपी हो गया!");
+        }
+
+        // Drag and Drop Events
+        const dropZone = document.getElementById('drop-zone');
+        if (dropZone) {
+            ['dragenter', 'dragover'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('dropzone-active');
+                });
+            });
+            ['dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('dropzone-active');
+                });
+            });
+            dropZone.addEventListener('drop', (e) => {
+                if (e.dataTransfer && e.dataTransfer.files) {
+                    handleFilesSelected(e.dataTransfer.files);
+                }
+            });
+        }
+
+        function initApp() {
+            if (typeof injectCommonLayout === 'function') {
+                injectCommonLayout();
+            } else {
+                renderPreviewFallbackLayout();
+            }
+            initPeerConnection();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
