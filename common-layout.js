@@ -1,5 +1,5 @@
 // ============================================================================
-// common-layout.js : सभी 10 पेजों का कॉमन Header, Navigation Bar, Footer & Chatbot
+// common-layout.js : सभी पेजों का कॉमन Header, Navigation Bar, Branch Switcher & Footer
 // ============================================================================
 
 const currentPageFile = window.location.pathname.split('/').pop() || 'index.html';
@@ -18,6 +18,54 @@ const navLinks = [
     { file: 'card-design.html', icon: 'fa-card-design', color: 'text-amber-300', label: 'शोक पत्र' },
     { file: 'branches.html', icon: 'fa-location-dot', color: 'text-lime-400', label: 'शाखाएँ' }
 ];
+
+const branchesData = {
+    chongribahar: {
+        name: 'चोंगरीबहार शाखा',
+        address: 'मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)',
+        phone: '6264531630',
+        wa: '916264531630',
+        map: 'https://maps.google.com/?q=Chongribahar'
+    },
+    dokda: {
+        name: 'दोकड़ा शाखा',
+        address: 'मेन रोड, दोकड़ा (जशपुर, छ.ग.)',
+        phone: '6264531630',
+        wa: '916264531630',
+        map: 'https://maps.google.com/?q=Dokda+Jashpur'
+    }
+};
+
+function switchBranch(branchKey) {
+    const b = branchesData[branchKey] || branchesData.chongribahar;
+    localStorage.setItem('rc_selected_branch', branchKey);
+
+    const btnC = document.getElementById('btn-chongribahar');
+    const btnD = document.getElementById('btn-dokda');
+    if (btnC && btnD) {
+        if (branchKey === 'dokda') {
+            btnD.className = 'px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md';
+            btnC.className = 'px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300';
+        } else {
+            btnC.className = 'px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md';
+            btnD.className = 'px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300';
+        }
+    }
+
+    const nameEl = document.getElementById('active-branch-name');
+    const addrEl = document.getElementById('active-branch-address');
+    const callEl = document.getElementById('active-branch-call');
+    const phoneTextEl = document.getElementById('active-branch-phone-text');
+    const waEl = document.getElementById('active-branch-wa');
+    const mapEl = document.getElementById('active-branch-map');
+
+    if (nameEl) nameEl.textContent = b.name;
+    if (addrEl) addrEl.textContent = b.address;
+    if (callEl) callEl.href = `tel:${b.phone}`;
+    if (phoneTextEl) phoneTextEl.textContent = b.phone;
+    if (waEl) waEl.href = `https://wa.me/${b.wa}?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS`;
+    if (mapEl) mapEl.href = b.map;
+}
 
 function injectCommonLayout() {
     const headerHtml = `
@@ -43,7 +91,7 @@ function injectCommonLayout() {
                 </div>
             </a>
             <div class="flex items-center gap-1.5 sm:gap-2">
-                <button id="header-pwa-btn" onclick="triggerPwaInstall()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-extrabold bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-sm transition">
+                <button id="header-pwa-btn" onclick="if(typeof triggerPwaInstall==='function') triggerPwaInstall()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-extrabold bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-sm transition">
                     <i class="fa-solid fa-download"></i> ऐप इंस्टॉल करें
                 </button>
                 <button id="btn-chongribahar" onclick="switchBranch('chongribahar')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md">चोंगरीबहार</button>
@@ -75,7 +123,63 @@ function injectCommonLayout() {
         </div>
     </div>`;
 
-    document.getElementById('site-header').innerHTML = headerHtml;
+    const footerHtml = `
+    <footer class="bg-slate-950 text-slate-300 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-xs sm:text-sm">
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg shadow">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-black text-white tracking-tight">RUPESH COMPUTERS</h3>
+                        <p class="text-[11px] text-amber-400 font-bold">चोंगरीबहार & दोकड़ा शाखा (जशपुर, छ.ग.)</p>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    आधार कार्ड, SBI कियोस्क बैंकिंग, आय-जाति-निवास प्रमाण पत्र, धान पंजीयन, ऑनलाइन फॉर्म व सभी डिजिटल एवं कंप्यूटर सेवाएं एक ही छत के नीचे।
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-3 uppercase tracking-wider">त्वरित डिजिटल टूल्स</h4>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <a href="aadhaar-print.html" class="hover:text-amber-400 transition">• आधार प्रिंट</a>
+                    <a href="pdf-tool.html" class="hover:text-amber-400 transition">• JPEG to PDF</a>
+                    <a href="passport-tool.html" class="hover:text-amber-400 transition">• पासपोर्ट फोटो</a>
+                    <a href="dob-tool.html" class="hover:text-amber-400 transition">• DOB Calculator</a>
+                    <a href="system_info_scanner.html" class="hover:text-amber-400 transition font-bold text-teal-300">• PC डायग्नोस्टिक</a>
+                    <a href="hindi-tool.html" class="hover:text-amber-400 transition">• Hindi Typing</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-3 uppercase tracking-wider">संपर्क व कार्य समय</h4>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i> शाखा 1: मुख्य मार्ग, चोंगरीबहार</li>
+                    <li><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i> शाखा 2: मेन रोड, दोकड़ा</li>
+                    <li><i class="fa-solid fa-clock text-emerald-400 mr-1.5"></i> सोम - शनि: सुबह 10:00 से शाम 6:00 बजे तक (रविवार अवकाश)</li>
+                    <li class="pt-1 flex items-center gap-2">
+                        <a href="tel:6264531630" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold"><i class="fa-solid fa-phone mr-1"></i>6264531630</a>
+                        <a href="https://wa.me/916264531630" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-black/40 border-t border-slate-900 py-4 px-4 text-center text-xs text-slate-400">
+            © ${new Date().getFullYear()} <strong class="text-white">RUPESH COMPUTERS</strong> • चोंगरीबहार एवं दोकड़ा शाखा | सर्वाधिकार सुरक्षित
+        </div>
+    </footer>`;
+
+    const headerEl = document.getElementById('site-header');
+    const footerEl = document.getElementById('site-footer');
+    if (headerEl) headerEl.innerHTML = headerHtml;
+    if (footerEl) footerEl.innerHTML = footerHtml;
+
+    const savedBranch = localStorage.getItem('rc_selected_branch') || 'chongribahar';
+    switchBranch(savedBranch);
 }
 
-window.addEventListener('DOMContentLoaded', injectCommonLayout);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectCommonLayout);
+} else {
+    injectCommonLayout();
+}
