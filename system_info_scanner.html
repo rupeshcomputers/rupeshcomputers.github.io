@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सिस्टम एवं डिवाइस डायग्नोस्टिक टूल - System Info Scanner</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Common Header Container (RUPESH COMPUTERS Layout) -->
+    <div id="site-header"></div>
+
+    <!-- Tool Action Sub-Bar -->
+    <div class="bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0">
+                    <i class="fa-solid fa-stethoscope"></i>
+                </div>
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">सिस्टम एवं डिवाइस डायग्नोस्टिक टूल</h2>
+                    <p class="text-xs text-slate-500">कंप्यूटर/मोबाइल हार्डवेयर, IP, स्पीड टेस्ट व बायोमेट्रिक स्कैनर</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <button onclick="scanAllBasicInfo()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate text-blue-600"></i><span>पुनः स्कैन करें</span>
+                </button>
+                <button onclick="window.print()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print text-indigo-600"></i><span>प्रिंट / PDF</span>
+                </button>
+                <button onclick="copyFullSystemReport()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-copy"></i><span>रिपोर्ट कॉपी करें</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 w-full flex-grow space-y-6">
+
+        <!-- Security & Privacy Note Banner -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-950">
+            <i class="fa-solid fa-shield-halved text-amber-600 text-lg mt-0.5"></i>
+            <div>
+                <p class="font-bold">ब्राउज़र सुरक्षा एवं प्राइवेसी जानकारी:</p>
+                <p class="text-amber-800 text-xs mt-0.5 leading-relaxed">
+                    यह टूल पूरी तरह सुरक्षित है और आपका कोई भी डेटा किसी बाहरी सर्वर पर नहीं भेजता। सुरक्षा कारणों से वेब ब्राउज़र कंप्यूटर का <strong>BIOS सीरियल नंबर</strong> या <strong>Windows लाइसेंस की</strong> साझा नहीं करते, लेकिन नीचे दी गई सभी हार्डवेयर, OS, बैटरी, और अनुमति-आधारित जानकारियाँ तुरंत देखी जा सकती हैं।
+                </p>
+            </div>
+        </div>
+
+        <!-- Core Automatic System Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+            <!-- 1. OS & Device Platform -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <i class="fa-brands fa-windows text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">ऑपरेटिंग सिस्टम (OS)</h2>
+                        </div>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">उपलब्ध</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="os-info-list">
+                        <div class="text-slate-400">स्कैन हो रहा है...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Hardware & Graphics (CPU, RAM, GPU) -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                                <i class="fa-solid fa-microchip text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">प्रोसेसर, RAM व ग्राफिक्स</h2>
+                        </div>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">उपलब्ध</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="hardware-info-list">
+                        <div class="text-slate-400">स्कैन हो रहा है...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Browser & Display Screen -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+                                <i class="fa-solid fa-display text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">ब्राउज़र एवं स्क्रीन डिस्प्ले</h2>
+                        </div>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">उपलब्ध</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="browser-screen-list">
+                        <div class="text-slate-400">स्कैन हो रहा है...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Battery & Power Status -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-battery-three-quarters text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">बैटरी एवं पावर स्थिति</h2>
+                        </div>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">लाइव</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="battery-info-list">
+                        <div class="text-slate-400">बैटरी स्थिति जाँची जा रही है...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Network & Internet Connection -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="fa-solid fa-wifi text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">नेटवर्क, IP एड्रेस व Static IP जाँच</h2>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="detectNetworkInfo()" title="IP पुनः जाँचें" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <span id="online-badge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">ऑनलाइन</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="network-info-list">
+                        <div class="text-slate-400">नेटवर्क व IP जाँच हो रही है...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Storage Quota & System Timezone -->
+            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                                <i class="fa-solid fa-hard-drive text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">स्टोरेज एवं टाइमज़ोन</h2>
+                        </div>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">उपलब्ध</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs" id="storage-info-list">
+                        <div class="text-slate-400">स्टोरेज जाँच हो रही है...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 7. Advanced Browser & Audio/Graphics Technical Specs (Full Width Organized Bar) -->
+        <section class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <i class="fa-solid fa-gears text-lg"></i>
+                    </span>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm">अतिरिक्त तकनीकी एवं सुरक्षा विवरण (Advanced Technical Specs)</h2>
+                        <p class="text-[11px] text-slate-500">GPU वेंडर, WebGL इंजन, ऑडियो सैंपल रेट और सुरक्षा स्थिति</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">सिस्टम इंजन</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs" id="advanced-tech-list">
+                <div class="text-slate-400">तकनीकी विवरण एकत्र हो रहे हैं...</div>
+            </div>
+        </section>
+
+        <!-- Interactive Hardware & Speed Testing Lab (Placed Right Below Core Specs for Easy Access) -->
+        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
+            <div class="mb-5">
+                <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-stethoscope text-indigo-600"></i>
+                    <span>लाइव हार्डवेयर एवं इंटरनेट स्पीड टेस्टर (Download, Upload & Hardware Check)</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">अपने इंटरनेट की असली डाउनलोड/अपलोड स्पीड, स्पीकर, माइक्रोफ़ोन, कीबोर्ड, माउस और मॉनिटर स्क्रीन की तुरंत जाँच करें:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <!-- 1. Live Internet Speed (Ping, Download & Upload Test) -->
+                <div class="border border-blue-200 rounded-2xl p-4 bg-blue-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-gauge-high text-blue-600"></i> इंटरनेट स्पीड टेस्ट
+                            </span>
+                            <button type="button" id="speed-test-btn" onclick="runInternetSpeedTest()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                स्पीड जाँचें
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-3">सर्वर पिंग, लाइव डाउनलोड और अपलोड स्पीड (Mbps) मापें।</p>
+                    </div>
+                    <div id="speed-test-result" class="text-xs bg-white border border-blue-200 rounded-xl p-3 text-slate-700 space-y-1.5">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-1">
+                            <span class="text-slate-500"><i class="fa-solid fa-signal text-amber-500 mr-1"></i>पिंग (Latency):</span>
+                            <strong id="ping-val" class="text-slate-900">-- ms</strong>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-1">
+                            <span class="text-slate-500"><i class="fa-solid fa-arrow-down text-emerald-600 mr-1"></i>डाउनलोड (Download):</span>
+                            <strong id="download-speed-val" class="text-emerald-700">-- Mbps</strong>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-500"><i class="fa-solid fa-arrow-up text-blue-600 mr-1"></i>अपलोड (Upload):</span>
+                            <strong id="upload-speed-val" class="text-blue-700">-- Mbps</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Speaker & Microphone Live Audio Test -->
+                <div class="border border-purple-200 rounded-2xl p-4 bg-purple-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-volume-high text-purple-600"></i> स्पीकर व माइक टेस्ट
+                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="testSpeakerTone()" class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    स्पीकर बजाएं
+                                </button>
+                                <button type="button" id="mic-test-btn" onclick="toggleMicLevelTest()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    माइक जाँच
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-3">स्पीकर से टेस्ट टोन बजाएं या बोलकर माइक्रोफ़ोन का आवाज़ लेवल देखें।</p>
+                    </div>
+                    <div class="text-xs bg-white border border-purple-200 rounded-xl p-3 space-y-2">
+                        <div class="flex justify-between text-[11px] text-slate-600">
+                            <span>माइक आवाज़ स्तर:</span>
+                            <span id="mic-status-label" class="font-semibold text-slate-500">बंद</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div id="mic-level-bar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-500 transition-all duration-75" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Keyboard, Mouse & Display Screen Tester -->
+                <div class="border border-teal-200 rounded-2xl p-4 bg-teal-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-keyboard text-teal-600"></i> कीबोर्ड, माउस व स्क्रीन टेस्ट
+                            </span>
+                            <button type="button" onclick="startDisplayColorTest()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                स्क्रीन टेस्ट
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-3">कोई भी कीबोर्ड बटन दबाएं या माउस क्लिक करें—यहाँ तुरंत दिखेगा।</p>
+                    </div>
+                    <div id="input-test-result" class="text-xs bg-white border border-teal-200 rounded-xl p-3 text-slate-700 space-y-1.5">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-1">
+                            <span class="text-slate-500">अंतिम कुंजी:</span>
+                            <span id="last-key-pressed" class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-teal-800 font-semibold">कोई नहीं</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-500">माउस स्थिति:</span>
+                            <span id="last-mouse-action" class="font-semibold text-slate-800">प्रतीक्षा में...</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Permission-Based & Local Service Diagnostics Section (Clean 2-Column Layout) -->
+        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
+            <div class="mb-5">
+                <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-key text-teal-600"></i>
+                    <span>अनुमति (Permission) एवं लोकल सर्विस आधारित डिवाइस स्कैन</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">नीचे दिए गए विकल्पों से आप सटीक लोकेशन, Mantra/Morpho बायोमेट्रिक सीरियल नंबर, कैमरा/माइक, USB और TPM जाँच सकते हैं:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- A. GPS + IP Fallback Location -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot text-rose-600"></i> सटीक लोकेशन (GPS + शहर)
+                            </span>
+                            <button onclick="requestLocationInfo()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                लोकेशन देखें
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">GPS अनुमति से सटीक स्थान या नेटवर्क से शहर, पिनकोड व अक्षांश-देशांतर देखें।</p>
+                    </div>
+                    <div id="perm-location-result" class="text-xs bg-white border border-slate-200 rounded-xl p-3 text-slate-500">
+                        लोकेशन जानने के लिए ऊपर "लोकेशन देखें" बटन दबाएं।
+                    </div>
+                </div>
+
+                <!-- B. Morpho / Mantra RD Service Serial Number Scanner -->
+                <div class="border border-emerald-200 rounded-2xl p-4 bg-emerald-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-fingerprint text-emerald-600"></i> Morpho / Mantra सीरियल नंबर
+                            </span>
+                            <button onclick="scanBiometricRDService()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                डिवाइस स्कैन
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">कंप्यूटर में लगे Mantra MFS100/110 या Morpho L0/L1 की RD Service से असली सीरियल नंबर निकालें।</p>
+                    </div>
+                    <div id="perm-biometric-result" class="text-xs bg-white border border-emerald-200 rounded-xl p-3 text-slate-500">
+                        बायोमेट्रिक डिवाइस प्लग-इन करके "डिवाइस स्कैन" दबाएं।
+                    </div>
+                </div>
+
+                <!-- C. Camera & Microphone Devices Permission -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-video text-blue-600"></i> कैमरा व माइक डिवाइस
+                            </span>
+                            <button onclick="requestMediaDevicesInfo()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                अनुमति दें
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">कंप्यूटर/मोबाइल से जुड़े वेबकैम, माइक्रोफ़ोन और स्पीकर के नाम देखें।</p>
+                    </div>
+                    <div id="perm-media-result" class="text-xs bg-white border border-slate-200 rounded-xl p-3 text-slate-500">
+                        अभी तक अनुमति नहीं दी गई है।
+                    </div>
+                </div>
+
+                <!-- D. Connected USB / External Device Selector -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-brands fa-usb text-teal-600"></i> अन्य USB डिवाइस पहचान
+                            </span>
+                            <button onclick="requestUsbDeviceInfo()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                डिवाइस चुनें
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">कनेक्टेड प्रिंटर, वेबकैम या अन्य USB हार्डवेयर का नाम व ID देखें।</p>
+                    </div>
+                    <div id="perm-usb-result" class="text-xs bg-white border border-slate-200 rounded-xl p-3 text-slate-500">
+                        कोई USB डिवाइस नहीं चुना गया है।
+                    </div>
+                </div>
+
+                <!-- E. TPM 2.0 & Hardware Security Check -->
+                <div class="border border-indigo-200 rounded-2xl p-4 bg-indigo-50/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-microchip text-indigo-600"></i> TPM 2.0 / हार्डवेयर सिक्योरिटी
+                            </span>
+                            <button onclick="copyTpmCommand()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                TPM कमांड कॉपी
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2 leading-relaxed">
+                            ब्राउज़र से <strong>TPM / Windows Hello हार्डवेयर चिप</strong> की उपलब्धता नीचे दिखती है। सटीक वर्ज़न (TPM 2.0) हेतु <code class="bg-white px-1 rounded border">tpm.msc</code> चलाएं।
+                        </p>
+                    </div>
+                    <div id="tpm-status-result" class="text-xs bg-white border border-indigo-200 rounded-xl p-2.5 text-slate-700 font-medium">
+                        जाँच हो रही है...
+                    </div>
+                </div>
+
+                <!-- F. Wi-Fi Name & Password Security Clarification + Windows Command -->
+                <div class="border border-amber-200 rounded-2xl p-4 bg-amber-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-xs text-amber-950 flex items-center gap-1.5">
+                                <i class="fa-solid fa-wifi text-amber-600"></i> Wi-Fi नाम व पासवर्ड CMD
+                            </span>
+                            <button onclick="copyWifiCmdCommand()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1">
+                                <i class="fa-solid fa-terminal"></i><span>कमांड कॉपी</span>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-amber-900 leading-relaxed mb-2">
+                            ब्राउज़र सुरक्षा के कारण Wi-Fi पासवर्ड नहीं पढ़ते। Windows CMD में नीचे दिया गया कमांड चलाकर सभी सेव किए गए Wi-Fi पासवर्ड देखें:
+                        </p>
+                    </div>
+                    <div class="text-[11px] bg-white border border-amber-200 rounded-xl p-2.5 text-slate-700 font-mono truncate">
+                        netsh wlan show profiles name="*" key=clear | findstr "SSID Content"
+                    </div>
+                </div>
+
+                <!-- G. Computer Model Number, Serial Number & Total Storage Command -->
+                <div class="border border-slate-300 rounded-2xl p-4 bg-slate-100/80 flex flex-col justify-between md:col-span-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <span class="font-bold text-xs text-slate-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-laptop-medical text-teal-700"></i> कंप्यूटर का असली मॉडल नंबर, सीरियल नंबर, कुल SSD/HDD स्टोरेज और Windows की निकालें
+                        </span>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="downloadHardwareBatchScript()" class="px-3.5 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-download"></i><span>1-क्लिक .BAT टूल डाउनलोड</span>
+                            </button>
+                            <button type="button" onclick="copyFullHardwareCmd()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-terminal"></i><span>कमांड दिखाएं व कॉपी करें</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        <strong>कैसे चलाएं:</strong> यदि प्रीव्यू बॉक्स में डाउनलोड ब्लॉक हो, तो <strong>"कमांड दिखाएं व कॉपी करें"</strong> दबाएं, फिर अपने कीबोर्ड पर <kbd class="bg-white border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Win + R</kbd> दबाकर उसे पेस्ट करें और <strong>Enter</strong> दबाएं। सारा डेटा सीधे स्क्रीन पर दिखेगा और डेस्कटॉप पर <code>PC_Details.txt</code> फ़ाइल में भी सेव हो जाएगा।
+                    </p>
+                    <div id="cmd-display-box" class="hidden mt-2 bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-[11px] select-all break-all border border-slate-700"></div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Fullscreen Display Dead-Pixel Color Overlay -->
+    <div id="display-test-overlay" onclick="nextDisplayColor()" class="fixed inset-0 z-50 hidden flex-col items-center justify-center cursor-pointer select-none">
+        <div class="bg-black/70 text-white px-5 py-3 rounded-2xl text-center backdrop-blur-sm border border-white/20">
+            <p id="display-color-label" class="text-sm font-bold">रंग: लाल (Red)</p>
+            <p class="text-xs text-slate-200 mt-1">अगला रंग देखने के लिए स्क्रीन पर क्लिक करें • बाहर निकलने के लिए ESC दबाएं</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-modal" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold hidden items-center gap-2 z-50 border border-slate-700">
+        <i class="fa-solid fa-circle-check text-teal-400 text-base"></i>
+        <span id="toast-message">सूचना</span>
+    </div>
+
+    <!-- Common Footer Container (RUPESH COMPUTERS Layout) -->
+    <div id="site-footer"></div>
+
+    <!-- Script Logic -->
+    <script>
+        // ============================================================================
+        // RUPESH COMPUTERS Common Header, Branch Switcher & Navigation Integration
+        // ============================================================================
+        const currentPageFile = window.location.pathname.split('/').pop() || 'system_info_scanner.html';
+
+        const navLinks = [
+            { file: 'index.html', icon: 'fa-house', color: '', label: 'होम' },
+            { file: 'services.html', icon: 'fa-layer-group', color: 'text-amber-400', label: 'सेवाएँ' },
+            { file: 'lpg-booking.html', icon: 'fa-fire-flame-simple', color: 'text-orange-400', label: 'Indane गैस बुकिंग' },
+            { file: 'aadhaar-print.html', icon: 'fa-id-card', color: 'text-sky-400', label: 'आधार प्रिंट' },
+            { file: 'pdf-tool.html', icon: 'fa-file-pdf', color: 'text-rose-400', label: 'JPEG to PDF' },
+            { file: 'passport-tool.html', icon: 'fa-id-badge', color: 'text-cyan-400', label: 'पासपोर्ट फोटो' },
+            { file: 'dob-tool.html', icon: 'fa-cake-candles', color: 'text-purple-400', label: 'DOB Calculator' },
+            { file: 'scanner-tool.html', icon: 'fa-barcode', color: 'text-emerald-400', label: 'Barcode Reader' },
+            { file: 'hindi-tool.html', icon: 'fa-language', color: 'text-pink-400', label: 'Hindi Typing & Kruti Dev' },
+            { file: 'card-design.html', icon: 'fa-file-lines', color: 'text-amber-300', label: 'शोक पत्र' },
+            { file: 'system_info_scanner.html', icon: 'fa-laptop-medical', color: 'text-teal-300', label: 'PC डायग्नोस्टिक' },
+            { file: 'branches.html', icon: 'fa-location-dot', color: 'text-lime-400', label: 'शाखाएँ' }
+        ];
+
+        const branchDetails = {
+            chongribahar: {
+                name: 'चोंगरीबहार शाखा',
+                address: 'मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)',
+                phone: '6264531630',
+                map: 'https://maps.google.com/?q=Chongribahar'
+            },
+            dokda: {
+                name: 'दोकड़ा शाखा',
+                address: 'मेन रोड, दोकड़ा (जशपुर, छ.ग.)',
+                phone: '6264531630',
+                map: 'https://maps.google.com/?q=Dokda'
+            }
+        };
+
+        function switchBranch(branchKey) {
+            const info = branchDetails[branchKey] || branchDetails.chongribahar;
+            const nameEl = document.getElementById('active-branch-name');
+            const addrEl = document.getElementById('active-branch-address');
+            const callEl = document.getElementById('active-branch-call');
+            const phoneTextEl = document.getElementById('active-branch-phone-text');
+            const waEl = document.getElementById('active-branch-wa');
+            const mapEl = document.getElementById('active-branch-map');
+            const btnCh = document.getElementById('btn-chongribahar');
+            const btnDo = document.getElementById('btn-dokda');
+
+            if (nameEl) nameEl.textContent = info.name;
+            if (addrEl) addrEl.textContent = info.address;
+            if (callEl) callEl.href = `tel:${info.phone}`;
+            if (phoneTextEl) phoneTextEl.textContent = info.phone;
+            if (waEl) waEl.href = `https://wa.me/91${info.phone}?text=${encodeURIComponent('नमस्ते RUPESH COMPUTERS (' + info.name + ')')}`;
+            if (mapEl) mapEl.href = info.map;
+
+            if (btnCh && btnDo) {
+                if (branchKey === 'chongribahar') {
+                    btnCh.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md";
+                    btnDo.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
+                } else {
+                    btnDo.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md";
+                    btnCh.className = "px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300";
+                }
+            }
+            try { localStorage.setItem('rupesh_selected_branch', branchKey); } catch (e) {}
+        }
+
+        function injectCommonLayout() {
+            const siteHeader = document.getElementById('site-header');
+            if (!siteHeader) return;
+
+            const headerHtml = `
+            <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-xs sm:text-sm py-2 px-4 shadow-inner">
+                <div class="max-w-7xl mx-auto flex items-center justify-between">
+                    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap w-full">
+                        <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">सुचना</span>
+                        <marquee behavior="scroll" direction="left" class="font-medium text-slate-200">
+                            🙏 रूपेश कंप्यूटर्स (चोंगरीबहार और दोकड़ा) में आपका स्वागत है! | आधार कार्ड, SBI कियोस्क, आय-जाति-निवास प्रमाण पत्र एवं सभी ऑनलाइन कार्य तुरंत कराए जाते हैं। 📢 सरकारी वैकेंसी और ताजा जानकारी के लिए हमारे व्हाट्सएप चैनल से जरूर जुड़ें! | समय: सोम-शनि (सुबह 10:00 से शाम 6:00 बजे तक) | रविवार अवकाश।
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+                    <a href="index.html" class="flex items-center gap-3 text-left focus:outline-none">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center text-lg sm:text-xl shadow-lg">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-base sm:text-xl font-black tracking-tight text-slate-900">RUPESH COMPUTERS</h1>
+                            <p class="text-[10px] sm:text-[11px] font-bold text-blue-700 tracking-wider uppercase">चोंगरीबहार & दोकड़ा शाखा</p>
+                        </div>
+                    </a>
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <button id="header-pwa-btn" onclick="if(typeof triggerPwaInstall==='function') triggerPwaInstall()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-extrabold bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-sm transition">
+                            <i class="fa-solid fa-download"></i> ऐप इंस्टॉल करें
+                        </button>
+                        <button id="btn-chongribahar" onclick="switchBranch('chongribahar')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-blue-600 text-white shadow-md">चोंगरीबहार</button>
+                        <button id="btn-dokda" onclick="switchBranch('dokda')" class="px-3 sm:px-4 py-2 rounded-full text-xs font-bold transition bg-slate-200 text-slate-700 hover:bg-slate-300">दोकड़ा</button>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border-t border-slate-800 px-2.5 sm:px-6 py-2.5 shadow-inner">
+                    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+                        ${navLinks.map(n => {
+                            const active = (currentPageFile === n.file) || (currentPageFile === '' && n.file === 'system_info_scanner.html');
+                            return `<a href="${n.file}" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs ${active ? 'font-extrabold bg-amber-400 text-slate-950 shadow-md' : 'font-bold bg-white/10 text-slate-100 hover:bg-white/20'} transition flex items-center gap-1.5"><i class="fa-solid ${n.icon} ${active ? '' : n.color}"></i> ${n.label}</a>`;
+                        }).join('')}
+                    </div>
+                </div>
+            </header>
+            <div class="bg-blue-950 text-white py-2.5 px-4 border-b border-blue-900">
+                <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-400 text-slate-950 font-black px-2 py-0.5 rounded text-[10px]">चयनित शाखा</span>
+                        <span id="active-branch-name" class="font-bold text-amber-300">चोंगरीबहार शाखा</span>
+                        <span class="hidden sm:inline text-slate-400">|</span>
+                        <span id="active-branch-address" class="hidden sm:inline text-slate-200">मुख्य मार्ग, चोंगरीबहार (जशपुर, छ.ग.)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a id="active-branch-call" href="tel:6264531630" class="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white font-bold px-2.5 py-1 rounded-lg transition"><i class="fa-solid fa-phone"></i> <span id="active-branch-phone-text">6264531630</span></a>
+                        <a id="active-branch-wa" href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS" target="_blank" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-lg transition"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a id="active-branch-map" href="https://maps.google.com/?q=Chongribahar" target="_blank" class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/20 text-amber-300 font-bold px-2.5 py-1 rounded-lg transition"><i class="fa-solid fa-location-dot"></i> लोकेशन</a>
+                    </div>
+                </div>
+            </div>`;
+
+            siteHeader.innerHTML = headerHtml;
+
+            const siteFooter = document.getElementById('site-footer');
+            if (siteFooter) {
+                siteFooter.innerHTML = `
+                <footer class="bg-slate-950 text-slate-300 border-t border-slate-800 mt-12">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-xs sm:text-sm">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center text-lg shadow">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-black text-white text-base tracking-tight">RUPESH COMPUTERS</h3>
+                                    <p class="text-[11px] font-semibold text-amber-400">चोंगरीबहार एवं दोकड़ा शाखा (जशपुर, छ.ग.)</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                आधार सेवा, SBI कियोस्क बैंकिंग, आय-जाति-निवास प्रमाण पत्र, पासपोर्ट फोटो, ऑनलाइन फॉर्म एवं सभी डिजिटल सेवाएँ विश्वसनीय और त्वरित रूप से उपलब्ध।
+                            </p>
+                            <div class="flex items-center gap-2 pt-1">
+                                <a href="tel:6264531630" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-phone"></i> 6264531630
+                                </a>
+                                <a href="https://wa.me/916264531630?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20RUPESH%20COMPUTERS" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition inline-flex items-center gap-1.5">
+                                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white text-sm mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-link text-amber-400"></i> प्रमुख ऑनलाइन टूल्स एवं सेवाएँ
+                            </h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                ${navLinks.map(n => `<a href="${n.file}" class="text-slate-400 hover:text-amber-300 transition flex items-center gap-1.5"><i class="fa-solid ${n.icon} text-[10px] text-slate-500"></i> ${n.label}</a>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <h4 class="font-bold text-white text-sm mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-lime-400"></i> हमारी शाखाएँ एवं समय
+                            </h4>
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-3 space-y-1">
+                                <p class="font-bold text-amber-300">1. चोंगरीबहार शाखा</p>
+                                <p class="text-slate-400">मुख्य मार्ग, चोंगरीबहार, जिला - जशपुर (छ.ग.)</p>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-3 space-y-1">
+                                <p class="font-bold text-amber-300">2. दोकड़ा शाखा</p>
+                                <p class="text-slate-400">मेन रोड, दोकड़ा, जिला - जशपुर (छ.ग.)</p>
+                            </div>
+                            <p class="text-[11px] text-slate-400 pt-1">
+                                <i class="fa-regular fa-clock text-teal-400 mr-1"></i> समय: सोम - शनि (सुबह 10:00 से शाम 6:00 बजे) | रविवार अवकाश
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 border-t border-slate-800/80 py-4 px-4 text-center text-[11px] text-slate-400">
+                        <p>© 2026 <strong>RUPESH COMPUTERS</strong> (चोंगरीबहार & दोकड़ा) • सर्वाधिकार सुरक्षित • सिस्टम एवं डिवाइस डायग्नोस्टिक टूल</p>
+                    </div>
+                </footer>`;
+            }
+
+            try {
+                const savedBranch = localStorage.getItem('rupesh_selected_branch');
+                if (savedBranch) switchBranch(savedBranch);
+            } catch (e) {}
+        }
+
+        let collectedReport = {};
+
+        function renderRows(containerId, rows, sectionTitle) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            collectedReport[sectionTitle] = rows;
+            container.innerHTML = rows.map(r => `
+                <div class="flex justify-between items-start gap-2 border-b border-slate-100 last:border-none pb-1.5 last:pb-0">
+                    <span class="text-slate-500 font-medium shrink-0">${r.label}:</span>
+                    <span class="text-slate-900 font-semibold text-right break-all">${r.value}</span>
+                </div>
+            `).join('');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-modal');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        // 1. OS & High-Entropy User-Agent Client Hints
+        async function detectOSInfo() {
+            const ua = navigator.userAgent;
+            let osName = "अज्ञात OS";
+            let osVersion = "उपलब्ध नहीं";
+            let architecture = navigator.platform || "उपलब्ध नहीं";
+            let deviceModel = "डेस्कटॉप / लैपटॉप (मॉडल छिपा हुआ)";
+
+            if (ua.includes("Windows")) osName = "Windows";
+            else if (ua.includes("Android")) osName = "Android";
+            else if (ua.includes("iPhone") || ua.includes("iPad")) osName = "iOS / iPadOS";
+            else if (ua.includes("Mac OS")) osName = "macOS";
+            else if (ua.includes("Linux")) osName = "Linux";
+
+            if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+                try {
+                    const hints = await navigator.userAgentData.getHighEntropyValues([
+                        "platform",
+                        "platformVersion",
+                        "architecture",
+                        "bitness",
+                        "model"
+                    ]);
+                    if (hints.platform) osName = hints.platform;
+                    if (hints.architecture) {
+                        architecture = `${hints.architecture} (${hints.bitness || '64'}-bit)`;
+                    }
+                    if (hints.model) {
+                        deviceModel = hints.model;
+                    }
+                    if (hints.platform === "Windows" && hints.platformVersion) {
+                        const major = parseInt(hints.platformVersion.split('.')[0], 10);
+                        if (major >= 13) {
+                            osVersion = `Windows 11 (Build ${hints.platformVersion})`;
+                        } else if (major > 0) {
+                            osVersion = `Windows 10 (Build ${hints.platformVersion})`;
+                        } else {
+                            osVersion = `Windows (${hints.platformVersion})`;
+                        }
+                    } else if (hints.platformVersion) {
+                        osVersion = hints.platformVersion;
+                    }
+                } catch (e) {
+                    console.warn("High entropy hints skipped:", e);
+                }
+            }
+
+            renderRows("os-info-list", [
+                { label: "ऑपरेटिंग सिस्टम", value: osName },
+                { label: "OS वर्ज़न / बिल्ड", value: osVersion },
+                { label: "आर्किटेक्चर", value: architecture },
+                { label: "डिवाइस मॉडल", value: deviceModel },
+                { label: "सिस्टम भाषा", value: navigator.language || "hi-IN" }
+            ], "ऑपरेटिंग सिस्टम");
+        }
+
+        // 2. Hardware (CPU, RAM, GPU via WebGL) & TPM Platform Authenticator Check
+        async function detectHardwareInfo() {
+            const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} लॉजिकल कोर` : "उपलब्ध नहीं";
+            const ram = navigator.deviceMemory ? `लगभग ${navigator.deviceMemory} GB (या अधिक)` : "ब्राउज़र द्वारा सीमित";
+            const touchPoints = navigator.maxTouchPoints > 0 ? `हाँ (${navigator.maxTouchPoints} टच पॉइंट)` : "नहीं (Non-Touch)";
+
+            let gpuRenderer = "उपलब्ध नहीं";
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        gpuRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || "उपलब्ध नहीं";
+                    }
+                }
+            } catch (e) {}
+
+            renderRows("hardware-info-list", [
+                { label: "प्रोसेसर (CPU)", value: cores },
+                { label: "अनुमानित RAM", value: ram },
+                { label: "ग्राफिक्स (GPU)", value: gpuRenderer },
+                { label: "टच स्क्रीन सपोर्ट", value: touchPoints }
+            ], "हार्डवेयर व ग्राफिक्स");
+
+            // TPM / Windows Hello हार्डवेयर सिक्योरिटी की जाँच
+            const tpmEl = document.getElementById('tpm-status-result');
+            if (tpmEl) {
+                if (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+                    try {
+                        const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+                        tpmEl.innerHTML = available
+                            ? `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>सक्रिय (TPM / Windows Hello उपलब्ध)</span>`
+                            : `<span class="text-amber-700 font-semibold"><i class="fa-solid fa-circle-info mr-1"></i>ब्राउज़र में सक्रिय नहीं (tpm.msc से जाँचें)</span>`;
+                    } catch (e) {
+                        tpmEl.textContent = "जाँच उपलब्ध नहीं (tpm.msc चलाएं)";
+                    }
+                } else {
+                    tpmEl.textContent = "WebAuthn समर्थित नहीं (tpm.msc चलाएं)";
+                }
+            }
+        }
+
+        // 3. Browser & Display Screen
+        function detectBrowserAndScreen() {
+            const ua = navigator.userAgent;
+            let browserName = "अज्ञात ब्राउज़र";
+            if (ua.includes("Edg/")) browserName = "Microsoft Edge";
+            else if (ua.includes("Chrome/")) browserName = "Google Chrome";
+            else if (ua.includes("Firefox/")) browserName = "Mozilla Firefox";
+            else if (ua.includes("Safari/") && !ua.includes("Chrome")) browserName = "Apple Safari";
+
+            const resolution = `${window.screen.width} × ${window.screen.height} px`;
+            const viewport = `${window.innerWidth} × ${window.innerHeight} px`;
+            const colorDepth = `${window.screen.colorDepth}-bit (DPR: ${window.devicePixelRatio || 1}x)`;
+
+            renderRows("browser-screen-list", [
+                { label: "ब्राउज़र", value: browserName },
+                { label: "स्क्रीन रेज़ोल्यूशन", value: resolution },
+                { label: "विंडो साइज", value: viewport },
+                { label: "कलर डेप्थ व DPR", value: colorDepth }
+            ], "ब्राउज़र व स्क्रीन");
+        }
+
+        // 4. Battery & Power Status
+        async function detectBatteryInfo() {
+            if (!navigator.getBattery) {
+                renderRows("battery-info-list", [
+                    { label: "बैटरी स्टेटस", value: "डेस्कटॉप या ब्राउज़र समर्थित नहीं" }
+                ], "बैटरी व पावर");
+                return;
+            }
+            try {
+                const battery = await navigator.getBattery();
+                const level = `${Math.round(battery.level * 100)}%`;
+                const charging = battery.charging ? "हाँ (चार्ज हो रहा है ⚡)" : "नहीं (बैटरी पर चल रहा है)";
+                renderRows("battery-info-list", [
+                    { label: "बैटरी प्रतिशत", value: level },
+                    { label: "चार्जिंग स्थिति", value: charging }
+                ], "बैटरी व पावर");
+            } catch (e) {
+                renderRows("battery-info-list", [
+                    { label: "बैटरी जानकारी", value: "उपलब्ध नहीं" }
+                ], "बैटरी व पावर");
+            }
+        }
+
+        // 5. Network Information API + Multi-API Public IP & Static vs Dynamic IP Analyzer
+        function analyzeStaticOrDynamicIP(ip, org, hostname) {
+            const lowerOrg = (org || "").toLowerCase();
+            const lowerHost = (hostname || "").toLowerCase();
+
+            // मोबाइल नेटवर्क (Jio, Airtel Mobile, Vi, BSNL Mobile) हमेशा Dynamic CGNAT IP देते हैं
+            const mobileKeywords = ['jio', 'reliance jio', 'bharti airtel', 'vodafone', 'idea', 'cellular', 'mobile', 'wireless'];
+            const dynamicHostKeywords = ['dynamic', 'dhcp', 'pool', 'pppoe', 'broadband', 'res-', 'dsl', 'ftth', 'nat', 'cgnat'];
+            const staticKeywords = ['static', 'leased', 'dedicated', 'corp', 'enterprise', 'datacenter', 'cloud', 'business', 'ill'];
+
+            if (staticKeywords.some(k => lowerHost.includes(k) || lowerOrg.includes(k))) {
+                return "संभावित Static IP (Dedicated / Business लाइन)";
+            }
+            if (dynamicHostKeywords.some(k => lowerHost.includes(k))) {
+                return "Dynamic IP (बदलने वाला ब्रॉडबैंड/PPPoE IP)";
+            }
+            if (mobileKeywords.some(k => lowerOrg.includes(k))) {
+                return "Dynamic IP (मोबाइल / CGNAT नेटवर्क)";
+            }
+            return "Dynamic IP (सामान्य ISP कनेक्शन — Static हेतु ISP से पुष्टि करें)";
+        }
+
+        async function detectLocalWebRtcIP() {
+            return new Promise((resolve) => {
+                try {
+                    const pc = new RTCPeerConnection({ iceServers: [] });
+                    pc.createDataChannel('');
+                    pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => resolve(null));
+                    const timer = setTimeout(() => {
+                        pc.close();
+                        resolve(null);
+                    }, 1500);
+
+                    pc.onicecandidate = (ice) => {
+                        if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+                        const match = ice.candidate.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+                        if (match && match[1]) {
+                            clearTimeout(timer);
+                            pc.close();
+                            resolve(match[1]);
+                        }
+                    };
+                } catch (e) {
+                    resolve(null);
+                }
+            });
+        }
+
+        async function detectNetworkInfo() {
+            const onlineBadge = document.getElementById('online-badge');
+            const isOnline = navigator.onLine;
+            onlineBadge.textContent = isOnline ? "ऑनलाइन" : "ऑफलाइन";
+            onlineBadge.className = isOnline
+                ? "text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200"
+                : "text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200";
+
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const items = [
+                { label: "इंटरनेट स्थिति", value: isOnline ? "कनेक्टेड (Online)" : "डिस्कनेक्टेड (Offline)" }
+            ];
+
+            if (conn) {
+                if (conn.type) items.push({ label: "कनेक्शन माध्यम", value: conn.type.toUpperCase() });
+                items.push({ label: "नेटवर्क गति श्रेणी", value: (conn.effectiveType || "अज्ञात").toUpperCase() });
+                if (conn.downlink) items.push({ label: "अनुमानित स्पीड", value: `~${conn.downlink} Mbps` });
+            }
+
+            const localIp = await detectLocalWebRtcIP();
+            if (localIp) {
+                items.push({ label: "लोकल / LAN IP", value: localIp });
+            }
+
+            items.push({ label: "पब्लिक IP एड्रेस", value: "खोजा जा रहा है..." });
+            renderRows("network-info-list", items, "नेटवर्क जानकारी");
+
+            if (!isOnline) return;
+
+            let publicIp = "";
+            let ispOrg = "";
+            let cityRegion = "";
+            let asnInfo = "";
+            let rdnsHost = "";
+
+            // 1. Primary API: ipwho.is (CORS-friendly & fast)
+            try {
+                const res1 = await fetch('https://ipwho.is/');
+                if (res1.ok) {
+                    const d1 = await res1.json();
+                    if (d1 && d1.success !== false && d1.ip) {
+                        publicIp = d1.ip;
+                        ispOrg = (d1.connection && (d1.connection.isp || d1.connection.org)) || "";
+                        asnInfo = (d1.connection && d1.connection.asn) ? `AS${d1.connection.asn}` : "";
+                        rdnsHost = (d1.connection && d1.connection.domain) || "";
+                        cityRegion = d1.city ? `${d1.city}, ${d1.region || ''}` : "";
+                    }
+                }
+            } catch (e) {}
+
+            // 2. Fallback API: ipapi.co
+            if (!publicIp) {
+                try {
+                    const res2 = await fetch('https://ipapi.co/json/');
+                    if (res2.ok) {
+                        const d2 = await res2.json();
+                        if (d2 && d2.ip) {
+                            publicIp = d2.ip;
+                            ispOrg = d2.org || "";
+                            asnInfo = d2.asn || "";
+                            cityRegion = d2.city ? `${d2.city}, ${d2.region || ''}` : "";
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            // 3. Final Plain IP Fallback: api.ipify.org
+            if (!publicIp) {
+                try {
+                    const res3 = await fetch('https://api.ipify.org?format=json');
+                    if (res3.ok) {
+                        const d3 = await res3.json();
+                        if (d3 && d3.ip) publicIp = d3.ip;
+                    }
+                } catch (e) {}
+            }
+
+            // "खोजा जा रहा है..." पंक्ति हटाएं और वास्तविक परिणाम जोड़ें
+            items.pop();
+
+            if (publicIp) {
+                const ipVersion = publicIp.includes(':') ? 'IPv6' : 'IPv4';
+                const staticStatus = analyzeStaticOrDynamicIP(publicIp, ispOrg, rdnsHost);
+
+                items.push({ label: `पब्लिक IP (${ipVersion})`, value: publicIp });
+                items.push({ label: "IP प्रकार (Static/Dynamic)", value: staticStatus });
+                if (ispOrg) items.push({ label: "नेटवर्क कंपनी (ISP)", value: `${ispOrg} ${asnInfo ? '(' + asnInfo + ')' : ''}` });
+                if (cityRegion) items.push({ label: "नेटवर्क लोकेशन", value: cityRegion });
+            } else {
+                items.push({ label: "पब्लिक IP एड्रेस", value: "नेटवर्क/ब्राउज़र द्वारा ब्लॉक" });
+            }
+
+            renderRows("network-info-list", items, "नेटवर्क जानकारी");
+        }
+
+        // 6. Browser Storage Quota, Estimated Total Disk & Timezone
+        async function detectStorageInfo() {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Kolkata";
+            const localTime = new Date().toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            if (!navigator.storage || !navigator.storage.estimate) {
+                renderRows("storage-info-list", [
+                    { label: "स्टोरेज API", value: "उपलब्ध नहीं" },
+                    { label: "टाइमज़ोन", value: tz },
+                    { label: "सिस्टम समय", value: localTime }
+                ], "स्टोरेज व समय");
+                return;
+            }
+            try {
+                const est = await navigator.storage.estimate();
+                const quotaGBNum = est.quota ? (est.quota / (1024 ** 3)) : 0;
+                const quotaGB = quotaGBNum > 0 ? quotaGBNum.toFixed(2) + " GB" : "N/A";
+                const estAvailDisk = quotaGBNum > 0 ? `~${Math.round(quotaGBNum / 0.6)} GB (उपलब्ध ड्राइव अनुमान)` : "N/A";
+                const usedMB = est.usage ? (est.usage / (1024 ** 2)).toFixed(2) + " MB" : "0 MB";
+
+                renderRows("storage-info-list", [
+                    { label: "ब्राउज़र स्टोरेज कोटा", value: quotaGB },
+                    { label: "अनुमानित उपलब्ध ड्राइव", value: estAvailDisk },
+                    { label: "उपयोग किया गया कैश", value: usedMB },
+                    { label: "टाइमज़ोन (Timezone)", value: tz },
+                    { label: "वर्तमान सिस्टम समय", value: localTime }
+                ], "स्टोरेज व समय");
+            } catch (e) {
+                renderRows("storage-info-list", [
+                    { label: "स्टोरेज जानकारी", value: "उपलब्ध नहीं" },
+                    { label: "टाइमज़ोन", value: tz }
+                ], "स्टोरेज व समय");
+            }
+        }
+
+        // 7. Advanced Technical Specs (GPU Vendor, Audio Sample Rate, WebGL, Cookies, PDF Viewer, Security)
+        function detectAdvancedTechnicalSpecs() {
+            let gpuVendor = "उपलब्ध नहीं";
+            let webglVer = "समर्थित नहीं";
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                if (gl) {
+                    webglVer = gl instanceof WebGL2RenderingContext ? "WebGL 2.0" : "WebGL 1.0";
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        gpuVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || "उपलब्ध नहीं";
+                    }
+                }
+            } catch (e) {}
+
+            let audioSampleRate = "उपलब्ध नहीं";
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) {
+                    const ctx = new AudioCtx();
+                    audioSampleRate = `${ctx.sampleRate} Hz`;
+                    ctx.close();
+                }
+            } catch (e) {}
+
+            const specs = [
+                { label: "GPU निर्माता (Vendor)", value: gpuVendor },
+                { label: "ग्राफिक्स इंजन", value: webglVer },
+                { label: "ऑडियो सैंपल रेट", value: audioSampleRate },
+                { label: "सुरक्षित मोड (HTTPS)", value: window.isSecureContext ? "हाँ (Secure)" : "नहीं" },
+                { label: "Cookies स्थिति", value: navigator.cookieEnabled ? "सक्रिय (Enabled)" : "बंद" },
+                { label: "PDF व्यूअर", value: navigator.pdfViewerEnabled ? "इन-बिल्ट उपलब्ध" : "बाहरी ऐप" },
+                { label: "Do Not Track", value: navigator.doNotTrack === "1" ? "चालू" : "बंद / डिफ़ॉल्ट" },
+                { label: "ऑनलाइन स्टेटस", value: navigator.onLine ? "सक्रिय" : "ऑफलाइन" }
+            ];
+
+            collectedReport["अतिरिक्त तकनीकी विवरण"] = specs;
+            const container = document.getElementById('advanced-tech-list');
+            if (container) {
+                container.innerHTML = specs.map(s => `
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5">
+                        <div class="text-[10px] text-slate-500 font-medium">${s.label}</div>
+                        <div class="text-xs font-bold text-slate-800 mt-0.5 truncate" title="${s.value}">${s.value}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // A. GPS Location + Multi-API Automatic Network/IP Fallback
+        async function fetchIpFallbackLocation(box, reasonText = "") {
+            let locData = null;
+
+            // 1. Primary Fallback: ipwho.is (बिना रेट-लिमिट के तेज़ API)
+            try {
+                const res1 = await fetch('https://ipwho.is/');
+                if (res1.ok) {
+                    const d1 = await res1.json();
+                    if (d1 && d1.success !== false && d1.city) {
+                        locData = {
+                            city: d1.city,
+                            region: d1.region || "",
+                            postal: d1.postal || "N/A",
+                            lat: d1.latitude,
+                            lng: d1.longitude,
+                            org: (d1.connection && (d1.connection.isp || d1.connection.org)) || "N/A"
+                        };
+                    }
+                }
+            } catch (e) {}
+
+            // 2. Secondary Fallback: ipapi.co
+            if (!locData) {
+                try {
+                    const res2 = await fetch('https://ipapi.co/json/');
+                    if (res2.ok) {
+                        const d2 = await res2.json();
+                        if (d2 && d2.city) {
+                            locData = {
+                                city: d2.city,
+                                region: d2.region || "",
+                                postal: d2.postal || "N/A",
+                                lat: d2.latitude,
+                                lng: d2.longitude,
+                                org: d2.org || "N/A"
+                            };
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            if (locData) {
+                const mapLink = (locData.lat && locData.lng) ? `https://www.google.com/maps?q=${locData.lat},${locData.lng}` : "";
+                box.innerHTML = `
+                    <div class="space-y-1 text-slate-800">
+                        <div class="text-[10px] text-amber-700 font-semibold mb-1">
+                            <i class="fa-solid fa-circle-info mr-1"></i>${reasonText || "नेटवर्क/IP आधारित लोकेशन:"}
+                        </div>
+                        <div><strong>शहर / राज्य:</strong> ${locData.city}, ${locData.region}</div>
+                        <div><strong>पिनकोड:</strong> ${locData.postal}</div>
+                        <div><strong>अक्षांश / देशांतर:</strong> ${locData.lat}, ${locData.lng}</div>
+                        <div><strong>इंटरनेट कंपनी:</strong> ${locData.org}</div>
+                        ${mapLink ? `<a href="${mapLink}" target="_blank" class="inline-block mt-1 text-blue-600 underline font-semibold text-[11px]">Google Maps पर देखें ↗</a>` : ''}
+                        <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-100 mt-1">
+                            💡 सटीक GPS के लिए Windows में <strong>Settings → Privacy → Location</strong> चालू रखें।
+                        </div>
+                    </div>
+                `;
+                collectedReport["लोकेशन (Network)"] = [
+                    { label: "शहर/राज्य", value: `${locData.city}, ${locData.region} (${locData.postal})` },
+                    { label: "Coordinates", value: `${locData.lat}, ${locData.lng}` }
+                ];
+                showToast("लैपटॉप की नेटवर्क लोकेशन मिल गई!");
+            } else {
+                box.innerHTML = `<span class="text-rose-600 font-semibold">लोकेशन नहीं मिल सकी। कृपया Windows Location सेटिंग व इंटरनेट जाँचें।</span>`;
+            }
+        }
+
+        function requestLocationInfo() {
+            const box = document.getElementById('perm-location-result');
+            box.innerHTML = `<span class="text-amber-600 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> लैपटॉप GPS व नेटवर्क लोकेशन जाँची जा रही है...</span>`;
+
+            if (!navigator.geolocation) {
+                fetchIpFallbackLocation(box, "ब्राउज़र GPS उपलब्ध नहीं, नेटवर्क लोकेशन:");
+                return;
+            }
+
+            // हाई एक्यूरेसी के बजाय पहले तेज़ Wi-Fi/Network पोजीशनिंग से लैपटॉप लोकेशन लें
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude.toFixed(6);
+                    const lng = pos.coords.longitude.toFixed(6);
+                    const acc = Math.round(pos.coords.accuracy);
+                    const mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
+                    box.innerHTML = `
+                        <div class="space-y-1 text-slate-800">
+                            <div class="text-[10px] text-emerald-700 font-bold"><i class="fa-solid fa-check-circle mr-1"></i>सटीक लैपटॉप लोकेशन प्राप्त:</div>
+                            <div><strong>अक्षांश (Lat):</strong> ${lat}</div>
+                            <div><strong>देशांतर (Lng):</strong> ${lng}</div>
+                            <div><strong>सटीकता:</strong> ±${acc} मीटर</div>
+                            <a href="${mapLink}" target="_blank" class="inline-block mt-1 text-blue-600 underline font-semibold text-[11px]">Google Maps पर देखें ↗</a>
+                        </div>
+                    `;
+                    collectedReport["GPS लोकेशन"] = [
+                        { label: "Latitude", value: lat },
+                        { label: "Longitude", value: lng },
+                        { label: "Accuracy", value: `±${acc}m` }
+                    ];
+                    showToast("सटीक लैपटॉप लोकेशन प्राप्त हो गई!");
+                },
+                (err) => {
+                    fetchIpFallbackLocation(box, "प्रीव्यू/Windows GPS ब्लॉक है — नेटवर्क से निकाली गई लोकेशन:");
+                },
+                { enableHighAccuracy: false, timeout: 4500, maximumAge: 60000 }
+            );
+        }
+
+        // B. Morpho / Mantra Local RD Service Scanner (Port 11100 - 11105)
+        async function scanBiometricRDService() {
+            const box = document.getElementById('perm-biometric-result');
+            box.innerHTML = `<span class="text-emerald-700 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Morpho / Mantra RD Service पोर्ट (11100-11105) स्कैन हो रहे हैं...</span>`;
+
+            const ports = [11100, 11101, 11102, 11103, 11104, 11105];
+            const protocols = ['http://127.0.0.1', 'https://127.0.0.1'];
+            let foundDevices = [];
+
+            for (const proto of protocols) {
+                for (const port of ports) {
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 900);
+
+                        const rdRes = await fetch(`${proto}:${port}`, {
+                            method: 'RDSERVICE',
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeoutId);
+
+                        const rdXmlText = await rdRes.text();
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(rdXmlText, "text/xml");
+                        const rdServiceNode = xmlDoc.querySelector("RDService");
+
+                        if (rdServiceNode) {
+                            const status = rdServiceNode.getAttribute("status") || "UNKNOWN";
+                            const info = rdServiceNode.getAttribute("info") || "Biometric RD Service";
+                            let serialNo = "डिवाइस प्लग-इन नहीं है (NOTREADY)";
+                            let deviceModel = info;
+                            let deviceCode = "";
+
+                            try {
+                                const infoRes = await fetch(`${proto}:${port}/rd/info`, { method: 'DEVICEINFO' });
+                                const infoXmlText = await infoRes.text();
+                                const infoDoc = parser.parseFromString(infoXmlText, "text/xml");
+                                const devInfoNode = infoDoc.querySelector("DeviceInfo");
+                                if (devInfoNode) {
+                                    deviceCode = devInfoNode.getAttribute("dc") || "";
+                                    deviceModel = devInfoNode.getAttribute("mi") || info;
+                                    const paramNodes = infoDoc.querySelectorAll("Param");
+                                    paramNodes.forEach(p => {
+                                        const name = (p.getAttribute("name") || "").toLowerCase();
+                                        if (name === "srno" || name === "serial" || name === "serialno") {
+                                            serialNo = p.getAttribute("value") || serialNo;
+                                        }
+                                    });
+                                }
+                            } catch (infoErr) {
+                                console.warn("DEVICEINFO fetch warning:", infoErr);
+                            }
+
+                            foundDevices.push({
+                                port: `${proto}:${port}`,
+                                status,
+                                info,
+                                deviceModel,
+                                serialNo,
+                                deviceCode
+                            });
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            if (foundDevices.length > 0) {
+                box.innerHTML = foundDevices.map(d => `
+                    <div class="space-y-1 text-slate-800 border-b border-slate-100 last:border-none pb-2 last:pb-0">
+                        <div class="flex items-center justify-between">
+                            <strong class="text-emerald-700">${d.info}</strong>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.status === 'READY' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${d.status}</span>
+                        </div>
+                        <div><strong>मॉडल:</strong> ${d.deviceModel}</div>
+                        <div><strong>सीरियल नंबर (S/N):</strong> <span class="font-mono font-bold text-slate-950 bg-amber-100 px-1.5 py-0.5 rounded">${d.serialNo}</span></div>
+                        <div class="text-[10px] text-slate-400">पोर्ट: ${d.port}</div>
+                    </div>
+                `).join('');
+
+                collectedReport["बायोमेट्रिक डिवाइस"] = foundDevices.map(d => ({
+                    label: `${d.info} (${d.status})`,
+                    value: `S/N: ${d.serialNo}`
+                }));
+                showToast("Mantra / Morpho RD Service डिवाइस मिल गई!");
+            } else {
+                box.innerHTML = `
+                    <div class="text-amber-800 space-y-1">
+                        <p class="font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>कोई सक्रिय RD Service नहीं मिली।</p>
+                        <p class="text-[10px] text-slate-600 leading-relaxed">सुनिश्चित करें कि कंप्यूटर में <strong>Mantra या Morpho RD Service</strong> इंस्टॉल होकर चल रही है और डिवाइस USB में लगी हुई है।</p>
+                    </div>
+                `;
+            }
+        }
+
+        // C. Camera & Microphone Media Devices Permission
+        async function requestMediaDevicesInfo() {
+            const box = document.getElementById('perm-media-result');
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                box.innerHTML = `<span class="text-rose-600 font-semibold">मीडिया डिवाइस API समर्थित नहीं है।</span>`;
+                return;
+            }
+            box.innerHTML = `<span class="text-blue-600 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> कैमरा/माइक अनुमति मांगी जा रही है...</span>`;
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                stream.getTracks().forEach(track => track.stop());
+
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const list = devices.map(d => {
+                    const typeLabel = d.kind === 'videoinput' ? 'कैमरा' : (d.kind === 'audioinput' ? 'माइक' : 'स्पीकर');
+                    return `<div><strong>${typeLabel}:</strong> ${d.label || 'अज्ञात डिवाइस'}</div>`;
+                }).join('');
+
+                box.innerHTML = `<div class="space-y-1 text-slate-800">${list || 'कोई डिवाइस नहीं मिला'}</div>`;
+                collectedReport["मीडिया डिवाइस"] = devices.map(d => ({ label: d.kind, value: d.label || "N/A" }));
+                showToast("कैमरा और माइक डिवाइस सूची प्राप्त हुई!");
+            } catch (err) {
+                box.innerHTML = `<span class="text-rose-600 font-semibold">अनुमति अस्वीकृत या कैमरा/माइक उपलब्ध नहीं है।</span>`;
+            }
+        }
+
+        // D. Connected USB Device Selector (WebUSB)
+        async function requestUsbDeviceInfo() {
+            const box = document.getElementById('perm-usb-result');
+            if (!navigator.usb) {
+                box.innerHTML = `<span class="text-rose-600 font-semibold">इस ब्राउज़र में WebUSB समर्थित नहीं है।</span>`;
+                return;
+            }
+            try {
+                const device = await navigator.usb.requestDevice({ filters: [] });
+                const infoHtml = `
+                    <div class="space-y-1 text-slate-800">
+                        <div><strong>डिवाइस नाम:</strong> ${device.productName || 'अज्ञात USB डिवाइस'}</div>
+                        <div><strong>निर्माता:</strong> ${device.manufacturerName || 'N/A'}</div>
+                        <div><strong>Vendor / Product ID:</strong> ${device.vendorId} / ${device.productId}</div>
+                    </div>
+                `;
+                box.innerHTML = infoHtml;
+                collectedReport["USB डिवाइस"] = [
+                    { label: "उत्पाद", value: device.productName || "USB Device" },
+                    { label: "VID/PID", value: `${device.vendorId}:${device.productId}` }
+                ];
+                showToast("USB डिवाइस की जानकारी मिल गई!");
+            } catch (err) {
+                box.innerHTML = `<span class="text-slate-600">कोई USB डिवाइस नहीं चुना गया।</span>`;
+            }
+        }
+
+        function copyTextHelper(text, successMsg) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (e) {
+                showToast("कॉपी नहीं हो सका।");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function copyFullSystemReport() {
+            let lines = ["🖥️ *सिस्टम एवं डिवाइस डायग्नोस्टिक रिपोर्ट* 🖥️", "----------------------------------"];
+            for (const [section, items] of Object.entries(collectedReport)) {
+                lines.push(`\n[${section}]`);
+                items.forEach(item => {
+                    lines.push(`• ${item.label}: ${item.value}`);
+                });
+            }
+            copyTextHelper(lines.join("\n"), "पूरी सिस्टम रिपोर्ट क्लिपबोर्ड पर कॉपी हो गई!");
+        }
+
+        function copyWifiCmdCommand() {
+            copyTextHelper('netsh wlan show profiles name="*" key=clear | findstr "SSID Content"', "Windows CMD कमांड कॉपी हो गया! इसे Command Prompt में पेस्ट करें।");
+        }
+
+        function copyTpmCommand() {
+            copyTextHelper('tpm.msc', "tpm.msc कमांड कॉपी हो गया! Windows + R दबाकर पेस्ट करें।");
+        }
+
+        function copyFullHardwareCmd() {
+            const displayCmd = `powershell -c "$c=gcim Win32_ComputerSystem;$b=gcim Win32_BIOS;$d=[math]::Round((Get-Disk|measure Size -Sum).Sum/1GB,2);$r='Manufacturer: '+$c.Manufacturer+' | Model: '+$c.Model+' | Serial: '+$b.SerialNumber+' | StorageGB: '+$d;$r;scb $r;pause"`;
+            const cmdBox = document.getElementById('cmd-display-box');
+            if (cmdBox) {
+                cmdBox.textContent = displayCmd;
+                cmdBox.classList.remove('hidden');
+            }
+            copyTextHelper(displayCmd, "कमांड कॉपी हो गया है! Win+R दबाकर पेस्ट करें।");
+        }
+
+        function downloadHardwareBatchScript() {
+            const lines = [
+                "@echo off",
+                "title System Model Serial Number RAM Motherboard and Battery Scanner",
+                "echo ==================================================================",
+                "echo   Complete PC Model, Serial, RAM, Motherboard and Storage Scanner",
+                "echo ==================================================================",
+                "echo.",
+                "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$cs=Get-CimInstance Win32_ComputerSystem; $bios=Get-CimInstance Win32_BIOS; $bb=Get-CimInstance Win32_BaseBoard; $os=Get-CimInstance Win32_OperatingSystem; $ram=(Get-CimInstance Win32_PhysicalMemory | ForEach-Object { [math]::Round($_.Capacity/1GB,0).ToString() + 'GB (' + $_.Speed + 'MHz)' }) -join ' + '; $disks=(Get-Disk | ForEach-Object { $_.FriendlyName + ' (' + [math]::Round($_.Size/1GB,2) + ' GB)' }) -join ', '; $key=(Get-CimInstance SoftwareLicensingService).OA3xOriginalProductKey; if(-not $key){$key='Digital License / Embedded'}; $report = 'Manufacturer: ' + $cs.Manufacturer + [Environment]::NewLine + 'Model: ' + $cs.Model + [Environment]::NewLine + 'Motherboard: ' + $bb.Manufacturer + ' ' + $bb.Product + [Environment]::NewLine + 'SerialNumber: ' + $bios.SerialNumber + [Environment]::NewLine + 'Windows: ' + $os.Caption + ' (' + $os.Version + ')' + [Environment]::NewLine + 'RAM Details: ' + $ram + [Environment]::NewLine + 'Storage: ' + $disks + [Environment]::NewLine + 'WindowsKey: ' + $key; Write-Host $report -ForegroundColor Green; Set-Clipboard -Value $report; $desk=[Environment]::GetFolderPath('Desktop'); $txtPath=Join-Path $desk 'PC_Details.txt'; Set-Content -Path $txtPath -Value $report; powercfg /batteryreport /output (Join-Path $desk 'Battery_Health_Report.html') | Out-Null\"",
+                "echo.",
+                "echo [SUCCESS] Details copied to Clipboard and saved to Desktop (PC_Details.txt)!",
+                "echo [INFO] Battery Health Report also saved on Desktop if laptop battery exists.",
+                "echo.",
+                "pause"
+            ];
+            const batContent = lines.join("\r\n") + "\r\n";
+            try {
+                const dataUri = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(batContent);
+                const a = document.createElement('a');
+                a.href = dataUri;
+                a.download = 'Check_PC_Model_Serial.bat';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast(".BAT टूल डाउनलोड हो गया! चलाने पर डेस्कटॉप पर PC_Details.txt व Battery Report बनेगी।");
+            } catch (e) {
+                copyFullHardwareCmd();
+            }
+        }
+
+        // =========================================================================
+        // Live Hardware Lab Functions (Speed Test: Ping + Download + Upload)
+        // =========================================================================
+        async function runInternetSpeedTest() {
+            const btn = document.getElementById('speed-test-btn');
+            const pingEl = document.getElementById('ping-val');
+            const dlSpeedEl = document.getElementById('download-speed-val');
+            const ulSpeedEl = document.getElementById('upload-speed-val');
+
+            btn.disabled = true;
+            btn.textContent = "जाँच जारी...";
+            pingEl.textContent = "मापा जा रहा है...";
+            dlSpeedEl.textContent = "मापा जा रहा है...";
+            ulSpeedEl.textContent = "मापा जा रहा है...";
+
+            let pingMs = "--";
+            let dlMbps = "--";
+            let ulMbps = "--";
+
+            try {
+                // 1. Ping Latency Measurement
+                const pingStart = performance.now();
+                await fetch('https://ipwho.is/?t=' + Date.now(), { cache: 'no-store' });
+                pingMs = `${Math.round(performance.now() - pingStart)} ms`;
+                pingEl.textContent = pingMs;
+
+                // 2. Download Speed Measurement (~500 KB payload)
+                const dlStart = performance.now();
+                const dlBytes = 500000;
+                const dlRes = await fetch(`https://speed.cloudflare.com/__down?bytes=${dlBytes}&t=${Date.now()}`, { cache: 'no-store' });
+                const blob = await dlRes.blob();
+                const dlDurationSec = Math.max(0.05, (performance.now() - dlStart) / 1000);
+                const dlBits = blob.size * 8;
+                dlMbps = `${(dlBits / dlDurationSec / (1024 * 1024)).toFixed(2)} Mbps`;
+                dlSpeedEl.textContent = dlMbps;
+
+                // 3. Upload Speed Measurement (~250 KB payload POST to Cloudflare speed endpoint with fallback)
+                try {
+                    const ulBytes = 250000;
+                    const payload = new Uint8Array(ulBytes);
+                    const ulStart = performance.now();
+                    await fetch(`https://speed.cloudflare.com/__up?t=${Date.now()}`, {
+                        method: 'POST',
+                        body: payload,
+                        cache: 'no-store'
+                    });
+                    const ulDurationSec = Math.max(0.05, (performance.now() - ulStart) / 1000);
+                    const ulBits = ulBytes * 8;
+                    ulMbps = `${(ulBits / ulDurationSec / (1024 * 1024)).toFixed(2)} Mbps`;
+                } catch (ulErr) {
+                    // यदि CORS/फायरवॉल अपलोड एंडपॉइंट रोके तो httpbin POST से मापें
+                    const fallbackBytes = 100000;
+                    const fallbackData = "x".repeat(fallbackBytes);
+                    const fbStart = performance.now();
+                    await fetch('https://httpbin.org/post', {
+                        method: 'POST',
+                        body: fallbackData,
+                        cache: 'no-store'
+                    });
+                    const fbDurationSec = Math.max(0.05, (performance.now() - fbStart) / 1000);
+                    ulMbps = `${((fallbackBytes * 8) / fbDurationSec / (1024 * 1024)).toFixed(2)} Mbps`;
+                }
+                ulSpeedEl.textContent = ulMbps;
+
+                collectedReport["स्पीड टेस्ट"] = [
+                    { label: "पिंग (Ping)", value: pingMs },
+                    { label: "डाउनलोड स्पीड (Download)", value: dlMbps },
+                    { label: "अपलोड स्पीड (Upload)", value: ulMbps }
+                ];
+                showToast(`स्पीड टेस्ट पूरा: Download ${dlMbps} | Upload ${ulMbps}`);
+            } catch (err) {
+                const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                const estDl = conn && conn.downlink ? `~${conn.downlink} Mbps` : "उपलब्ध नहीं";
+                const estUl = conn && conn.downlink ? `~${(conn.downlink * 0.4).toFixed(1)} Mbps (अनुमानित)` : "उपलब्ध नहीं";
+                dlSpeedEl.textContent = estDl;
+                ulSpeedEl.textContent = estUl;
+                showToast("लाइव स्पीड सर्वर सीमित है, नेटवर्क के आधार पर अनुमानित गति दिखाई गई है।");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "पुनः जाँचें";
+            }
+        }
+
+        function testSpeakerTone() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5 note
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.25); // E5 note
+                osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.5); // G5 note
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.85);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.9);
+                showToast("स्पीकर टेस्ट टोन बज रही है!");
+            } catch (e) {
+                showToast("ऑडियो प्लेबैक समर्थित नहीं है।");
+            }
+        }
+
+        let micStream = null;
+        let micAnimFrame = null;
+        let micAudioCtx = null;
+
+        async function toggleMicLevelTest() {
+            const btn = document.getElementById('mic-test-btn');
+            const bar = document.getElementById('mic-level-bar');
+            const label = document.getElementById('mic-status-label');
+
+            if (micStream) {
+                micStream.getTracks().forEach(t => t.stop());
+                micStream = null;
+                if (micAnimFrame) cancelAnimationFrame(micAnimFrame);
+                if (micAudioCtx) micAudioCtx.close();
+                bar.style.width = "0%";
+                label.textContent = "बंद";
+                btn.textContent = "माइक जाँच";
+                return;
+            }
+
+            try {
+                micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                micAudioCtx = new AudioCtx();
+                const source = micAudioCtx.createMediaStreamSource(micStream);
+                const analyser = micAudioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                source.connect(analyser);
+
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                btn.textContent = "बंद करें";
+                label.textContent = "सक्रिय (बोलकर जाँचें)";
+
+                function updateMicBar() {
+                    if (!micStream) return;
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+                    const avg = sum / dataArray.length;
+                    const pct = Math.min(100, Math.round((avg / 128) * 100));
+                    bar.style.width = `${pct}%`;
+                    micAnimFrame = requestAnimationFrame(updateMicBar);
+                }
+                updateMicBar();
+                showToast("माइक्रोफ़ोन लाइव मीटर चालू हो गया है!");
+            } catch (err) {
+                showToast("माइक्रोफ़ोन अनुमति अस्वीकृत या उपलब्ध नहीं है।");
+            }
+        }
+
+        // Keyboard & Mouse Global Listeners
+        window.addEventListener('keydown', (e) => {
+            const overlay = document.getElementById('display-test-overlay');
+            if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                return;
+            }
+            const keyEl = document.getElementById('last-key-pressed');
+            if (keyEl) {
+                keyEl.textContent = `${e.key === ' ' ? 'Spacebar' : e.key} (Code: ${e.code})`;
+            }
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            const mouseEl = document.getElementById('last-mouse-action');
+            if (mouseEl) {
+                const btnNames = { 0: 'बायाँ क्लिक (Left)', 1: 'स्क्रॉल व्हील (Middle)', 2: 'दायाँ क्लिक (Right)' };
+                mouseEl.textContent = `${btnNames[e.button] || 'बटन ' + e.button} • X:${e.clientX}, Y:${e.clientY}`;
+            }
+        });
+
+        const displayColors = [
+            { name: "लाल (Red)", bg: "#ef4444" },
+            { name: "हरा (Green)", bg: "#22c55e" },
+            { name: "नीला (Blue)", bg: "#3b82f6" },
+            { name: "सफ़ेद (White)", bg: "#ffffff" },
+            { name: "काला (Black)", bg: "#000000" }
+        ];
+        let currentColorIdx = 0;
+
+        function startDisplayColorTest() {
+            currentColorIdx = 0;
+            const overlay = document.getElementById('display-test-overlay');
+            const label = document.getElementById('display-color-label');
+            overlay.style.backgroundColor = displayColors[0].bg;
+            label.textContent = `रंग: ${displayColors[0].name} (1/${displayColors.length})`;
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function nextDisplayColor() {
+            currentColorIdx++;
+            const overlay = document.getElementById('display-test-overlay');
+            if (currentColorIdx >= displayColors.length) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                showToast("स्क्रीन डेड-पिक्सेल टेस्ट पूरा हुआ!");
+                return;
+            }
+            const label = document.getElementById('display-color-label');
+            overlay.style.backgroundColor = displayColors[currentColorIdx].bg;
+            label.textContent = `रंग: ${displayColors[currentColorIdx].name} (${currentColorIdx + 1}/${displayColors.length})`;
+        }
+
+        function scanAllBasicInfo() {
+            detectOSInfo();
+            detectHardwareInfo();
+            detectBrowserAndScreen();
+            detectBatteryInfo();
+            detectNetworkInfo();
+            detectStorageInfo();
+            detectAdvancedTechnicalSpecs();
+        }
+
+        window.addEventListener('online', detectNetworkInfo);
+        window.addEventListener('offline', detectNetworkInfo);
+
+        function initApp() {
+            injectCommonLayout();
+            scanAllBasicInfo();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
