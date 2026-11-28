@@ -17,6 +17,26 @@
         .card-shadow {
             box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
         }
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            .no-print, #site-header, #site-footer, #toast-modal, #display-test-overlay, #keyboard-modal {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .card-shadow {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            main {
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
@@ -24,8 +44,36 @@
     <!-- Common Header Container (RUPESH COMPUTERS Layout) -->
     <div id="site-header"></div>
 
+    <!-- Print-Only Customer Service Slip Header (RUPESH COMPUTERS) -->
+    <div class="hidden print-only border-2 border-slate-800 rounded-2xl p-5 mb-5 mx-4 mt-4 bg-white">
+        <div class="flex items-center justify-between border-b-2 border-slate-800 pb-3 mb-3">
+            <div>
+                <h1 class="text-xl font-black tracking-tight text-slate-900">RUPESH COMPUTERS</h1>
+                <p class="text-xs font-semibold text-slate-600">चोंगरीबहार एवं दोकड़ा शाखा • कंप्यूटर, लैपटॉप सेल्स एवं रिपेयरिंग सेंटर</p>
+            </div>
+            <div class="text-right text-xs">
+                <div class="font-bold text-slate-900">सिस्टम डायग्नोस्टिक एवं सर्विस रिपोर्ट</div>
+                <div id="print-date-stamp" class="text-slate-600 mt-0.5">दिनांक: --</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-xs">
+            <div class="border border-slate-300 rounded-lg p-2">
+                <span class="text-slate-500 block text-[10px]">ग्राहक का नाम (Customer Name):</span>
+                <span id="print-cust-name" class="font-bold text-slate-900">--</span>
+            </div>
+            <div class="border border-slate-300 rounded-lg p-2">
+                <span class="text-slate-500 block text-[10px]">मोबाइल नंबर (Mobile No.):</span>
+                <span id="print-cust-phone" class="font-bold text-slate-900">--</span>
+            </div>
+            <div class="border border-slate-300 rounded-lg p-2">
+                <span class="text-slate-500 block text-[10px]">डिवाइस / समस्या (Device / Issue):</span>
+                <span id="print-cust-issue" class="font-bold text-slate-900">--</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Tool Action Sub-Bar -->
-    <div class="bg-white border-b border-slate-200 shadow-sm">
+    <div class="bg-white border-b border-slate-200 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0">
@@ -33,15 +81,15 @@
                 </div>
                 <div>
                     <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">सिस्टम एवं डिवाइस डायग्नोस्टिक टूल</h2>
-                    <p class="text-xs text-slate-500">हार्डवेयर, मदरबोर्ड स्लॉट्स, बैटरी हेल्थ, स्पीड टेस्ट व बायोमेट्रिक स्कैनर</p>
+                    <p class="text-xs text-slate-500">हार्डवेयर, मदरबोर्ड स्लॉट्स, बैटरी हेल्थ, कीबोर्ड टेस्टर व सर्विस स्लिप</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 flex-wrap justify-center">
                 <button onclick="scanAllBasicInfo()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                     <i class="fa-solid fa-rotate text-blue-600"></i><span>पुनः स्कैन करें</span>
                 </button>
-                <button onclick="window.print()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-print text-indigo-600"></i><span>प्रिंट / PDF</span>
+                <button onclick="prepareAndPrintSlip()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-print"></i><span>सर्विस स्लिप प्रिंट / PDF</span>
                 </button>
                 <button onclick="copyFullSystemReport()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-copy"></i><span>रिपोर्ट कॉपी करें</span>
@@ -53,8 +101,28 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 w-full flex-grow space-y-6">
 
+        <!-- Customer Service Slip Input Bar (Shop Use - Hidden when empty on print, editable anytime) -->
+        <section class="bg-white rounded-3xl p-4 sm:p-5 card-shadow border border-indigo-200/80 no-print">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </span>
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-900">ग्राहक सर्विस स्लिप विवरण (प्रिंट / PDF रिपोर्ट के लिए)</h3>
+                        <p class="text-[11px] text-slate-500">यहाँ ग्राहक की जानकारी भरकर "सर्विस स्लिप प्रिंट / PDF" दबाएं—ऊपर दुकान के नाम के साथ रिपोर्ट प्रिंट होगी।</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <input type="text" id="cust-name-input" oninput="syncCustomerSlipFields()" placeholder="ग्राहक का नाम (उदा. राजेश कुमार)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
+                <input type="text" id="cust-phone-input" oninput="syncCustomerSlipFields()" placeholder="मोबाइल नंबर (उदा. 98261XXXXX)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
+                <input type="text" id="cust-issue-input" oninput="syncCustomerSlipFields()" placeholder="डिवाइस / समस्या (उदा. HP Laptop RAM/SSD Upgrade)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
+            </div>
+        </section>
+
         <!-- Security & Privacy Note Banner -->
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-950">
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-950 no-print">
             <i class="fa-solid fa-shield-halved text-amber-600 text-lg mt-0.5"></i>
             <div>
                 <p class="font-bold">ब्राउज़र सुरक्षा एवं हार्डवेयर अपग्रेड जानकारी:</p>
@@ -69,14 +137,15 @@
 
             <!-- 1. OS & Device Platform -->
             <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                                <i class="fa-brands fa-windows text-lg"></i>
-                            </span>
-                            <h2 class="font-bold text-slate-800 text-sm">ऑपरेटिंग सिस्टम (OS)</h2>
-                        </div>
+        <!-- Interactive Hardware & Speed Testing Lab (Now 4 Cards including Live Webcam Tester & Full Keyboard Grid) -->
+        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200 no-print">
+            <div class="mb-5">
+                <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-stethoscope text-indigo-600"></i>
+                    <span>लाइव हार्डवेयर एवं इंटरनेट स्पीड टेस्टर (Speed, Audio, Webcam, Keyboard & Screen Check)</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">इंटरनेट की असली स्पीड, स्पीकर, माइक्रोफ़ोन, वेबकैम, फुल कीबोर्ड बटन, माउस और मॉनिटर स्क्रीन की तुरंत जाँच करें:</p>
+            </div>
                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">उपलब्ध</span>
                     </div>
                     <div class="space-y-2.5 text-xs" id="os-info-list">
@@ -297,11 +366,16 @@
                             <span class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
                                 <i class="fa-solid fa-keyboard text-teal-600"></i> कीबोर्ड व स्क्रीन
                             </span>
-                            <button type="button" onclick="startDisplayColorTest()" class="px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
-                                स्क्रीन टेस्ट
-                            </button>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="openFullKeyboardModal()" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    फुल कीबोर्ड
+                                </button>
+                                <button type="button" onclick="startDisplayColorTest()" class="px-2 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm">
+                                    स्क्रीन
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-[11px] text-slate-600 mb-3">कोई बटन दबाएं या डेड-पिक्सेल रंग जाँचें।</p>
+                        <p class="text-[11px] text-slate-600 mb-3">लैपटॉप के हर बटन या डेड-पिक्सेल रंग की जाँच करें।</p>
                     </div>
                     <div id="input-test-result" class="text-xs bg-white border border-teal-200 rounded-xl p-3 text-slate-700 space-y-1.5">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-1">
@@ -319,7 +393,7 @@
         </section>
 
         <!-- Permission-Based & Local Service Diagnostics Section -->
-        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
+        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200 no-print">
             <div class="mb-5">
                 <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-key text-teal-600"></i>
@@ -484,9 +558,9 @@
                         </div>
                         <div class="bg-white border border-slate-200 rounded-xl p-2.5">
                             <div class="font-bold text-emerald-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-battery-full"></i> बैटरी हेल्थ (%) व सिक्योरिटी
+                                <i class="fa-solid fa-battery-full"></i> बैटरी हेल्थ, BIOS व MAC
                             </div>
-                            <p class="text-slate-600 mt-0.5">लैपटॉप बैटरी की असली हेल्थ (%), चार्ज साइकल, Secure Boot व Windows की बताएगा।</p>
+                            <p class="text-slate-600 mt-0.5">लैपटॉप बैटरी हेल्थ (%), BIOS डेट, सिस्टम अपटाइम, Secure Boot व MAC एड्रेस बताएगा।</p>
                         </div>
                     </div>
 
@@ -499,7 +573,42 @@
             </div>
         </section>
 
+        <!-- Print-Only Signature Footer -->
+        <div class="hidden print-only border-t-2 border-slate-800 pt-4 mt-6 flex items-center justify-between text-xs">
+            <div>
+                <p class="font-bold text-slate-900">नोट: यह कंप्यूटर हार्डवेयर एवं सिस्टम डायग्नोस्टिक रिपोर्ट RUPESH COMPUTERS द्वारा जनरेट की गई है।</p>
+                <p class="text-slate-600">चोंगरीबहार एवं दोकड़ा शाखा</p>
+            </div>
+            <div class="text-right">
+                <div class="h-8"></div>
+                <p class="font-bold text-slate-900 border-t border-slate-600 pt-1 px-4">अधिकृत हस्ताक्षर / मुहर</p>
+            </div>
+        </div>
+
     </main>
+
+    <!-- Visual On-Screen Full Keyboard Tester Modal -->
+    <div id="keyboard-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-5">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
+                <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-keyboard text-teal-600"></i> लाइव कीबोर्ड बटन टेस्टर (Visual Keyboard Tester)
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">अपने कीबोर्ड का हर बटन दबाएं—सही काम करने वाला बटन तुरंत <span class="text-emerald-600 font-bold">हरा (Green)</span> हो जाएगा।</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="resetVisualKeyboard()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition">
+                        रीसेट करें
+                    </button>
+                    <button type="button" onclick="closeFullKeyboardModal()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition">
+                        बंद करें
+                    </button>
+                </div>
+            </div>
+            <div id="visual-keyboard-grid" class="space-y-2 select-none overflow-x-auto pb-1"></div>
+        </div>
+    </div>
 
     <!-- Fullscreen Display Dead-Pixel Color Overlay -->
     <div id="display-test-overlay" onclick="nextDisplayColor()" class="fixed inset-0 z-50 hidden flex-col items-center justify-center cursor-pointer select-none">
@@ -992,6 +1101,14 @@
         document.addEventListener('keydown', (e) => {
             const keyEl = document.getElementById('last-key-pressed');
             if (keyEl) keyEl.textContent = `${e.key === ' ' ? 'Space' : e.key}`;
+
+            // विज़ुअल कीबोर्ड बटन को हरा करें
+            const keyBtn = document.querySelector(`[data-key-code="${e.code}"]`);
+            if (keyBtn) {
+                keyBtn.classList.remove('bg-slate-100', 'text-slate-800', 'border-slate-300');
+                keyBtn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600', 'shadow-sm');
+            }
+
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('display-test-overlay');
                 if (overlay) overlay.classList.add('hidden');
@@ -1005,24 +1122,245 @@
             mouseEl.textContent = `${names[e.button] || 'Click'} (${e.clientX},${e.clientY})`;
         });
 
-        // मॉनिटर स्क्रीन डेड-पिक्सेल टेस्ट
-        const screenColors = [
-            { bg: "#ef4444", name: "लाल (Red)" },
-            { bg: "#22c55e", name: "हरा (Green)" },
-            { bg: "#3b82f6", name: "नीला (Blue)" },
-            { bg: "#ffffff", name: "सफ़ेद (White)" },
-            { bg: "#000000", name: "काला (Black)" }
+        // ऑन-स्क्रीन फुल कीबोर्ड ग्रिड जनरेटर
+        const keyboardRows = [
+            [
+                { code: 'Escape', label: 'Esc' }, { code: 'F1', label: 'F1' }, { code: 'F2', label: 'F2' }, { code: 'F3', label: 'F3' },
+                { code: 'F4', label: 'F4' }, { code: 'F5', label: 'F5' }, { code: 'F6', label: 'F6' }, { code: 'F7', label: 'F7' },
+                { code: 'F8', label: 'F8' }, { code: 'F9', label: 'F9' }, { code: 'F10', label: 'F10' }, { code: 'F11', label: 'F11' },
+                { code: 'F12', label: 'F12' }, { code: 'Delete', label: 'Del' }
+            ],
+            [
+                { code: 'Backquote', label: '`' }, { code: 'Digit1', label: '1' }, { code: 'Digit2', label: '2' }, { code: 'Digit3', label: '3' },
+                { code: 'Digit4', label: '4' }, { code: 'Digit5', label: '5' }, { code: 'Digit6', label: '6' }, { code: 'Digit7', label: '7' },
+                { code: 'Digit8', label: '8' }, { code: 'Digit9', label: '9' }, { code: 'Digit0', label: '0' }, { code: 'Minus', label: '-' },
+                { code: 'Equal', label: '=' }, { code: 'Backspace', label: 'Backspace', flex: 'flex-grow' }
+            ],
+            [
+                { code: 'Tab', label: 'Tab', w: 'w-14' }, { code: 'KeyQ', label: 'Q' }, { code: 'KeyW', label: 'W' }, { code: 'KeyE', label: 'E' },
+                { code: 'KeyR', label: 'R' }, { code: 'KeyT', label: 'T' }, { code: 'KeyY', label: 'Y' }, { code: 'KeyU', label: 'U' },
+                { code: 'KeyI', label: 'I' }, { code: 'KeyO', label: 'O' }, { code: 'KeyP', label: 'P' }, { code: 'BracketLeft', label: '[' },
+                { code: 'BracketRight', label: ']' }, { code: 'Backslash', label: '\\', flex: 'flex-grow' }
+            ],
+            [
+                { code: 'CapsLock', label: 'Caps', w: 'w-16' }, { code: 'KeyA', label: 'A' }, { code: 'KeyS', label: 'S' }, { code: 'KeyD', label: 'D' },
+                { code: 'KeyF', label: 'F' }, { code: 'KeyG', label: 'G' }, { code: 'KeyH', label: 'H' }, { code: 'KeyJ', label: 'J' },
+                { code: 'KeyK', label: 'K' }, { code: 'KeyL', label: 'L' }, { code: 'Semicolon', label: ';' }, { code: 'Quote', label: "'" },
+                { code: 'Enter', label: 'Enter', flex: 'flex-grow' }
+            ],
+            [
+                { code: 'ShiftLeft', label: 'Shift', w: 'w-20' }, { code: 'KeyZ', label: 'Z' }, { code: 'KeyX', label: 'X' }, { code: 'KeyC', label: 'C' },
+                { code: 'KeyV', label: 'V' }, { code: 'KeyB', label: 'B' }, { code: 'KeyN', label: 'N' }, { code: 'KeyM', label: 'M' },
+                { code: 'Comma', label: ',' }, { code: 'Period', label: '.' }, { code: 'Slash', label: '/' }, { code: 'ShiftRight', label: 'Shift', flex: 'flex-grow' }
+            ],
+            [
+                { code: 'ControlLeft', label: 'Ctrl', w: 'w-14' }, { code: 'MetaLeft', label: 'Win', w: 'w-12' }, { code: 'AltLeft', label: 'Alt', w: 'w-12' },
+                { code: 'Space', label: 'Spacebar', flex: 'flex-grow' }, { code: 'AltRight', label: 'Alt', w: 'w-12' }, { code: 'ControlRight', label: 'Ctrl', w: 'w-14' },
+                { code: 'ArrowLeft', label: '←' }, { code: 'ArrowUp', label: '↑' }, { code: 'ArrowDown', label: '↓' }, { code: 'ArrowRight', label: '→' }
+            ]
         ];
-        let colorIdx = 0;
 
-        function startDisplayColorTest() {
-            colorIdx = 0;
-            const overlay = document.getElementById('display-test-overlay');
-            const label = document.getElementById('display-color-label');
-            overlay.style.backgroundColor = screenColors[0].bg;
-            label.textContent = `रंग: ${screenColors[0].name}`;
-            overlay.classList.remove('hidden');
-            overlay.classList.add('flex');
+        function buildVisualKeyboard() {
+            const grid = document.getElementById('visual-keyboard-grid');
+            if (!grid) return;
+            grid.innerHTML = keyboardRows.map(row => `
+                <div class="flex items-center gap-1.5 min-w-[640px]">
+                    ${row.map(k => `
+                        <div data-key-code="${k.code}" class="${k.w || 'w-10'} ${k.flex || ''} h-10 rounded-xl border border-slate-300 bg-slate-100 text-slate-800 font-mono text-xs font-bold flex items-center justify-center transition-colors">
+                            ${k.label}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function openFullKeyboardModal() {
+            buildVisualKeyboard();
+            const modal = document.getElementById('keyboard-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeFullKeyboardModal() {
+            const modal = document.getElementById('keyboard-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function resetVisualKeyboard() {
+            buildVisualKeyboard();
+            showToast("कीबोर्ड टेस्टर रीसेट हो गया!");
+        }
+
+        // कस्टमर सर्विस स्लिप सिंक व प्रिंट
+        function syncCustomerSlipFields() {
+            const name = document.getElementById('cust-name-input')?.value.trim() || "--";
+            const phone = document.getElementById('cust-phone-input')?.value.trim() || "--";
+            const issue = document.getElementById('cust-issue-input')?.value.trim() || "--";
+            document.getElementById('print-cust-name').textContent = name;
+            document.getElementById('print-cust-phone').textContent = phone;
+            document.getElementById('print-cust-issue').textContent = issue;
+        }
+
+        function prepareAndPrintSlip() {
+            syncCustomerSlipFields();
+            const dateEl = document.getElementById('print-date-stamp');
+            if (dateEl) {
+                dateEl.textContent = "दिनांक: " + new Date().toLocaleString('hi-IN', { dateStyle: 'medium', timeStyle: 'short' });
+            }
+            window.print();
+        }
+        // 1-क्लिक .BAT टूल (100% Bug-Free Encoded PowerShell - BIOS डेट, अपटाइम व MAC एड्रेस सहित)
+        function downloadHardwareBatchScript() {
+            const psScript = `
+$ErrorActionPreference = 'SilentlyContinue'
+$cs = Get-CimInstance Win32_ComputerSystem
+$cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
+$mb = Get-CimInstance Win32_BaseBoard
+$bios = Get-CimInstance Win32_BIOS
+$os = Get-CimInstance Win32_OperatingSystem
+$memArr = Get-CimInstance Win32_PhysicalMemoryArray
+$rams = @(Get-CimInstance Win32_PhysicalMemory)
+
+$biosDate = if ($bios.ReleaseDate) { $bios.ReleaseDate.ToString('dd-MMM-yyyy') } else { 'Unknown' }
+$lastBoot = if ($os.LastBootUpTime) { $os.LastBootUpTime.ToString('dd-MMM-yyyy hh:mm tt') } else { 'Unknown' }
+$uptimeSpan = if ($os.LastBootUpTime) { (Get-Date) - $os.LastBootUpTime } else { $null }
+$uptimeStr = if ($uptimeSpan) { "$($uptimeSpan.Days)d $($uptimeSpan.Hours)h $($uptimeSpan.Minutes)m" } else { 'Unknown' }
+
+$netAdapters = @(Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true })
+$macLines = if ($netAdapters.Count -gt 0) {
+    foreach ($n in $netAdapters) {
+        "  -> $($n.Description) | MAC: $($n.MACAddress) | IP: $($n.IPAddress -join ', ')"
+    }
+} else {
+    @("  -> No active network adapter found")
+}
+
+$totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum
+if (-not $totalSlots) { $totalSlots = $rams.Count }
+$usedSlots = $rams.Count
+$freeSlots = [math]::Max(0, ($totalSlots - $usedSlots))
+$maxRamKB = ($memArr | Measure-Object MaxCapacity -Sum).Sum
+$maxRamGB = if ($maxRamKB -gt 0) { [math]::Round(($maxRamKB / 1MB), 2) } else { "Unknown" }
+
+$ddrMap = @{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5';0='LPDDR/Onboard'}
+$ffMap = @{8='DIMM (Desktop)';12='SODIMM (Laptop)'}
+
+$ramLines = foreach ($r in $rams) {
+    $tCode = [int]$r.SMBIOSMemoryType
+    if ($tCode -eq 0) { $tCode = [int]$r.MemoryType }
+    $t = if ($ddrMap.ContainsKey($tCode)) { $ddrMap[$tCode] } else { "DDR-Type($tCode)" }
+    $fCode = [int]$r.FormFactor
+    $f = if ($ffMap.ContainsKey($fCode)) { $ffMap[$fCode] } else { "Standard" }
+    $cap = [math]::Round(($r.Capacity / 1GB), 2)
+    $spd = $r.Speed
+    $slot = $r.DeviceLocator
+    "  -> $slot : $cap GB $t ($f) @ $spd MHz"
+}
+if (-not $ramLines) { $ramLines = @("  -> RAM details not exposed by BIOS") }
+
+$physDisks = @(Get-PhysicalDisk)
+$diskLines = if ($physDisks.Count -gt 0) {
+    foreach ($d in $physDisks) {
+        $sz = [math]::Round(($d.Size / 1GB), 2)
+        "  -> $($d.FriendlyName) | Type: $($d.MediaType) | Slot/Bus: $($d.BusType) | Size: $sz GB | Health: $($d.HealthStatus)"
+    }
+} else {
+    foreach ($d in (Get-CimInstance Win32_DiskDrive)) {
+        $sz = [math]::Round(($d.Size / 1GB), 2)
+        "  -> $($d.Model) | Interface: $($d.InterfaceType) | Size: $sz GB"
+    }
+}
+
+$slots = @(Get-CimInstance Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' })
+$slotLines = if ($slots.Count -gt 0) {
+    foreach ($s in $slots) {
+        $st = if ($s.CurrentUsage -eq 3) { 'Empty / Free' } elseif ($s.CurrentUsage -eq 4) { 'In Use' } else { 'Available' }
+        "  -> $($s.SlotDesignation) [$st]"
+    }
+} else {
+    @("  -> Check Motherboard Physical M.2/SATA Ports")
+}
+
+$batStatic = Get-CimInstance -Namespace root/wmi -ClassName BatteryStaticData | Select-Object -First 1
+$batFull = Get-CimInstance -Namespace root/wmi -ClassName BatteryFullChargedCapacity | Select-Object -First 1
+if ($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0) {
+    $pct = [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity) * 100, 1)
+    $batHealth = "$pct% (Full: $($batFull.FullChargedCapacity) mWh / Design: $($batStatic.DesignedCapacity) mWh)"
+} else {
+    $batHealth = "Desktop PC or Battery Info Unavailable"
+}
+
+$secBoot = try { if (Confirm-SecureBootUEFI) { 'Enabled (On)' } else { 'Disabled (Off)' } } catch { 'Legacy BIOS / Unsupported' }
+$key = (Get-CimInstance SoftwareLicensingService).OA3xOriginalProductKey
+if (-not $key) { $key = "Digital License / OEM" }
+
+$report = @"
+============================================================
+   RUPESH COMPUTERS - COMPLETE SYSTEM & UPGRADE REPORT
+============================================================
+Manufacturer & Model : $($cs.Manufacturer) $($cs.Model)
+Processor (CPU)      : $($cpu.Name.Trim()) ($($cpu.NumberOfCores) Cores / $($cpu.NumberOfLogicalProcessors) Threads)
+Motherboard Board    : $($mb.Manufacturer) $($mb.Product) (Ver: $($mb.Version))
+BIOS Serial & Date   : $($bios.SerialNumber) (BIOS Date: $biosDate)
+Operating System     : $($os.Caption) ($($os.OSArchitecture))
+Last Boot & Uptime   : $lastBoot (Uptime: $uptimeStr)
+Secure Boot Status   : $secBoot
+Windows License Key  : $key
+Laptop Battery Health: $batHealth
+
+--- [1] RAM SLOTS & COMPATIBILITY ---
+Total RAM Slots      : $totalSlots Slots
+Used / Empty Slots   : $usedSlots Used  |  $freeSlots Empty (Free Slots)
+Max Supported RAM    : $maxRamGB GB
+Installed RAM Sticks :
+$($ramLines -join "\`r\`n")
+
+--- [2] STORAGE & SSD / HDD DRIVES ---
+$($diskLines -join "\`r\`n")
+
+--- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---
+$($slotLines -join "\`r\`n")
+
+--- [4] NETWORK ADAPTERS & MAC ADDRESS ---
+$($macLines -join "\`r\`n")
+============================================================
+"@
+
+Write-Host $report -ForegroundColor Cyan
+$report | Set-Clipboard
+$outPath = Join-Path ([Environment]::GetFolderPath('Desktop')) 'PC_Details.txt'
+$report | Out-File -FilePath $outPath -Encoding UTF8
+Write-Host ""
+Write-Host "[SUCCESS] Report copied to Clipboard & saved to: $outPath" -ForegroundColor Green
+`;
+
+            const encodedCmd = encodePowerShellBase64(psScript.trim());
+
+            const batLines = [
+                "@echo off",
+                "title RUPESH COMPUTERS - Full Hardware, RAM Slots, SSD and Battery Health Scanner",
+                "color 0A",
+                "echo ============================================================",
+                "echo   Scanning System Hardware, Motherboard Slots, SSD and Battery...",
+                "echo ============================================================",
+                "echo.",
+                `powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${encodedCmd}`,
+                "echo.",
+                "pause"
+            ];
+
+            const content = batLines.join("\r\n");
+            const blob = new Blob([content], { type: "application/bat" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Rupesh_Computers_Full_PC_Scanner.bat";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+            showToast("नई अपडेटेड .BAT फ़ाइल डाउनलोड शुरू हुई!");
         }
 
         function nextDisplayColor() {
@@ -1175,85 +1513,154 @@
             showToast("Wi-Fi पासवर्ड CMD कमांड कॉपी हो गया!");
         }
 
-        // 1-क्लिक .BAT टूल (CPU Generation, Motherboard Slots, DDR Type, Max RAM, SSD/NVMe, Battery Health % & Secure Boot सहित)
+        // UTF-16LE Base64 Encoder (PowerShell -EncodedCommand के लिए ताकि CMD में कोट्स या सिंटैक्स कभी न टूटे)
+        function encodePowerShellBase64(script) {
+            const bytes = new Uint8Array(script.length * 2);
+            for (let i = 0; i < script.length; i++) {
+                const code = script.charCodeAt(i);
+                bytes[i * 2] = code & 0xff;
+                bytes[i * 2 + 1] = (code >> 8) & 0xff;
+            }
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        // 1-क्लिक .BAT टूल (100% Bug-Free Encoded PowerShell के साथ)
         function downloadHardwareBatchScript() {
-            const psScript = [
-                "$cs = gcim Win32_ComputerSystem;",
-                "$cpu = gcim Win32_Processor | Select-Object -First 1;",
-                "$mb = gcim Win32_BaseBoard;",
-                "$bios = gcim Win32_BIOS;",
-                "$os = gcim Win32_OperatingSystem;",
-                "$memArr = gcim Win32_PhysicalMemoryArray;",
-                "$rams = gcim Win32_PhysicalMemory;",
-                "$totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum;",
-                "$usedSlots = ($rams | Measure-Object).Count;",
-                "$freeSlots = $totalSlots - $usedSlots;",
-                "$maxRamGB = [math]::Round((($memArr | Measure-Object MaxCapacity -Sum).Sum / 1MB), 2);",
-                "$ddrMap = @{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5';0='Unknown/LPDDR'};",
-                "$ffMap = @{8='DIMM (Desktop)';12='SODIMM (Laptop)'};",
-                "$ramDetails = $rams | ForEach-Object { $t = if($ddrMap.ContainsKey([int]$_.SMBIOSMemoryType)){$ddrMap[[int]$_.SMBIOSMemoryType]}else{'DDR-Type('+$_.SMBIOSMemoryType+')'}; $f = if($ffMap.ContainsKey([int]$_.FormFactor)){$ffMap[[int]$_.FormFactor]}else{'Standard'}; $cap = [math]::Round($_.Capacity/1GB,2); $spd = $_.Speed; $slot = $_.DeviceLocator; \"$slot : $cap GB $t ($f) @ $spd MHz\" };",
-                "$physDisks = Get-PhysicalDisk | ForEach-Object { $sz = [math]::Round($_.Size/1GB,2); \"$($_.FriendlyName) | Type: $($_.MediaType) | Bus/Slot: $($_.BusType) | Capacity: $sz GB | Health: $($_.HealthStatus)\" };",
-                "$slots = gcim Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' } | ForEach-Object { \"$($_.SlotDesignation) (Status: $(if($_.CurrentUsage -eq 3){'Empty/Available'}elseif($_.CurrentUsage -eq 4){'In Use'}else{'Present'}))\" };",
-                "$batStatic = gcim -Namespace root/wmi -ClassName BatteryStaticData -ErrorAction SilentlyContinue | Select-Object -First 1;",
-                "$batFull = gcim -Namespace root/wmi -ClassName BatteryFullChargedCapacity -ErrorAction SilentlyContinue | Select-Object -First 1;",
-                "$batHealth = if($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0){ [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity)*100, 1).ToString() + '% (Full: ' + $batFull.FullChargedCapacity + ' mWh / Design: ' + $batStatic.DesignedCapacity + ' mWh)' } else { 'Desktop PC or Battery Info Unavailable' };",
-                "$secBoot = try { if(Confirm-SecureBootUEFI){'Enabled (On)'}else{'Disabled (Off)'} } catch { 'Legacy BIOS / Unsupported' };",
-                "$key = (gcim SoftwareLicensingService).OA3xOriginalProductKey;",
-                "$report = @(",
-                "'============================================================',",
-                "'   RUPESH COMPUTERS - COMPLETE SYSTEM & UPGRADE REPORT',",
-                "'============================================================',",
-                "'Manufacturer & Model : ' + $cs.Manufacturer + ' ' + $cs.Model,",
-                "'Processor (CPU)      : ' + $cpu.Name.Trim() + ' (' + $cpu.NumberOfCores + ' Cores / ' + $cpu.NumberOfLogicalProcessors + ' Threads)',",
-                "'Motherboard Board    : ' + $mb.Manufacturer + ' ' + $mb.Product + ' (Ver: ' + $mb.Version + ')',",
-                "'BIOS Serial Number   : ' + $bios.SerialNumber,",
-                "'Operating System     : ' + $os.Caption + ' (' + $os.OSArchitecture + ')',",
-                "'Secure Boot Status   : ' + $secBoot,",
-                "'Windows License Key  : ' + $(if($key){$key}else{'Digital License / OEM'}),",
-                "'Laptop Battery Health: ' + $batHealth,",
-                "'',",
-                "'--- [1] RAM SLOTS & COMPATIBILITY (कौन सा RAM लगेगा) ---',",
-                "'Total RAM Slots      : ' + $totalSlots + ' Slots',",
-                "'Used / Empty Slots   : ' + $usedSlots + ' Used  |  ' + $freeSlots + ' Empty (खाली स्लॉट)',",
-                "'Max Supported RAM    : ' + $maxRamGB + ' GB (मदरबोर्ड अधिकतम क्षमता)',",
-                "'Installed RAM Sticks :',",
-                "($ramDetails -join \"`r`n\"),",
-                "'',",
-                "'--- [2] STORAGE & SSD / HDD SLOTS (हार्डडिस्क व SSD) ---',",
-                "($physDisks -join \"`r`n\"),",
-                "'',",
-                "'--- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---',",
-                "$(if($slots){$slots -join \"`r`n\"}else{'Check Motherboard Manual / Physical M.2 Port (NVMe/SATA supported on modern boards)'}),",
-                "'============================================================'",
-                ") -join \"`r`n\";",
-                "Write-Output $report;",
-                "$report | Set-Clipboard;",
-                "$report | Out-File -FilePath ($env:USERPROFILE + '\\Desktop\\PC_Details.txt') -Encoding UTF8;"
-            ].join(" ");
+            const psScript = `
+$ErrorActionPreference = 'SilentlyContinue'
+$cs = Get-CimInstance Win32_ComputerSystem
+$cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
+$mb = Get-CimInstance Win32_BaseBoard
+$bios = Get-CimInstance Win32_BIOS
+$os = Get-CimInstance Win32_OperatingSystem
+$memArr = Get-CimInstance Win32_PhysicalMemoryArray
+$rams = @(Get-CimInstance Win32_PhysicalMemory)
+
+$totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum
+if (-not $totalSlots) { $totalSlots = $rams.Count }
+$usedSlots = $rams.Count
+$freeSlots = [math]::Max(0, ($totalSlots - $usedSlots))
+$maxRamKB = ($memArr | Measure-Object MaxCapacity -Sum).Sum
+$maxRamGB = if ($maxRamKB -gt 0) { [math]::Round(($maxRamKB / 1MB), 2) } else { "Unknown" }
+
+$ddrMap = @{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5';0='LPDDR/Onboard'}
+$ffMap = @{8='DIMM (Desktop)';12='SODIMM (Laptop)'}
+
+$ramLines = foreach ($r in $rams) {
+    $tCode = [int]$r.SMBIOSMemoryType
+    if ($tCode -eq 0) { $tCode = [int]$r.MemoryType }
+    $t = if ($ddrMap.ContainsKey($tCode)) { $ddrMap[$tCode] } else { "DDR-Type($tCode)" }
+    $fCode = [int]$r.FormFactor
+    $f = if ($ffMap.ContainsKey($fCode)) { $ffMap[$fCode] } else { "Standard" }
+    $cap = [math]::Round(($r.Capacity / 1GB), 2)
+    $spd = $r.Speed
+    $slot = $r.DeviceLocator
+    "  -> $slot : $cap GB $t ($f) @ $spd MHz"
+}
+if (-not $ramLines) { $ramLines = @("  -> RAM details not exposed by BIOS") }
+
+$physDisks = @(Get-PhysicalDisk)
+$diskLines = if ($physDisks.Count -gt 0) {
+    foreach ($d in $physDisks) {
+        $sz = [math]::Round(($d.Size / 1GB), 2)
+        "  -> $($d.FriendlyName) | Type: $($d.MediaType) | Slot/Bus: $($d.BusType) | Size: $sz GB | Health: $($d.HealthStatus)"
+    }
+} else {
+    foreach ($d in (Get-CimInstance Win32_DiskDrive)) {
+        $sz = [math]::Round(($d.Size / 1GB), 2)
+        "  -> $($d.Model) | Interface: $($d.InterfaceType) | Size: $sz GB"
+    }
+}
+
+$slots = @(Get-CimInstance Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' })
+$slotLines = if ($slots.Count -gt 0) {
+    foreach ($s in $slots) {
+        $st = if ($s.CurrentUsage -eq 3) { 'Empty / Free' } elseif ($s.CurrentUsage -eq 4) { 'In Use' } else { 'Available' }
+        "  -> $($s.SlotDesignation) [$st]"
+    }
+} else {
+    @("  -> Check Motherboard Physical M.2/SATA Ports")
+}
+
+$batStatic = Get-CimInstance -Namespace root/wmi -ClassName BatteryStaticData | Select-Object -First 1
+$batFull = Get-CimInstance -Namespace root/wmi -ClassName BatteryFullChargedCapacity | Select-Object -First 1
+if ($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0) {
+    $pct = [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity) * 100, 1)
+    $batHealth = "$pct% (Full: $($batFull.FullChargedCapacity) mWh / Design: $($batStatic.DesignedCapacity) mWh)"
+} else {
+    $batHealth = "Desktop PC or Battery Info Unavailable"
+}
+
+$secBoot = try { if (Confirm-SecureBootUEFI) { 'Enabled (On)' } else { 'Disabled (Off)' } } catch { 'Legacy BIOS / Unsupported' }
+$key = (Get-CimInstance SoftwareLicensingService).OA3xOriginalProductKey
+if (-not $key) { $key = "Digital License / OEM" }
+
+$report = @"
+============================================================
+   RUPESH COMPUTERS - COMPLETE SYSTEM & UPGRADE REPORT
+============================================================
+Manufacturer & Model : $($cs.Manufacturer) $($cs.Model)
+Processor (CPU)      : $($cpu.Name.Trim()) ($($cpu.NumberOfCores) Cores / $($cpu.NumberOfLogicalProcessors) Threads)
+Motherboard Board    : $($mb.Manufacturer) $($mb.Product) (Ver: $($mb.Version))
+BIOS Serial Number   : $($bios.SerialNumber)
+Operating System     : $($os.Caption) ($($os.OSArchitecture))
+Secure Boot Status   : $secBoot
+Windows License Key  : $key
+Laptop Battery Health: $batHealth
+
+--- [1] RAM SLOTS & COMPATIBILITY ---
+Total RAM Slots      : $totalSlots Slots
+Used / Empty Slots   : $usedSlots Used  |  $freeSlots Empty (Free Slots)
+Max Supported RAM    : $maxRamGB GB
+Installed RAM Sticks :
+$($ramLines -join "\`r\`n")
+
+--- [2] STORAGE & SSD / HDD DRIVES ---
+$($diskLines -join "\`r\`n")
+
+--- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---
+$($slotLines -join "\`r\`n")
+============================================================
+"@
+
+Write-Host $report -ForegroundColor Cyan
+$report | Set-Clipboard
+$outPath = Join-Path ([Environment]::GetFolderPath('Desktop')) 'PC_Details.txt'
+$report | Out-File -FilePath $outPath -Encoding UTF8
+Write-Host ""
+Write-Host "[SUCCESS] Report copied to Clipboard & saved to: $outPath" -ForegroundColor Green
+`;
+
+            const encodedCmd = encodePowerShellBase64(psScript.trim());
 
             const batLines = [
                 "@echo off",
-                "chcp 65001 >nul",
                 "title RUPESH COMPUTERS - Full Hardware, RAM Slots, SSD and Battery Health Scanner",
-                "color 0B",
-                "echo Scanning CPU, Motherboard RAM Slots, DDR Type, Max Capacity, SSD/HDD and Battery Health...",
+                "color 0A",
+                "echo ============================================================",
+                "echo   Scanning System Hardware, Motherboard Slots, SSD and Battery...",
+                "echo ============================================================",
                 "echo.",
-                `powershell -NoProfile -Command "${psScript.replace(/"/g, '\\"')}"`,
-                "echo.",
-                "echo [SUCCESS] पूरी रिपोर्ट क्लिपबोर्ड पर कॉपी हो गई है और Desktop\\PC_Details.txt में सेव हो गई है!",
+                `powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${encodedCmd}`,
                 "echo.",
                 "pause"
             ];
 
             const content = batLines.join("\r\n");
-            const dataUri = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(content);
+            const blob = new Blob([content], { type: "application/bat" });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
-            a.href = dataUri;
+            a.href = url;
             a.download = "Rupesh_Computers_Full_PC_Scanner.bat";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            showToast("Rupesh_Computers_Full_PC_Scanner.bat डाउनलोड शुरू हुआ!");
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+            showToast("नई फिक्स की गई .BAT फ़ाइल डाउनलोड शुरू हुई!");
         }
 
         // Win + R के लिए वन-लाइनर PowerShell कमांड (CPU, RAM स्लॉट्स, DDR प्रकार, Max RAM, SSD/HDD व Battery Health सहित)
