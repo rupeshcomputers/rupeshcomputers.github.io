@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>किसान कोड फाइंडर - Kisan Code Finder</title>
+    <title>किसान कोड फाइंडर एवं कैलकुलेटर - Kisan Code Finder</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts (Inter & Poppins) -->
@@ -19,6 +19,15 @@
         }
         .card-shadow {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        /* Number input arrows हटाने के लिए साफ़ UI */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 </head>
@@ -36,12 +45,19 @@
                     <p class="text-xs text-emerald-100">आसानी से खोजें अपना किसान रिकॉर्ड और कोड • <strong>21-11-2026 के अनुसार</strong></p>
                 </div>
             </div>
-            <div id="data-status" class="bg-emerald-800/60 border border-emerald-600/50 px-3 py-1.5 rounded-xl text-xs flex items-center space-x-2 backdrop-blur-sm">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="status-dot"></span>
-                <span id="status-text">डेटा लोड हो रहा है...</span>
-                <button id="retry-btn" onclick="loadSheetData()" class="hidden ml-2 bg-white/20 hover:bg-white/30 text-white px-2 py-0.5 rounded-lg font-semibold transition">
-                    <i class="fa-solid fa-rotate-right mr-1"></i>पुनः लोड करें
-                </button>
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <!-- कैलकुलेटर पर जाने का त्वरित बटन -->
+                <a href="#kisan-calculator-section" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-sm transition">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>धान कैलकुलेटर</span>
+                </a>
+                <div id="data-status" class="bg-emerald-800/60 border border-emerald-600/50 px-3 py-1.5 rounded-xl text-xs flex items-center space-x-2 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="status-dot"></span>
+                    <span id="status-text">डेटा लोड हो रहा है...</span>
+                    <button id="retry-btn" onclick="loadSheetData()" class="hidden ml-2 bg-white/20 hover:bg-white/30 text-white px-2 py-0.5 rounded-lg font-semibold transition">
+                        <i class="fa-solid fa-rotate-right mr-1"></i>पुनः लोड करें
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -95,7 +111,7 @@
         </div>
 
         <!-- Results Section -->
-        <div id="results-container" class="space-y-4">
+        <div id="results-container" class="space-y-4 mb-10">
             <!-- Initial State / Empty State -->
             <div id="placeholder-state" class="bg-white rounded-3xl p-12 text-center card-shadow border border-slate-100">
                 <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
@@ -105,6 +121,119 @@
                 <p class="text-xs text-slate-400 max-w-sm mx-auto">परिणाम देखने के लिए ऊपर दिए गए सर्च बॉक्स में कम से कम 3 अक्षर लिखें (अधिकतम 6 परिणाम दिखेंगे)।</p>
             </div>
         </div>
+
+        <!-- ========================================================================= -->
+        <!-- किसान धान, रकबा (हेक्टेयर/एकड़), बोरा और बोनस स्मार्ट कैलकुलेटर -->
+        <!-- ========================================================================= -->
+        <section id="kisan-calculator-section" class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border-2 border-emerald-200/80 mb-8 scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-700 text-white flex items-center justify-center text-xl shadow-md shrink-0">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800">धान रकबा, बोरा एवं बोनस कैलकुलेटर</h2>
+                        <p class="text-xs text-slate-500">धान का रकबा (हेक्टेयर या एकड़) या कोई भी एक मान लिखें, बाकी सभी मान तुरंत निकल आएंगे</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-auto">
+                    <button onclick="copyCalculatorSummary()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-copy"></i><span>हिसाब कॉपी करें</span>
+                    </button>
+                    <button onclick="resetCalculator()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i><span>रीसेट</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conversion Rate Info Pills -->
+            <div class="flex flex-wrap items-center gap-2 mb-6 text-[11px] font-semibold">
+                <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <i class="fa-solid fa-ruler-combined mr-1"></i> 1 हेक्टेयर = 2.47105 एकड़
+                </span>
+                <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                    <i class="fa-solid fa-wheat-awn mr-1"></i> 1 एकड़ = 21 क्विंटल धान
+                </span>
+                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                    <i class="fa-solid fa-sack-xmark mr-1"></i> 1 बोरा = 40 किलोग्राम
+                </span>
+                <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                    <i class="fa-solid fa-indian-rupee-sign mr-1"></i> 1 एकड़ बोनस = ₹13,839
+                </span>
+            </div>
+
+            <!-- 5 Interactive Bidirectional Input Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <!-- 1. धान का रकबा हेक्टेयर (Paddy Hectare) -->
+                <div class="bg-slate-50 focus-within:bg-emerald-50/40 border border-slate-200 focus-within:border-emerald-500 rounded-2xl p-4 transition-all">
+                    <label for="calc-hectare" class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1.5">
+                        <span><i class="fa-solid fa-map text-emerald-600 mr-1.5"></i>धान का रकबा (हेक्टेयर)</span>
+                        <span class="text-[10px] font-medium text-slate-400">Paddy Hectare</span>
+                    </label>
+                    <input type="number" id="calc-hectare" step="any" min="0" placeholder="उदा. 1.00"
+                        oninput="updateCalculator('hectare')"
+                        class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+
+                <!-- 2. धान का रकबा एकड़ (Paddy Acre) -->
+                <div class="bg-slate-50 focus-within:bg-emerald-50/40 border border-slate-200 focus-within:border-emerald-500 rounded-2xl p-4 transition-all">
+                    <label for="calc-acre" class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1.5">
+                        <span><i class="fa-solid fa-crop-simple text-emerald-600 mr-1.5"></i>धान का रकबा (एकड़)</span>
+                        <span class="text-[10px] font-medium text-slate-400">Paddy Acre</span>
+                    </label>
+                    <input type="number" id="calc-acre" step="any" min="0" placeholder="उदा. 2.47"
+                        oninput="updateCalculator('acre')"
+                        class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+
+                <!-- 3. कुल धान (क्विंटल में - 21 क्विंटल/एकड़) -->
+                <div class="bg-amber-50/50 focus-within:bg-amber-50 border border-amber-200 focus-within:border-amber-500 rounded-2xl p-4 transition-all">
+                    <label for="calc-quintal" class="flex items-center justify-between text-xs font-bold text-amber-900 mb-1.5">
+                        <span><i class="fa-solid fa-wheat-awn text-amber-600 mr-1.5"></i>कुल धान (क्विंटल)</span>
+                        <span class="text-[10px] font-semibold text-amber-700">21 क्विं./एकड़</span>
+                    </label>
+                    <input type="number" id="calc-quintal" step="any" min="0" placeholder="उदा. 21"
+                        oninput="updateCalculator('quintal')"
+                        class="w-full bg-white border border-amber-200 rounded-xl px-3.5 py-2.5 text-base font-bold text-amber-950 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+
+                <!-- 4. कुल बोरा (40 किग्रा प्रति बोरा) -->
+                <div class="bg-blue-50/50 focus-within:bg-blue-50 border border-blue-200 focus-within:border-blue-500 rounded-2xl p-4 transition-all">
+                    <label for="calc-bags" class="flex items-center justify-between text-xs font-bold text-blue-900 mb-1.5">
+                        <span><i class="fa-solid fa-boxes-stacked text-blue-600 mr-1.5"></i>कुल बोरा (40 Kg)</span>
+                        <span class="text-[10px] font-semibold text-blue-700">40 किलो/बोरा</span>
+                    </label>
+                    <input type="number" id="calc-bags" step="any" min="0" placeholder="उदा. 52.5"
+                        oninput="updateCalculator('bags')"
+                        class="w-full bg-white border border-blue-200 rounded-xl px-3.5 py-2.5 text-base font-bold text-blue-950 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- 5. कुल बोनस राशि (₹13,839 प्रति एकड़) -->
+                <div class="bg-purple-50/50 focus-within:bg-purple-50 border border-purple-200 focus-within:border-purple-500 rounded-2xl p-4 transition-all sm:col-span-2 lg:col-span-2">
+                    <label for="calc-bonus" class="flex items-center justify-between text-xs font-bold text-purple-900 mb-1.5">
+                        <span><i class="fa-solid fa-indian-rupee-sign text-purple-600 mr-1.5"></i>कुल बोनस राशि (₹)</span>
+                        <span class="text-[10px] font-semibold text-purple-700">₹13,839 प्रति एकड़ के हिसाब से</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-purple-700 font-bold text-base">₹</span>
+                        <input type="number" id="calc-bonus" step="any" min="0" placeholder="उदा. 13839"
+                            oninput="updateCalculator('bonus')"
+                            class="w-full bg-white border border-purple-200 rounded-xl pl-8 pr-3.5 py-2.5 text-base font-bold text-purple-950 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Readable Summary Bar -->
+            <div id="calc-summary-box" class="mt-5 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs sm:text-sm text-emerald-950">
+                    <div id="calc-summary-text" class="font-medium leading-relaxed"></div>
+                    <button onclick="shareCalculatorWhatsApp()" class="shrink-0 px-3.5 py-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-brands fa-whatsapp text-sm"></i><span>WhatsApp भेजें</span>
+                    </button>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -189,7 +318,139 @@
         const countPurpleEl = document.getElementById('count-purple');
         const countBlackEl = document.getElementById('count-black');
 
-        // Parse CSV robustly handling quotes and line breaks
+        // =========================================================================
+        // किसान कैलकुलेटर लॉजिक (Hectare <-> Acre <-> Quintal <-> Bags <-> Bonus)
+        // =========================================================================
+        const HECTARE_TO_ACRE = 2.47105381; // 1 हेक्टेयर = 2.47105 एकड़
+        const QUINTAL_PER_ACRE = 21;       // 1 एकड़ = 21 क्विंटल धान
+        const BAGS_PER_QUINTAL = 2.5;      // 1 क्विंटल (100kg) / 40kg प्रति बोरा = 2.5 बोरा
+        const BONUS_PER_ACRE = 13839;      // 1 एकड़ = ₹13,839 बोनस
+
+        function formatNum(val, decimals = 2) {
+            if (isNaN(val) || !isFinite(val)) return "";
+            // अनावश्यक शून्य हटाने के लिए
+            return parseFloat(val.toFixed(decimals)).toString();
+        }
+
+        function updateCalculator(source) {
+            const hectareEl = document.getElementById('calc-hectare');
+            const acreEl = document.getElementById('calc-acre');
+            const quintalEl = document.getElementById('calc-quintal');
+            const bagsEl = document.getElementById('calc-bags');
+            const bonusEl = document.getElementById('calc-bonus');
+            const summaryBox = document.getElementById('calc-summary-box');
+            const summaryText = document.getElementById('calc-summary-text');
+
+            let inputVal = parseFloat(document.getElementById(`calc-${source}`).value);
+
+            // यदि इनपुट खाली या अमान्य है तो बाकी बॉक्स साफ़ करें
+            if (isNaN(inputVal) || document.getElementById(`calc-${source}`).value.trim() === "") {
+                if (source !== 'hectare') hectareEl.value = '';
+                if (source !== 'acre') acreEl.value = '';
+                if (source !== 'quintal') quintalEl.value = '';
+                if (source !== 'bags') bagsEl.value = '';
+                if (source !== 'bonus') bonusEl.value = '';
+                summaryBox.classList.add('hidden');
+                return;
+            }
+
+            if (inputVal < 0) inputVal = 0;
+
+            // पहले सभी मानों को एकड़ (Acre) में बदलें
+            let acres = 0;
+            if (source === 'hectare') {
+                acres = inputVal * HECTARE_TO_ACRE;
+            } else if (source === 'acre') {
+                acres = inputVal;
+            } else if (source === 'quintal') {
+                acres = inputVal / QUINTAL_PER_ACRE;
+            } else if (source === 'bags') {
+                const quintals = inputVal / BAGS_PER_QUINTAL;
+                acres = quintals / QUINTAL_PER_ACRE;
+            } else if (source === 'bonus') {
+                acres = inputVal / BONUS_PER_ACRE;
+            }
+
+            // एकड़ से बाकी सभी मान निकालें
+            const hectares = acres / HECTARE_TO_ACRE;
+            const quintals = acres * QUINTAL_PER_ACRE;
+            const bags = quintals * BAGS_PER_QUINTAL;
+            const bonus = acres * BONUS_PER_ACRE;
+
+            // जिस बॉक्स में यूज़र लिख रहा है उसे छोड़कर बाकी अपडेट करें
+            if (source !== 'hectare') hectareEl.value = formatNum(hectares, 4);
+            if (source !== 'acre') acreEl.value = formatNum(acres, 3);
+            if (source !== 'quintal') quintalEl.value = formatNum(quintals, 2);
+            if (source !== 'bags') bagsEl.value = formatNum(bags, 2);
+            if (source !== 'bonus') bonusEl.value = formatNum(bonus, 2);
+
+            // लाइव सारांश दिखाएं
+            const formattedBonus = Number(bonus.toFixed(2)).toLocaleString('en-IN');
+            const fullBags = Math.floor(bags);
+            const remKg = Math.round((bags - fullBags) * 40);
+            const bagDetail = remKg > 0 ? `${fullBags} बोरा + ${remKg} किग्रा` : `${fullBags} बोरा`;
+
+            summaryBox.classList.remove('hidden');
+            summaryText.innerHTML = `
+                <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+                धान रकबा <strong>${formatNum(hectares, 4)} हेक्टेयर</strong> (${formatNum(acres, 3)} एकड़) में कुल 
+                <strong class="text-amber-800">${formatNum(quintals, 2)} क्विंटल</strong> धान 
+                (<strong class="text-blue-800">${bagDetail}</strong>) एवं कुल बोनस 
+                <strong class="text-purple-800">₹${formattedBonus}</strong> होगा।
+            `;
+        }
+
+        function resetCalculator() {
+            document.getElementById('calc-hectare').value = '';
+            document.getElementById('calc-acre').value = '';
+            document.getElementById('calc-quintal').value = '';
+            document.getElementById('calc-bags').value = '';
+            document.getElementById('calc-bonus').value = '';
+            document.getElementById('calc-summary-box').classList.add('hidden');
+        }
+
+        function getCalculatorReportText() {
+            const h = document.getElementById('calc-hectare').value;
+            const a = document.getElementById('calc-acre').value;
+            const q = document.getElementById('calc-quintal').value;
+            const b = document.getElementById('calc-bags').value;
+            const bonus = document.getElementById('calc-bonus').value;
+
+            if (!h && !a && !q && !b && !bonus) return null;
+
+            const formattedBonus = Number(parseFloat(bonus || 0).toFixed(2)).toLocaleString('en-IN');
+            return [
+                "🌾 *धान रकबा, बोरा एवं बोनस गणना* 🌾",
+                "----------------------------------",
+                `• *धान का रकबा (हेक्टेयर):* ${h} हेक्टेयर`,
+                `• *धान का रकबा (एकड़):* ${a} एकड़`,
+                `• *कुल धान (21 क्विं./एकड़):* ${q} क्विंटल`,
+                `• *कुल बोरा (40 किग्रा/बोरा):* ${b} बोरा`,
+                `• *कुल बोनस (₹13,839/एकड़):* ₹${formattedBonus}`,
+                "----------------------------------"
+            ].join("\n");
+        }
+
+        function copyCalculatorSummary() {
+            const text = getCalculatorReportText();
+            if (!text) {
+                showModal("जानकारी खाली है", "कृपया पहले कैलकुलेटर में कोई मान दर्ज करें।", "error");
+                return;
+            }
+            copyToClipboardReliable(text.replace(/\*/g, ''));
+            showModal("गणना कॉपी हुई", "धान, बोरा और बोनस का पूरा हिसाब क्लिपबोर्ड पर कॉपी हो गया है!", "success");
+        }
+
+        function shareCalculatorWhatsApp() {
+            const text = getCalculatorReportText();
+            if (!text) return;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // =========================================================================
+        // CSV Parser & Kisan Code Finder Logic
+        // =========================================================================
         function parseCSV(text) {
             let lines = text.split(/\r?\n/);
             let result = [];
@@ -219,7 +480,6 @@
                 if (i === 0) {
                     currentHeaders = row;
                 } else {
-                    // खाली पंक्तियों (Empty rows) को छोड़ें
                     if (row.every(cell => cell === "")) continue;
                     
                     let obj = {};
@@ -233,7 +493,6 @@
             return { headers: currentHeaders, data: result };
         }
 
-        // Helper to extract Farmer Code specifically from a row object
         function extractFarmerCode(row) {
             let keys = Object.keys(row);
             for (let key of keys) {
@@ -245,7 +504,6 @@
             return String(row[keys[0]] || "").trim();
         }
 
-        // Highlight matching search text cleanly
         function highlightText(text, query) {
             if (!text) return "";
             const str = String(text);
@@ -255,17 +513,14 @@
             return str.replace(regex, '<mark class="bg-amber-200 text-slate-900 px-1 rounded font-bold">$1</mark>');
         }
 
-        // Column P (अंतिम कॉलम) की वास्तविक वैल्यू से किसान का स्टेटस (हरा / बैंगनी / काला) पहचानें
         function getFarmerStatus(row) {
             let keys = Object.keys(row);
             if (keys.length === 0) return 'green';
 
-            // Column P (index 15, या अंतिम कॉलम) की वैल्यू निकालें
             let colPKey = keys[15] || keys[keys.length - 1];
             let colPVal = String(row[colPKey] || "").toLowerCase().trim();
             let allVals = Object.values(row).join(" ").toLowerCase();
 
-            // 1. बैंगनी (नया पंजीयन) की जाँच - Column P या पूरे रिकॉर्ड में
             if (
                 colPVal.includes('purple') ||
                 colPVal.includes('बैंगनी') ||
@@ -279,7 +534,6 @@
                 return 'purple';
             }
 
-            // 2. काला (अधूरा) की जाँच - Column P में (166 रिकॉर्ड्स)
             if (
                 colPVal.includes('black') ||
                 colPVal.includes('काला') ||
@@ -293,7 +547,6 @@
                 return 'black';
             }
 
-            // 3. हरा (AgriStack हुआ) की जाँच - Column P में
             if (
                 colPVal.includes('green') ||
                 colPVal.includes('हरा') ||
@@ -307,7 +560,6 @@
                 return 'green';
             }
 
-            // यदि Column P खाली है तो अधूरा (काला) या डिफ़ॉल्ट स्थिति
             if (colPVal === '') {
                 return 'black';
             }
@@ -315,7 +567,6 @@
             return 'green';
         }
 
-        // Column P से सीधे हरा, बैंगनी और काला (166) की असली गिनती करें
         function calculateStatusCounts() {
             let greenCount = 0;
             let purpleCount = 0;
@@ -333,7 +584,17 @@
             countBlackEl.textContent = blackCount;
         }
 
-        // Render matching results limited strictly to maximum 6 items
+        // धान का रकबा (हेक्टेयर) को रिकॉर्ड से निकालकर सीधे कैलकुलेटर में भरने की सुविधा
+        function sendRakbaToCalculator(rakbaVal) {
+            const num = parseFloat(String(rakbaVal).replace(/[^\d.]/g, ''));
+            if (!isNaN(num) && num >= 0) {
+                const hectareInput = document.getElementById('calc-hectare');
+                hectareInput.value = num;
+                updateCalculator('hectare');
+                document.getElementById('kisan-calculator-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
         function renderResults(dataList, query = "") {
             matchedCountEl.textContent = dataList.length;
 
@@ -352,7 +613,6 @@
 
             let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
             
-            // Limit strictly to maximum 6 results
             dataList.slice(0, 6).forEach((row, index) => {
                 let keys = Object.keys(row);
                 let primaryTitle = row[keys[0]] || `रिकॉर्ड #${index + 1}`;
@@ -373,6 +633,35 @@
                     statusBadge = `<span class="px-2.5 py-1 bg-slate-100 text-slate-800 border border-slate-300 text-[10px] font-bold rounded-lg flex items-center gap-1"><i class="fa-solid fa-circle-xmark text-slate-700"></i> AgriStack अधूरा था (काला)</span>`;
                     cardBorder = 'border-slate-300 bg-slate-50/50';
                 }
+
+                // किसान के रिकॉर्ड से विशेष रूप से "धान का रकबा" (Paddy Area) पहचानें
+                let detectedDhanRakba = null;
+                let fallbackRakba = null;
+
+                for (let k of keys) {
+                    const lk = k.toLowerCase();
+                    const valStr = String(row[k] || "").trim();
+                    if (!valStr) continue;
+
+                    const parsed = parseFloat(valStr.replace(/[^\d.]/g, ''));
+                    if (isNaN(parsed) || parsed <= 0) continue;
+
+                    // प्राथमिकता 1: जिस कॉलम के नाम में "धान" और "रकबा/हेक्टेयर/area" दोनों हों
+                    if ((lk.includes('धान') || lk.includes('dhan') || lk.includes('paddy')) &&
+                        (lk.includes('रकबा') || lk.includes('rakba') || lk.includes('area') || lk.includes('हेक्टेयर') || lk.includes('ha'))) {
+                        detectedDhanRakba = parsed;
+                        break;
+                    }
+
+                    // प्राथमिकता 2: सामान्य रकबा कॉलम (जिसमें कुल रकबा न लिखा हो)
+                    if (fallbackRakba === null &&
+                        (lk.includes('रकबा') || lk.includes('rakba') || lk.includes('area') || lk.includes('हेक्टेयर')) &&
+                        !lk.includes('कुल') && !lk.includes('total')) {
+                        fallbackRakba = parsed;
+                    }
+                }
+
+                const finalDhanRakba = detectedDhanRakba !== null ? detectedDhanRakba : fallbackRakba;
 
                 const escapedRowJson = JSON.stringify(row).replace(/'/g, "&#39;");
                 const escapedCode = farmerCode.replace(/'/g, "\\'");
@@ -397,20 +686,19 @@
                                 </div>
                             </div>
                             
-                            <div class="mb-3 flex items-center justify-between gap-2">
+                            <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                                 ${statusBadge}
+                                ${finalDhanRakba !== null ? `<button onclick="sendRakbaToCalculator(${finalDhanRakba})" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[10px] font-bold rounded-lg flex items-center gap-1 transition"><i class="fa-solid fa-calculator"></i> धान रकबा (${finalDhanRakba} हे.) हिसाब देखें</button>` : ''}
                             </div>
                             
                             <div class="space-y-1.5 border-t border-slate-100 pt-3 text-xs">
                 `;
 
-                // पहले 2 कॉलम (कोड और नाम) के बाद के सभी कॉलम (नई जोड़ी गई 2 लाइनों सहित) यहाँ दिखेंगे
                 keys.forEach((key, idx) => {
                     if (idx > 1 && row[key] !== "") {
                         const isVillageCol = key.toLowerCase().includes('village') || key.toLowerCase().includes('ग्राम') || key.toLowerCase().includes('गाँव');
                         const displayVal = isVillageCol ? row[key] : highlightText(row[key], query);
                         
-                        // अंतिम 2 नए जोड़े गए कॉलम को थोड़ा हाइलाइट करके दिखाएं
                         const isNewExtraRow = idx >= keys.length - 2;
                         const rowHighlightClass = isNewExtraRow ? "bg-emerald-50/60 px-2 py-1 rounded-lg border border-emerald-100/80" : "py-0.5";
 
@@ -442,7 +730,6 @@
             resultsContainer.innerHTML = html;
         }
 
-        // Search Filter Logic: Excludes Village column, searches Farmer Code, Farmer Name, Father/Husband Name & other details
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
             
@@ -480,7 +767,6 @@
             const filtered = rawData.filter(row => {
                 return Object.entries(row).some(([key, val]) => {
                     const lowerKey = key.toLowerCase();
-                    // Exclude village / gram columns completely from search
                     if (lowerKey.includes('village') || lowerKey.includes('ग्राम') || lowerKey.includes('गाँव') || lowerKey.includes('gram')) {
                         return false;
                     }
@@ -506,7 +792,6 @@
             matchedCountEl.textContent = "0";
         });
 
-        // Reliable Cross-Browser Clipboard Copy Helper
         function copyToClipboardReliable(text) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
@@ -524,14 +809,12 @@
             document.body.removeChild(textArea);
         }
 
-        // Copy Only Farmer Code
         function copyOnlyCode(code) {
             if (!code) return;
             copyToClipboardReliable(code);
             showModal("किसान कोड कॉपी हुआ", `किसान कोड (${code}) सफलतापूर्वक कॉपी हो गया है!`, "success");
         }
 
-        // Copy Full Card Details
         function copyCardData(rowObj) {
             let textToCopy = Object.entries(rowObj)
                 .filter(([_, v]) => v !== "")
@@ -541,7 +824,6 @@
             showModal("विवरण कॉपी हुआ", "किसान का पूरा विवरण क्लिपबोर्ड पर कॉपी हो गया है!", "success");
         }
 
-        // Share Farmer Card Details directly on WhatsApp
         function shareOnWhatsApp(rowObj) {
             let statusType = getFarmerStatus(rowObj);
             let statusLabel = statusType === 'green' ? 'AgriStack हुआ है (हरा)' : (statusType === 'purple' ? 'नया पंजीयन (बैंगनी)' : 'AgriStack अधूरा था (काला)');
@@ -590,7 +872,6 @@
             document.getElementById('custom-modal').classList.add('hidden');
         }
 
-        // Load Sheet Data from CSV URL
         async function loadSheetData() {
             statusText.textContent = "डेटा लोड हो रहा है...";
             statusDot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
@@ -623,6 +904,6 @@
         }
 
         window.onload = loadSheetData;
-    </script>
+    </script> 
 </body>
 </html>
