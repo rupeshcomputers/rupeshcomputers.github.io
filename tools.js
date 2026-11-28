@@ -857,4 +857,21 @@ window.addEventListener('DOMContentLoaded', () => {
     switchBranch('chongribahar');
     setupPwa();
     initVisitorCounter();
+// ... existing code ...
+window.addEventListener('DOMContentLoaded', () => {
+    renderServices();
+    switchBranch('chongribahar');
+    setupPwa();
+    initVisitorCounter();
+
+    // सभी पेजों के ऊपर नेविगेशन बार में 'PC डायग्नोस्टिक' बटन स्वतः जोड़ें
+    const dobLink = document.querySelector('a[href="dob-tool.html"]');
+    if (dobLink && dobLink.parentElement && !document.querySelector('a[href="system_info_scanner.html"]')) {
+        const isCurrent = window.location.pathname.endsWith('system_info_scanner.html');
+        const pcLink = document.createElement('a');
+        pcLink.href = 'system_info_scanner.html';
+        pcLink.className = `px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs ${isCurrent ? 'font-extrabold bg-amber-400 text-slate-950 shadow-md' : 'font-bold bg-white/10 text-slate-100 hover:bg-white/20'} transition flex items-center gap-1.5`;
+        pcLink.innerHTML = `<i class="fa-solid fa-laptop-medical ${isCurrent ? '' : 'text-teal-300'}"></i> PC डायग्नोस्टिक`;
+        dobLink.insertAdjacentElement('afterend', pcLink);
+    }
 });
