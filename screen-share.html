@@ -552,13 +552,20 @@
                     call.on('close', () => {
                         disconnectRemoteViewer();
                     });
+                    call.on('error', () => {
+                        showToast("लाइव वीडियो स्ट्रीम में रुकावट आई—दोबारा कनेक्ट करें।");
+                    });
                 });
 
                 peer.on('error', (err) => {
                     if (err.type === 'unavailable-id') {
                         initPeer();
                     } else if (err.type === 'peer-unavailable') {
+                        setActivityLog("कोड नहीं मिला—सामने वाले डिवाइस पर कोड चेक करें।");
                         showToast("यह कोड नहीं मिला! कृपया सामने वाले PC पर नया कोड चेक करें।");
+                    } else if (err.type === 'network' || err.type === 'server-error' || err.type === 'socket-error') {
+                        updateStatusPill('loading', 'सर्वर से दोबारा जुड़ रहा है...');
+                        setActivityLog("सिग्नलिंग सर्वर से दोबारा जुड़ने का प्रयास जारी है...");
                     } else {
                         updateStatusPill('ready', 'लोकल मोड • लाइव साइट पर P2P सक्रिय');
                     }
@@ -592,7 +599,7 @@
                 updateStatusPill('live', 'लाइव स्क्रीन शेयर चालू है');
                 setActivityLog("आपकी स्क्रीन शेयर हो रही है—कंट्रोलर के जुड़ने पर कंट्रोल शुरू होगा।");
 
-                if (activeDataConn && activeDataConn.open && peer) {
+                if (activeDataConn && activeDataConn.peer && peer) {
                     activeMediaCall = peer.call(activeDataConn.peer, localScreenStream);
                 }
 
@@ -697,7 +704,13 @@
             });
 
             conn.on('close', () => {
+                setActivityLog("रिमोट कनेक्शन बंद हो गया है।");
                 disconnectRemoteViewer();
+            });
+
+            conn.on('error', () => {
+                setActivityLog("कनेक्शन में त्रुटि आई—कृपया पुनः कनेक्ट करें।");
+                showToast("कनेक्शन में समस्या आई, कृपया दोबारा कनेक्ट करें।");
             });
         }
 
