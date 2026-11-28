@@ -218,7 +218,7 @@
             </div>
         </section>
 
-        <!-- Interactive Hardware & Speed Testing Lab (Now 4 Cards including Live Webcam Tester) -->
+        <!-- Interactive Hardware & Speed Testing Lab -->
         <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200">
             <div class="mb-5">
                 <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -500,9 +500,9 @@
                         </div>
                         <div class="bg-white border border-slate-200 rounded-xl p-2.5">
                             <div class="font-bold text-indigo-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-hard-drive"></i> SSD (NVMe/SATA) व HDD
+                                <i class="fa-solid fa-hard-drive"></i> SSD (NVMe/SATA) व पोर्ट्स
                             </div>
-                            <p class="text-slate-600 mt-0.5">डिस्क प्रकार (NVMe M.2 / SATA SSD / HDD), कुल क्षमता (GB) और M.2 स्पोर्ट बताएगा।</p>
+                            <p class="text-slate-600 mt-0.5">कुल SATA/NVMe कंट्रोलर, M.2 स्लॉट खाली हैं या भरे, और नई SSD/HDD सपोर्ट बताएगा।</p>
                         </div>
                         <div class="bg-white border border-slate-200 rounded-xl p-2.5">
                             <div class="font-bold text-emerald-800 flex items-center gap-1.5">
@@ -1103,7 +1103,7 @@
             grid.innerHTML = keyboardRows.map(row => `
                 <div class="flex items-center gap-1.5 min-w-[640px]">
                     ${row.map(k => `
-                        <div data-key-code="${k.code}" class="${k.w || 'w-10'} ${k.flex || ''} h-10 rounded-xl border border-slate-300 bg-slate-100 text-slate-800 font-mono text-xs font-bold flex items-center justify-center transition-colors">
+                        <div data-key-code="${k.code}" class="${k.w || 'w-10'} ${k.flex || ''} h-10 rounded-lg bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold flex items-center justify-center transition-colors">
                             ${k.label}
                         </div>
                     `).join('')}
@@ -1114,14 +1114,18 @@
         function openFullKeyboardModal() {
             buildVisualKeyboard();
             const modal = document.getElementById('keyboard-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
         }
 
         function closeFullKeyboardModal() {
             const modal = document.getElementById('keyboard-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
         }
 
         function resetVisualKeyboard() {
@@ -1129,157 +1133,24 @@
             showToast("कीबोर्ड टेस्टर रीसेट हो गया!");
         }
 
-        // 1-क्लिक .BAT टूल (100% Bug-Free Encoded PowerShell - BIOS डेट, अपटाइम व MAC एड्रेस सहित)
-        function downloadHardwareBatchScript() {
-            const psScript = `
-$ErrorActionPreference = 'SilentlyContinue'
-$cs = Get-CimInstance Win32_ComputerSystem
-$cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
-$mb = Get-CimInstance Win32_BaseBoard
-$bios = Get-CimInstance Win32_BIOS
-$os = Get-CimInstance Win32_OperatingSystem
-$memArr = Get-CimInstance Win32_PhysicalMemoryArray
-$rams = @(Get-CimInstance Win32_PhysicalMemory)
+        // मॉनिटर स्क्रीन डेड-पिक्सेल टेस्ट
+        const screenColors = [
+            { bg: "#ef4444", name: "लाल (Red)" },
+            { bg: "#22c55e", name: "हरा (Green)" },
+            { bg: "#3b82f6", name: "नीला (Blue)" },
+            { bg: "#ffffff", name: "सफ़ेद (White)" },
+            { bg: "#000000", name: "काला (Black)" }
+        ];
+        let colorIdx = 0;
 
-$biosDate = if ($bios.ReleaseDate) { $bios.ReleaseDate.ToString('dd-MMM-yyyy') } else { 'Unknown' }
-$lastBoot = if ($os.LastBootUpTime) { $os.LastBootUpTime.ToString('dd-MMM-yyyy hh:mm tt') } else { 'Unknown' }
-$uptimeSpan = if ($os.LastBootUpTime) { (Get-Date) - $os.LastBootUpTime } else { $null }
-$uptimeStr = if ($uptimeSpan) { "$($uptimeSpan.Days)d $($uptimeSpan.Hours)h $($uptimeSpan.Minutes)m" } else { 'Unknown' }
-
-$netAdapters = @(Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true })
-$macLines = if ($netAdapters.Count -gt 0) {
-    foreach ($n in $netAdapters) {
-        "  -> $($n.Description) | MAC: $($n.MACAddress) | IP: $($n.IPAddress -join ', ')"
-    }
-} else {
-    @("  -> No active network adapter found")
-}
-
-$totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum
-if (-not $totalSlots) { $totalSlots = $rams.Count }
-$usedSlots = $rams.Count
-$freeSlots = [math]::Max(0, ($totalSlots - $usedSlots))
-$maxRamKB = ($memArr | Measure-Object MaxCapacity -Sum).Sum
-$maxRamGB = if ($maxRamKB -gt 0) { [math]::Round(($maxRamKB / 1MB), 2) } else { "Unknown" }
-
-$ddrMap = @{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5';0='LPDDR/Onboard'}
-$ffMap = @{8='DIMM (Desktop)';12='SODIMM (Laptop)'}
-
-$ramLines = foreach ($r in $rams) {
-    $tCode = [int]$r.SMBIOSMemoryType
-    if ($tCode -eq 0) { $tCode = [int]$r.MemoryType }
-    $t = if ($ddrMap.ContainsKey($tCode)) { $ddrMap[$tCode] } else { "DDR-Type($tCode)" }
-    $fCode = [int]$r.FormFactor
-    $f = if ($ffMap.ContainsKey($fCode)) { $ffMap[$fCode] } else { "Standard" }
-    $cap = [math]::Round(($r.Capacity / 1GB), 2)
-    $spd = $r.Speed
-    $slot = $r.DeviceLocator
-    "  -> $slot : $cap GB $t ($f) @ $spd MHz"
-}
-if (-not $ramLines) { $ramLines = @("  -> RAM details not exposed by BIOS") }
-
-$physDisks = @(Get-PhysicalDisk)
-$diskLines = if ($physDisks.Count -gt 0) {
-    foreach ($d in $physDisks) {
-        $sz = [math]::Round(($d.Size / 1GB), 2)
-        "  -> $($d.FriendlyName) | Type: $($d.MediaType) | Slot/Bus: $($d.BusType) | Size: $sz GB | Health: $($d.HealthStatus)"
-    }
-} else {
-    foreach ($d in (Get-CimInstance Win32_DiskDrive)) {
-        $sz = [math]::Round(($d.Size / 1GB), 2)
-        "  -> $($d.Model) | Interface: $($d.InterfaceType) | Size: $sz GB"
-    }
-}
-
-$slots = @(Get-CimInstance Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' })
-$slotLines = if ($slots.Count -gt 0) {
-    foreach ($s in $slots) {
-        $st = if ($s.CurrentUsage -eq 3) { 'Empty / Free' } elseif ($s.CurrentUsage -eq 4) { 'In Use' } else { 'Available' }
-        "  -> $($s.SlotDesignation) [$st]"
-    }
-} else {
-    @("  -> Check Motherboard Physical M.2/SATA Ports")
-}
-
-$batStatic = Get-CimInstance -Namespace root/wmi -ClassName BatteryStaticData | Select-Object -First 1
-$batFull = Get-CimInstance -Namespace root/wmi -ClassName BatteryFullChargedCapacity | Select-Object -First 1
-if ($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0) {
-    $pct = [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity) * 100, 1)
-    $batHealth = "$pct% (Full: $($batFull.FullChargedCapacity) mWh / Design: $($batStatic.DesignedCapacity) mWh)"
-} else {
-    $batHealth = "Desktop PC or Battery Info Unavailable"
-}
-
-$secBoot = try { if (Confirm-SecureBootUEFI) { 'Enabled (On)' } else { 'Disabled (Off)' } } catch { 'Legacy BIOS / Unsupported' }
-$key = (Get-CimInstance SoftwareLicensingService).OA3xOriginalProductKey
-if (-not $key) { $key = "Digital License / OEM" }
-
-$report = @"
-============================================================
-   RUPESH COMPUTERS - COMPLETE SYSTEM & UPGRADE REPORT
-============================================================
-Manufacturer & Model : $($cs.Manufacturer) $($cs.Model)
-Processor (CPU)      : $($cpu.Name.Trim()) ($($cpu.NumberOfCores) Cores / $($cpu.NumberOfLogicalProcessors) Threads)
-Motherboard Board    : $($mb.Manufacturer) $($mb.Product) (Ver: $($mb.Version))
-BIOS Serial & Date   : $($bios.SerialNumber) (BIOS Date: $biosDate)
-Operating System     : $($os.Caption) ($($os.OSArchitecture))
-Last Boot & Uptime   : $lastBoot (Uptime: $uptimeStr)
-Secure Boot Status   : $secBoot
-Windows License Key  : $key
-Laptop Battery Health: $batHealth
-
---- [1] RAM SLOTS & COMPATIBILITY ---
-Total RAM Slots      : $totalSlots Slots
-Used / Empty Slots   : $usedSlots Used  |  $freeSlots Empty (Free Slots)
-Max Supported RAM    : $maxRamGB GB
-Installed RAM Sticks :
-$($ramLines -join "\`r\`n")
-
---- [2] STORAGE & SSD / HDD DRIVES ---
-$($diskLines -join "\`r\`n")
-
---- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---
-$($slotLines -join "\`r\`n")
-
---- [4] NETWORK ADAPTERS & MAC ADDRESS ---
-$($macLines -join "\`r\`n")
-============================================================
-"@
-
-Write-Host $report -ForegroundColor Cyan
-$report | Set-Clipboard
-$outPath = Join-Path ([Environment]::GetFolderPath('Desktop')) 'PC_Details.txt'
-$report | Out-File -FilePath $outPath -Encoding UTF8
-Write-Host ""
-Write-Host "[SUCCESS] Report copied to Clipboard & saved to: $outPath" -ForegroundColor Green
-`;
-
-            const encodedCmd = encodePowerShellBase64(psScript.trim());
-
-            const batLines = [
-                "@echo off",
-                "title RUPESH COMPUTERS - Full Hardware, RAM Slots, SSD and Battery Health Scanner",
-                "color 0A",
-                "echo ============================================================",
-                "echo   Scanning System Hardware, Motherboard Slots, SSD and Battery...",
-                "echo ============================================================",
-                "echo.",
-                `powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${encodedCmd}`,
-                "echo.",
-                "pause"
-            ];
-
-            const content = batLines.join("\r\n");
-            const blob = new Blob([content], { type: "application/bat" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "Rupesh_Computers_Full_PC_Scanner.bat";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 2000);
-            showToast("नई अपडेटेड .BAT फ़ाइल डाउनलोड शुरू हुई!");
+        function startDisplayColorTest() {
+            colorIdx = 0;
+            const overlay = document.getElementById('display-test-overlay');
+            const label = document.getElementById('display-color-label');
+            overlay.style.backgroundColor = screenColors[0].bg;
+            label.textContent = `रंग: ${screenColors[0].name}`;
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
         }
 
         function nextDisplayColor() {
@@ -1447,7 +1318,7 @@ Write-Host "[SUCCESS] Report copied to Clipboard & saved to: $outPath" -Foregrou
             return btoa(binary);
         }
 
-        // 1-क्लिक .BAT टूल (100% Bug-Free Encoded PowerShell के साथ)
+        // 1-क्लिक .BAT टूल (Intel RST VMD NVMe पहचान, Battery Health XML रिपोर्ट व Secure Boot फिक्स सहित)
         function downloadHardwareBatchScript() {
             const psScript = `
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1458,6 +1329,20 @@ $bios = Get-CimInstance Win32_BIOS
 $os = Get-CimInstance Win32_OperatingSystem
 $memArr = Get-CimInstance Win32_PhysicalMemoryArray
 $rams = @(Get-CimInstance Win32_PhysicalMemory)
+
+$biosDate = if ($bios.ReleaseDate) { $bios.ReleaseDate.ToString('dd-MMM-yyyy') } else { 'Unknown' }
+$lastBoot = if ($os.LastBootUpTime) { $os.LastBootUpTime.ToString('dd-MMM-yyyy hh:mm tt') } else { 'Unknown' }
+$uptimeSpan = if ($os.LastBootUpTime) { (Get-Date) - $os.LastBootUpTime } else { $null }
+$uptimeStr = if ($uptimeSpan) { "$($uptimeSpan.Days)d $($uptimeSpan.Hours)h $($uptimeSpan.Minutes)m" } else { 'Unknown' }
+
+$netAdapters = @(Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true })
+$macLines = if ($netAdapters.Count -gt 0) {
+    foreach ($n in $netAdapters) {
+        "  -> $($n.Description) | MAC: $($n.MACAddress) | IP: $($n.IPAddress -join ', ')"
+    }
+} else {
+    @("  -> No active network adapter found")
+}
 
 $totalSlots = ($memArr | Measure-Object MemoryDevices -Sum).Sum
 if (-not $totalSlots) { $totalSlots = $rams.Count }
@@ -1495,26 +1380,64 @@ $diskLines = if ($physDisks.Count -gt 0) {
     }
 }
 
-$slots = @(Get-CimInstance Win32_SystemSlot | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe|PCI|SATA' })
-$slotLines = if ($slots.Count -gt 0) {
-    foreach ($s in $slots) {
-        $st = if ($s.CurrentUsage -eq 3) { 'Empty / Free' } elseif ($s.CurrentUsage -eq 4) { 'In Use' } else { 'Available' }
-        "  -> $($s.SlotDesignation) [$st]"
+$controllers = @(Get-CimInstance Win32_IDEController) + @(Get-CimInstance Win32_SCSIController) | Where-Object { $_.Name -notmatch 'Microsoft Storage Spaces|Virtual' }
+$ctrlLines = if ($controllers.Count -gt 0) {
+    foreach ($c in $controllers) {
+        "  -> Controller: $($c.Name) [Status: $($c.Status)]"
     }
 } else {
-    @("  -> Check Motherboard Physical M.2/SATA Ports")
+    @("  -> Standard Storage Controller")
 }
 
-$batStatic = Get-CimInstance -Namespace root/wmi -ClassName BatteryStaticData | Select-Object -First 1
-$batFull = Get-CimInstance -Namespace root/wmi -ClassName BatteryFullChargedCapacity | Select-Object -First 1
-if ($batStatic -and $batFull -and $batStatic.DesignedCapacity -gt 0) {
-    $pct = [math]::Round(($batFull.FullChargedCapacity / $batStatic.DesignedCapacity) * 100, 1)
-    $batHealth = "$pct% (Full: $($batFull.FullChargedCapacity) mWh / Design: $($batStatic.DesignedCapacity) mWh)"
-} else {
-    $batHealth = "Desktop PC or Battery Info Unavailable"
+$sataPorts = @(Get-CimInstance Win32_PortConnector | Where-Object { $_.InternalReferenceDesignator -match 'SATA|M\\.2|NVMe|HDD|SSD|IDE' -or $_.ExternalReferenceDesignator -match 'SATA|eSATA' })
+$portLines = if ($sataPorts.Count -gt 0) {
+    foreach ($p in $sataPorts) {
+        $pName = if ($p.InternalReferenceDesignator) { $p.InternalReferenceDesignator } else { $p.ExternalReferenceDesignator }
+        "  -> Motherboard Port: $pName"
+    }
+} else { @() }
+
+$slots = @(Get-CimInstance Win32_SystemSlot)
+$slotLines = if ($slots.Count -gt 0) {
+    foreach ($s in $slots) {
+        $st = if ($s.CurrentUsage -eq 3) { 'Empty / Free' } elseif ($s.CurrentUsage -eq 4) { 'In Use' } else { 'Present' }
+        "  -> Slot: $($s.SlotDesignation) [$st]"
+    }
+} else { @() }
+
+$hasNvme = ($physDisks | Where-Object { $_.BusType -eq 'NVMe' -or $_.FriendlyName -match 'NVMe' }).Count -gt 0 -or ($controllers | Where-Object { $_.Name -match 'NVMe|NVM Express|RST VMD' }).Count -gt 0 -or ($slots | Where-Object { $_.SlotDesignation -match 'M\\.2|NVMe' }).Count -gt 0
+$hasSata = ($physDisks | Where-Object { $_.BusType -eq 'SATA' }).Count -gt 0 -or ($controllers | Where-Object { $_.Name -match 'SATA|AHCI|RST VMD' }).Count -gt 0 -or $sataPorts.Count -gt 0
+
+$upgradeAdvice = @()
+if ($hasNvme) { $upgradeAdvice += "  * M.2 NVMe SSD Slot: YES (Active/Supported - High Speed PCIe NVMe SSD)" } else { $upgradeAdvice += "  * M.2 NVMe SSD: Not detected in BIOS (2.5-inch SATA SSD 100% Supported)" }
+if ($hasSata) { $upgradeAdvice += "  * 2.5-inch SATA SSD / HDD Bay: YES (SATA Controller Active - Supports 256GB / 512GB / 1TB / 2TB)" }
+$upgradeAdvice += "  * Upgrade Tip: Modern Laptops have 1x M.2 NVMe Slot + 1x 2.5-inch SATA Bay (Empty if only NVMe is installed)."
+
+# Battery Health via powercfg XML (works without Admin on Laptops)
+$batHealth = "Desktop PC (No Battery)"
+$win32Bat = Get-CimInstance Win32_Battery | Select-Object -First 1
+if ($win32Bat) {
+    $xmlTmp = Join-Path $env:TEMP 'bat_health_tmp.xml'
+    powercfg /batteryreport /xml /output "$xmlTmp" | Out-Null
+    if (Test-Path $xmlTmp) {
+        [xml]$bXml = Get-Content $xmlTmp
+        $bNode = $bXml.BatteryReport.Batteries.Battery | Select-Object -First 1
+        if ($bNode -and [int]$bNode.DesignCapacity -gt 0) {
+            $des = [int]$bNode.DesignCapacity
+            $full = [int]$bNode.FullChargeCapacity
+            $cyc = $bNode.CycleCount
+            $pct = [math]::Round(($full / $des) * 100, 1)
+            $batHealth = "$pct% Health (Full Charge: $full mWh / Design: $des mWh | Cycles: $cyc)"
+        } else {
+            $batHealth = "Laptop Battery Present ($($win32Bat.EstimatedChargeRemaining)% Charged)"
+        }
+        Remove-Item $xmlTmp -Force
+    }
 }
 
-$secBoot = try { if (Confirm-SecureBootUEFI) { 'Enabled (On)' } else { 'Disabled (Off)' } } catch { 'Legacy BIOS / Unsupported' }
+$sbReg = (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecureBoot\State' -Name 'UEFISecureBootEnabled' -ErrorAction SilentlyContinue).UEFISecureBootEnabled
+$secBoot = if ($sbReg -eq 1) { 'Enabled (UEFI Secure Boot ON)' } elseif ($sbReg -eq 0) { 'Disabled (UEFI Secure Boot OFF)' } else { 'UEFI Mode (Run as Admin for exact lock status)' }
+
 $key = (Get-CimInstance SoftwareLicensingService).OA3xOriginalProductKey
 if (-not $key) { $key = "Digital License / OEM" }
 
@@ -1525,8 +1448,9 @@ $report = @"
 Manufacturer & Model : $($cs.Manufacturer) $($cs.Model)
 Processor (CPU)      : $($cpu.Name.Trim()) ($($cpu.NumberOfCores) Cores / $($cpu.NumberOfLogicalProcessors) Threads)
 Motherboard Board    : $($mb.Manufacturer) $($mb.Product) (Ver: $($mb.Version))
-BIOS Serial Number   : $($bios.SerialNumber)
+BIOS Serial & Date   : $($bios.SerialNumber) (BIOS Date: $biosDate)
 Operating System     : $($os.Caption) ($($os.OSArchitecture))
+Last Boot & Uptime   : $lastBoot (Uptime: $uptimeStr)
 Secure Boot Status   : $secBoot
 Windows License Key  : $key
 Laptop Battery Health: $batHealth
@@ -1541,8 +1465,14 @@ $($ramLines -join "\`r\`n")
 --- [2] STORAGE & SSD / HDD DRIVES ---
 $($diskLines -join "\`r\`n")
 
---- [3] MOTHERBOARD M.2 / PCIe / SATA SLOTS ---
+--- [3] SATA / M.2 SSD SLOTS & UPGRADE SUPPORT ---
+$($ctrlLines -join "\`r\`n")
+$($portLines -join "\`r\`n")
 $($slotLines -join "\`r\`n")
+$($upgradeAdvice -join "\`r\`n")
+
+--- [4] NETWORK ADAPTERS & MAC ADDRESS ---
+$($macLines -join "\`r\`n")
 ============================================================
 "@
 
@@ -1579,12 +1509,12 @@ Write-Host "[SUCCESS] Report copied to Clipboard & saved to: $outPath" -Foregrou
             a.click();
             document.body.removeChild(a);
             setTimeout(() => URL.revokeObjectURL(url), 2000);
-            showToast("नई फिक्स की गई .BAT फ़ाइल डाउनलोड शुरू हुई!");
+            showToast("नई अपडेटेड .BAT फ़ाइल डाउनलोड शुरू हुई!");
         }
 
-        // Win + R के लिए वन-लाइनर PowerShell कमांड (CPU, RAM स्लॉट्स, DDR प्रकार, Max RAM, SSD/HDD व Battery Health सहित)
+        // Win + R के लिए वन-लाइनर PowerShell कमांड
         function copyFullHardwareCmd() {
-            const oneLiner = `powershell -NoExit -Command "$cpu=(gcim Win32_Processor).Name;$mb=gcim Win32_BaseBoard;$ma=gcim Win32_PhysicalMemoryArray;$r=gcim Win32_PhysicalMemory;$d=Get-PhysicalDisk;$bs=gcim -Namespace root/wmi -ClassName BatteryStaticData -EA 0;$bf=gcim -Namespace root/wmi -ClassName BatteryFullChargedCapacity -EA 0;$ddr=@{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5'};'CPU: '+$cpu;'Board: '+$mb.Manufacturer+' '+$mb.Product;'Total Slots: '+$ma.MemoryDevices+' | Used: '+$r.Count+' | Free: '+($ma.MemoryDevices-$r.Count)+' | Max RAM: '+[math]::Round($ma.MaxCapacity/1MB,0)+' GB';$r|ForEach-Object{'RAM: '+[math]::Round($_.Capacity/1GB,0)+'GB '+$ddr[[int]$_.SMBIOSMemoryType]+' @ '+$_.Speed+'MHz ('+$_.DeviceLocator+')'};$d|ForEach-Object{'Disk: '+$_.FriendlyName+' | '+$_.MediaType+' ('+$_.BusType+') | '+[math]::Round($_.Size/1GB,0)+' GB'};if($bs -and $bf){'Battery Health: '+[math]::Round(($bf.FullChargedCapacity/$bs.DesignedCapacity)*100,1)+'%'}"`;
+            const oneLiner = `powershell -NoExit -Command "$cpu=(gcim Win32_Processor).Name;$mb=gcim Win32_BaseBoard;$ma=gcim Win32_PhysicalMemoryArray;$r=gcim Win32_PhysicalMemory;$d=Get-PhysicalDisk;$sl=gcim Win32_SystemSlot;$pt=gcim Win32_PortConnector|?{$_.InternalReferenceDesignator -match 'SATA|M\\.2'};$ddr=@{20='DDR';21='DDR2';24='DDR3';26='DDR4';34='DDR5'};'CPU: '+$cpu;'Board: '+$mb.Manufacturer+' '+$mb.Product;'RAM Slots: '+$ma.MemoryDevices+' Total | '+$r.Count+' Used | '+($ma.MemoryDevices-$r.Count)+' Free | Max: '+[math]::Round($ma.MaxCapacity/1MB,0)+' GB';$r|ForEach-Object{'RAM: '+[math]::Round($_.Capacity/1GB,0)+'GB '+$ddr[[int]$_.SMBIOSMemoryType]+' @ '+$_.Speed+'MHz'};$d|ForEach-Object{'Disk: '+$_.FriendlyName+' | '+$_.MediaType+' ('+$_.BusType+') | '+[math]::Round($_.Size/1GB,0)+' GB'};$pt|ForEach-Object{'Port: '+$_.InternalReferenceDesignator};$sl|ForEach-Object{'Slot: '+$_.SlotDesignation+' (Usage:'+$_.CurrentUsage+')'}"`;
             copyTextSafe(oneLiner);
             const box = document.getElementById('cmd-display-box');
             if (box) {
