@@ -180,109 +180,100 @@
             </div>
         </div>
 
-        <!-- Send & Receive Main Workspace -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-            <!-- SEND PANEL -->
-            <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 space-y-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2.5">
-                        <span class="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
-                            <i class="fa-solid fa-paper-plane text-sm"></i>
-                        </span>
-                        <span>फ़ाइल, सॉफ़्टवेयर या संदेश भेजें</span>
-                    </h3>
-                </div>
-
-                <!-- Recipient Selector -->
-                <div class="bg-amber-50/90 border border-amber-200/90 rounded-2xl p-3.5 space-y-2">
-                    <span class="block text-[11px] font-extrabold text-amber-950">
-                        <i class="fa-solid fa-bullseye text-amber-600 mr-1"></i>किसे भेजना है? (डिवाइस चुनें):
-                    </span>
-                    <div id="recipient-selector-pills" class="flex flex-wrap gap-1.5">
-                        <span class="text-xs text-slate-500">डिवाइस जुड़ने पर यहाँ चुनाव बटन दिखेंगे...</span>
-                    </div>
-                </div>
-
-                <!-- Attractive File Dropzone -->
-                <div id="drop-zone" onclick="document.getElementById('file-picker-input').click()"
-                    class="border-2 border-dashed border-blue-300 hover:border-blue-600 bg-gradient-to-b from-blue-50/50 to-slate-50 hover:from-blue-50 hover:to-indigo-50/50 rounded-2xl p-6 text-center cursor-pointer transition-all duration-200 space-y-2.5 group">
-                    <input type="file" id="file-picker-input" multiple class="hidden" onchange="handleFilesSelected(this.files)">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-600 group-hover:scale-105 transition-transform text-white flex items-center justify-center text-2xl mx-auto shadow-md shadow-blue-500/25">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <!-- Unified Mobile-Style Chat & File Transfer Workspace -->
+        <div id="drop-zone" class="bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden flex flex-col transition-all duration-200">
+            
+            <!-- Chat Window Top Header -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-base shadow-md shrink-0">
+                        <i class="fa-solid fa-comments"></i>
                     </div>
                     <div>
-                        <p class="text-sm font-black text-slate-900">यहाँ क्लिक करें या फ़ाइल खींचकर छोड़ें</p>
-                        <p class="text-[11px] text-slate-500 mt-0.5">फ़ोटो, PDF, वीडियो, ZIP या सॉफ़्टवेयर (.exe) • कोई साइज लिमिट नहीं</p>
-                    </div>
-                    <span class="inline-block px-4 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-xl text-xs font-extrabold shadow-xs">
-                        फ़ाइलें चुनें (Browse)
-                    </span>
-                </div>
-
-                <!-- Send Progress -->
-                <div id="send-progress-wrapper" class="hidden bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-1.5">
-                    <div class="flex justify-between text-xs font-bold text-blue-900">
-                        <span id="send-file-label" class="truncate pr-2">भेजा जा रहा है...</span>
-                        <span id="send-percent-label">0%</span>
-                    </div>
-                    <div class="w-full h-2.5 bg-blue-200 rounded-full overflow-hidden">
-                        <div id="send-progress-bar" class="h-full bg-blue-600 transition-all duration-100 rounded-full" style="width: 0%"></div>
+                        <h3 class="text-sm sm:text-base font-black tracking-tight flex items-center gap-2">
+                            <span>लाइव चैट एवं फ़ाइल ट्रांसफ़र</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">P2P डायरेक्ट</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-300">फ़ोटो, PDF, सॉफ़्टवेयर (.exe) या संदेश सीधे यहाँ से भेजें और प्राप्त करें</p>
                     </div>
                 </div>
 
-                <!-- Quick Text / Link Sender -->
-                <div class="pt-2 border-t border-slate-100 space-y-2">
-                    <label class="block text-xs font-extrabold text-slate-700">
-                        <i class="fa-solid fa-comment-dots text-teal-600 mr-1"></i>त्वरित संदेश, लिंक या आवेदन नंबर भेजें:
-                    </label>
-                    <div class="flex gap-2">
-                        <textarea id="quick-text-input" rows="2" placeholder="यहाँ लिंक, OTP या कोई भी टेक्स्ट लिखें... (Enter से भेजें)"
-                            onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendTextMessage(); }"
-                            class="flex-grow px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900"></textarea>
-                        <button type="button" onclick="sendTextMessage()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white rounded-2xl text-xs font-extrabold transition shrink-0 flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-paper-plane"></i><span>भेजें</span>
-                        </button>
-                    </div>
+                <div class="flex items-center gap-2 self-end sm:self-auto">
+                    <button type="button" onclick="document.getElementById('file-picker-input').click()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-paperclip"></i><span>फ़ाइल / सॉफ़्टवेयर भेजें</span>
+                    </button>
+                    <button type="button" onclick="clearTransferHistory()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition" title="चैट साफ़ करें">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- RECEIVE / HISTORY PANEL -->
-            <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 flex flex-col justify-between space-y-4">
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2.5">
-                            <span class="w-9 h-9 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
-                                <i class="fa-solid fa-inbox text-sm"></i>
-                            </span>
-                            <span>प्राप्त फ़ाइलें एवं संदेश</span>
-                        </h3>
-                        <button type="button" onclick="clearTransferHistory()" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition">
-                            <i class="fa-solid fa-trash-can mr-1"></i>साफ़ करें
-                        </button>
+            <!-- Recipient Selector Strip -->
+            <div class="bg-amber-50/95 border-b border-amber-200/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center gap-2">
+                <span class="text-[11px] font-extrabold text-amber-950 flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-bullseye text-amber-600"></i><span>किसे भेजना है:</span>
+                </span>
+                <div id="recipient-selector-pills" class="flex flex-wrap gap-1.5">
+                    <span class="text-xs text-slate-500">डिवाइस जुड़ने पर यहाँ चुनाव बटन दिखेंगे...</span>
+                </div>
+            </div>
+
+            <!-- Live Transfer Progress Bars (Send & Receive) -->
+            <div id="send-progress-wrapper" class="hidden bg-blue-50 border-b border-blue-200 px-4 sm:px-6 py-2.5 space-y-1">
+                <div class="flex justify-between text-xs font-bold text-blue-900">
+                    <span id="send-file-label" class="truncate pr-2">भेजा जा रहा है...</span>
+                    <span id="send-percent-label">0%</span>
+                </div>
+                <div class="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
+                    <div id="send-progress-bar" class="h-full bg-blue-600 transition-all duration-100 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="receive-progress-wrapper" class="hidden bg-emerald-50 border-b border-emerald-200 px-4 sm:px-6 py-2.5 space-y-1">
+                <div class="flex justify-between text-xs font-bold text-emerald-900">
+                    <span id="receive-file-label" class="truncate pr-2">फ़ाइल आ रही है...</span>
+                    <span id="receive-percent-label">0%</span>
+                </div>
+                <div class="w-full h-2 bg-emerald-200 rounded-full overflow-hidden">
+                    <div id="receive-progress-bar" class="h-full bg-emerald-600 transition-all duration-100 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Mobile-Style Chat Stream Area -->
+            <div id="transfer-history-list" class="space-y-3 h-[360px] sm:h-[420px] overflow-y-auto p-4 sm:p-5 bg-[#efeae2]/70 flex flex-col">
+                <div id="empty-history-msg" class="text-xs text-slate-500 bg-white/95 border border-dashed border-slate-300 rounded-3xl p-6 sm:p-8 text-center my-auto max-w-md mx-auto shadow-xs space-y-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mx-auto">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <p class="font-extrabold text-slate-800 text-sm">यहाँ से सीधे फ़ाइलें और संदेश भेजें</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        नीचे <strong class="text-blue-700">📎 अटैच बटन</strong> दबाकर फ़ोटो, PDF, ZIP या सॉफ़्टवेयर (.exe) चुनें, या फ़ाइल को सीधे इस बॉक्स में खींचकर छोड़ें।
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mobile-Style Bottom Input & File Attach Bar -->
+            <div class="bg-slate-100 border-t border-slate-200 p-3 sm:p-3.5">
+                <input type="file" id="file-picker-input" multiple class="hidden" onchange="handleFilesSelected(this.files)">
+                <div class="flex items-end gap-2">
+                    <!-- Attach File Button -->
+                    <button type="button" onclick="document.getElementById('file-picker-input').click()" title="फ़ाइल, फ़ोटो या सॉफ़्टवेयर चुनें"
+                        class="w-11 h-11 rounded-2xl bg-white hover:bg-blue-50 active:scale-95 text-blue-600 border border-slate-300 flex items-center justify-center text-lg transition shrink-0 shadow-xs">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
+
+                    <!-- Message Input Box -->
+                    <div class="flex-grow bg-white border border-slate-300 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-2xl px-3.5 py-2 shadow-xs">
+                        <textarea id="quick-text-input" rows="1" placeholder="संदेश या लिंक लिखें... (या फ़ाइल ड्रैग करें)"
+                            onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendTextMessage(); }"
+                            class="w-full text-xs sm:text-sm bg-transparent focus:outline-none text-slate-900 resize-none max-h-24 leading-snug"></textarea>
                     </div>
 
-                    <!-- Receive Progress -->
-                    <div id="receive-progress-wrapper" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 space-y-1.5">
-                        <div class="flex justify-between text-xs font-bold text-emerald-900">
-                            <span id="receive-file-label" class="truncate pr-2">फ़ाइल आ रही है...</span>
-                            <span id="receive-percent-label">0%</span>
-                        </div>
-                        <div class="w-full h-2.5 bg-emerald-200 rounded-full overflow-hidden">
-                            <div id="receive-progress-bar" class="h-full bg-emerald-600 transition-all duration-100 rounded-full" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Transfer History List -->
-                    <div id="transfer-history-list" class="space-y-2.5 max-h-96 overflow-y-auto pr-1">
-                        <div id="empty-history-msg" class="text-xs text-slate-400 bg-slate-50/80 border border-dashed border-slate-200 rounded-2xl p-8 text-center">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-300 flex items-center justify-center text-xl mx-auto mb-2.5">
-                                <i class="fa-solid fa-folder-open"></i>
-                            </div>
-                            <p class="font-bold text-slate-500">अभी तक कोई फ़ाइल या संदेश नहीं आया है</p>
-                            <p class="text-[11px] mt-1">भेजी गई और प्राप्त हुई सभी फ़ाइलें (ऑटो-डाउनलोड सहित) यहाँ दिखेंगी।</p>
-                        </div>
-                    </div>
+                    <!-- Send Button -->
+                    <button type="button" onclick="sendTextMessage()" title="संदेश भेजें"
+                        class="h-11 px-4 sm:px-5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs sm:text-sm font-extrabold transition shrink-0 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20">
+                        <i class="fa-solid fa-paper-plane"></i><span class="hidden sm:inline">भेजें</span>
+                    </button>
                 </div>
             </div>
 
@@ -1006,59 +997,80 @@
             if (emptyMsg) emptyMsg.remove();
 
             const isReceived = item.direction === 'received';
-            const badgeClass = isReceived
-                ? "bg-emerald-100 text-emerald-800"
-                : "bg-blue-100 text-blue-800";
-            const badgeText = isReceived ? "प्राप्त (Received)" : "भेजा गया (Sent)";
+            const timeNow = new Date().toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
 
-            const card = document.createElement('div');
-            card.className = "p-3 rounded-2xl border border-slate-200 bg-slate-50/80 space-y-2";
+            // Mobile Chat Bubble Alignment (Sent = Right Blue Bubble, Received = Left White Bubble)
+            const rowWrap = document.createElement('div');
+            rowWrap.className = `flex w-full ${isReceived ? 'justify-start' : 'justify-end'}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = isReceived
+                ? "max-w-[85%] sm:max-w-[78%] bg-white text-slate-800 border border-slate-200/90 rounded-2xl rounded-tl-none px-3.5 py-2.5 shadow-xs space-y-1.5"
+                : "max-w-[85%] sm:max-w-[78%] bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl rounded-tr-none px-3.5 py-2.5 shadow-sm space-y-1.5";
 
             let actionHtml = "";
             let previewHtml = "";
             if (item.kind === 'file' && item.downloadUrl) {
                 if (item.mimeType && item.mimeType.startsWith('image/')) {
                     previewHtml = `
-                        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white p-1">
-                            <img src="${item.downloadUrl}" alt="${item.title}" class="max-h-36 w-auto mx-auto rounded-lg object-contain">
+                        <div class="overflow-hidden rounded-xl border ${isReceived ? 'border-slate-200 bg-slate-50' : 'border-white/20 bg-white/10'} p-1">
+                            <img src="${item.downloadUrl}" alt="${item.title}" class="max-h-40 w-auto mx-auto rounded-lg object-contain">
                         </div>
                     `;
                 }
                 actionHtml = `
-                    <a href="${item.downloadUrl}" download="${item.title}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold transition shadow-sm">
-                        <i class="fa-solid fa-download"></i><span>पुनः डाउनलोड करें</span>
+                    <a href="${item.downloadUrl}" download="${item.title}" class="inline-flex items-center gap-1.5 px-3 py-1.5 ${isReceived ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-white text-blue-700 hover:bg-blue-50'} rounded-xl text-[11px] font-extrabold transition shadow-xs">
+                        <i class="fa-solid fa-download"></i><span>डाउनलोड करें</span>
                     </a>
                 `;
             } else if (item.kind === 'text') {
-                const escaped = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const escaped = item.title.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 actionHtml = `
-                    <button type="button" onclick="copyTextSafe('${escaped}'); showToast('टेक्स्ट कॉपी हो गया!');" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[11px] font-bold transition">
-                        <i class="fa-solid fa-copy"></i><span>टेक्स्ट कॉपी करें</span>
+                    <button type="button" onclick="copyTextSafe('${escaped}'); showToast('संदेश कॉपी हो गया!');" class="inline-flex items-center gap-1 px-2.5 py-1 ${isReceived ? 'bg-slate-100 hover:bg-slate-200 text-slate-800' : 'bg-white/20 hover:bg-white/30 text-white'} rounded-lg text-[10px] font-bold transition">
+                        <i class="fa-solid fa-copy"></i><span>कॉपी करें</span>
                     </button>
                 `;
             }
 
-            card.innerHTML = `
-                <div class="flex items-center justify-between gap-2">
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}">${badgeText}</span>
-                    <span class="text-[11px] text-slate-500">${item.subtitle}</span>
+            const headerColor = isReceived ? "text-emerald-700" : "text-blue-100";
+            const contentBoxClass = item.kind === 'file'
+                ? (isReceived ? "bg-slate-50 border border-slate-200/80 text-slate-900 p-2 rounded-xl flex items-center gap-2" : "bg-white/15 border border-white/20 text-white p-2 rounded-xl flex items-center gap-2")
+                : "text-xs sm:text-[13px] leading-relaxed break-words whitespace-pre-wrap font-medium";
+
+            const titleContent = item.kind === 'file'
+                ? `<i class="fa-solid fa-file-lines text-base shrink-0"></i><span class="text-xs font-bold break-all">${item.title}</span>`
+                : item.title;
+
+            bubble.innerHTML = `
+                <div class="flex items-center justify-between gap-3 text-[10px] font-bold ${headerColor}">
+                    <span>${item.subtitle}</span>
                 </div>
                 ${previewHtml}
-                <div class="text-xs font-bold text-slate-900 break-all bg-white p-2.5 rounded-xl border border-slate-200/80">
-                    ${item.title}
+                <div class="${contentBoxClass}">
+                    ${titleContent}
                 </div>
-                ${actionHtml ? `<div>${actionHtml}</div>` : ''}
+                <div class="flex items-center justify-between gap-2 pt-0.5">
+                    <div>${actionHtml}</div>
+                    <span class="text-[10px] ${isReceived ? 'text-slate-400' : 'text-blue-100'} font-medium ml-auto flex items-center gap-1">
+                        ${timeNow} ${!isReceived ? '<i class="fa-solid fa-check-double text-sky-200"></i>' : ''}
+                    </span>
+                </div>
             `;
 
-            list.prepend(card);
+            rowWrap.appendChild(bubble);
+            list.appendChild(rowWrap);
+            list.scrollTop = list.scrollHeight;
         }
 
         function clearTransferHistory() {
             const list = document.getElementById('transfer-history-list');
             list.innerHTML = `
-                <div id="empty-history-msg" class="text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
-                    <i class="fa-solid fa-folder-open text-2xl text-slate-300 mb-2 block"></i>
-                    यहाँ आपकी प्राप्त हुई फ़ाइलें (ऑटो-डाउनलोड बटन सहित) और संदेश दिखाई देंगे।
+                <div id="empty-history-msg" class="text-xs text-slate-400 bg-white/90 border border-dashed border-slate-300 rounded-2xl p-8 text-center my-auto">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-xl mx-auto mb-2.5">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <p class="font-bold text-slate-600">अभी तक कोई चैट या फ़ाइल नहीं है</p>
+                    <p class="text-[11px] mt-1">भेजी गई फ़ाइलें दाईं ओर (नीले बबल में) और प्राप्त फ़ाइलें बाईं ओर (सफ़ेद बबल में) दिखेंगी।</p>
                 </div>
             `;
         }
