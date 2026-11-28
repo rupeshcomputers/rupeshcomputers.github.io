@@ -63,20 +63,20 @@
         <div class="bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-3xl p-5 shadow-md">
             <h3 class="text-sm sm:text-base font-extrabold flex items-center gap-2">
                 <i class="fa-solid fa-network-wired text-amber-300 text-lg"></i>
-                <span>4 कंप्यूटर या मोबाइल को एक साथ जोड़ने और मनचाहे डिवाइस पर भेजने का तरीका:</span>
+                <span>2 या अधिक डिवाइस (कंप्यूटर और मोबाइल) को जोड़ने और मनचाहे डिवाइस पर भेजने का तरीका:</span>
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3 text-xs">
                 <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
                     <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 1 (अपना नाम रखें)</span>
-                    <p class="font-semibold">हर कंप्यूटर/मोबाइल का नाम रखें (जैसे: <strong>Counter-1, Counter-2, Office PC</strong>) ताकि पहचान आसान रहे।</p>
+                    <p class="font-semibold">हर कंप्यूटर या मोबाइल का नाम रखें (जैसे: <strong>Counter-1, Mobile-1, Office PC</strong>) ताकि पहचान आसान रहे।</p>
                 </div>
                 <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
-                    <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 2 (चारों को जोड़ें)</span>
-                    <p class="font-semibold">बाकी तीनों कंप्यूटर/मोबाइल से पहले कंप्यूटर का <strong>QR स्कैन</strong> करें या <strong>6-अंकीय कोड</strong> डालें—चारों आपस में जुड़ जाएंगे।</p>
+                    <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 2 (डिवाइस जोड़ें)</span>
+                    <p class="font-semibold">दूसरे डिवाइस से पहले डिवाइस का <strong>QR स्कैन</strong> करें, <strong>6-अंकीय कोड</strong> डालें या <strong>कॉमन रूम</strong> जॉइन करें—सभी आपस में जुड़ जाएंगे।</p>
                 </div>
                 <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
                     <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-black rounded-md mb-1">स्टेप 3 (मनचाहा चुनें)</span>
-                    <p class="font-semibold">फ़ाइल या संदेश भेजते समय ऊपर से चुनें कि <strong>किस एक कंप्यूटर</strong> को भेजना है या <strong>सभी चारों</strong> को एक साथ!</p>
+                    <p class="font-semibold">फ़ाइल या संदेश भेजते समय ऊपर से चुनें कि <strong>किस एक डिवाइस</strong> को भेजना है या <strong>सभी जुड़े हुए डिवाइसों</strong> को एक साथ!</p>
                 </div>
             </div>
         </div>
@@ -87,9 +87,9 @@
                 <div>
                     <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-wifi text-teal-600"></i>
-                        <span>मल्टी-डिवाइस नेटवर्क (4+ कंप्यूटर और मोबाइल एक साथ जोड़ें)</span>
+                        <span>मल्टी-डिवाइस नेटवर्क (2 या अधिक कंप्यूटर और मोबाइल जोड़ें)</span>
                     </h3>
-                    <p class="text-xs text-slate-500 mt-0.5">किसी एक डिवाइस से जुड़ने पर ग्रुप के बाकी सभी जुड़े हुए कंप्यूटर भी अपने आप जुड़ जाते हैं (Auto-Mesh)</p>
+                    <p class="text-xs text-slate-500 mt-0.5">किसी एक डिवाइस से जुड़ने पर ग्रुप के बाकी सभी जुड़े हुए डिवाइस भी अपने आप जुड़ जाते हैं (Auto-Mesh)</p>
                 </div>
                 <!-- Device Name Customizer -->
                 <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-2xl border border-slate-200 shrink-0">
@@ -165,110 +165,121 @@
                             <i class="fa-solid fa-link"></i><span>अभी जोड़ें</span>
                         </button>
                     </form>
+
+                    <!-- Quick Shared Room Connect (All PCs & Mobiles join same room automatically) -->
+                    <div class="pt-2.5 border-t border-blue-200/80">
+                        <label class="block text-[11px] font-extrabold text-blue-950 mb-1">
+                            <i class="fa-solid fa-door-open text-blue-600 mr-1"></i>या सीधे "कॉमन रूम" से जुड़ें (2 या अधिक PC/मोबाइल एक साथ):
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="shared-room-input" value="rupesh-shop" maxlength="20" placeholder="रूम का नाम (जैसे: shop1)"
+                                class="flex-grow px-3 py-2 text-xs font-bold bg-white border border-blue-300 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900">
+                            <button type="button" onclick="joinSharedRoom()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl text-xs font-extrabold transition shadow-sm shrink-0">
+                                रूम जॉइन करें
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Connected Devices Status Bar (Always Visible) -->
-            <div class="pt-3 border-t border-slate-200">
+            <!-- Connected Devices List -->
+            <div class="pt-3 border-t border-slate-100">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                        <i class="fa-solid fa-link text-emerald-600"></i>
-                        <span>जुड़े हुए कंप्यूटर व मोबाइल (Connected Devices):</span>
+                        <i class="fa-solid fa-users text-emerald-600"></i>
+                        <span>जुड़े हुए डिवाइस (Connected Devices):</span>
                     </span>
-                    <span id="connected-count-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">0 जुड़े हैं</span>
+                    <span id="connected-count-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">0 जुड़े हैं</span>
                 </div>
-                <div id="connected-peers-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-                    <div class="sm:col-span-2 md:col-span-4 text-xs text-slate-500 bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-3 text-center">
-                        अभी कोई दूसरा डिवाइस जुड़ा नहीं है। बाएं बॉक्स का QR स्कैन करें या दाएं बॉक्स में मुख्य कंप्यूटर का 6-अंकीय कोड डालें।
+                <div id="connected-peers-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                    <div class="sm:col-span-2 md:col-span-4 text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-xl p-3 text-center">
+                        अभी कोई दूसरा डिवाइस जुड़ा नहीं है। बाएं बॉक्स का QR स्कैन करें या दाएं बॉक्स में कोड डालें।
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- Step 2: Active File & Text Sharing Workspace -->
-        <div id="workspace-section" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Send & Receive Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-            <!-- Send Files & Text (7 Columns) -->
-            <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 space-y-4">
+            <!-- SEND PANEL -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 space-y-4">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                        <i class="fa-solid fa-paper-plane text-blue-600"></i>
-                        <span>फ़ाइल, फ़ोटो, PDF या टेक्स्ट भेजें</span>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </span>
+                        <span>फ़ाइल, सॉफ़्टवेयर या संदेश भेजें</span>
                     </h3>
-                    <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700">मोबाइल व PC समर्थित</span>
                 </div>
 
-                <!-- Target Recipient Selector (Choose Specific Computer or All) -->
+                <!-- Recipient Selector -->
                 <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3 space-y-2">
-                    <div class="flex items-center justify-between">
-                        <label class="text-xs font-extrabold text-amber-950 flex items-center gap-1.5">
-                            <i class="fa-solid fa-bullseye text-amber-600"></i>
-                            <span>किसे भेजना है? (डिवाइस चुनें):</span>
-                        </label>
-                        <span class="text-[10px] font-bold text-amber-800">अपनी पसंद से एक या सभी चुनें</span>
-                    </div>
+                    <span class="block text-[11px] font-extrabold text-amber-950">
+                        <i class="fa-solid fa-bullseye text-amber-600 mr-1"></i>किसे भेजना है? (मनचाहा डिवाइस चुनें):
+                    </span>
                     <div id="recipient-selector-pills" class="flex flex-wrap gap-1.5">
                         <span class="text-xs text-slate-500">डिवाइस जुड़ने के बाद यहाँ नाम दिखेंगे...</span>
                     </div>
                 </div>
 
-                <!-- Mobile-Friendly Big Action Buttons + Drag & Drop Zone -->
+                <!-- File Dropzone -->
                 <div id="drop-zone" onclick="document.getElementById('file-picker-input').click()"
-                    class="border-2 border-dashed border-blue-300 hover:border-blue-600 bg-blue-50/40 hover:bg-blue-50 rounded-3xl p-6 text-center cursor-pointer transition active:scale-[0.99]">
+                    class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50 hover:bg-blue-50/40 rounded-2xl p-6 text-center cursor-pointer transition space-y-2">
                     <input type="file" id="file-picker-input" multiple class="hidden" onchange="handleFilesSelected(this.files)">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mx-auto">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                     </div>
-                    <p class="text-sm sm:text-base font-extrabold text-slate-900">फ़ाइल या फ़ोटो चुनने के लिए यहाँ टच करें</p>
-                    <p class="text-xs text-slate-500 mt-1">गैलरी फ़ोटो, PDF, डॉक्यूमेंट, ZIP या वीडियो चुनें (एक साथ कई फ़ाइलें चुन सकते हैं)</p>
-                    <span class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-sm">
-                        <i class="fa-solid fa-folder-plus"></i><span>फ़ाइलें चुनें (Select Files)</span>
-                    </span>
+                    <p class="text-xs sm:text-sm font-extrabold text-slate-800">फ़ाइलें, फ़ोटो, PDF या सॉफ़्टवेयर (.exe/.zip) चुनें</p>
+                    <p class="text-[11px] text-slate-500">यहाँ क्लिक करें या फ़ाइल को खींचकर (Drag &amp; Drop) छोड़ें • कोई साइज लिमिट नहीं</p>
                 </div>
 
-                <!-- Send Progress Bar (Visible during transfer) -->
-                <div id="send-progress-wrapper" class="hidden bg-blue-50 border border-blue-200 rounded-2xl p-3.5 space-y-2">
-                    <div class="flex items-center justify-between text-xs font-bold text-blue-900">
-                        <span id="send-file-label" class="truncate max-w-[70%]">फ़ाइल भेजी जा रही है...</span>
+                <!-- Send Progress -->
+                <div id="send-progress-wrapper" class="hidden bg-blue-50 border border-blue-200 rounded-2xl p-3 space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold text-blue-900">
+                        <span id="send-file-label" class="truncate pr-2">भेजा जा रहा है...</span>
                         <span id="send-percent-label">0%</span>
                     </div>
-                    <div class="w-full h-2.5 bg-blue-200 rounded-full overflow-hidden">
+                    <div class="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
                         <div id="send-progress-bar" class="h-full bg-blue-600 transition-all duration-100" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <!-- Quick Text / Link / OTP Share Box -->
-                <div class="pt-3 border-t border-slate-100">
-                    <label class="block text-xs font-extrabold text-slate-700 mb-1.5">
-                        <i class="fa-solid fa-message text-teal-600 mr-1"></i>तुरंत टेक्स्ट, लिंक या आवेदन नंबर भेजें:
+                <!-- Quick Text / Link Sender -->
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                    <label class="block text-xs font-bold text-slate-700">
+                        <i class="fa-solid fa-message text-teal-600 mr-1"></i>त्वरित टेक्स्ट, लिंक या आवेदन नंबर भेजें:
                     </label>
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <textarea id="quick-text-input" rows="2" placeholder="यहाँ कोई लिंक, आवेदन नंबर या संदेश लिखें..."
-                            class="flex-grow px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white"></textarea>
-                        <button type="button" onclick="sendTextMessage()" class="px-5 py-3 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-2xl text-xs font-extrabold transition shadow-sm flex items-center justify-center gap-1.5 shrink-0">
-                            <i class="fa-solid fa-paper-plane"></i><span>संदेश भेजें</span>
+                    <div class="flex gap-2">
+                        <textarea id="quick-text-input" rows="2" placeholder="यहाँ कोई लिंक, OTP, आवेदन नंबर या संदेश लिखें..."
+                            class="flex-grow px-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900"></textarea>
+                        <button type="button" onclick="sendTextMessage()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-extrabold transition shrink-0 flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i><span>भेजें</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Transfer History & Received Items (5 Columns) -->
-            <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                            <i class="fa-solid fa-inbox text-emerald-600"></i>
-                            <span>प्राप्त व भेजी गई फ़ाइलें / संदेश</span>
+            <!-- RECEIVE / HISTORY PANEL -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 card-shadow border border-slate-200/80 flex flex-col justify-between space-y-4">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-inbox"></i>
+                            </span>
+                            <span>प्राप्त फ़ाइलें एवं संदेश (History)</span>
                         </h3>
                         <button type="button" onclick="clearTransferHistory()" class="text-[11px] font-bold text-slate-500 hover:text-rose-600 transition">
-                            साफ़ करें
+                            सूची साफ़ करें
                         </button>
                     </div>
 
-                    <!-- Incoming Progress Bar -->
-                    <div id="receive-progress-wrapper" class="hidden mb-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-3 space-y-1.5">
-                        <div class="flex items-center justify-between text-xs font-bold text-emerald-900">
-                            <span id="receive-file-label" class="truncate max-w-[75%]">फ़ाइल आ रही है...</span>
+                    <!-- Receive Progress -->
+                    <div id="receive-progress-wrapper" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-3 space-y-1.5">
+                        <div class="flex justify-between text-xs font-bold text-emerald-900">
+                            <span id="receive-file-label" class="truncate pr-2">फ़ाइल आ रही है...</span>
                             <span id="receive-percent-label">0%</span>
                         </div>
                         <div class="w-full h-2 bg-emerald-200 rounded-full overflow-hidden">
@@ -276,7 +287,8 @@
                         </div>
                     </div>
 
-                    <div id="transfer-history-list" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                    <!-- Transfer History List -->
+                    <div id="transfer-history-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1">
                         <div id="empty-history-msg" class="text-xs text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
                             <i class="fa-solid fa-folder-open text-2xl text-slate-300 mb-2 block"></i>
                             यहाँ आपकी प्राप्त हुई फ़ाइलें (ऑटो-डाउनलोड बटन सहित) और संदेश दिखाई देंगे।
@@ -330,16 +342,33 @@
             }
         }
 
+        function showToast(msg) {
+            const toast = document.getElementById('toast-modal');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastMsg) return;
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
         const PEER_PREFIX = "rc-share-";
+        const ROOM_HOST_PREFIX = "rc-room-host-";
         const CHUNK_SIZE = 64 * 1024; // 64 KB chunks for reliable high-speed WebRTC transfer
         let peer = null;
         let myShortCode = "";
         let myDeviceName = "";
         let activeConnections = new Map(); // fullPeerId -> DataConnection or LocalChannelAdapter
-        let peerNames = new Map(); // fullPeerId -> Friendly Name (e.g. "PC-1 (482910)")
+        let peerNames = new Map(); // fullPeerId -> Friendly Name
         let selectedRecipients = "ALL"; // "ALL" or Set of fullPeerIds
         let incomingFileBuffers = new Map(); // transferId -> { meta, chunks, receivedBytes }
         let localChannel = null;
+        let isRoomHost = false;
+        let currentRoomSlug = "";
 
         function getDefaultDeviceName() {
             const saved = localStorage.getItem('rc_transfer_device_name');
@@ -478,11 +507,17 @@
             try {
                 peer = new Peer(fullPeerId, {
                     debug: 0,
+                    secure: true,
                     config: {
                         iceServers: [
                             { urls: 'stun:stun.l.google.com:19302' },
-                            { urls: 'stun:stun1.l.google.com:19302' }
-                        ]
+                            { urls: 'stun:stun1.l.google.com:19302' },
+                            { urls: 'stun:stun2.l.google.com:19302' },
+                            { urls: 'stun:stun3.l.google.com:19302' },
+                            { urls: 'stun:stun4.l.google.com:19302' },
+                            { urls: 'stun:global.stun.twilio.com:3478' }
+                        ],
+                        iceCandidatePoolSize: 10
                     }
                 });
 
@@ -503,11 +538,16 @@
                     setupDataConnection(conn);
                 });
 
+                peer.on('disconnected', () => {
+                    updateStatusPill('loading', 'पुनः जुड़ रहा है...');
+                    try { peer.reconnect(); } catch (e) {}
+                });
+
                 peer.on('error', (err) => {
                     if (err.type === 'unavailable-id') {
                         initPeerConnection();
                     } else if (err.type === 'peer-unavailable') {
-                        showToast("यह डिवाइस कोड उपलब्ध नहीं है। कृपया सामने वाले डिवाइस का सही कोड जांचें।");
+                        showToast("यह कोड नहीं मिला! कृपया सामने वाले डिवाइस पर नया कोड रिफ्रेश करें या 'रूम जॉइन करें' दबाएं।");
                     } else {
                         updateStatusPill('ready', 'लोकल मोड तैयार (लाइव साइट पर P2P सक्रिय)');
                     }
@@ -517,6 +557,77 @@
                 peer = null;
                 updateStatusPill('ready', 'प्रीव्यू लोकल मोड • लाइव साइट पर P2P सक्रिय');
             }
+        }
+
+        // कॉमन रूम सिस्टम: 2 या अधिक कंप्यूटर और मोबाइल पर एक ही रूम नाम लिखकर 'रूम जॉइन करें' दबाते ही सब स्वतः जुड़ जाएंगे
+        function joinSharedRoom() {
+            const rawRoom = (document.getElementById('shared-room-input')?.value || '').trim().toLowerCase().replace(/[^a-z0-9-_]/g, '');
+            if (!rawRoom) {
+                showToast("कृपया कोई रूम नाम लिखें (जैसे: shop1)");
+                return;
+            }
+            if (!peer || peer.disconnected) {
+                showToast("लाइव वेबसाइट पर यह रूम सीधे सभी डिवाइसों को जोड़ देगा!");
+                return;
+            }
+
+            currentRoomSlug = rawRoom;
+            const hostId = ROOM_HOST_PREFIX + rawRoom;
+            showToast(`रूम "${rawRoom}" से जुड़ रहा है...`);
+
+            // पहले कोशिश करें कि क्या इस रूम का मुख्य होस्ट पहले से बना हुआ है
+            const conn = peer.connect(hostId, { reliable: true });
+            let connectedToHost = false;
+
+            const fallbackTimer = setTimeout(() => {
+                if (!connectedToHost) {
+                    try { conn.close(); } catch (e) {}
+                    becomeRoomHost(hostId, rawRoom);
+                }
+            }, 2500);
+
+            conn.on('open', () => {
+                connectedToHost = true;
+                clearTimeout(fallbackTimer);
+                setupDataConnection(conn);
+                showToast(`रूम "${rawRoom}" में जुड़ गए! ग्रुप के बाकी डिवाइस भी जुड़ रहे हैं...`);
+            });
+
+            conn.on('error', () => {
+                clearTimeout(fallbackTimer);
+                if (!connectedToHost) {
+                    becomeRoomHost(hostId, rawRoom);
+                }
+            });
+        }
+
+        function becomeRoomHost(hostId, rawRoom) {
+            if (isRoomHost) return;
+            try {
+                const hostPeer = new Peer(hostId, {
+                    debug: 0,
+                    secure: true,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' }
+                        ]
+                    }
+                });
+                hostPeer.on('open', () => {
+                    isRoomHost = true;
+                    updateStatusPill('ready', `रूम "${rawRoom}" सक्रिय (मुख्य होस्ट)`);
+                    showToast(`आप रूम "${rawRoom}" के मुख्य डिवाइस बन गए हैं! अब बाकी PC/मोबाइल में भी "रूम जॉइन करें" दबाएं।`);
+                });
+                hostPeer.on('connection', (incomingConn) => {
+                    setupDataConnection(incomingConn);
+                });
+                hostPeer.on('error', () => {
+                    // यदि किसी दूसरे ने उसी समय होस्ट बना लिया है तो उससे जुड़ जाएं
+                    const retryConn = peer.connect(hostId, { reliable: true });
+                    setupDataConnection(retryConn);
+                });
+            } catch (e) {}
         }
 
         // एक ही ब्राउज़र के दो टैब्स या प्रीव्यू में तुरंत टेस्टिंग के लिए BroadcastChannel ब्रिज
