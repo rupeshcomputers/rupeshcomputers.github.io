@@ -449,18 +449,18 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-xs text-amber-950 flex items-center gap-1.5">
-                                <i class="fa-solid fa-wifi text-amber-600"></i> Wi-Fi नाम व पासवर्ड CMD
+                                <i class="fa-solid fa-wifi text-amber-600"></i> कनेक्टेड Wi-Fi व पासवर्ड CMD
                             </span>
                             <button onclick="copyWifiCmdCommand()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[11px] font-semibold transition shadow-sm flex items-center gap-1">
                                 <i class="fa-solid fa-terminal"></i><span>कमांड कॉपी</span>
                             </button>
                         </div>
                         <p class="text-[11px] text-amber-900 leading-relaxed mb-2">
-                            ब्राउज़र सुरक्षा के कारण Wi-Fi पासवर्ड नहीं पढ़ते। Windows CMD में नीचे दिया गया कमांड चलाकर सभी सेव किए गए Wi-Fi पासवर्ड देखें:
+                            वर्तमान में कौन-सा Wi-Fi जुड़ा है, सिग्नल (%) और सभी सेव किए गए Wi-Fi पासवर्ड देखने के लिए Windows CMD में यह कमांड चलाएं:
                         </p>
                     </div>
                     <div class="text-[11px] bg-white border border-amber-200 rounded-xl p-2.5 text-slate-700 font-mono truncate">
-                        netsh wlan show profiles name="*" key=clear | findstr "SSID Content"
+                        netsh wlan show interfaces &amp; netsh wlan show profiles name="*" key=clear | findstr "SSID Content"
                     </div>
                 </div>
 
@@ -1298,9 +1298,9 @@
         }
 
         function copyWifiCmdCommand() {
-            const cmd = 'netsh wlan show profiles name="*" key=clear | findstr "SSID Content"';
+            const cmd = 'cmd /k "netsh wlan show drivers | findstr /C:"Interface name" /C:"Description" /C:"Radio types" && echo --- CONNECTED WIFI --- && netsh wlan show interfaces | findstr /C:"SSID" /C:"Signal" && echo --- SAVED PASSWORDS --- && netsh wlan show profiles name="*" key=clear | findstr "SSID Content""';
             copyTextSafe(cmd);
-            showToast("Wi-Fi पासवर्ड CMD कमांड कॉपी हो गया!");
+            showToast("Wi-Fi कार्ड, बैंड व पासवर्ड CMD कमांड कॉपी हो गया! Win + R दबाकर पेस्ट करें।");
         }
 
         // UTF-16LE Base64 Encoder (PowerShell -EncodedCommand के लिए ताकि CMD में कोट्स या सिंटैक्स कभी न टूटे)
@@ -1318,7 +1318,7 @@
             return btoa(binary);
         }
 
-        // 1-क्लिक .BAT टूल (Intel RST VMD NVMe पहचान, Battery Health XML रिपोर्ट व Secure Boot फिक्स सहित)
+        // 1-क्लिक .BAT टूल (Intel RST VMD NVMe पहचान, Battery Health XML रिपोर्ट, Wi-Fi कार्ड व Secure Boot फिक्स सहित)
         function downloadHardwareBatchScript() {
             const psScript = `
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1338,8 +1338,43 @@ $uptimeStr = if ($uptimeSpan) { "$($uptimeSpan.Days)d $($uptimeSpan.Hours)h $($u
 $netAdapters = @(Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true })
 $macLines = if ($netAdapters.Count -gt 0) {
     foreach ($n in $netAdapters) {
-        "  -> $($n.Description) | MAC: $($n.MACAddress) | IP: $($n.IPAddress -join ', ')"
+        "  -> Active Adapter  : $($n.Description) | MAC: $($n.MACAddress) | IP: $($n.IPAddress -join ', ')"
     }
+} else {
+    @("  -> No active network adapter found")
+}
+
+$wlanDrivers = netsh wlan show drivers 2>$null
+$wifiCardLines = @()
+if ($wlanDrivers) {
+    $descLine = ($wlanDrivers | Select-String '^\s*Description\s*:').Line
+    $vendorLine = ($wlanDrivers | Select-String '^\s*Vendor\s*:').Line
+    $radioSuppLine = ($wlanDrivers | Select-String '^\s*Radio types supported\s*:').Line
+    if ($descLine) { $wifiCardLines += "  -> Wi-Fi Card Name : $($descLine.Split(':',2)[1].Trim())" }
+    if ($vendorLine) { $wifiCardLines += "  -> Card Vendor     : $($vendorLine.Split(':',2)[1].Trim())" }
+    if ($radioSuppLine) {
+        $radios = $radioSuppLine.Split(':',2)[1].Trim()
+        $bandTip = if ($radios -match '802\.11ax') { 'Wi-Fi 6 (Dual Band 2.4GHz + 5GHz)' } elseif ($radios -match '802\.11ac') { 'Wi-Fi 5 (Dual Band 2.4GHz + 5GHz)' } else { 'Wi-Fi 4 (2.4GHz Single Band)' }
+        $wifiCardLines += "  -> Supported Bands : $bandTip [$radios]"
+    }
+}
+if ($wifiCardLines.Count -eq 0) {
+    $wifiCardLines += "  -> Wi-Fi Card Name : No Internal Wi-Fi Card / USB Wi-Fi Detected"
+}
+
+$wlanInfo = netsh wlan show interfaces 2>$null
+$wifiSummary = @()
+if ($wlanInfo) {
+    $ssidLine = ($wlanInfo | Select-String '^\s*SSID\s*:').Line
+    $sigLine = ($wlanInfo | Select-String '^\s*Signal\s*:').Line
+    $rxLine = ($wlanInfo | Select-String '^\s*Receive rate').Line
+    if ($ssidLine) { $wifiSummary += "  -> Connected Wi-Fi : $($ssidLine.Split(':',2)[1].Trim())" }
+    if ($sigLine) { $wifiSummary += "  -> Wi-Fi Signal    : $($sigLine.Split(':',2)[1].Trim())" }
+    if ($rxLine) { $wifiSummary += "  -> Link Speed      : $($rxLine.Split(':',2)[1].Trim()) Mbps" }
+}
+if ($wifiSummary.Count -eq 0) {
+    $wifiSummary += "  -> Connected Wi-Fi : Not connected via Wi-Fi (Ethernet / Offline)"
+}
 } else {
     @("  -> No active network adapter found")
 }
@@ -1469,9 +1504,9 @@ $($diskLines -join "\`r\`n")
 $($ctrlLines -join "\`r\`n")
 $($portLines -join "\`r\`n")
 $($slotLines -join "\`r\`n")
-$($upgradeAdvice -join "\`r\`n")
-
---- [4] NETWORK ADAPTERS & MAC ADDRESS ---
+--- [4] NETWORK ADAPTERS, WI-FI CARD & MAC ADDRESS ---
+$($wifiCardLines -join "\`r\`n")
+$($wifiSummary -join "\`r\`n")
 $($macLines -join "\`r\`n")
 ============================================================
 "@
