@@ -25,9 +25,6 @@
             .no-print, #site-header, #site-footer, #toast-modal, #display-test-overlay, #keyboard-modal {
                 display: none !important;
             }
-            .print-only {
-                display: block !important;
-            }
             .card-shadow {
                 box-shadow: none !important;
                 border: 1px solid #cbd5e1 !important;
@@ -44,34 +41,6 @@
     <!-- Common Header Container (RUPESH COMPUTERS Layout) -->
     <div id="site-header"></div>
 
-    <!-- Print-Only Customer Service Slip Header (RUPESH COMPUTERS) -->
-    <div class="hidden print-only border-2 border-slate-800 rounded-2xl p-5 mb-5 mx-4 mt-4 bg-white">
-        <div class="flex items-center justify-between border-b-2 border-slate-800 pb-3 mb-3">
-            <div>
-                <h1 class="text-xl font-black tracking-tight text-slate-900">RUPESH COMPUTERS</h1>
-                <p class="text-xs font-semibold text-slate-600">चोंगरीबहार एवं दोकड़ा शाखा • कंप्यूटर, लैपटॉप सेल्स एवं रिपेयरिंग सेंटर</p>
-            </div>
-            <div class="text-right text-xs">
-                <div class="font-bold text-slate-900">सिस्टम डायग्नोस्टिक एवं सर्विस रिपोर्ट</div>
-                <div id="print-date-stamp" class="text-slate-600 mt-0.5">दिनांक: --</div>
-            </div>
-        </div>
-        <div class="grid grid-cols-3 gap-3 text-xs">
-            <div class="border border-slate-300 rounded-lg p-2">
-                <span class="text-slate-500 block text-[10px]">ग्राहक का नाम (Customer Name):</span>
-                <span id="print-cust-name" class="font-bold text-slate-900">--</span>
-            </div>
-            <div class="border border-slate-300 rounded-lg p-2">
-                <span class="text-slate-500 block text-[10px]">मोबाइल नंबर (Mobile No.):</span>
-                <span id="print-cust-phone" class="font-bold text-slate-900">--</span>
-            </div>
-            <div class="border border-slate-300 rounded-lg p-2">
-                <span class="text-slate-500 block text-[10px]">डिवाइस / समस्या (Device / Issue):</span>
-                <span id="print-cust-issue" class="font-bold text-slate-900">--</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Tool Action Sub-Bar -->
     <div class="bg-white border-b border-slate-200 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -81,15 +50,15 @@
                 </div>
                 <div>
                     <h2 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">सिस्टम एवं डिवाइस डायग्नोस्टिक टूल</h2>
-                    <p class="text-xs text-slate-500">हार्डवेयर, मदरबोर्ड स्लॉट्स, बैटरी हेल्थ, कीबोर्ड टेस्टर व सर्विस स्लिप</p>
+                    <p class="text-xs text-slate-500">कंप्यूटर/लैपटॉप हार्डवेयर, RAM/SSD स्लॉट्स, स्पीड टेस्ट व बायोमेट्रिक स्कैनर</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 flex-wrap justify-center">
                 <button onclick="scanAllBasicInfo()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                     <i class="fa-solid fa-rotate text-blue-600"></i><span>पुनः स्कैन करें</span>
                 </button>
-                <button onclick="prepareAndPrintSlip()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-print"></i><span>सर्विस स्लिप प्रिंट / PDF</span>
+                <button onclick="window.print()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print text-indigo-600"></i><span>प्रिंट / PDF</span>
                 </button>
                 <button onclick="copyFullSystemReport()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-copy"></i><span>रिपोर्ट कॉपी करें</span>
@@ -101,31 +70,11 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 w-full flex-grow space-y-6">
 
-        <!-- Customer Service Slip Input Bar (Shop Use - Hidden when empty on print, editable anytime) -->
-        <section class="bg-white rounded-3xl p-4 sm:p-5 card-shadow border border-indigo-200/80 no-print">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                        <i class="fa-solid fa-file-invoice"></i>
-                    </span>
-                    <div>
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-900">ग्राहक सर्विस स्लिप विवरण (प्रिंट / PDF रिपोर्ट के लिए)</h3>
-                        <p class="text-[11px] text-slate-500">यहाँ ग्राहक की जानकारी भरकर "सर्विस स्लिप प्रिंट / PDF" दबाएं—ऊपर दुकान के नाम के साथ रिपोर्ट प्रिंट होगी।</p>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                <input type="text" id="cust-name-input" oninput="syncCustomerSlipFields()" placeholder="ग्राहक का नाम (उदा. राजेश कुमार)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
-                <input type="text" id="cust-phone-input" oninput="syncCustomerSlipFields()" placeholder="मोबाइल नंबर (उदा. 98261XXXXX)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
-                <input type="text" id="cust-issue-input" oninput="syncCustomerSlipFields()" placeholder="डिवाइस / समस्या (उदा. HP Laptop RAM/SSD Upgrade)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:border-indigo-500 focus:outline-none bg-slate-50/60">
-            </div>
-        </section>
-
         <!-- Security & Privacy Note Banner -->
         <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs sm:text-sm text-amber-950 no-print">
             <i class="fa-solid fa-shield-halved text-amber-600 text-lg mt-0.5"></i>
             <div>
-                <p class="font-bold">ब्राउज़र सुरक्षा एवं हार्डवेयर अपग्रेड जानकारी:</p>
+                <p class="font-bold">ब्राउज़र सुरक्षा एवं सिस्टम जानकारी:</p>
                 <p class="text-amber-800 text-xs mt-0.5 leading-relaxed">
                     यह टूल पूरी तरह सुरक्षित है और आपका कोई भी डेटा बाहरी सर्वर पर नहीं भेजता। सुरक्षा कारणों से वेब ब्राउज़र सीधे <strong>CPU का असली मॉडल नाम, मदरबोर्ड के खाली RAM स्लॉट्स, DDR प्रकार या बैटरी हेल्थ (%)</strong> नहीं पढ़ सकते—इसके लिए नीचे दिए गए <strong>1-क्लिक .BAT टूल</strong> या <strong>CMD कमांड</strong> का उपयोग करें।
                 </p>
@@ -137,15 +86,14 @@
 
             <!-- 1. OS & Device Platform -->
             <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-200/70 flex flex-col justify-between">
-        <!-- Interactive Hardware & Speed Testing Lab (Now 4 Cards including Live Webcam Tester & Full Keyboard Grid) -->
-        <section class="bg-white rounded-3xl p-6 card-shadow border border-slate-200 no-print">
-            <div class="mb-5">
-                <h2 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-stethoscope text-indigo-600"></i>
-                    <span>लाइव हार्डवेयर एवं इंटरनेट स्पीड टेस्टर (Speed, Audio, Webcam, Keyboard & Screen Check)</span>
-                </h2>
-                <p class="text-xs text-slate-500 mt-1">इंटरनेट की असली स्पीड, स्पीकर, माइक्रोफ़ोन, वेबकैम, फुल कीबोर्ड बटन, माउस और मॉनिटर स्क्रीन की तुरंत जाँच करें:</p>
-            </div>
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <i class="fa-brands fa-windows text-lg"></i>
+                            </span>
+                            <h2 class="font-bold text-slate-800 text-sm">ऑपरेटिंग सिस्टम (OS)</h2>
+                        </div>
                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">उपलब्ध</span>
                     </div>
                     <div class="space-y-2.5 text-xs" id="os-info-list">
@@ -573,18 +521,6 @@
             </div>
         </section>
 
-        <!-- Print-Only Signature Footer -->
-        <div class="hidden print-only border-t-2 border-slate-800 pt-4 mt-6 flex items-center justify-between text-xs">
-            <div>
-                <p class="font-bold text-slate-900">नोट: यह कंप्यूटर हार्डवेयर एवं सिस्टम डायग्नोस्टिक रिपोर्ट RUPESH COMPUTERS द्वारा जनरेट की गई है।</p>
-                <p class="text-slate-600">चोंगरीबहार एवं दोकड़ा शाखा</p>
-            </div>
-            <div class="text-right">
-                <div class="h-8"></div>
-                <p class="font-bold text-slate-900 border-t border-slate-600 pt-1 px-4">अधिकृत हस्ताक्षर / मुहर</p>
-            </div>
-        </div>
-
     </main>
 
     <!-- Visual On-Screen Full Keyboard Tester Modal -->
@@ -627,8 +563,9 @@
     <!-- Common Footer Container (RUPESH COMPUTERS Layout) -->
     <div id="site-footer"></div>
 
-    <!-- आपकी वेबसाइट की असली कॉमन Header & Footer फाइल -->
-    <script src="common-layout.js" onerror="window.__commonLayoutMissing = true;"></script>
+    <!-- आपकी वेबसाइट की tools.js (Header & Footer) फाइल -->
+    <script src="tools.js"></script>
+    <script src="common-layout.js"></script>
 
     <!-- Script Logic -->
     <script>
@@ -1192,24 +1129,6 @@
             showToast("कीबोर्ड टेस्टर रीसेट हो गया!");
         }
 
-        // कस्टमर सर्विस स्लिप सिंक व प्रिंट
-        function syncCustomerSlipFields() {
-            const name = document.getElementById('cust-name-input')?.value.trim() || "--";
-            const phone = document.getElementById('cust-phone-input')?.value.trim() || "--";
-            const issue = document.getElementById('cust-issue-input')?.value.trim() || "--";
-            document.getElementById('print-cust-name').textContent = name;
-            document.getElementById('print-cust-phone').textContent = phone;
-            document.getElementById('print-cust-issue').textContent = issue;
-        }
-
-        function prepareAndPrintSlip() {
-            syncCustomerSlipFields();
-            const dateEl = document.getElementById('print-date-stamp');
-            if (dateEl) {
-                dateEl.textContent = "दिनांक: " + new Date().toLocaleString('hi-IN', { dateStyle: 'medium', timeStyle: 'short' });
-            }
-            window.print();
-        }
         // 1-क्लिक .BAT टूल (100% Bug-Free Encoded PowerShell - BIOS डेट, अपटाइम व MAC एड्रेस सहित)
         function downloadHardwareBatchScript() {
             const psScript = `
